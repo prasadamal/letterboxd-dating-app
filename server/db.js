@@ -1,622 +1,143 @@
-* { box-sizing: border-box; }
+const movies = [
+  { id: 1, title: 'Shawshank Redemption', genre: 'Drama', mood: 'Hopeful', description: 'A prison drama with remarkable emotional payoff.' },
+  { id: 2, title: 'The Godfather', genre: 'Crime', mood: 'Epic', description: 'A legendary family story shaped by ambition and loyalty.' },
+  { id: 3, title: 'Spirited Away', genre: 'Animation', mood: 'Magical', description: 'A dreamlike adventure through a mysterious spirit world.' },
+  { id: 4, title: 'Moonlight', genre: 'Drama', mood: 'Intimate', description: 'A tender story of identity, memory, and growing up.' },
+  { id: 5, title: 'Parasite', genre: 'Thriller', mood: 'Sharp', description: 'A social satire that becomes tension-filled and unforgettable.' },
+  { id: 6, title: 'Arrival', genre: 'Sci-Fi', mood: 'Thoughtful', description: 'A human story shaped by language, connection, and time.' },
+  { id: 7, title: 'The Social Network', genre: 'Drama', mood: 'Fast', description: 'A sharp and stylish look at ambition and innovation.' },
+  { id: 8, title: 'The Grand Budapest Hotel', genre: 'Comedy', mood: 'Whimsical', description: 'Stylish, funny, and pictorially rich.' },
+  { id: 9, title: 'The Apartment', genre: 'Romance', mood: 'Warm', description: 'A bittersweet romantic classic with wit and heart.' },
+  { id: 10, title: 'Dune', genre: 'Sci-Fi', mood: 'Epic', description: 'Big ideas and massive scale with strong visual storytelling.' },
+  { id: 11, title: 'No Country for Old Men', genre: 'Thriller', mood: 'Tense', description: 'A brutal, elegant thriller with razor sharp energy.' },
+  { id: 12, title: 'Lady Bird', genre: 'Coming-of-age', mood: 'Honest', description: 'A realistic, intimate portrait of growing up.' }
+]
+
+export const store = {
+  users: [
+    {
+      id: 1,
+      email: 'maya@example.com',
+      password: '123456',
+      name: 'Maya',
+      age: 27,
+      city: 'Brooklyn',
+      bio: 'I love thoughtful cinema and slow-burn romances.',
+      hobbies: ['Cinema', 'Hiking', 'Travel'],
+      avatar_url: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80',
+      loved: ['Shawshank Redemption', 'The Godfather', 'Spirited Away', 'Moonlight'],
+      hated: ['Marvel Cinematic Universe', 'Generic action remakes']
+    },
+    {
+      id: 2,
+      email: 'anna@example.com',
+      password: '123456',
+      name: 'Anna',
+      age: 29,
+      city: 'Austin',
+      bio: 'I collect great performances and dream about midnight screenings.',
+      hobbies: ['Film clubs', 'Cooking', 'Road trips'],
+      avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80',
+      loved: ['Shawshank Redemption', 'The Godfather', 'The Apartment', 'Moonlight'],
+      hated: ['Marvel Cinematic Universe', 'Superhero fatigue']
+    },
+    {
+      id: 3,
+      email: 'luca@example.com',
+      password: '123456',
+      name: 'Luca',
+      age: 31,
+      city: 'Chicago',
+      bio: 'Classic films, deep conversations, and film history nerding.',
+      hobbies: ['Photography', 'Chess', 'Jazz'],
+      avatar_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80',
+      loved: ['The Social Network', 'Spirited Away', 'Arrival', 'The Grand Budapest Hotel'],
+      hated: ['Low-budget action', 'Generic streaming thrillers']
+    }
+  ],
+  movies,
+  ratings: [],
+  likes: []
+}
+
+export function ensureUserProfile(user) {
+  return {
+    ...user,
+    loved: user.loved || [],
+    hated: user.hated || [],
+    hobbies: user.hobbies || []
+  }
+}
+
+export function addUser(user) {
+  store.users.push(user)
+}
+
+export function findUserByEmail(email) {
+  return store.users.find((user) => user.email.toLowerCase() === String(email).toLowerCase())
+}
+
+export function findUserById(id) {
+  return store.users.find((user) => user.id === Number(id))
+}
+
+export function getMovieById(id) {
+  return store.movies.find((movie) => movie.id === Number(id))
+}
+
+export function getDailyMovies() {
+  return [...store.movies].sort(() => Math.random() - 0.5).slice(0, 5)
+}
+
+export function rateMovie(userId, movieId, reaction) {
+  const user = findUserById(userId)
+  const movie = getMovieById(movieId)
+  if (!user || !movie) return null
+
+  user.loved = user.loved || []
+  user.hated = user.hated || []
+
+  if (reaction === 'love') {
+    user.loved = [...new Set([...user.loved, movie.title])]
+    user.hated = user.hated.filter((title) => title !== movie.title)
+  }
 
-:root {
-  --bg: #0d1016;
-  --card: rgba(18, 22, 30, 0.9);
-  --card-alt: rgba(22, 27, 36, 0.86);
-  --border: rgba(255,255,255,0.08);
-  --text: #edf5ff;
-  --muted: #b0bfce;
-  --soft: #dfe9ff;
-  --pink: #ff6993;
-  --purple: #ad7cff;
-  --peach: #ffb38d;
-  --green: #73e0a7;
-  --shadow: 0 20px 50px rgba(0,0,0,0.3);
-}
-
-html, body, #root {
-  margin: 0;
-  min-height: 100%;
-  background:
-    radial-gradient(circle at top, rgba(173,124,255,0.18), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(255,179,141,0.12), transparent 24%),
-    var(--bg);
-  color: var(--text);
-  font-family: 'Inter', sans-serif;
-}
-
-button, input, textarea {
-  font: inherit;
-}
-
-button { cursor: pointer; }
-img { max-width: 100%; display: block; }
-textarea, input { resize: vertical; }
-
-h1, h2, h3, h4, p { margin: 0; }
-
-.loading {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  font-size: 1.3rem;
-  color: var(--text);
-}
-
-.auth-shell {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-}
-
-.auth-card {
-  width: min(100%, 520px);
-  padding: 28px 22px;
-  border-radius: 26px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-}
-
-.brand-wrap {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.brand-mark {
-  width: 48px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  border-radius: 14px;
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-  font-weight: 800;
-}
-
-.eyebrow {
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.eyebrow.accent { color: var(--peach); }
-
-h1 { letter-spacing: -0.06em; }
-
-.auth-brand { margin-bottom: 18px; }
-
-.auth-toggle {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-
-.nav-pill {
-  background: transparent;
-  color: var(--muted);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 10px 16px;
-}
-
-.nav-pill.active {
-  background: rgba(255,255,255,0.06);
-  color: var(--text);
-}
-
-.auth-form {
-  display: grid;
-  gap: 12px;
-}
-
-.auth-form input,
-.auth-form textarea,
-.profile-details input,
-.profile-details textarea {
-  width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 13px 14px;
-  background: rgba(255,255,255,0.03);
-  color: var(--text);
-}
-
-.auth-form input::placeholder,
-.profile-details input::placeholder,
-.profile-details textarea::placeholder {
-  color: var(--muted);
-}
-
-.error-text {
-  color: #ff9dac;
-  font-size: 0.9rem;
-}
-
-.primary-button,
-.ghost-button {
-  border-radius: 999px;
-  padding: 12px 18px;
-  font-weight: 600;
-}
-
-.primary-button {
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-  color: white;
-  border: none;
-}
-
-.primary-button.small {
-  padding: 10px 14px;
-  font-size: 0.82rem;
-}
-
-.ghost-button {
-  color: var(--text);
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border);
-}
-
-.app-shell {
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 24px 18px 40px;
-}
-
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 14px 18px;
-  border-radius: 24px;
-  background: rgba(17,21,29,0.85);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(12px);
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 6px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid var(--border);
-}
-
-.page-grid {
-  display: grid;
-  grid-template-columns: 1.5fr 0.8fr;
-  gap: 22px;
-  margin-top: 26px;
-}
-
-.card-panel {
-  background: rgba(18, 22, 30, 0.82);
-  border: 1px solid var(--border);
-  border-radius: 26px;
-  box-shadow: var(--shadow);
-}
-
-.hero {
-  display: grid;
-  grid-template-columns: 1.4fr 0.8fr;
-  gap: 18px;
-  padding: 26px;
-}
-
-.hero-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.hero-copy h2 {
-  font-size: clamp(2.4rem, 4vw, 4.2rem);
-  line-height: 0.96;
-  letter-spacing: -0.08em;
-  max-width: 500px;
-}
-
-.hero-text {
-  max-width: 540px;
-  color: var(--muted);
-  line-height: 1.7;
-  font-size: 1.02rem;
-}
-
-.cta-row {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.stat-row {
-  display: flex;
-  gap: 25px;
-  flex-wrap: wrap;
-}
-
-.stat-row div {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.stat-row strong {
-  font-size: 1.15rem;
-}
-
-.stat-row span {
-  color: var(--muted);
-  font-size: 0.8rem;
-}
-
-.profile-mini {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 18px;
-}
-
-.avatar-ring {
-  width: 122px;
-  height: 122px;
-  margin: 0 auto;
-  border-radius: 50%;
-  padding: 4px;
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-}
-
-.avatar-ring img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.mini-meta { text-align: center; }
-
-.mini-meta h3 {
-  margin-top: 8px;
-  font-size: 2rem;
-  letter-spacing: -0.06em;
-}
-
-.mini-meta p { color: var(--muted); }
-
-.taste-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-}
-
-.taste-tags span, .label-chip {
-  display: inline-flex;
-  padding: 8px 10px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: rgba(255,255,255,0.04);
-  color: var(--soft);
-  font-size: 0.72rem;
-}
+  if (reaction === 'hate') {
+    user.hated = [...new Set([...user.hated, movie.title])]
+    user.loved = user.loved.filter((title) => title !== movie.title)
+  }
 
-.sidebar {
-  padding: 20px 18px;
+  return user
 }
 
-.sidebar-head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-}
-
-.sidebar-head h3 {
-  font-size: clamp(2rem, 4vw, 3rem);
-  letter-spacing: -0.06em;
-}
-
-.meter {
-  position: relative;
-  height: 12px;
-  margin: 18px 0 20px;
-  border-radius: 999px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.05);
-}
-
-.meter span {
-  position: absolute;
-  inset: 0 auto 0 0;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--green), var(--peach), var(--purple));
-}
-
-.match-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: rgba(255,255,255,0.02);
-}
-
-.match-card img {
-  width: 82px;
-  height: 82px;
-  border-radius: 18px;
-  object-fit: cover;
-}
-
-.match-card h4 { margin-bottom: 4px; }
-
-.match-card p { color: var(--muted); }
-
-.taste-box {
-  margin-top: 18px;
-  display: grid;
-  gap: 10px;
-  padding: 16px;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.02);
-}
-
-.taste-box p { color: var(--muted); line-height: 1.6; }
-
-.discover, .profile-panel {
-  grid-column: 1 / -1;
-  padding: 26px;
-}
-
-.section-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
-}
-
-.section-head h3 {
-  margin-top: 8px;
-  font-size: clamp(1.7rem, 2vw, 2.5rem);
-  letter-spacing: -0.06em;
-}
-
-.movie-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.movie-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 220px;
-  padding: 18px 16px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-}
-
-.movie-topline {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.movie-card h4 {
-  margin-top: 24px;
-  font-size: 1.55rem;
-  letter-spacing: -0.06em;
-}
-
-.movie-description {
-  margin-top: 10px;
-  line-height: 1.6;
-  color: var(--muted);
-}
-
-.movie-actions {
-  margin-top: 18px;
-  display: flex;
-  gap: 10px;
-}
-
-.matches-list { grid-column: 1 / -1; }
-
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
-}
-
-.person-card { overflow: hidden; }
-
-.person-image-wrap {
-  position: relative;
-  height: 260px;
-}
-
-.person-image-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.score-badge {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  padding: 7px 10px;
-  border-radius: 999px;
-  background: rgba(13,16,22,0.8);
-  border: 1px solid var(--border);
-  font-size: 0.7rem;
-  font-weight: 700;
-}
-
-.person-body {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  padding: 22px 20px 18px;
-}
-
-.identity-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.identity-row h4 {
-  font-size: 1.8rem;
-  letter-spacing: -0.06em;
-}
-
-.identity-row p { margin-top: 5px; color: var(--muted); }
-
-.bio { color: var(--muted); line-height: 1.7; }
-
-.taste-quote {
-  display: grid;
-  gap: 8px;
-  padding: 14px 16px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.02);
-}
-
-.taste-quote strong {
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.taste-quote p { color: var(--soft); line-height: 1.6; }
-
-.favorite-lists {
-  display: grid;
-  gap: 12px;
-}
-
-.favorite-lists div {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.favorite-lists span {
-  color: var(--muted);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.favorite-lists p { color: var(--soft); line-height: 1.5; }
+export function computeCompatibility(user, candidate) {
+  const sharedLoved = (user.loved || []).filter((movie) => (candidate.loved || []).includes(movie)).length
+  const sharedHated = (user.hated || []).filter((movie) => (candidate.hated || []).includes(movie)).length
 
-.action-row {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
+  return Math.min(99, 55 + sharedLoved * 12 + sharedHated * 8)
 }
 
-.profile-editor {
-  margin-top: 18px;
-}
-
-.profile-grid {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 26px;
-}
-
-.profile-summary {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.profile-summary img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  border-radius: 20px;
-}
-
-.profile-summary h4 {
-  font-size: 1.8rem;
-  letter-spacing: -0.05em;
-}
-
-.profile-summary p { color: var(--muted); }
-
-.profile-details {
-  display: grid;
-  gap: 14px;
-}
-
-.taste-columns {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-  margin-top: 22px;
-}
-
-.taste-block {
-  padding: 18px;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.02);
-}
+export function buildTasteSummary(user, candidate) {
+  const sharedLoved = (candidate.loved || []).filter((movie) => (user.loved || []).includes(movie)).slice(0, 2)
+  const sharedHated = (candidate.hated || []).filter((movie) => (user.hated || []).includes(movie)).slice(0, 2)
 
-.taste-block h4 {
-  margin-bottom: 16px;
-  font-size: 1.2rem;
-}
-
-.taste-block ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 10px;
-}
+  const parts = []
+  if (sharedLoved.length) parts.push(`Loved: ${sharedLoved.join(' and ')} like you`)
+  if (sharedHated.length) parts.push(`Hated: ${sharedHated.join(' and ')} like you`)
 
-.taste-block li {
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.03);
-  color: var(--soft);
+  return parts.join(' · ') || 'Different taste, but definitely interesting.'
 }
 
-@media (max-width: 1100px) {
-  .movie-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
-@media (max-width: 960px) {
-  .page-grid, .hero, .profile-grid, .card-grid { grid-template-columns: 1fr; }
-}
+export function getMatchesForUser(userId) {
+  const user = findUserById(userId)
+  if (!user) return []
 
-@media (max-width: 680px) {
-  .app-shell { padding-inline: 12px; }
-  .topbar { flex-wrap: wrap; }
-  .nav { order: 3; width: 100%; justify-content: center; }
-  .movie-grid { grid-template-columns: 1fr; }
-  .identity-row { flex-direction: column; }
-  .hero, .discover, .profile-panel { padding: 18px 16px; }
+  return store.users
+    .filter((candidate) => candidate.id !== userId)
+    .map((candidate) => ({
+      ...candidate,
+      score: computeCompatibility(user, candidate),
+      tasteSummary: buildTasteSummary(user, candidate)
+    }))
+    .sort((a, b) => b.score - a.score)
 }

@@ -1,35 +1,26 @@
 import express from 'express'
-import { store, getMatchesForUser, buildTasteSummary, ensureUserProfile } from '../db.js'
+import { store, ensureUserProfile } from '../db.js'
 import { authMiddleware } from '../middleware/auth.js'
 
 const router = express.Router()
 
-router.get('/', authMiddleware, (req, res) => {
-  const matches = getMatchesForUser(req.user.id)
-  return res.json({ matches })
-})
-
-router.post('/:matchId/like', authMiddleware, (req, res) => {
-  store.likes.push({
-    from_user_id: req.user.id,
-    to_user_id: Number(req.params.matchId),
-    created_at: new Date()
-  })
-  return res.json({ ok: true })
-})
-
-router.get('/:matchId', authMiddleware, (req, res) => {
+router.get('/profile', authMiddleware, (req, res) => {
   const user = store.users.find((item) => item.id === req.user.id)
-  const match = store.users.find((item) => item.id === Number(req.params.matchId))
-  if (!user || !match) return res.status(404).json({ message: 'Match not found' })
+  if (!user) return res.status(404).json({ message: 'User not found' })
+  return res.json({ user: ensureUserProfile(user) })
+})
 
-  return res.json({
-    match: {
-      ...match,
-      score: Math.round((Math.random() * 30) + 60),
-      tasteSummary: buildTasteSummary(user, match)
-    }
-  })
+router.put('/profile', authMiddleware, (req, res) => {
+  const user = store.users.find((item) => item.id === req.user.id)
+  if (!user) return res.status(404).json({ message: 'User not found' })
+
+  const { name, city, bio, hobbies } = req.body
+  if (name) user.name = name
+  if (city) user.city = city
+  if (bio) user.bio = bio
+  if (hobbies) user.hobbies = Array.isArray(hobbies) ? hobbies : String(hobbies).split(',').map((item) => item.trim())
+
+  return res.json({ user: ensureUserProfile(user) })
 })
 
 export default router
