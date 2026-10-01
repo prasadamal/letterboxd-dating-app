@@ -1,11 +1,12 @@
 import jwt from 'jsonwebtoken'
-
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key'
+import { getJwtSecret } from '../config.js'
+import { findUserById } from '../db.js'
 
 export function signToken(payload) {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' })
+  return jwt.sign(payload, getJwtSecret(), { expiresIn: '7d', algorithm: 'HS256' })
 }
 
+/** Verifies the Bearer token (signature + expiry) and that the user still exists. */
 export function authMiddleware(req, res, next) {
   const header = req.headers.authorization
   if (!header || !header.startsWith('Bearer ')) {
@@ -13,9 +14,11 @@ export function authMiddleware(req, res, next) {
   }
 
   try {
-    const token = header.split(' ')[1]
-    req.user = jwt.verify(token, JWT_SECRET)
-    next()
+    const payload = jwt.verify(header.split(' ')[1], getJwtSecret(), { algorithms: ['HS256'] })
+    const user = findUserById(payload.id)
+    if (!user) return res.status(401).json({ message: 'Token expired or invalid' })
+    req.user = { id: user.id, email: user.email }
+    return next()
   } catch (error) {
     return res.status(401).json({ message: 'Token expired or invalid' })
   }
