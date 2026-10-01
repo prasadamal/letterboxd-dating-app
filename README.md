@@ -1,2 +1,18 @@
-# letterboxd-dating-app
-A dating app that matches people based on their Letterboxd movie and series taste compatibility
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules
+
+# Build output
+dist
+
+# Environment
+.env
+.env.*
+
+# Editor
+.vscode
+.DS_Store
