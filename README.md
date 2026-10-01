@@ -1,41 +1,30 @@
 # ReelMates
 
-ReelMates is a movie-taste-based dating app where people with similar cinema preferences can meet, match, and chat.
+A movie-taste-based dating app where people connect through shared film preferences.
+
+## Run locally
+
+npm install
+cp .env.example .env
+npm run dev
+
+Then open http://localhost:3000
+
+## Demo login
+
+Email: maya@example.com
+Password: 123456
 
 ## Features
 
-- Daily movie rating flow
-- Profile creation from loved and hated movies
-- Compatibility engine based on taste overlap
-- Match discovery UI with profile summaries
-- JWT auth and Express backend
-- PostgreSQL-ready architecture with in-memory fallback for local development
+- Movie-rating flow for love / hate / skip
+- Personalized taste profile
+- Compatibility matching engine
+- Match cards and profile views
+- Messaging API
+- JWT-based auth
+- In-memory local datastore for easy launch
 
-## Quick start
+## Notes
 
-1. Install dependencies:
-   npm install
-
-2. Configure environment:
-   cp .env.example .env
-
-3. Start the app:
-   npm run dev
-
-4. Open:
-   http://localhost:3000
-
-## API endpoints
-
-- POST /api/auth/signup
-- POST /api/auth/login
-- GET /api/auth/me
-- GET /api/movies/daily
-- POST /api/movies/:id/rate
-- GET /api/matches
-- GET /api/profile
-- GET /api/health
-
-## Production deployment note
-
-This MVP is designed to be deployed with a PostgreSQL database. If DATABASE_URL is not configured, the app uses a seeded in-memory dataset so it still runs locally and can be developed without a database server.
+This MVP is designed to be easy to launch locally and extend for production use with a real database and live chat.
