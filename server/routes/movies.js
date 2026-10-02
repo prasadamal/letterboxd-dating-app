@@ -1,33 +1,39 @@
 import express from 'express'
-import { getDailyMovies, getMovieById, rateMovie, store, ensureUserProfile } from '../db.js'
+import { getDailyMovies, getMovieById, rateMovie, getUserProfile, ensureUserProfile } from '../db.js'
 import { authMiddleware } from '../middleware/auth.js'
 
 const router = express.Router()
 
-router.get('/daily', authMiddleware, (req, res) => {
-  res.json({ movies: getDailyMovies() })
+router.get('/daily', authMiddleware, async (req, res) => {
+  try {
+    const movies = await getDailyMovies(req.user.id)
+    return res.json({ movies })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ message: 'Could not load daily movies' })
+  }
 })
 
-router.post('/:id/rate', authMiddleware, (req, res) => {
-  const { id } = req.params
-  const { reaction } = req.body
-  const user = store.users.find((item) => item.id === req.user.id)
-  const movie = getMovieById(id)
+router.post('/:id/rate', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params
+    const { reaction } = req.body
+    const movie = await getMovieById(id)
 
-  if (!user || !movie) {
-    return res.status(404).json({ message: 'User or movie not found' })
+    if (!movie) {
+      return res.status(404).json({ message: 'Movie not found' })
+    }
+
+    if (!['love', 'hate', 'skip'].includes(reaction)) {
+      return res.status(400).json({ message: 'Invalid reaction' })
+    }
+
+    const user = await rateMovie(req.user.id, movie.id, reaction)
+    return res.json({ ok: true, user: ensureUserProfile(user) })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ message: 'Could not save rating' })
   }
-
-  if (!['love', 'hate', 'skip'].includes(reaction)) {
-    return res.status(400).json({ message: 'Invalid reaction' })
-  }
-
-  rateMovie(user.id, movie.id, reaction)
-  return res.json({ ok: true, user: ensureUserProfile(user) })
-})
-
-router.get('/', authMiddleware, (req, res) => {
-  res.json({ movies: store.movies })
 })
 
 export default router
