@@ -1,30 +1,36 @@
 # ReelMates
 
-A movie-taste-based dating app where people connect through shared film preferences.
+Movie-taste dating app: rate films, get a taste profile, and discover compatible matches.
 
-## Run locally
+## Development
 
+```bash
 npm install
 cp .env.example .env
 npm run dev
+```
 
-Then open http://localhost:3000
+Open http://localhost:3000 (Vite proxies `/api` to the backend on port 4000).
 
-## Demo login
+**Demo login:** `maya@example.com` / `123456`
 
-Email: maya@example.com
-Password: 123456
+## Production
 
-## Features
+```bash
+npm install
+cp .env.example .env   # set JWT_SECRET and CLIENT_URL
+npm run build
+NODE_ENV=production npm start
+```
 
-- Movie-rating flow for love / hate / skip
-- Personalized taste profile
-- Compatibility matching engine
-- Match cards and profile views
-- Messaging API
-- JWT-based auth
-- In-memory local datastore for easy launch
+Serves the built SPA from `dist/` on the same port as the API (`PORT`, default 4000).
 
-## Notes
+## API
 
-This MVP is designed to be easy to launch locally and extend for production use with a real database and live chat.
+- `POST /api/auth/signup|login`, `GET /api/auth/me`
+- `GET /api/movies/daily`, `POST /api/movies/:id/rate`
+- `GET /api/matches`, `GET /api/matches/:id`, `POST /api/matches/:id/like`
+- `GET|PUT /api/users/profile`
+- `GET /api/messages/:userId`, `POST /api/messages`
+
+Data is in-memory (resets on restart). Swap `server/db.js` for Postgres when you outgrow the MVP.
