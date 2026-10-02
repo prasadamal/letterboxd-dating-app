@@ -1,26 +1,57 @@
 import express from 'express'
-import { store, ensureUserProfile } from '../db.js'
-import { authMiddleware } from '../middleware/auth.js'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import fs from 'fs'
 
-const router = express.Router()
+dotenv.config()
 
-router.get('/profile', authMiddleware, (req, res) => {
-  const user = store.users.find((item) => item.id === req.user.id)
-  if (!user) return res.status(404).json({ message: 'User not found' })
-  return res.json({ user: ensureUserProfile(user) })
+import authRoutes from './routes/auth.js'
+import moviesRoutes from './routes/movies.js'
+import matchesRoutes from './routes/matches.js'
+import usersRoutes from './routes/users.js'
+import messagesRoutes from './routes/messages.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const isProduction = process.env.NODE_ENV === 'production'
+const distPath = path.join(__dirname, '..', 'dist')
+
+const app = express()
+const port = Number(process.env.PORT || 4000)
+
+if (isProduction && (!process.env.JWT_SECRET || process.env.JWT_SECRET === 'change-this-secret-for-production')) {
+  console.error('Set a strong JWT_SECRET before running in production.')
+  process.exit(1)
+}
+
+app.use(cors({ origin: process.env.CLIENT_URL || (isProduction ? false : '*'), credentials: true }))
+app.use(express.json({ limit: '1mb' }))
+app.use(express.urlencoded({ extended: true }))
+
+app.get('/api/health', (req, res) => {
+  res.json({ ok: true, status: 'healthy', env: process.env.NODE_ENV || 'development' })
 })
 
-router.put('/profile', authMiddleware, (req, res) => {
-  const user = store.users.find((item) => item.id === req.user.id)
-  if (!user) return res.status(404).json({ message: 'User not found' })
+app.use('/api/auth', authRoutes)
+app.use('/api/movies', moviesRoutes)
+app.use('/api/matches', matchesRoutes)
+app.use('/api/users', usersRoutes)
+app.use('/api/messages', messagesRoutes)
 
-  const { name, city, bio, hobbies } = req.body
-  if (name) user.name = name
-  if (city) user.city = city
-  if (bio) user.bio = bio
-  if (hobbies) user.hobbies = Array.isArray(hobbies) ? hobbies : String(hobbies).split(',').map((item) => item.trim())
+if (isProduction && fs.existsSync(distPath)) {
+  app.use(express.static(distPath))
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next()
+    return res.sendFile(path.join(distPath, 'index.html'))
+  })
+}
 
-  return res.json({ user: ensureUserProfile(user) })
+app.use((req, res) => {
+  res.status(404).json({ message: 'Endpoint not found' })
 })
 
-export default router
+app.listen(port, () => {
+  console.log(`ReelMates backend running on http://localhost:${port}`)
+})
