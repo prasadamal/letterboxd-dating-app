@@ -25,6 +25,7 @@ export type User = {
   profile_completion?: number
   matchmaking_enabled?: boolean
   email_verified?: boolean
+  loved: string[]
   hated: string[]
 }
 

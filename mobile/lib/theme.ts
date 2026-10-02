@@ -8,6 +8,7 @@ export const colors = {
   muted: '#9aa7b8',
   soft: '#dbe4ef',
   accent: '#f4a261',
+  peach: '#f4a261',
   highlight: '#f5d76e',
   pink: '#ff5f8a',
   purple: '#c084fc',
