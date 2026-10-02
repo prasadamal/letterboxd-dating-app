@@ -59,3 +59,15 @@ NODE_ENV=production npm start
 ## Security note
 
 The Supabase project currently has **RLS disabled** on public tables (backend uses the service role). Before exposing Supabase directly to clients, enable RLS and add policies. See [Supabase RLS](https://supabase.com/docs/guides/database/postgres/row-level-security).
+
+## Mobile (iOS & Android)
+
+Expo app in **`mobile/`**. Full Play Store & App Store checklist: **`docs/store/SUBMISSION_CHECKLIST.md`**.
+
+```bash
+npm run mobile          # Expo dev server
+cd mobile && npm run build:android
+cd mobile && npm run build:ios
+```
+
+Bundle ID / package: **`com.reelmates.app`**
