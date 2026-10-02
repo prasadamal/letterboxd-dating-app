@@ -14,6 +14,8 @@ const demoUsers = [
     bio: 'I love thoughtful cinema and slow-burn romances.',
     hobbies: ['Cinema', 'Hiking', 'Travel'],
     city: 'Brooklyn',
+    country: 'United States',
+    gender: 'female',
     age: 27,
     loves: [1, 2, 4, 26],
     hates: [25, 208]
@@ -24,6 +26,8 @@ const demoUsers = [
     bio: 'I collect great performances and midnight screenings.',
     hobbies: ['Film clubs', 'Cooking', 'Road trips'],
     city: 'Austin',
+    country: 'United States',
+    gender: 'female',
     age: 29,
     loves: [1, 2, 115, 26],
     hates: [25, 81]
@@ -34,6 +38,8 @@ const demoUsers = [
     bio: 'Classic films, deep conversations, and film history.',
     hobbies: ['Photography', 'Chess', 'Jazz'],
     city: 'Chicago',
+    country: 'United States',
+    gender: 'male',
     age: 31,
     loves: [7, 4, 31, 37],
     hates: [34, 258]
@@ -55,6 +61,8 @@ for (const demo of demoUsers) {
         bio: demo.bio,
         hobbies: demo.hobbies,
         city: demo.city,
+        country: demo.country,
+        gender: demo.gender,
         age: demo.age,
         is_demo: true
       })
@@ -71,6 +79,8 @@ for (const demo of demoUsers) {
         bio: demo.bio,
         hobbies: demo.hobbies,
         city: demo.city,
+        country: demo.country,
+        gender: demo.gender,
         age: demo.age,
         is_demo: true
       })

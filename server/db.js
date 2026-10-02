@@ -25,7 +25,9 @@ function seededShuffle(items, seedKey) {
   return copy
 }
 
-function pickDailySet(pool, userId, day, count = 8) {
+export const DAILY_MOVIE_COUNT = Number(process.env.DAILY_MOVIE_COUNT || 10)
+
+function pickDailySet(pool, userId, day, count = DAILY_MOVIE_COUNT) {
   const famous = pool.filter((movie) => movie.popularity >= 55)
   const underrated = pool.filter((movie) => movie.popularity < 55)
   const genres = new Set()
@@ -67,7 +69,7 @@ function pickDailySet(pool, userId, day, count = 8) {
   return picks.slice(0, count)
 }
 
-async function getRatingsForUsers(userIds) {
+export async function getRatingsForUsers(userIds) {
   if (!userIds.length) return new Map()
 
   const { data, error } = await supabase
@@ -98,17 +100,42 @@ async function getRatingsForUsers(userIds) {
 }
 
 export function mapUserRow(row, taste = { loved: [], hated: [] }) {
+  const seed = encodeURIComponent(row.display_name || row.email || row.id)
   return {
     id: row.id,
     email: row.email,
     name: row.display_name,
     age: row.age ?? 25,
     city: row.city ?? '',
+    country: row.country ?? '',
+    gender: row.gender ?? null,
     bio: row.bio ?? '',
     hobbies: row.hobbies ?? [],
-    avatar_url: `https://api.dicebear.com/7.x/thumbs/svg?seed=${encodeURIComponent(row.display_name || row.email)}`,
+    avatar_url:
+      row.photo_url ||
+      `https://api.dicebear.com/7.x/thumbs/svg?seed=${seed}`,
+    photo_url: row.photo_url || null,
+    referral_code: row.referral_code || null,
     loved: taste.loved,
     hated: taste.hated
+  }
+}
+
+export function buildTasteLines(userLabels, candidateLabels, candidateName = 'They') {
+  const sharedLoved = (candidateLabels?.love || [])
+    .filter((title) => (userLabels?.love || []).includes(title))
+    .slice(0, 2)
+  const sharedHated = (candidateLabels?.hate || [])
+    .filter((title) => (userLabels?.hate || []).includes(title))
+    .slice(0, 2)
+
+  return {
+    likedLine: sharedLoved.length
+      ? `${candidateName} liked ${sharedLoved.join(' and ')} like you`
+      : null,
+    dislikedLine: sharedHated.length
+      ? `${candidateName} didn't like ${sharedHated.join(' and ')} like you`
+      : null
   }
 }
 
@@ -198,22 +225,28 @@ export async function getDailyMovies(userId) {
 
   const { data: ratedRows, error: ratedError } = await supabase
     .from('user_ratings')
-    .select('movie_id')
+    .select('movie_id, rating')
     .eq('user_id', userId)
+    .in('rating', ['love', 'hate'])
 
   if (ratedError) throw ratedError
 
   const ratedIds = new Set((ratedRows || []).map((row) => row.movie_id))
 
-  const { data: pool, error: poolError } = await supabase
-    .from('movies')
-    .select('*')
-    .eq('in_deck', true)
+  const { data: pool, error: poolError } = await supabase.from('movies').select('*').eq('in_deck', true)
 
   if (poolError) throw poolError
 
-  const available = (pool || []).filter((movie) => !ratedIds.has(movie.id))
-  const picks = pickDailySet(available, userId, day, 8)
+  const all = pool || []
+  const unseen = all.filter((movie) => !ratedIds.has(movie.id))
+  const repeats = all.filter((movie) => ratedIds.has(movie.id))
+
+  const repeatCount = Math.min(3, Math.floor(DAILY_MOVIE_COUNT * 0.3), repeats.length)
+  const freshCount = Math.max(0, DAILY_MOVIE_COUNT - repeatCount)
+
+  const freshPicks = pickDailySet(unseen.length ? unseen : all, userId, day, freshCount)
+  const repeatPicks = seededShuffle(repeats, `${userId}:${day}:repeat`).slice(0, repeatCount)
+  const picks = seededShuffle([...freshPicks, ...repeatPicks], `${userId}:${day}:mix`).slice(0, DAILY_MOVIE_COUNT)
 
   if (picks.length) {
     const { error: insertError } = await supabase.from('daily_batches').insert({
@@ -253,7 +286,36 @@ export async function rateMovie(userId, movieId, reaction) {
   )
 
   if (error) throw error
+  await updateTasteVector(userId, movieId, reaction)
   return getUserProfile(userId)
+}
+
+async function updateTasteVector(userId, movieId, reaction) {
+  const movie = await getMovieById(movieId)
+  if (!movie || reaction === 'skip') return
+
+  const user = await findUserById(userId)
+  const vector = user?.taste_vector || {}
+  const genre = movie.genres?.[0] || 'Drama'
+  const language = movie.origin_language || 'English'
+
+  const next = {
+    ...vector,
+    genres: { ...(vector.genres || {}) },
+    languages: { ...(vector.languages || {}) },
+    loveCount: Number(vector.loveCount || 0),
+    hateCount: Number(vector.hateCount || 0)
+  }
+
+  const genreWeight = reaction === 'love' ? 2 : -2
+  const languageWeight = reaction === 'love' ? 1 : -1
+  next.genres[genre] = Number(next.genres[genre] || 0) + genreWeight
+  next.languages[language] = Number(next.languages[language] || 0) + languageWeight
+  if (reaction === 'love') next.loveCount += 1
+  if (reaction === 'hate') next.hateCount += 1
+  next.updatedAt = new Date().toISOString()
+
+  await supabase.from('users').update({ taste_vector: next }).eq('id', userId)
 }
 
 export function computeCompatibilityFromMaps(userMap, candidateMap) {
@@ -319,37 +381,18 @@ export async function getMatchesForUser(userId) {
     .sort((a, b) => b.score - a.score)
 }
 
-async function orderedMatchUsers(a, b) {
+export async function orderedMatchUsers(a, b) {
   return a < b ? [a, b] : [b, a]
 }
 
-export async function getOrCreateMatch(userId, peerId) {
+export async function getMutualMatchRow(userId, peerId) {
   const [userA, userB] = await orderedMatchUsers(userId, peerId)
-  const { data: existing, error: findError } = await supabase
+  const { data, error } = await supabase
     .from('matches')
     .select('*')
     .eq('user_a', userA)
     .eq('user_b', userB)
     .maybeSingle()
-
-  if (findError) throw findError
-  if (existing) return existing
-
-  const ratings = await getRatingsForUsers([userId, peerId])
-  const stats = computeCompatibilityFromMaps(ratings.get(userId), ratings.get(peerId))
-
-  const { data, error } = await supabase
-    .from('matches')
-    .insert({
-      user_a: userA,
-      user_b: userB,
-      compatibility: stats.score,
-      shared_loves: stats.sharedLove || 0,
-      shared_hates: stats.sharedHate || 0,
-      conflicts: stats.conflicts || 0
-    })
-    .select('*')
-    .single()
 
   if (error) throw error
   return data
@@ -371,7 +414,9 @@ async function getOrCreateConversation(matchId) {
 }
 
 export async function getMessagesBetween(userId, peerId) {
-  const match = await getOrCreateMatch(userId, peerId)
+  const match = await getMutualMatchRow(userId, peerId)
+  if (!match) return []
+
   const conversation = await getOrCreateConversation(match.id)
 
   const { data, error } = await supabase
@@ -392,8 +437,25 @@ export async function getMessagesBetween(userId, peerId) {
 }
 
 export async function sendMessage(userId, peerId, text) {
-  const match = await getOrCreateMatch(userId, peerId)
+  const match = await getMutualMatchRow(userId, peerId)
+  if (!match) {
+    const error = new Error('You can only message mutual matches.')
+    error.code = 'NO_MATCH'
+    throw error
+  }
+
   const conversation = await getOrCreateConversation(match.id)
+  const [userA, userB] = await orderedMatchUsers(userId, peerId)
+  const isUserA = userId === userA
+
+  if (!match.chat_unlocked) {
+    const introSent = isUserA ? match.user_a_intro_sent : match.user_b_intro_sent
+    if (introSent) {
+      const error = new Error('Send one intro message first. Chat unlocks after you both say hello.')
+      error.code = 'INTRO_LIMIT'
+      throw error
+    }
+  }
 
   const { data, error } = await supabase
     .from('messages')
@@ -406,6 +468,20 @@ export async function sendMessage(userId, peerId, text) {
     .single()
 
   if (error) throw error
+
+  if (!match.chat_unlocked) {
+    const nextA = isUserA ? true : match.user_a_intro_sent
+    const nextB = !isUserA ? true : match.user_b_intro_sent
+    await supabase
+      .from('matches')
+      .update({
+        updated_at: new Date().toISOString(),
+        user_a_intro_sent: nextA,
+        user_b_intro_sent: nextB,
+        chat_unlocked: Boolean(nextA && nextB)
+      })
+      .eq('id', match.id)
+  }
 
   return {
     id: data.id,

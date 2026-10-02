@@ -17,12 +17,14 @@ router.get('/profile', authMiddleware, async (req, res) => {
 
 router.put('/profile', authMiddleware, async (req, res) => {
   try {
-    const { name, city, bio, hobbies, age } = req.body
+    const { name, city, country, bio, hobbies, age, photoUrl } = req.body
     const updates = {}
 
     if (name) updates.display_name = name
     if (city !== undefined) updates.city = city
+    if (country !== undefined) updates.country = country
     if (bio !== undefined) updates.bio = bio
+    if (photoUrl !== undefined) updates.photo_url = photoUrl
     if (age !== undefined) updates.age = Number(age)
     if (hobbies) {
       updates.hobbies = Array.isArray(hobbies) ? hobbies : String(hobbies).split(',').map((item) => item.trim())
