@@ -19,6 +19,7 @@ import messagesRoutes from './routes/messages.js'
 import platformRoutes from './routes/platform.js'
 import datingRoutes from './routes/dating.js'
 import safetyRoutes from './routes/safety.js'
+import notificationsRoutes from './routes/notifications.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -65,6 +66,16 @@ export function createApp() {
     res.json(await healthPayload())
   })
 
+  app.get('/api/v1/health/db', async (req, res) => {
+    const { error } = await supabase.from('users').select('id').limit(1)
+    res.status(error ? 503 : 200).json({ ok: !error, db: error ? 'down' : 'up' })
+  })
+
+  app.get('/api/v1/health/storage', async (req, res) => {
+    const { data, error } = await supabase.storage.from('avatars').list('', { limit: 1 })
+    res.status(error ? 503 : 200).json({ ok: !error, storage: error ? 'down' : 'up', sample: (data || []).length })
+  })
+
   app.get('/api/v1/openapi.json', (req, res) => {
     res.json({
       openapi: '3.0.3',
@@ -88,6 +99,7 @@ export function createApp() {
     app.use(`${prefix}/platform`, platformRoutes)
     app.use(`${prefix}/dating`, datingRoutes)
     app.use(`${prefix}/safety`, safetyRoutes)
+    app.use(`${prefix}/notifications`, notificationsRoutes)
   }
 
   mount('/api/v1')

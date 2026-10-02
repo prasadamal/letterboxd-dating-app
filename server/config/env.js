@@ -5,6 +5,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(4000),
   JWT_SECRET: z.string().min(16),
+  JWT_REFRESH_SECRET: z.string().min(16).optional(),
   CLIENT_URL: z.string().url().optional(),
   SUPABASE_URL: z.string().url(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(20).optional(),
@@ -37,6 +38,10 @@ export function loadEnv() {
     }
     if (!env.SUPABASE_SERVICE_ROLE_KEY) {
       console.error('Production requires SUPABASE_SERVICE_ROLE_KEY.')
+      process.exit(1)
+    }
+    if (!env.JWT_REFRESH_SECRET || env.JWT_REFRESH_SECRET.length < 32) {
+      console.error('Production requires JWT_REFRESH_SECRET (32+ chars).')
       process.exit(1)
     }
   } else if (!env.SUPABASE_SERVICE_ROLE_KEY && !env.SUPABASE_ANON_KEY) {

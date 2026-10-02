@@ -1,8 +1,19 @@
 import express from 'express'
-import { findUserById, getMessagesBetween, getMutualMatchRow, sendMessage } from '../db.js'
+import { findUserById, getMessagesBetween, getMutualMatchRow, sendMessage, getConversationsForUser } from '../db.js'
 import { authMiddleware } from '../middleware/auth.js'
+import { asyncHandler, AppError } from '../middleware/errors.js'
+import { validateBody, messageSchema } from '../middleware/validate.js'
 
 const router = express.Router()
+
+router.get(
+  '/conversations',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const conversations = await getConversationsForUser(req.user.id)
+    return res.json({ conversations })
+  })
+)
 
 router.get('/:userId', authMiddleware, async (req, res) => {
   try {

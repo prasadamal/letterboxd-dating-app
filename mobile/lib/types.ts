@@ -22,8 +22,9 @@ export type User = {
   hobbies: string[]
   avatar_url: string
   photo_url?: string | null
-  referral_code?: string | null
-  loved: string[]
+  profile_completion?: number
+  matchmaking_enabled?: boolean
+  email_verified?: boolean
   hated: string[]
 }
 

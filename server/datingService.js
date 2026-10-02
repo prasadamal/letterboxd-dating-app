@@ -10,6 +10,7 @@ import {
 } from './db.js'
 import { assertDatingLaunched } from './platformService.js'
 import { getBlockedUserIds } from './safetyService.js'
+import { assertMatchmakingReady } from './services/profileService.js'
 
 function oppositeGender(gender) {
   if (gender === 'male') return 'female'
@@ -53,6 +54,7 @@ async function createMutualMatch(userId, peerId) {
 
 export async function recordSwipe(userId, targetId, action) {
   await assertDatingLaunched()
+  await assertMatchmakingReady(userId)
 
   if (userId === targetId) throw new Error('Invalid swipe target')
   if (!['like', 'pass'].includes(action)) throw new Error('Invalid swipe action')
@@ -104,6 +106,7 @@ export async function recordSwipe(userId, targetId, action) {
 
 export async function getDatingDeck(userId, limit = 1) {
   await assertDatingLaunched()
+  await assertMatchmakingReady(userId)
 
   const self = await findUserById(userId)
   if (!self) throw new Error('User not found')

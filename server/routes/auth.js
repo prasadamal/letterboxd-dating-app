@@ -23,6 +23,8 @@ import {
   requestEmailVerification,
   verifyEmail
 } from '../services/authLifecycleService.js'
+import { issueRefreshToken, rotateRefreshToken, revokeRefreshToken } from '../services/authService.js'
+import { syncProfileCompletion } from '../services/profileService.js'
 
 const router = express.Router()
 
@@ -76,9 +78,11 @@ router.post(
     })
 
     const token = signToken({ id: row.id, email: row.email })
+    const { refreshToken, expiresAt } = await issueRefreshToken(row.id)
+    await syncProfileCompletion(row.id)
     const user = await getUserProfile(row.id)
     const platform = await getPlatformStatus()
-    return res.status(201).json({ token, user: ensureUserProfile(user), platform })
+    return res.status(201).json({ token, refreshToken, refreshExpiresAt: expiresAt, user: ensureUserProfile(user), platform })
   })
 )
 
@@ -96,9 +100,11 @@ router.post(
     await updateUserProfile(user.id, { last_active_at: new Date().toISOString() })
 
     const token = signToken({ id: user.id, email: user.email })
+    const { refreshToken, expiresAt } = await issueRefreshToken(user.id)
+    await syncProfileCompletion(user.id)
     const profile = await getUserProfile(user.id)
     const platform = await getPlatformStatus()
-    return res.json({ token, user: ensureUserProfile(profile), platform })
+    return res.json({ token, refreshToken, refreshExpiresAt: expiresAt, user: ensureUserProfile(profile), platform })
   })
 )
 
@@ -127,6 +133,29 @@ router.post('/verify-email/confirm', validateBody(verifyEmailSchema), asyncHandl
   } catch (error) {
     throw new AppError(error.message, error.status || 400, error.code || 'VERIFY_FAILED')
   }
+  return res.json({ ok: true })
+}))
+
+router.post('/refresh', asyncHandler(async (req, res) => {
+  const { refreshToken } = req.body
+  if (!refreshToken) throw new AppError('refreshToken required', 400, 'VALIDATION_ERROR')
+
+  const rotated = await rotateRefreshToken(refreshToken)
+  if (!rotated) throw new AppError('Invalid refresh token', 401, 'INVALID_REFRESH')
+
+  const profile = await getUserProfile(rotated.userId)
+  const token = signToken({ id: rotated.userId, email: profile.email })
+  return res.json({
+    token,
+    refreshToken: rotated.refreshToken,
+    refreshExpiresAt: rotated.expiresAt,
+    user: ensureUserProfile(profile)
+  })
+}))
+
+router.post('/logout', asyncHandler(async (req, res) => {
+  const { refreshToken } = req.body
+  if (refreshToken) await revokeRefreshToken(refreshToken)
   return res.json({ ok: true })
 }))
 

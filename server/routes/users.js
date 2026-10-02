@@ -6,6 +6,7 @@ import { asyncHandler, AppError } from '../middleware/errors.js'
 import { validateBody } from '../middleware/validate.js'
 import { uploadAvatar } from '../services/storageService.js'
 import { computeProfileCompletion, writeAuditLog } from '../services/auditService.js'
+import { saveProfilePhotoRecord, syncProfileCompletion } from '../services/profileService.js'
 
 const router = express.Router()
 
@@ -77,10 +78,7 @@ router.post(
     if (buffer.length > 2_500_000) throw new AppError('Image too large (max 2.5MB)', 400, 'FILE_TOO_LARGE')
 
     const publicUrl = await uploadAvatar(req.user.id, buffer, req.body.contentType)
-    await updateUserProfile(req.user.id, { photo_url: publicUrl, last_active_at: new Date().toISOString() })
-
-    const userRow = await findUserById(req.user.id)
-    await updateUserProfile(req.user.id, { profile_completion: computeProfileCompletion(userRow) })
+    const state = await saveProfilePhotoRecord(req.user.id, publicUrl, true)
 
     await writeAuditLog({
       actorId: req.user.id,
@@ -91,7 +89,7 @@ router.post(
     })
 
     const user = await getUserProfile(req.user.id)
-    return res.json({ user: ensureUserProfile(user), photoUrl: publicUrl })
+    return res.json({ user: ensureUserProfile(user), photoUrl: publicUrl, profile: state })
   })
 )
 
