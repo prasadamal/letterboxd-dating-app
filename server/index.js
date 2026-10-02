@@ -1,17 +1,16 @@
+import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
-
-dotenv.config()
 
 import authRoutes from './routes/auth.js'
 import moviesRoutes from './routes/movies.js'
 import matchesRoutes from './routes/matches.js'
 import usersRoutes from './routes/users.js'
 import messagesRoutes from './routes/messages.js'
+import { seedMoviesIfEmpty } from './db.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -52,6 +51,15 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Endpoint not found' })
 })
 
-app.listen(port, () => {
+app.listen(port, async () => {
+  try {
+    const result = await seedMoviesIfEmpty()
+    if (result.seeded) {
+      console.log(`Seeded ${result.seeded} movies into Supabase`)
+    }
+  } catch (error) {
+    console.error('Movie seed failed:', error.message)
+  }
+
   console.log(`ReelMates backend running on http://localhost:${port}`)
 })

@@ -111,6 +111,10 @@ function buildTasteSummary(user, match) {
   return parts.join(' · ') || 'Different taste, but definitely interesting.'
 }
 
+function movieLabel(movie) {
+  return `${movie.title} (${movie.year})`
+}
+
 function Dashboard({ user, setUser }) {
   const [tab, setTab] = useState('discover')
   const [movies, setMovies] = useState([])
@@ -308,8 +312,8 @@ function Dashboard({ user, setUser }) {
           <section className="discover card-panel">
             <div className="section-head">
               <div>
-                <p className="eyebrow accent">Daily movie rating</p>
-                <h3>What are you in the mood for?</h3>
+                <p className="eyebrow accent">Daily picks</p>
+                <h3>Rate a few films to sharpen your matches</h3>
               </div>
             </div>
 
@@ -317,14 +321,14 @@ function Dashboard({ user, setUser }) {
               {movies.map((movie) => (
                 <article className="movie-card" key={movie.id}>
                   <div className="movie-topline">
-                    <span>{movie.genre}</span>
-                    <span>{movie.mood}</span>
+                    <span>{movie.genres?.[0] || 'Film'}</span>
+                    <span>{movie.origin_language}</span>
                   </div>
-                  <h4>{movie.title}</h4>
-                  <p className="movie-description">{movie.description}</p>
+                  <h4>{movieLabel(movie)}</h4>
                   <div className="movie-actions">
-                    <button className="ghost-button" onClick={() => rateMovie(movie, 'hate')}>Hate</button>
-                    <button className="primary-button" onClick={() => rateMovie(movie, 'love')}>Love</button>
+                    <button className="ghost-button" onClick={() => rateMovie(movie, 'hate')}>Dislike</button>
+                    <button className="ghost-button" onClick={() => rateMovie(movie, 'skip')}>Skip</button>
+                    <button className="primary-button" onClick={() => rateMovie(movie, 'love')}>Like</button>
                   </div>
                 </article>
               ))}
@@ -418,14 +422,14 @@ function Dashboard({ user, setUser }) {
 
             <div className="taste-columns">
               <div className="taste-block">
-                <h4>Loved</h4>
+                <h4>Liked</h4>
                 <ul>
                   {(profile.loved || []).map((movie) => <li key={movie}>{movie}</li>)}
                 </ul>
               </div>
 
               <div className="taste-block">
-                <h4>Hated</h4>
+                <h4>Disliked</h4>
                 <ul>
                   {(profile.hated || []).map((movie) => <li key={movie}>{movie}</li>)}
                 </ul>

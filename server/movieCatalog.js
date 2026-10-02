@@ -1,318 +1,3260 @@
 export const movieCatalog = [
-  { id: 1, title: 'Shawshank Redemption', genre: 'Drama', mood: 'Hopeful', description: 'A prison drama with remarkable emotional payoff.' },
-  { id: 2, title: 'The Godfather', genre: 'Crime', mood: 'Epic', description: 'A legendary family story shaped by ambition and loyalty.' },
-  { id: 3, title: 'Spirited Away', genre: 'Animation', mood: 'Magical', description: 'A dreamlike adventure through a mysterious spirit world.' },
-  { id: 4, title: 'Moonlight', genre: 'Drama', mood: 'Intimate', description: 'A tender story of identity, memory, and growing up.' },
-  { id: 5, title: 'Parasite', genre: 'Thriller', mood: 'Sharp', description: 'A social satire that becomes tension-filled and unforgettable.' },
-  { id: 6, title: 'Arrival', genre: 'Sci-Fi', mood: 'Thoughtful', description: 'A human story shaped by language, connection, and time.' },
-  { id: 7, title: 'The Social Network', genre: 'Drama', mood: 'Fast', description: 'A sharp and stylish look at ambition and innovation.' },
-  { id: 8, title: 'The Grand Budapest Hotel', genre: 'Comedy', mood: 'Whimsical', description: 'Stylish, funny, and pictorially rich.' },
-  { id: 9, title: 'The Apartment', genre: 'Romance', mood: 'Warm', description: 'A bittersweet romantic classic with wit and heart.' },
-  { id: 10, title: 'Dune', genre: 'Sci-Fi', mood: 'Epic', description: 'Big ideas and massive scale with strong visual storytelling.' },
-  { id: 11, title: 'No Country for Old Men', genre: 'Thriller', mood: 'Tense', description: 'A brutal, elegant thriller with razor sharp energy.' },
-  { id: 12, title: 'Lady Bird', genre: 'Coming-of-age', mood: 'Honest', description: 'A realistic, intimate portrait of growing up.' },
-  { id: 13, title: 'The Dark Knight', genre: 'Action', mood: 'Electric', description: 'A morally complex superhero epic with unforgettable tension.' },
-  { id: 14, title: 'Inception', genre: 'Sci-Fi', mood: 'Mind-bending', description: 'A layered thriller about dreams, memory, and obsession.' },
-  { id: 15, title: 'The Matrix', genre: 'Sci-Fi', mood: 'Revolutionary', description: 'A groundbreaking cyberpunk classic about reality and control.' },
-  { id: 16, title: 'Pulp Fiction', genre: 'Crime', mood: 'Stylish', description: 'A nonlinear masterpiece of cool dialogue and sharp storytelling.' },
-  { id: 17, title: 'Fight Club', genre: 'Drama', mood: 'Disturbing', description: 'A raw, intense story about identity, rebellion, and masculinity.' },
-  { id: 18, title: 'The Departed', genre: 'Crime', mood: 'Tense', description: 'A ruthless crime drama with layered deception and pressure.' },
-  { id: 19, title: 'The Silence of the Lambs', genre: 'Thriller', mood: 'Chilling', description: 'A psychological cat-and-mouse thriller with incredible tension.' },
-  { id: 20, title: 'The Prestige', genre: 'Drama', mood: 'Mystical', description: 'A brilliant illusionist story about obsession and sacrifice.' },
-  { id: 21, title: 'Interstellar', genre: 'Sci-Fi', mood: 'Epic', description: 'A sweeping space odyssey about survival, love, and time.' },
-  { id: 22, title: 'La La Land', genre: 'Romance', mood: 'Dreamy', description: 'A glossy, emotional musical about ambition and love.' },
-  { id: 23, title: 'Whiplash', genre: 'Drama', mood: 'Intense', description: 'A high-pressure music drama about obsession and excellence.' },
-  { id: 24, title: 'Forrest Gump', genre: 'Drama', mood: 'Warm', description: 'A moving, funny, and deeply human story of life and chance.' },
-  { id: 25, title: 'The Green Mile', genre: 'Drama', mood: 'Emotional', description: 'A prison tale of mercy, injustice, and redemption.' },
-  { id: 26, title: 'Casablanca', genre: 'Romance', mood: 'Classic', description: 'A timeless tale of love, sacrifice, and wartime choices.' },
-  { id: 27, title: 'Citizen Kane', genre: 'Drama', mood: 'Inventive', description: 'A groundbreaking portrait of power, ambition, and legacy.' },
-  { id: 28, title: '2001: A Space Odyssey', genre: 'Sci-Fi', mood: 'Epic', description: 'A monumental journey through evolution, time, and the unknown.' },
-  { id: 29, title: 'Blade Runner 2049', genre: 'Sci-Fi', mood: 'Atmospheric', description: 'A visually stunning existential sci-fi journey.' },
-  { id: 30, title: 'Mad Max: Fury Road', genre: 'Action', mood: 'Relentless', description: 'A high-speed desert chase with relentless energy.' },
-  { id: 31, title: 'The Batman', genre: 'Action', mood: 'Moody', description: 'A dark, atmospheric detective thriller in superhero form.' },
-  { id: 32, title: 'Avengers: Endgame', genre: 'Action', mood: 'Crowd-pleaser', description: 'Big stakes, big spectacle, and a satisfying payoff.' },
-  { id: 33, title: 'The Lion King', genre: 'Animation', mood: 'Epic', description: 'A sweeping coming-of-age story about leadership and loss.' },
-  { id: 34, title: 'Toy Story', genre: 'Animation', mood: 'Joyful', description: 'A charming story about friendship, imagination, and growing up.' },
-  { id: 35, title: 'Finding Nemo', genre: 'Animation', mood: 'Heartfelt', description: 'A colourful, emotional journey about family and courage.' },
-  { id: 36, title: 'Up', genre: 'Animation', mood: 'Heartwarming', description: 'An adventure full of wonder, grief, and love.' },
-  { id: 37, title: 'Inside Out', genre: 'Animation', mood: 'Emotional', description: 'A playful and moving look at feelings and growing up.' },
-  { id: 38, title: 'The Emperor’s New Groove', genre: 'Animation', mood: 'Funny', description: 'A quick, funny, and surprisingly charming comedy adventure.' },
-  { id: 39, title: 'Coco', genre: 'Animation', mood: 'Emotional', description: 'A celebration of family, music, and memory.' },
-  { id: 40, title: 'The Princess Bride', genre: 'Adventure', mood: 'Playful', description: 'A heartfelt fantasy story full of humour and romance.' },
-  { id: 41, title: 'The Lord of the Rings: The Fellowship of the Ring', genre: 'Fantasy', mood: 'Epic', description: 'A heroic adventure of friendship, courage, and destiny.' },
-  { id: 42, title: 'The Lord of the Rings: The Two Towers', genre: 'Fantasy', mood: 'Epic', description: 'A darker, larger battle for Middle-earth.' },
-  { id: 43, title: 'The Lord of the Rings: The Return of the King', genre: 'Fantasy', mood: 'Triumphant', description: 'A grand finale of sacrifice, hope, and victory.' },
-  { id: 44, title: 'Harry Potter and the Sorcerer’s Stone', genre: 'Fantasy', mood: 'Magical', description: 'An enchanting introduction to a world of magic and wonder.' },
-  { id: 45, title: 'Harry Potter and the Prisoner of Azkaban', genre: 'Fantasy', mood: 'Atmospheric', description: 'A mysterious and emotionally rich chapter of the saga.' },
-  { id: 46, title: 'The Hobbit: An Unexpected Journey', genre: 'Fantasy', mood: 'Adventure', description: 'A charming and expansive epic of courage and camaraderie.' },
-  { id: 47, title: 'Pan’s Labyrinth', genre: 'Fantasy', mood: 'Dark', description: 'A beautiful, haunting fantasy set against war and loss.' },
-  { id: 48, title: 'The Shape of Water', genre: 'Fantasy', mood: 'Romantic', description: 'A tender fantasy romance with mystery and wonder.' },
-  { id: 49, title: 'Get Out', genre: 'Horror', mood: 'Unsettling', description: 'A razor-sharp horror film about identity and fear.' },
-  { id: 50, title: 'Hereditary', genre: 'Horror', mood: 'Disturbing', description: 'A devastating and dread-filled family horror story.' },
-  { id: 51, title: 'The Conjuring', genre: 'Horror', mood: 'Intense', description: 'A classic paranormal investigation with genuine scares.' },
-  { id: 52, title: 'A Quiet Place', genre: 'Horror', mood: 'Tense', description: 'A nerve-shredding survival thriller with a strong emotional core.' },
-  { id: 53, title: 'The Witch', genre: 'Horror', mood: 'Atmospheric', description: 'A chilling folk horror tale of fear and obsession.' },
-  { id: 54, title: 'E.T. the Extra-Terrestrial', genre: 'Sci-Fi', mood: 'Nostalgic', description: 'A heartfelt story of friendship and wonder across worlds.' },
-  { id: 55, title: 'Back to the Future', genre: 'Sci-Fi', mood: 'Fun', description: 'A joyfully inventive time-travel comedy adventure.' },
-  { id: 56, title: 'Ex Machina', genre: 'Sci-Fi', mood: 'Mindful', description: 'A sleek, intelligent AI thriller about ethics and identity.' },
-  { id: 57, title: 'The Fifth Element', genre: 'Sci-Fi', mood: 'Vivid', description: 'A visually flamboyant space adventure with a strong sense of style.' },
-  { id: 58, title: 'Arrival', genre: 'Sci-Fi', mood: 'Thoughtful', description: 'A deeply emotional look at language, connection, and fate.' },
-  { id: 59, title: 'District 9', genre: 'Sci-Fi', mood: 'Intense', description: 'A gritty, inventive sci-fi action story about exclusion and survival.' },
-  { id: 60, title: 'Twelve Angry Men', genre: 'Drama', mood: 'Tense', description: 'A masterclass in dialogue, justice, and human bias.' },
-  { id: 61, title: 'Before Sunrise', genre: 'Romance', mood: 'Intimate', description: 'A charming conversation-driven romance filled with connection and possibility.' },
-  { id: 62, title: 'Before Sunset', genre: 'Romance', mood: 'Reflective', description: 'A deeply human romantic conversation about time and choices.' },
-  { id: 63, title: 'The Notebook', genre: 'Romance', mood: 'Emotional', description: 'A sweeping love story with warmth and heartbreak.' },
-  { id: 64, title: 'La La Land', genre: 'Romance', mood: 'Dreamy', description: 'A stylish, emotional musical about ambition and love.' },
-  { id: 65, title: 'Romeo + Juliet', genre: 'Romance', mood: 'Passionate', description: 'A modern and vivid take on a classic tragic romance.' },
-  { id: 66, title: 'The Favourite', genre: 'Drama', mood: 'Witty', description: 'A darkly comedic historical drama with sharp character work.' },
-  { id: 67, title: 'Midsommar', genre: 'Horror', mood: 'Disorienting', description: 'A folk horror story steeped in ritual, dread, and emotional collapse.' },
-  { id: 68, title: 'The Others', genre: 'Horror', mood: 'Atmospheric', description: 'A moody, elegant ghost story full of dread and uncertainty.' },
-  { id: 69, title: 'The VVitch', genre: 'Horror', mood: 'Unsettling', description: 'A slow-burn folk horror with an unforgettable atmosphere.' },
-  { id: 70, title: 'The Art of Racing in the Rain', genre: 'Drama', mood: 'Heartwarming', description: 'A moving story about love, family, and life’s unexpected turns.' },
-  { id: 71, title: 'The Pianist', genre: 'Drama', mood: 'Intense', description: 'A brutal, tender portrait of survival amid war.' },
-  { id: 72, title: 'Schindler’s List', genre: 'Drama', mood: 'Profound', description: 'A solemn, unforgettable account of humanity under extraordinary pressure.' },
-  { id: 73, title: 'The Intouchables', genre: 'Comedy', mood: 'Uplifting', description: 'A warm, witty story about friendship across cultures and class.' },
-  { id: 74, title: 'Life Is Beautiful', genre: 'Comedy', mood: 'Heartfelt', description: 'A profound and life-affirming story told through humour and tenderness.' },
-  { id: 75, title: 'Amélie', genre: 'Romance', mood: 'Whimsical', description: 'A tender, whimsical exploration of beauty and connection.' },
-  { id: 76, title: 'The Lives of Others', genre: 'Drama', mood: 'Thoughtful', description: 'A rich, layered look at surveillance, power, and conscience.' },
-  { id: 77, title: 'The Room', genre: 'Drama', mood: 'Cult', description: 'A cult classic of chaotic intensity and unforgettable emotional oddity.' },
-  { id: 78, title: 'The Lion in Winter', genre: 'Drama', mood: 'Historical', description: 'A sharp and dramatic depiction of power and family.' },
-  { id: 79, title: 'The King’s Speech', genre: 'Drama', mood: 'Inspiring', description: 'A warm historical drama about courage, disability, and leadership.' },
-  { id: 80, title: 'The Truman Show', genre: 'Comedy', mood: 'Thoughtful', description: 'A clever satire on identity, freedom, and performance.' },
-  { id: 81, title: 'Good Will Hunting', genre: 'Drama', mood: 'Human', description: 'A deeply moving story of genius, trauma, and personal change.' },
-  { id: 82, title: 'The Devil Wears Prada', genre: 'Comedy', mood: 'Stylish', description: 'A witty and stylish look at ambition, femininity, and work.' },
-  { id: 83, title: 'The Big Lebowski', genre: 'Comedy', mood: 'Laid-back', description: 'A cult comedy with surreal charm and strange wisdom.' },
-  { id: 84, title: 'Groundhog Day', genre: 'Comedy', mood: 'Thoughtful', description: 'A clever, life-affirming story about repetition and self-growth.' },
-  { id: 85, title: 'Dead Poets Society', genre: 'Drama', mood: 'Inspirational', description: 'A stirring film about creativity, courage, and self-expression.' },
-  { id: 86, title: 'The Breakfast Club', genre: 'Drama', mood: 'Real', description: 'A classic look at adolescence, identity, and connection.' },
-  { id: 87, title: 'The Social Network', genre: 'Drama', mood: 'Fast', description: 'A sharp look at ambition, ego, and digital power.' },
-  { id: 88, title: 'Memento', genre: 'Thriller', mood: 'Puzzle-box', description: 'A mind-bending noir thriller about memory and identity.' },
-  { id: 89, title: 'Se7en', genre: 'Thriller', mood: 'Dark', description: 'A bleak and unforgettable serial killer mystery.' },
-  { id: 90, title: 'The Usual Suspects', genre: 'Crime', mood: 'Twisty', description: 'A cat-and-mouse crime story with a famous final reveal.' },
-  { id: 91, title: 'Oldboy', genre: 'Thriller', mood: 'Brutal', description: 'An intense revenge thriller with huge emotional impact.' },
-  { id: 92, title: 'Drive', genre: 'Crime', mood: 'Lyrical', description: 'A neon-lit crime film with precision, cool, and emotional weight.' },
-  { id: 93, title: 'Nightcrawler', genre: 'Thriller', mood: 'Creepy', description: 'A cold, stylish look at ambition and morality in the media world.' },
-  { id: 94, title: 'Prisoners', genre: 'Thriller', mood: 'Gripping', description: 'A deeply unsettling mystery about desperation and moral fracture.' },
-  { id: 95, title: 'The Revenant', genre: 'Adventure', mood: 'Harsh', description: 'A brutal survival epic defined by sacrifice and endurance.' },
-  { id: 96, title: 'Gladiator', genre: 'Action', mood: 'Epic', description: 'An intense and grand historical action film about power and vengeance.' },
-  { id: 97, title: 'The Last Samurai', genre: 'Action', mood: 'Epic', description: 'A sweeping story about honour, identity, and transformation.' },
-  { id: 98, title: 'The Revenant', genre: 'Adventure', mood: 'Harsh', description: 'A brutal survival epic defined by sacrifice and endurance.' },
-  { id: 99, title: 'The Departed', genre: 'Crime', mood: 'Tense', description: 'A layered crime drama of betrayal and pressure.' },
-  { id: 100, title: 'The Wolf of Wall Street', genre: 'Comedy', mood: 'Wild', description: 'A riotous, indulgent high-wire business saga.' },
-  { id: 101, title: 'Lagaan', genre: 'Drama', mood: 'Inspirational', description: 'An epic sports drama with strong emotional and historical gravity.' },
-  { id: 102, title: '3 Idiots', genre: 'Comedy', mood: 'Heartfelt', description: 'A lively, funny, and emotionally resonant coming-of-age story.' },
-  { id: 103, title: 'Dilwale Dulhania Le Jayenge', genre: 'Romance', mood: 'Warm', description: 'A beloved romantic classic of love, family, and identity.' },
-  { id: 104, title: 'PK', genre: 'Comedy', mood: 'Thoughtful', description: 'A funny and moving film about belief, curiosity, and humanity.' },
-  { id: 105, title: 'Bajrangi Bhaijaan', genre: 'Drama', mood: 'Uplifting', description: 'A warm-hearted adventure about compassion and humanity.' },
-  { id: 106, title: 'Slumdog Millionaire', genre: 'Drama', mood: 'Energetic', description: 'A vibrant journey of survival, memory, and destiny.' },
-  { id: 107, title: 'The Kashmir Files', genre: 'Drama', mood: 'Intense', description: 'A hard-hitting historical drama with emotional weight.' },
-  { id: 108, title: 'Dangal', genre: 'Drama', mood: 'Inspirational', description: 'A powerful family saga about ambition, pressure, and excellence.' },
-  { id: 109, title: 'Gully Boy', genre: 'Drama', mood: 'Electric', description: 'A raw, hopeful story about talent, class, and expression.' },
-  { id: 110, title: 'Jawan', genre: 'Action', mood: 'Explosive', description: 'A patriotic action film with high-energy suspense.' },
-  { id: 111, title: 'RRR', genre: 'Action', mood: 'Explosive', description: 'A stylized and thrilling action epic with mass appeal.' },
-  { id: 112, title: 'Baahubali: The Beginning', genre: 'Action', mood: 'Epic', description: 'A visually grand action fantasy with huge emotional stakes.' },
-  { id: 113, title: 'Baahubali 2: The Conclusion', genre: 'Action', mood: 'Epic', description: 'A grand finale of power, betrayal, and destiny.' },
-  { id: 114, title: 'K.G.F: Chapter 1', genre: 'Action', mood: 'Intense', description: 'A stylish underworld action film with commanding energy.' },
-  { id: 115, title: 'K.G.F: Chapter 2', genre: 'Action', mood: 'Explosive', description: 'A larger-than-life continuation of a gritty rise-to-power story.' },
-  { id: 116, title: 'Sultan', genre: 'Sport', mood: 'Motivating', description: 'A gripping sports drama about ambition and grit.' },
-  { id: 117, title: 'Kabir Singh', genre: 'Drama', mood: 'Intense', description: 'A passionate and turbulent love story with emotional extremes.' },
-  { id: 118, title: 'Hichki', genre: 'Drama', mood: 'Uplifting', description: 'A warm and inspiring story about resilience and purpose.' },
-  { id: 119, title: 'Aamir', genre: 'Drama', mood: 'Thoughtful', description: 'A grounded and tense drama about moral pressure and justice.' },
-  { id: 120, title: 'My Name Is Khan', genre: 'Drama', mood: 'Warm', description: 'A human story about identity, prejudice, and dignity.' },
-  { id: 121, title: 'Pyaasa', genre: 'Drama', mood: 'Classic', description: 'A timeless film about creativity, heartbreak, and artistic struggle.' },
-  { id: 122, title: 'Anand', genre: 'Drama', mood: 'Heartfelt', description: 'A classic story of hope, humour, and life in the face of illness.' },
-  { id: 123, title: 'Sholay', genre: 'Action', mood: 'Legendary', description: 'A celebrated Bollywood classic with comedy, action, and iconic characters.' },
-  { id: 124, title: 'Deewar', genre: 'Crime', mood: 'Classic', description: 'A powerful crime saga about loyalty, class, and family.' },
-  { id: 125, title: 'Zindagi Na Milegi Dobara', genre: 'Drama', mood: 'Free-spirited', description: 'A breezy and emotionally rich story about friendship and life.' },
-  { id: 126, title: 'Brokeback Mountain', genre: 'Romance', mood: 'Melancholic', description: 'A deeply moving love story shaped by time and impossible circumstances.' },
-  { id: 127, title: 'The Hurt Locker', genre: 'Action', mood: 'Intense', description: 'A high-pressure war film about adrenaline, danger, and stress.' },
-  { id: 128, title: 'Fallen Angels', genre: 'Drama', mood: 'Urban', description: 'A moody and atmospheric noir story of isolation and desire.' },
-  { id: 129, title: 'Spirited Away', genre: 'Animation', mood: 'Magical', description: 'A Japanese animated treasure about wonder and self-discovery.' },
-  { id: 130, title: 'Your Name', genre: 'Animation', mood: 'Romantic', description: 'A heartfelt and visually stunning story of connection across time.' },
-  { id: 131, title: 'Weathering with You', genre: 'Animation', mood: 'Dreamy', description: 'A captivating romantic fantasy about love and weather.' },
-  { id: 132, title: 'A Silent Voice', genre: 'Animation', mood: 'Moving', description: 'A thoughtful, emotional story about regret, forgiveness, and healing.' },
-  { id: 133, title: 'Belle', genre: 'Animation', mood: 'Feel-good', description: 'A modern fairy tale of identity, self-expression, and belonging.' },
-  { id: 134, title: 'Parasite', genre: 'Drama', mood: 'Sharp', description: 'An elegantly layered story of class, power, and survival.' },
-  { id: 135, title: 'Memories of Murder', genre: 'Crime', mood: 'Gripping', description: 'A tense, human investigation story with haunting urgency.' },
-  { id: 136, title: 'Oldboy', genre: 'Thriller', mood: 'Brutal', description: 'A raw and unforgettable revenge story with emotional depth.' },
-  { id: 137, title: 'Train to Busan', genre: 'Action', mood: 'Tense', description: 'A high-speed survival film packed with urgency and heart.' },
-  { id: 138, title: 'The Handmaiden', genre: 'Thriller', mood: 'Lush', description: 'A sensual and intricate thriller full of twists and atmosphere.' },
-  { id: 139, title: 'Burning', genre: 'Mystery', mood: 'Tense', description: 'A slow-building mystery of obsession, longing, and ambiguity.' },
-  { id: 140, title: 'Minari', genre: 'Drama', mood: 'Tender', description: 'A warm and earnest story about family, hope, and belonging.' },
-  { id: 141, title: 'Shoplifters', genre: 'Drama', mood: 'Human', description: 'A intimate family drama about love in unconventional forms.' },
-  { id: 142, title: 'Roma', genre: 'Drama', mood: 'Tender', description: 'A deeply lyrical portrait of family life and memory.' },
-  { id: 143, title: 'Bicycle Thieves', genre: 'Drama', mood: 'Human', description: 'A classic story of poverty, dignity, and survival.' },
-  { id: 144, title: 'Cinema Paradiso', genre: 'Drama', mood: 'Nostalgic', description: 'A heartfelt film about cinema, memory, and coming of age.' },
-  { id: 145, title: 'The Lives of Others', genre: 'Drama', mood: 'Thoughtful', description: 'A layered and haunting story of surveillance and conscience.' },
-  { id: 146, title: 'A Separation', genre: 'Drama', mood: 'Complex', description: 'A tense and morally layered exploration of family conflict.' },
-  { id: 147, title: 'Amélie', genre: 'Romance', mood: 'Whimsical', description: 'A joyful, intimate portrait of romance and urban fantasy.' },
-  { id: 148, title: 'Portrait of a Lady on Fire', genre: 'Romance', mood: 'Tender', description: 'A beautifully intense romance about love and artistic observation.' },
-  { id: 149, title: 'Past Lives', genre: 'Romance', mood: 'Reflective', description: 'A subtle, emotional story about love, timing, and identity.' },
-  { id: 150, title: 'Anora', genre: 'Comedy', mood: 'Wild', description: 'A bright, chaotic, and intimate story of connection and escape.' },
-  { id: 151, title: 'The Big Short', genre: 'Comedy', mood: 'Sharp', description: 'A smart, funny film about finance, greed, and denial.' },
-  { id: 152, title: 'The Wolf of Wall Street', genre: 'Comedy', mood: 'Wild', description: 'A ridiculous and over-the-top rise-and-fall saga.' },
-  { id: 153, title: 'The Iron Giant', genre: 'Animation', mood: 'Heartfelt', description: 'A moving story about friendship and self-discovery.' },
-  { id: 154, title: 'The Secret Life of Walter Mitty', genre: 'Adventure', mood: 'Dreamy', description: 'A whimsical adventure about wonder, courage, and reinvention.' },
-  { id: 155, title: 'The Gentlemen', genre: 'Crime', mood: 'Sharp', description: 'A stylish crime comedy with wit, swagger, and menace.' },
-  { id: 156, title: 'Klaus', genre: 'Animation', mood: 'Heartwarming', description: 'A visually inventive holiday tale of generosity and wonder.' },
-  { id: 157, title: 'The Northman', genre: 'Action', mood: 'Dark', description: 'A grim and mythic revenge saga with brutal energy.' },
-  { id: 158, title: 'The Green Knight', genre: 'Fantasy', mood: 'Mystical', description: 'A dreamlike and philosophical medieval fantasy.' },
-  { id: 159, title: 'The Lighthouse', genre: 'Drama', mood: 'Haunting', description: 'A stark, eerie psychological drama set at sea.' },
-  { id: 160, title: 'The Florida Project', genre: 'Drama', mood: 'Tender', description: 'A warm and observant portrait of childhood and resilience.' },
-  { id: 161, title: 'Jeanne Dielman, 23, Quai du Commerce, 1080 Bruxelles', genre: 'Drama', mood: 'Minimal', description: 'A precise and human study of routine, labor, and quiet endurance.' },
-  { id: 162, title: 'Nights of Cabiria', genre: 'Drama', mood: 'Poetic', description: 'A moving portrait of resilience and hope in difficult circumstances.' },
-  { id: 163, title: 'The Color Purple', genre: 'Drama', mood: 'Emotional', description: 'A powerful and lyrical story about survival and sisterhood.' },
-  { id: 164, title: 'Hachi: A Dog’s Tale', genre: 'Drama', mood: 'Heartwarming', description: 'A deeply sincere story of loyalty and love.' },
-  { id: 165, title: 'The Pursuit of Happyness', genre: 'Drama', mood: 'Hopeful', description: 'A resilient and emotional story of determination and future.' },
-  { id: 166, title: 'King Richard', genre: 'Drama', mood: 'Inspiring', description: 'A compelling story of grit, parenting, and ambitious greatness.' },
-  { id: 167, title: 'The International', genre: 'Thriller', mood: 'Cerebral', description: 'A globe-spanning thriller of finance, power, and danger.' },
-  { id: 168, title: 'The Equalizer', genre: 'Action', mood: 'Tough', description: 'A revenge-driven action film with steady, brutal intensity.' },
-  { id: 169, title: 'The Nice Guys', genre: 'Comedy', mood: 'Funny', description: 'A clever and stylish detective comedy with layered energy.' },
-  { id: 170, title: 'The Man from Earth', genre: 'Drama', mood: 'Thoughtful', description: 'A philosophical conversation film with a sharp central premise.' },
-  { id: 171, title: 'The Last Emperor', genre: 'Drama', mood: 'Historical', description: 'A sweeping and intimate story of imperial history and identity.' },
-  { id: 172, title: 'A Beautiful Mind', genre: 'Drama', mood: 'Inspirational', description: 'A moving story about brilliance, obsession, and recovery.' },
-  { id: 173, title: 'The Royal Tenenbaums', genre: 'Comedy', mood: 'Quirky', description: 'A deadpan tragicomic story of family dysfunction and affection.' },
-  { id: 174, title: 'O Brother, Where Art Thou?', genre: 'Comedy', mood: 'Adventure', description: 'A wisecracking odyssey with music, wit, and mythology.' },
-  { id: 175, title: 'The Big Lebowski', genre: 'Comedy', mood: 'Laid-back', description: 'A cult classic of absurdity, style, and philosophical drift.' },
-  { id: 176, title: 'The French Connection', genre: 'Crime', mood: 'Tense', description: 'A gritty urban thriller of pursuit, danger, and obsession.' },
-  { id: 177, title: 'Unforgiven', genre: 'Western', mood: 'Grim', description: 'A measured, hard-hitting western about violence and conscience.' },
-  { id: 178, title: 'The Good, the Bad and the Ugly', genre: 'Western', mood: 'Legendary', description: 'A classic western of tension, strategy, and legend.' },
-  { id: 179, title: 'Django Unchained', genre: 'Western', mood: 'Explosive', description: 'A stylized revenge western with swagger and emotional force.' },
-  { id: 180, title: 'The Searchers', genre: 'Western', mood: 'Classic', description: 'A towering western about obsession, loyalty, and frontier life.' },
-  { id: 181, title: 'Y tu mamá también', genre: 'Drama', mood: 'Free-spirited', description: 'A road film of friendship, desire, and maturity.' },
-  { id: 182, title: 'Roma', genre: 'Drama', mood: 'Tender', description: 'A portrait of family life and longing in a changing city.' },
-  { id: 183, title: 'The Spirit of the Beehive', genre: 'Drama', mood: 'Poetic', description: 'A subtle and poetic story of childhood and imagination.' },
-  { id: 184, title: 'City of God', genre: 'Crime', mood: 'Electric', description: 'A gritty and unforgettable portrait of urban life and violence.' },
-  { id: 185, title: 'Central Station', genre: 'Drama', mood: 'Human', description: 'A moving journey of connection, memory, and migration.' },
-  { id: 186, title: 'The Lives of Others', genre: 'Drama', mood: 'Thoughtful', description: 'A study of power, surveillance, and moral responsibility.' },
-  { id: 187, title: 'The Diving Bell and the Butterfly', genre: 'Drama', mood: 'Beautiful', description: 'A visually striking story of perception, resilience, and imagination.' },
-  { id: 188, title: 'The Theory of Everything', genre: 'Drama', mood: 'Inspirational', description: 'A touching story of intellect, love, and resilience.' },
-  { id: 189, title: 'A Clockwork Orange', genre: 'Sci-Fi', mood: 'Disturbing', description: 'A dystopian critique of violence, free will, and control.' },
-  { id: 190, title: 'The Hunger Games', genre: 'Action', mood: 'Intense', description: 'A fierce survival story of rebellion, spectacle, and pressure.' },
-  { id: 191, title: 'Blade Runner', genre: 'Sci-Fi', mood: 'Atmospheric', description: 'A canon of noir sci-fi about humanity, memory, and identity.' },
-  { id: 192, title: 'Eternal Sunshine of the Spotless Mind', genre: 'Romance', mood: 'Inventive', description: 'A surreal and tender meditation on memory and love.' },
-  { id: 193, title: 'The Green Knight', genre: 'Fantasy', mood: 'Mystical', description: 'A mythic fantasy about masculinity, fate, and courage.' },
-  { id: 194, title: 'I Am Sam', genre: 'Drama', mood: 'Heartfelt', description: 'A moving story about love, family, and dignity.' },
-  { id: 195, title: 'The Secret in Their Eyes', genre: 'Mystery', mood: 'Intense', description: 'A sharp and emotional mystery about justice and memory.' },
-  { id: 196, title: 'A Separation', genre: 'Drama', mood: 'Complex', description: 'A morally layered family tragedy about trust and duty.' },
-  { id: 197, title: 'The Shape of Water', genre: 'Fantasy', mood: 'Romantic', description: 'A tender fantasy romance with a stunning sense of wonder.' },
-  { id: 198, title: 'Le Fabuleux Destin d’Amélie Poulain', genre: 'Romance', mood: 'Whimsical', description: 'A joyful and imaginative story of love and coincidence.' },
-  { id: 199, title: 'The Intouchables', genre: 'Comedy', mood: 'Uplifting', description: 'A warm and funny story about unlikely friendship.' },
-  { id: 200, title: 'The Tragedy of Macbeth', genre: 'Drama', mood: 'Dark', description: 'A stark, dramatic retelling of ambition, fate, and guilt.' },
-  { id: 201, title: 'The Fall', genre: 'Adventure', mood: 'Dreamlike', description: 'A visually rich fantasy of imagination and survival.' },
-  { id: 202, title: 'The Fountain', genre: 'Drama', mood: 'Poetic', description: 'A meditative love story about time, mortality, and faith.' },
-  { id: 203, title: 'The Neon Demon', genre: 'Thriller', mood: 'Hypnotic', description: 'A stylish and chilling look at beauty, envy, and desire.' },
-  { id: 204, title: 'The Handmaiden', genre: 'Thriller', mood: 'Lush', description: 'A twisting and sensual mystery of deception and desire.' },
-  { id: 205, title: 'Belfast', genre: 'Drama', mood: 'Warm', description: 'A nostalgic and intimate portrait of childhood amid conflict.' },
-  { id: 206, title: 'All Quiet on the Western Front', genre: 'War', mood: 'Harsh', description: 'A devastating war film about fear, loss, and survival.' },
-  { id: 207, title: '1917', genre: 'War', mood: 'Intense', description: 'A relentless war-time journey defined by urgency and fear.' },
-  { id: 208, title: 'Saving Private Ryan', genre: 'War', mood: 'Brutal', description: 'A raw, devastating account of sacrifice in war.' },
-  { id: 209, title: 'Dunkirk', genre: 'War', mood: 'Tense', description: 'A taut and immersive war film shaped by urgency and survival.' },
-  { id: 210, title: 'The Patriot', genre: 'War', mood: 'Epic', description: 'A sweeping story of conflict, honour, and revolutionary struggle.' },
-  { id: 211, title: 'The Inglorious Bastards', genre: 'War', mood: 'Wild', description: 'A violent and explosive revenge narrative set in wartime.' },
-  { id: 212, title: 'The Hurt Locker', genre: 'War', mood: 'Intense', description: 'A high-pressure bomb disposal story about adrenaline and risk.' },
-  { id: 213, title: 'The Great Dictator', genre: 'Comedy', mood: 'Satirical', description: 'A sharp, funny, and morally incisive satire.' },
-  { id: 214, title: 'The Thin Red Line', genre: 'War', mood: 'Reflective', description: 'A meditative war film about fear, brotherhood, and mortality.' },
-  { id: 215, title: 'The Deer Hunter', genre: 'Drama', mood: 'Haunting', description: 'A vivid and devastating portrait of war and aftermath.' },
-  { id: 216, title: 'Nell', genre: 'Drama', mood: 'Tender', description: 'A compassionate story about language, connection, and belonging.' },
-  { id: 217, title: 'The Secret of Karhyan', genre: 'Adventure', mood: 'Mystical', description: 'A mythic journey through wonder and courage.' },
-  { id: 218, title: 'Kimi no Nawa', genre: 'Animation', mood: 'Romantic', description: 'A visually stunning story of connection, loss, and fate.' },
-  { id: 219, title: 'Ghost in the Shell', genre: 'Animation', mood: 'Futuristic', description: 'A cerebral cyborg story about identity and consciousness.' },
-  { id: 220, title: 'Akira', genre: 'Animation', mood: 'Revolutionary', description: 'A landmark cyberpunk anime with enormous influence and weight.' },
-  { id: 221, title: 'Princess Mononoke', genre: 'Animation', mood: 'Epic', description: 'A mythic story of nature, humanity, and conflict.' },
-  { id: 222, title: 'Howl’s Moving Castle', genre: 'Animation', mood: 'Dreamlike', description: 'A whimsical fantasy about magic, love, and transformation.' },
-  { id: 223, title: 'Paprika', genre: 'Animation', mood: 'Surreal', description: 'A vivid, dreamlike dive into memory, imagination, and perception.' },
-  { id: 224, title: 'The Wind Rises', genre: 'Animation', mood: 'Reflective', description: 'An elegant story of ambition, art, and historical change.' },
-  { id: 225, title: 'The Boy and the Heron', genre: 'Animation', mood: 'Mystical', description: 'A visually rich story of grief, wonder, and emotional discovery.' },
-  { id: 226, title: 'Chungking Express', genre: 'Drama', mood: 'Lyrical', description: 'A stylish and atmospheric portrait of urban longing and connection.' },
-  { id: 227, title: 'In the Mood for Love', genre: 'Romance', mood: 'Tender', description: 'A luxurious, restrained love story of longing and missed chances.' },
-  { id: 228, title: 'The Handmaiden', genre: 'Thriller', mood: 'Lush', description: 'A glamorous and intricate story of deception and desire.' },
-  { id: 229, title: 'Evangelion: 3.0+1.0', genre: 'Animation', mood: 'Big', description: 'A huge, emotional finale of a deeply philosophical futuristic saga.' },
-  { id: 230, title: 'The Match Factory Girl', genre: 'Drama', mood: 'Bleak', description: 'A sharp, intimate look at labour, loneliness, and emotional friction.' },
-  { id: 231, title: 'Inside Llewyn Davis', genre: 'Drama', mood: 'Gritty', description: 'A folk-music story about ambition, failure, and artistic struggle.' },
-  { id: 232, title: 'Mirrors', genre: 'Horror', mood: 'Claustrophobic', description: 'A suspenseful and unsettling story of obsession and reflection.' },
-  { id: 233, title: 'The Wailing', genre: 'Horror', mood: 'Unsettling', description: 'A dense, eerie folk horror story of fear and infection.' },
-  { id: 234, title: 'The Babadook', genre: 'Horror', mood: 'Heavy', description: 'A terrifying and emotional film about grief and trauma.' },
-  { id: 235, title: 'The Menu', genre: 'Thriller', mood: 'Clever', description: 'A darkly funny and tense culinary thriller.' },
-  { id: 236, title: 'Poor Things', genre: 'Fantasy', mood: 'Wild', description: 'A surreal and playful reimagining of identity and sexual freedom.' },
-  { id: 237, title: 'The Favourite', genre: 'Drama', mood: 'Witty', description: 'A sharp, witty historical drama of power and intrigue.' },
-  { id: 238, title: 'The Last Picture Show', genre: 'Drama', mood: 'Nostalgic', description: 'A tender portrait of adolescence, longing, and place.' },
-  { id: 239, title: 'Lovers Rock', genre: 'Drama', mood: 'Warm', description: 'A music-filled story of love, escape, and connection.' },
-  { id: 240, title: 'The Lodger', genre: 'Thriller', mood: 'Classic', description: 'A suspenseful and atmospheric early thriller.' },
-  { id: 241, title: 'The Long Goodbye', genre: 'Crime', mood: 'Laid-back', description: 'A moody and witty noir with unconventional charm.' },
-  { id: 242, title: 'The Conversation', genre: 'Thriller', mood: 'Observant', description: 'A suspenseful story about surveillance and paranoia.' },
-  { id: 243, title: 'Murder on the Orient Express', genre: 'Mystery', mood: 'Classic', description: 'A locked-room mystery full of suspicion and twists.' },
-  { id: 244, title: 'Knives Out', genre: 'Mystery', mood: 'Fun', description: 'A witty mystery with sharp twists and a big ensemble cast.' },
-  { id: 245, title: 'The Girl with the Dragon Tattoo', genre: 'Mystery', mood: 'Dark', description: 'A grim mystery built on obsession, violence, and investigation.' },
-  { id: 246, title: 'Gone Girl', genre: 'Mystery', mood: 'Tense', description: 'A razor-sharp thriller about media, marriage, and perception.' },
-  { id: 247, title: 'The Talented Mr. Ripley', genre: 'Mystery', mood: 'Sleek', description: 'A seductive and chilling portrait of identity theft and obsession.' },
-  { id: 248, title: 'The Invisible Guest', genre: 'Mystery', mood: 'Clever', description: 'A tightly wound thriller about guilt, lies, and a perfect alibi.' },
-  { id: 249, title: 'A Prophet', genre: 'Crime', mood: 'Hard', description: 'A brutal prison drama about power, survival, and transformation.' },
-  { id: 250, title: 'The Irishman', genre: 'Crime', mood: 'Measured', description: 'A long, reflective mob epic about memory, guilt, and consequence.' },
-  { id: 251, title: 'Heat', genre: 'Crime', mood: 'Tense', description: 'A classic cat-and-mouse crime thriller with incredible precision.' },
-  { id: 252, title: 'Dog Day Afternoon', genre: 'Crime', mood: 'Human', description: 'A tense and darkly comic story rooted in desperation and humanity.' },
-  { id: 253, title: 'The Killing', genre: 'Crime', mood: 'Stylish', description: 'A noir crime film steeped in calculation and betrayal.' },
-  { id: 254, title: 'The Long Good Friday', genre: 'Crime', mood: 'Dark', description: 'A brutal and vibrant London crime film.' },
-  { id: 255, title: 'The Departed', genre: 'Crime', mood: 'Tense', description: 'A layered police-underworld thriller of paranoia and betrayal.' },
-  { id: 256, title: 'A Beautiful Day in the Neighborhood', genre: 'Drama', mood: 'Warm', description: 'A gentle story about kindness, curiosity, and understanding.' },
-  { id: 257, title: 'The Half of It', genre: 'Romance', mood: 'Tender', description: 'A nuanced coming-of-age romance about love and honesty.' },
-  { id: 258, title: 'Call Me by Your Name', genre: 'Romance', mood: 'Tender', description: 'A languid and emotionally rich story of desire and self-discovery.' },
-  { id: 259, title: 'Carol', genre: 'Romance', mood: 'Tender', description: 'A sumptuous and emotionally intense love story of longing and risk.' },
-  { id: 260, title: 'Fleabag', genre: 'Comedy', mood: 'Witty', description: 'A sharp and vulnerable portrait of modern life and emotional messiness.' },
-  { id: 261, title: 'The Farewell', genre: 'Drama', mood: 'Tender', description: 'A deeply human story of family, culture, and big feelings.' },
-  { id: 262, title: 'Always Be My Maybe', genre: 'Comedy', mood: 'Warm', description: 'A witty, heart-filled romance about timing and second chances.' },
-  { id: 263, title: 'Love, Simon', genre: 'Romance', mood: 'Warm', description: 'A heartfelt and open exploration of identity and love.' },
-  { id: 264, title: 'The Kissing Booth', genre: 'Romance', mood: 'Fun', description: 'A breezy teen romance built on chemistry and chaos.' },
-  { id: 265, title: 'The Notebook', genre: 'Romance', mood: 'Emotional', description: 'A sweeping love story with deep emotional weight.' },
-  { id: 266, title: 'Titanic', genre: 'Romance', mood: 'Epic', description: 'A grand romantic tragedy set against a historic disaster.' },
-  { id: 267, title: 'Moulin Rouge!', genre: 'Romance', mood: 'Musical', description: 'A vivid and exuberant musical about passion, art, and desire.' },
-  { id: 268, title: 'The Greatest Showman', genre: 'Drama', mood: 'Inspiring', description: 'A show-stopping story about ambition, creativity, and spectacle.' },
-  { id: 269, title: 'The Rocky Horror Picture Show', genre: 'Musical', mood: 'Wild', description: 'A campy cult classic with humour, music, and outrageous energy.' },
-  { id: 270, title: 'La Bohème', genre: 'Drama', mood: 'Classic', description: 'A tender, atmospheric story of love and tragedy in Paris.' },
-  { id: 271, title: 'The Last Samurai', genre: 'Action', mood: 'Epic', description: 'A sweeping tale of culture, honour, and transformation.' },
-  { id: 272, title: 'Troy', genre: 'Action', mood: 'Epic', description: 'A sprawling mythic war epic of love, pride, and destiny.' },
-  { id: 273, title: 'The Last Emperor', genre: 'Drama', mood: 'Historical', description: 'A richly cinematic portrait of empire and identity.' },
-  { id: 274, title: 'The Patriot', genre: 'War', mood: 'Epic', description: 'A heroic story of family, conflict, and resistance.' },
-  { id: 275, title: 'The Pianist', genre: 'War', mood: 'Intense', description: 'A devastating account of survival during the Holocaust.' },
-  { id: 276, title: 'Apocalypto', genre: 'Adventure', mood: 'Brutal', description: 'A tense and immersive survival epic in the jungle.' },
-  { id: 277, title: 'The Revenant', genre: 'Adventure', mood: 'Harsh', description: 'A brutal survival tale of revenge and endurance.' },
-  { id: 278, title: 'The Tree of Life', genre: 'Drama', mood: 'Reflective', description: 'A meditative journey of childhood, grace, and meaning.' },
-  { id: 279, title: 'Moonstruck', genre: 'Romance', mood: 'Warm', description: 'A funny and tender modern romance full of family and chaos.' },
-  { id: 280, title: 'The Holiday', genre: 'Romance', mood: 'Warm', description: 'A charming and comforting story of second chances and holiday magic.' },
-  { id: 281, title: 'Love Actually', genre: 'Romance', mood: 'Warm', description: 'A sprawling and charming tale of love across many lives.' },
-  { id: 282, title: 'Notting Hill', genre: 'Romance', mood: 'Sweet', description: 'A delightful romantic comedy about chemistry and timing.' },
-  { id: 283, title: 'The Proposal', genre: 'Comedy', mood: 'Light', description: 'A playful romantic comedy built on wit and tension.' },
-  { id: 284, title: '50 First Dates', genre: 'Romance', mood: 'Sweet', description: 'A warm and humorous romance with heart and optimism.' },
-  { id: 285, title: 'Crazy Rich Asians', genre: 'Romance', mood: 'Fun', description: 'A glossy and heartfelt comedy of wealth, family, and love.' },
-  { id: 286, title: 'The Holiday Calendar', genre: 'Romance', mood: 'Merry', description: 'A cheerful holiday romance with magic and timing.' },
-  { id: 287, title: 'Legally Blonde', genre: 'Comedy', mood: 'Funny', description: 'A witty and empowering story of confidence and reinvention.' },
-  { id: 288, title: 'Mean Girls', genre: 'Comedy', mood: 'Sharp', description: 'A classic teen comedy about status, identity, and power.' },
-  { id: 289, title: 'Clueless', genre: 'Comedy', mood: 'Playful', description: 'A stylish and witty coming-of-age comedy with iconic charm.' },
-  { id: 290, title: 'Bridesmaids', genre: 'Comedy', mood: 'Wild', description: 'A sharp, hilarious look at friendship, love, and social pressure.' },
-  { id: 291, title: 'The Hangover', genre: 'Comedy', mood: 'Chaotic', description: 'A chaotic and memorable bachelor comedy with endless energy.' },
-  { id: 292, title: 'Superbad', genre: 'Comedy', mood: 'Chaotic', description: 'A funny and awkward high-school comedy about growing up.' },
-  { id: 293, title: 'The Intern', genre: 'Comedy', mood: 'Warm', description: 'A charming workplace comedy about contrast, respect, and connection.' },
-  { id: 294, title: 'The Intern', genre: 'Comedy', mood: 'Warm', description: 'A charming workplace comedy about contrast, respect, and connection.' },
-  { id: 295, title: 'Chef', genre: 'Comedy', mood: 'Warm', description: 'A joyful food-centered story about second chances and identity.' },
-  { id: 296, title: 'The Last King of Scotland', genre: 'Drama', mood: 'Intense', description: 'A politically charged and psychologically intense drama.' },
-  { id: 297, title: 'The Founding Father', genre: 'Drama', mood: 'Historical', description: 'A serious and insightful look at power, leadership, and ideology.' },
-  { id: 298, title: 'The Light Between Oceans', genre: 'Drama', mood: 'Emotional', description: 'A tender and haunting tale of love, guilt, and longing.' },
-  { id: 299, title: 'The Fault in Our Stars', genre: 'Romance', mood: 'Emotional', description: 'A deeply heartfelt love story about life, loss, and meaning.' },
-  { id: 300, title: 'A Walk to Remember', genre: 'Romance', mood: 'Tender', description: 'A sincere and heartfelt love story that leaves a lasting mark.' }
+  {
+    "id": 1,
+    "title": "The Shawshank Redemption",
+    "year": 1994,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 85,
+    "in_deck": true
+  },
+  {
+    "id": 2,
+    "title": "The Godfather",
+    "year": 1972,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "English",
+    "popularity": 90,
+    "in_deck": true
+  },
+  {
+    "id": 3,
+    "title": "Parasite",
+    "year": 2019,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Korean",
+    "popularity": 88,
+    "in_deck": true
+  },
+  {
+    "id": 4,
+    "title": "Spirited Away",
+    "year": 2001,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 86,
+    "in_deck": true
+  },
+  {
+    "id": 5,
+    "title": "Cinema Paradiso",
+    "year": 1988,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Italian",
+    "popularity": 70,
+    "in_deck": true
+  },
+  {
+    "id": 6,
+    "title": "Pan's Labyrinth",
+    "year": 2006,
+    "genres": [
+      "Fantasy"
+    ],
+    "origin_language": "Spanish",
+    "popularity": 75,
+    "in_deck": true
+  },
+  {
+    "id": 7,
+    "title": "Amélie",
+    "year": 2001,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "French",
+    "popularity": 78,
+    "in_deck": true
+  },
+  {
+    "id": 8,
+    "title": "City of God",
+    "year": 2002,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "Portuguese",
+    "popularity": 72,
+    "in_deck": true
+  },
+  {
+    "id": 9,
+    "title": "Oldboy",
+    "year": 2003,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Korean",
+    "popularity": 74,
+    "in_deck": true
+  },
+  {
+    "id": 10,
+    "title": "In the Mood for Love",
+    "year": 2000,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "Mandarin",
+    "popularity": 68,
+    "in_deck": true
+  },
+  {
+    "id": 11,
+    "title": "Crouching Tiger, Hidden Dragon",
+    "year": 2000,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "Mandarin",
+    "popularity": 80,
+    "in_deck": true
+  },
+  {
+    "id": 12,
+    "title": "Lagaan",
+    "year": 2001,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 65,
+    "in_deck": true
+  },
+  {
+    "id": 13,
+    "title": "3 Idiots",
+    "year": 2009,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 82,
+    "in_deck": true
+  },
+  {
+    "id": 14,
+    "title": "Dangal",
+    "year": 2016,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 79,
+    "in_deck": true
+  },
+  {
+    "id": 15,
+    "title": "RRR",
+    "year": 2022,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "Telugu",
+    "popularity": 84,
+    "in_deck": true
+  },
+  {
+    "id": 16,
+    "title": "Baahubali: The Beginning",
+    "year": 2015,
+    "genres": [
+      "Fantasy"
+    ],
+    "origin_language": "Telugu",
+    "popularity": 77,
+    "in_deck": true
+  },
+  {
+    "id": 17,
+    "title": "Drishyam",
+    "year": 2013,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Malayalam",
+    "popularity": 60,
+    "in_deck": true
+  },
+  {
+    "id": 18,
+    "title": "Vikram Vedha",
+    "year": 2017,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "Tamil",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 19,
+    "title": "Pather Panchali",
+    "year": 1955,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Bangla",
+    "popularity": 55,
+    "in_deck": true
+  },
+  {
+    "id": 20,
+    "title": "The Lunchbox",
+    "year": 2013,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 62,
+    "in_deck": true
+  },
+  {
+    "id": 21,
+    "title": "Timbuktu",
+    "year": 2014,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Arabic",
+    "popularity": 52,
+    "in_deck": true
+  },
+  {
+    "id": 22,
+    "title": "A Separation",
+    "year": 2011,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Persian",
+    "popularity": 71,
+    "in_deck": true
+  },
+  {
+    "id": 23,
+    "title": "The Salesman",
+    "year": 2016,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Persian",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 24,
+    "title": "Tsotsi",
+    "year": 2005,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 48,
+    "in_deck": true
+  },
+  {
+    "id": 25,
+    "title": "Black Panther",
+    "year": 2018,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "English",
+    "popularity": 83,
+    "in_deck": true
+  },
+  {
+    "id": 26,
+    "title": "Moonlight",
+    "year": 2016,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 76,
+    "in_deck": true
+  },
+  {
+    "id": 27,
+    "title": "Get Out",
+    "year": 2017,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "English",
+    "popularity": 77,
+    "in_deck": true
+  },
+  {
+    "id": 28,
+    "title": "Everything Everywhere All at Once",
+    "year": 2022,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "English",
+    "popularity": 85,
+    "in_deck": true
+  },
+  {
+    "id": 29,
+    "title": "The Matrix",
+    "year": 1999,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "English",
+    "popularity": 88,
+    "in_deck": true
+  },
+  {
+    "id": 30,
+    "title": "Blade Runner 2049",
+    "year": 2017,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "English",
+    "popularity": 74,
+    "in_deck": true
+  },
+  {
+    "id": 31,
+    "title": "Arrival",
+    "year": 2016,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "English",
+    "popularity": 73,
+    "in_deck": true
+  },
+  {
+    "id": 32,
+    "title": "Interstellar",
+    "year": 2014,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "English",
+    "popularity": 84,
+    "in_deck": true
+  },
+  {
+    "id": 33,
+    "title": "Mad Max: Fury Road",
+    "year": 2015,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "English",
+    "popularity": 81,
+    "in_deck": true
+  },
+  {
+    "id": 34,
+    "title": "The Dark Knight",
+    "year": 2008,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "English",
+    "popularity": 89,
+    "in_deck": true
+  },
+  {
+    "id": 35,
+    "title": "Whiplash",
+    "year": 2014,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 78,
+    "in_deck": true
+  },
+  {
+    "id": 36,
+    "title": "La La Land",
+    "year": 2016,
+    "genres": [
+      "Musical"
+    ],
+    "origin_language": "English",
+    "popularity": 80,
+    "in_deck": true
+  },
+  {
+    "id": 37,
+    "title": "The Grand Budapest Hotel",
+    "year": 2014,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "English",
+    "popularity": 76,
+    "in_deck": true
+  },
+  {
+    "id": 38,
+    "title": "Lady Bird",
+    "year": 2017,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 70,
+    "in_deck": true
+  },
+  {
+    "id": 39,
+    "title": "Nomadland",
+    "year": 2020,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 68,
+    "in_deck": true
+  },
+  {
+    "id": 40,
+    "title": "Minari",
+    "year": 2020,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Korean",
+    "popularity": 66,
+    "in_deck": true
+  },
+  {
+    "id": 41,
+    "title": "Past Lives",
+    "year": 2023,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "Korean",
+    "popularity": 72,
+    "in_deck": true
+  },
+  {
+    "id": 42,
+    "title": "Train to Busan",
+    "year": 2016,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "Korean",
+    "popularity": 75,
+    "in_deck": true
+  },
+  {
+    "id": 43,
+    "title": "Your Name",
+    "year": 2016,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 83,
+    "in_deck": true
+  },
+  {
+    "id": 44,
+    "title": "Perfect Blue",
+    "year": 1997,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 64,
+    "in_deck": true
+  },
+  {
+    "id": 45,
+    "title": "Grave of the Fireflies",
+    "year": 1988,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 67,
+    "in_deck": true
+  },
+  {
+    "id": 46,
+    "title": "Shoplifters",
+    "year": 2018,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 69,
+    "in_deck": true
+  },
+  {
+    "id": 47,
+    "title": "Drive My Car",
+    "year": 2021,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 61,
+    "in_deck": true
+  },
+  {
+    "id": 48,
+    "title": "Godzilla Minus One",
+    "year": 2023,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 70,
+    "in_deck": true
+  },
+  {
+    "id": 49,
+    "title": "The Handmaiden",
+    "year": 2016,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Korean",
+    "popularity": 68,
+    "in_deck": true
+  },
+  {
+    "id": 50,
+    "title": "Memories of Murder",
+    "year": 2003,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "Korean",
+    "popularity": 66,
+    "in_deck": true
+  },
+  {
+    "id": 51,
+    "title": "Burning",
+    "year": 2018,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Korean",
+    "popularity": 55,
+    "in_deck": true
+  },
+  {
+    "id": 52,
+    "title": "The Wailing",
+    "year": 2016,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "Korean",
+    "popularity": 60,
+    "in_deck": true
+  },
+  {
+    "id": 53,
+    "title": "Roma",
+    "year": 2018,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Spanish",
+    "popularity": 71,
+    "in_deck": true
+  },
+  {
+    "id": 54,
+    "title": "Y Tu Mamá También",
+    "year": 2001,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Spanish",
+    "popularity": 63,
+    "in_deck": true
+  },
+  {
+    "id": 55,
+    "title": "The Secret in Their Eyes",
+    "year": 2009,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Spanish",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 56,
+    "title": "A Fantastic Woman",
+    "year": 2017,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Spanish",
+    "popularity": 52,
+    "in_deck": true
+  },
+  {
+    "id": 57,
+    "title": "Portrait of a Lady on Fire",
+    "year": 2019,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "French",
+    "popularity": 65,
+    "in_deck": true
+  },
+  {
+    "id": 58,
+    "title": "Blue Is the Warmest Color",
+    "year": 2013,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "French",
+    "popularity": 62,
+    "in_deck": true
+  },
+  {
+    "id": 59,
+    "title": "The Intouchables",
+    "year": 2011,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "French",
+    "popularity": 79,
+    "in_deck": true
+  },
+  {
+    "id": 60,
+    "title": "Persepolis",
+    "year": 2007,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "French",
+    "popularity": 57,
+    "in_deck": true
+  },
+  {
+    "id": 61,
+    "title": "The Battle of Algiers",
+    "year": 1966,
+    "genres": [
+      "War"
+    ],
+    "origin_language": "Arabic",
+    "popularity": 54,
+    "in_deck": true
+  },
+  {
+    "id": 62,
+    "title": "Capernaum",
+    "year": 2018,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Arabic",
+    "popularity": 59,
+    "in_deck": true
+  },
+  {
+    "id": 63,
+    "title": "Wadjda",
+    "year": 2012,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Arabic",
+    "popularity": 48,
+    "in_deck": true
+  },
+  {
+    "id": 64,
+    "title": "Theeb",
+    "year": 2014,
+    "genres": [
+      "Adventure"
+    ],
+    "origin_language": "Arabic",
+    "popularity": 45,
+    "in_deck": true
+  },
+  {
+    "id": 65,
+    "title": "District 9",
+    "year": 2009,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "English",
+    "popularity": 72,
+    "in_deck": true
+  },
+  {
+    "id": 66,
+    "title": "The Gods Must Be Crazy",
+    "year": 1980,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "English",
+    "popularity": 50,
+    "in_deck": true
+  },
+  {
+    "id": 67,
+    "title": "Queen of Katwe",
+    "year": 2016,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 46,
+    "in_deck": true
+  },
+  {
+    "id": 68,
+    "title": "Slumdog Millionaire",
+    "year": 2008,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 78,
+    "in_deck": true
+  },
+  {
+    "id": 69,
+    "title": "Gangs of Wasseypur",
+    "year": 2012,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 56,
+    "in_deck": true
+  },
+  {
+    "id": 70,
+    "title": "Andhadhun",
+    "year": 2018,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 61,
+    "in_deck": true
+  },
+  {
+    "id": 71,
+    "title": "Article 15",
+    "year": 2019,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 53,
+    "in_deck": true
+  },
+  {
+    "id": 72,
+    "title": "Court",
+    "year": 2014,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Marathi",
+    "popularity": 42,
+    "in_deck": true
+  },
+  {
+    "id": 73,
+    "title": "Sairat",
+    "year": 2016,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "Marathi",
+    "popularity": 49,
+    "in_deck": true
+  },
+  {
+    "id": 74,
+    "title": "Kumbalangi Nights",
+    "year": 2019,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Malayalam",
+    "popularity": 44,
+    "in_deck": true
+  },
+  {
+    "id": 75,
+    "title": "Premam",
+    "year": 2015,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "Malayalam",
+    "popularity": 51,
+    "in_deck": true
+  },
+  {
+    "id": 76,
+    "title": "Super Deluxe",
+    "year": 2019,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Tamil",
+    "popularity": 47,
+    "in_deck": true
+  },
+  {
+    "id": 77,
+    "title": "Kaithi",
+    "year": 2019,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "Tamil",
+    "popularity": 50,
+    "in_deck": true
+  },
+  {
+    "id": 78,
+    "title": "Jersey",
+    "year": 2019,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Telugu",
+    "popularity": 43,
+    "in_deck": true
+  },
+  {
+    "id": 79,
+    "title": "Coco",
+    "year": 2017,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 82,
+    "in_deck": true
+  },
+  {
+    "id": 80,
+    "title": "Inside Out",
+    "year": 2015,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 80,
+    "in_deck": true
+  },
+  {
+    "id": 81,
+    "title": "Spider-Man: Into the Spider-Verse",
+    "year": 2018,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 81,
+    "in_deck": true
+  },
+  {
+    "id": 82,
+    "title": "The Lion King",
+    "year": 1994,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 85,
+    "in_deck": true
+  },
+  {
+    "id": 83,
+    "title": "WALL-E",
+    "year": 2008,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 79,
+    "in_deck": true
+  },
+  {
+    "id": 84,
+    "title": "Finding Nemo",
+    "year": 2003,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 78,
+    "in_deck": true
+  },
+  {
+    "id": 85,
+    "title": "Toy Story",
+    "year": 1995,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 84,
+    "in_deck": true
+  },
+  {
+    "id": 86,
+    "title": "The Princess Bride",
+    "year": 1987,
+    "genres": [
+      "Fantasy"
+    ],
+    "origin_language": "English",
+    "popularity": 74,
+    "in_deck": true
+  },
+  {
+    "id": 87,
+    "title": "The Shining",
+    "year": 1980,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "English",
+    "popularity": 82,
+    "in_deck": true
+  },
+  {
+    "id": 88,
+    "title": "Hereditary",
+    "year": 2018,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "English",
+    "popularity": 68,
+    "in_deck": true
+  },
+  {
+    "id": 89,
+    "title": "The Witch",
+    "year": 2015,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "English",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 90,
+    "title": "A Quiet Place",
+    "year": 2018,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "English",
+    "popularity": 70,
+    "in_deck": true
+  },
+  {
+    "id": 91,
+    "title": "Scream",
+    "year": 1996,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "English",
+    "popularity": 72,
+    "in_deck": true
+  },
+  {
+    "id": 92,
+    "title": "The Exorcist",
+    "year": 1973,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "English",
+    "popularity": 75,
+    "in_deck": true
+  },
+  {
+    "id": 93,
+    "title": "Halloween",
+    "year": 1978,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "English",
+    "popularity": 68,
+    "in_deck": true
+  },
+  {
+    "id": 94,
+    "title": "Psycho",
+    "year": 1960,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "English",
+    "popularity": 77,
+    "in_deck": true
+  },
+  {
+    "id": 95,
+    "title": "The Silence of the Lambs",
+    "year": 1991,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "English",
+    "popularity": 83,
+    "in_deck": true
+  },
+  {
+    "id": 96,
+    "title": "Se7en",
+    "year": 1995,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "English",
+    "popularity": 79,
+    "in_deck": true
+  },
+  {
+    "id": 97,
+    "title": "Zodiac",
+    "year": 2007,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "English",
+    "popularity": 71,
+    "in_deck": true
+  },
+  {
+    "id": 98,
+    "title": "Prisoners",
+    "year": 2013,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "English",
+    "popularity": 67,
+    "in_deck": true
+  },
+  {
+    "id": 99,
+    "title": "No Country for Old Men",
+    "year": 2007,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "English",
+    "popularity": 76,
+    "in_deck": true
+  },
+  {
+    "id": 100,
+    "title": "Fargo",
+    "year": 1996,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "English",
+    "popularity": 73,
+    "in_deck": true
+  },
+  {
+    "id": 101,
+    "title": "Pulp Fiction",
+    "year": 1994,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "English",
+    "popularity": 86,
+    "in_deck": true
+  },
+  {
+    "id": 102,
+    "title": "Goodfellas",
+    "year": 1990,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "English",
+    "popularity": 82,
+    "in_deck": true
+  },
+  {
+    "id": 103,
+    "title": "The Departed",
+    "year": 2006,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "English",
+    "popularity": 77,
+    "in_deck": true
+  },
+  {
+    "id": 104,
+    "title": "Casino",
+    "year": 1995,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "English",
+    "popularity": 70,
+    "in_deck": true
+  },
+  {
+    "id": 105,
+    "title": "Heat",
+    "year": 1995,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "English",
+    "popularity": 72,
+    "in_deck": true
+  },
+  {
+    "id": 106,
+    "title": "The Usual Suspects",
+    "year": 1995,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "English",
+    "popularity": 69,
+    "in_deck": true
+  },
+  {
+    "id": 107,
+    "title": "L.A. Confidential",
+    "year": 1997,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "English",
+    "popularity": 66,
+    "in_deck": true
+  },
+  {
+    "id": 108,
+    "title": "Chinatown",
+    "year": 1974,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "English",
+    "popularity": 64,
+    "in_deck": true
+  },
+  {
+    "id": 109,
+    "title": "Double Indemnity",
+    "year": 1944,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "English",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 110,
+    "title": "The Maltese Falcon",
+    "year": 1941,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "English",
+    "popularity": 52,
+    "in_deck": true
+  },
+  {
+    "id": 111,
+    "title": "Before Sunrise",
+    "year": 1995,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "English",
+    "popularity": 65,
+    "in_deck": true
+  },
+  {
+    "id": 112,
+    "title": "Eternal Sunshine of the Spotless Mind",
+    "year": 2004,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "English",
+    "popularity": 74,
+    "in_deck": true
+  },
+  {
+    "id": 113,
+    "title": "Call Me by Your Name",
+    "year": 2017,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "English",
+    "popularity": 73,
+    "in_deck": true
+  },
+  {
+    "id": 114,
+    "title": "The Notebook",
+    "year": 2004,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "English",
+    "popularity": 68,
+    "in_deck": true
+  },
+  {
+    "id": 115,
+    "title": "Pride & Prejudice",
+    "year": 2005,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "English",
+    "popularity": 70,
+    "in_deck": true
+  },
+  {
+    "id": 116,
+    "title": "Brooklyn",
+    "year": 2015,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "English",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 117,
+    "title": "Carol",
+    "year": 2015,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "English",
+    "popularity": 60,
+    "in_deck": true
+  },
+  {
+    "id": 118,
+    "title": "Phantom Thread",
+    "year": 2017,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "English",
+    "popularity": 57,
+    "in_deck": true
+  },
+  {
+    "id": 119,
+    "title": "The Shape of Water",
+    "year": 2017,
+    "genres": [
+      "Fantasy"
+    ],
+    "origin_language": "English",
+    "popularity": 71,
+    "in_deck": true
+  },
+  {
+    "id": 120,
+    "title": "The Lord of the Rings: The Fellowship of the Ring",
+    "year": 2001,
+    "genres": [
+      "Fantasy"
+    ],
+    "origin_language": "English",
+    "popularity": 87,
+    "in_deck": true
+  },
+  {
+    "id": 121,
+    "title": "Harry Potter and the Prisoner of Azkaban",
+    "year": 2004,
+    "genres": [
+      "Fantasy"
+    ],
+    "origin_language": "English",
+    "popularity": 80,
+    "in_deck": true
+  },
+  {
+    "id": 122,
+    "title": "Howl's Moving Castle",
+    "year": 2004,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 76,
+    "in_deck": true
+  },
+  {
+    "id": 123,
+    "title": "The Wizard of Oz",
+    "year": 1939,
+    "genres": [
+      "Fantasy"
+    ],
+    "origin_language": "English",
+    "popularity": 72,
+    "in_deck": true
+  },
+  {
+    "id": 124,
+    "title": "Dune",
+    "year": 2021,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "English",
+    "popularity": 78,
+    "in_deck": true
+  },
+  {
+    "id": 125,
+    "title": "2001: A Space Odyssey",
+    "year": 1968,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "English",
+    "popularity": 74,
+    "in_deck": true
+  },
+  {
+    "id": 126,
+    "title": "Alien",
+    "year": 1979,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "English",
+    "popularity": 76,
+    "in_deck": true
+  },
+  {
+    "id": 127,
+    "title": "The Thing",
+    "year": 1982,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "English",
+    "popularity": 65,
+    "in_deck": true
+  },
+  {
+    "id": 128,
+    "title": "Children of Men",
+    "year": 2006,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "English",
+    "popularity": 67,
+    "in_deck": true
+  },
+  {
+    "id": 129,
+    "title": "Ex Machina",
+    "year": 2014,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "English",
+    "popularity": 66,
+    "in_deck": true
+  },
+  {
+    "id": 130,
+    "title": "Annihilation",
+    "year": 2018,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "English",
+    "popularity": 60,
+    "in_deck": true
+  },
+  {
+    "id": 131,
+    "title": "Snowpiercer",
+    "year": 2013,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "Korean",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 132,
+    "title": "Okja",
+    "year": 2017,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "Korean",
+    "popularity": 54,
+    "in_deck": true
+  },
+  {
+    "id": 133,
+    "title": "Stalker",
+    "year": 1979,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "Russian",
+    "popularity": 50,
+    "in_deck": true
+  },
+  {
+    "id": 134,
+    "title": "Solaris",
+    "year": 1972,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "Russian",
+    "popularity": 48,
+    "in_deck": true
+  },
+  {
+    "id": 135,
+    "title": "Metropolis",
+    "year": 1927,
+    "genres": [
+      "Sci-Fi"
+    ],
+    "origin_language": "German",
+    "popularity": 55,
+    "in_deck": true
+  },
+  {
+    "id": 136,
+    "title": "Das Boot",
+    "year": 1981,
+    "genres": [
+      "War"
+    ],
+    "origin_language": "German",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 137,
+    "title": "Downfall",
+    "year": 2004,
+    "genres": [
+      "War"
+    ],
+    "origin_language": "German",
+    "popularity": 62,
+    "in_deck": true
+  },
+  {
+    "id": 138,
+    "title": "Come and See",
+    "year": 1985,
+    "genres": [
+      "War"
+    ],
+    "origin_language": "Russian",
+    "popularity": 53,
+    "in_deck": true
+  },
+  {
+    "id": 139,
+    "title": "Apocalypse Now",
+    "year": 1979,
+    "genres": [
+      "War"
+    ],
+    "origin_language": "English",
+    "popularity": 71,
+    "in_deck": true
+  },
+  {
+    "id": 140,
+    "title": "Saving Private Ryan",
+    "year": 1998,
+    "genres": [
+      "War"
+    ],
+    "origin_language": "English",
+    "popularity": 74,
+    "in_deck": true
+  },
+  {
+    "id": 141,
+    "title": "1917",
+    "year": 2019,
+    "genres": [
+      "War"
+    ],
+    "origin_language": "English",
+    "popularity": 69,
+    "in_deck": true
+  },
+  {
+    "id": 142,
+    "title": "Dunkirk",
+    "year": 2017,
+    "genres": [
+      "War"
+    ],
+    "origin_language": "English",
+    "popularity": 68,
+    "in_deck": true
+  },
+  {
+    "id": 143,
+    "title": "The Hurt Locker",
+    "year": 2008,
+    "genres": [
+      "War"
+    ],
+    "origin_language": "English",
+    "popularity": 61,
+    "in_deck": true
+  },
+  {
+    "id": 144,
+    "title": "Full Metal Jacket",
+    "year": 1987,
+    "genres": [
+      "War"
+    ],
+    "origin_language": "English",
+    "popularity": 64,
+    "in_deck": true
+  },
+  {
+    "id": 145,
+    "title": "Platoon",
+    "year": 1986,
+    "genres": [
+      "War"
+    ],
+    "origin_language": "English",
+    "popularity": 60,
+    "in_deck": true
+  },
+  {
+    "id": 146,
+    "title": "The Searchers",
+    "year": 1956,
+    "genres": [
+      "Western"
+    ],
+    "origin_language": "English",
+    "popularity": 52,
+    "in_deck": true
+  },
+  {
+    "id": 147,
+    "title": "Unforgiven",
+    "year": 1992,
+    "genres": [
+      "Western"
+    ],
+    "origin_language": "English",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 148,
+    "title": "The Good, the Bad and the Ugly",
+    "year": 1966,
+    "genres": [
+      "Western"
+    ],
+    "origin_language": "Italian",
+    "popularity": 70,
+    "in_deck": true
+  },
+  {
+    "id": 149,
+    "title": "Raging Bull",
+    "year": 1980,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 63,
+    "in_deck": true
+  },
+  {
+    "id": 150,
+    "title": "Taxi Driver",
+    "year": 1976,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 68,
+    "in_deck": true
+  },
+  {
+    "id": 151,
+    "title": "There Will Be Blood",
+    "year": 2007,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 66,
+    "in_deck": true
+  },
+  {
+    "id": 152,
+    "title": "The Master",
+    "year": 2012,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 55,
+    "in_deck": true
+  },
+  {
+    "id": 153,
+    "title": "Magnolia",
+    "year": 1999,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 57,
+    "in_deck": true
+  },
+  {
+    "id": 154,
+    "title": "Boyhood",
+    "year": 2014,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 59,
+    "in_deck": true
+  },
+  {
+    "id": 155,
+    "title": "The Florida Project",
+    "year": 2017,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 54,
+    "in_deck": true
+  },
+  {
+    "id": 156,
+    "title": "The Farewell",
+    "year": 2019,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Mandarin",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 157,
+    "title": "A Taxi Driver",
+    "year": 2017,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Korean",
+    "popularity": 56,
+    "in_deck": true
+  },
+  {
+    "id": 158,
+    "title": "PK",
+    "year": 2014,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 60,
+    "in_deck": true
+  },
+  {
+    "id": 159,
+    "title": "Hera Pheri",
+    "year": 2000,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 52,
+    "in_deck": true
+  },
+  {
+    "id": 160,
+    "title": "Andaz Apna Apna",
+    "year": 1994,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 55,
+    "in_deck": true
+  },
+  {
+    "id": 161,
+    "title": "Superbad",
+    "year": 2007,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "English",
+    "popularity": 64,
+    "in_deck": true
+  },
+  {
+    "id": 162,
+    "title": "Bridesmaids",
+    "year": 2011,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "English",
+    "popularity": 62,
+    "in_deck": true
+  },
+  {
+    "id": 163,
+    "title": "The Big Lebowski",
+    "year": 1998,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "English",
+    "popularity": 67,
+    "in_deck": true
+  },
+  {
+    "id": 164,
+    "title": "Groundhog Day",
+    "year": 1993,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "English",
+    "popularity": 66,
+    "in_deck": true
+  },
+  {
+    "id": 165,
+    "title": "Monty Python and the Holy Grail",
+    "year": 1975,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "English",
+    "popularity": 61,
+    "in_deck": true
+  },
+  {
+    "id": 166,
+    "title": "Borat",
+    "year": 2006,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "English",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 167,
+    "title": "The Grand Seduction",
+    "year": 2013,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "English",
+    "popularity": 40,
+    "in_deck": true
+  },
+  {
+    "id": 168,
+    "title": "Hunt for the Wilderpeople",
+    "year": 2016,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "English",
+    "popularity": 49,
+    "in_deck": true
+  },
+  {
+    "id": 169,
+    "title": "What We Do in the Shadows",
+    "year": 2014,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "English",
+    "popularity": 51,
+    "in_deck": true
+  },
+  {
+    "id": 170,
+    "title": "The Square",
+    "year": 2017,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Swedish",
+    "popularity": 45,
+    "in_deck": true
+  },
+  {
+    "id": 171,
+    "title": "Force Majeure",
+    "year": 2014,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Swedish",
+    "popularity": 44,
+    "in_deck": true
+  },
+  {
+    "id": 172,
+    "title": "The Lives of Others",
+    "year": 2006,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "German",
+    "popularity": 63,
+    "in_deck": true
+  },
+  {
+    "id": 173,
+    "title": "Head-On",
+    "year": 2004,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Turkish",
+    "popularity": 46,
+    "in_deck": true
+  },
+  {
+    "id": 174,
+    "title": "Once Upon a Time in Anatolia",
+    "year": 2011,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "Turkish",
+    "popularity": 50,
+    "in_deck": true
+  },
+  {
+    "id": 175,
+    "title": "Mustang",
+    "year": 2015,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Turkish",
+    "popularity": 43,
+    "in_deck": true
+  },
+  {
+    "id": 176,
+    "title": "Incendies",
+    "year": 2010,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "French",
+    "popularity": 57,
+    "in_deck": true
+  },
+  {
+    "id": 177,
+    "title": "The Class",
+    "year": 2008,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "French",
+    "popularity": 42,
+    "in_deck": true
+  },
+  {
+    "id": 178,
+    "title": "Atlantics",
+    "year": 2019,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "French",
+    "popularity": 41,
+    "in_deck": true
+  },
+  {
+    "id": 179,
+    "title": "Rafiki",
+    "year": 2018,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "Swahili",
+    "popularity": 38,
+    "in_deck": true
+  },
+  {
+    "id": 180,
+    "title": "Supa Modo",
+    "year": 2018,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Swahili",
+    "popularity": 35,
+    "in_deck": true
+  },
+  {
+    "id": 181,
+    "title": "The Band's Visit",
+    "year": 2007,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "Arabic",
+    "popularity": 44,
+    "in_deck": true
+  },
+  {
+    "id": 182,
+    "title": "Caramel",
+    "year": 2007,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Arabic",
+    "popularity": 40,
+    "in_deck": true
+  },
+  {
+    "id": 183,
+    "title": "Omar",
+    "year": 2013,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Arabic",
+    "popularity": 39,
+    "in_deck": true
+  },
+  {
+    "id": 184,
+    "title": "Uncle Boonmee Who Can Recall His Past Lives",
+    "year": 2010,
+    "genres": [
+      "Fantasy"
+    ],
+    "origin_language": "Thai",
+    "popularity": 42,
+    "in_deck": true
+  },
+  {
+    "id": 185,
+    "title": "Bad Genius",
+    "year": 2017,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Thai",
+    "popularity": 48,
+    "in_deck": true
+  },
+  {
+    "id": 186,
+    "title": "The Raid",
+    "year": 2011,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "Indonesian",
+    "popularity": 54,
+    "in_deck": true
+  },
+  {
+    "id": 187,
+    "title": "The Act of Killing",
+    "year": 2012,
+    "genres": [
+      "Documentary"
+    ],
+    "origin_language": "Indonesian",
+    "popularity": 52,
+    "in_deck": true
+  },
+  {
+    "id": 188,
+    "title": "Honeyland",
+    "year": 2019,
+    "genres": [
+      "Documentary"
+    ],
+    "origin_language": "Macedonian",
+    "popularity": 41,
+    "in_deck": true
+  },
+  {
+    "id": 189,
+    "title": "Free Solo",
+    "year": 2018,
+    "genres": [
+      "Documentary"
+    ],
+    "origin_language": "English",
+    "popularity": 55,
+    "in_deck": true
+  },
+  {
+    "id": 190,
+    "title": "March of the Penguins",
+    "year": 2005,
+    "genres": [
+      "Documentary"
+    ],
+    "origin_language": "French",
+    "popularity": 46,
+    "in_deck": true
+  },
+  {
+    "id": 191,
+    "title": "13th",
+    "year": 2016,
+    "genres": [
+      "Documentary"
+    ],
+    "origin_language": "English",
+    "popularity": 53,
+    "in_deck": true
+  },
+  {
+    "id": 192,
+    "title": "Won't You Be My Neighbor?",
+    "year": 2018,
+    "genres": [
+      "Documentary"
+    ],
+    "origin_language": "English",
+    "popularity": 50,
+    "in_deck": true
+  },
+  {
+    "id": 193,
+    "title": "Searching for Sugar Man",
+    "year": 2012,
+    "genres": [
+      "Documentary"
+    ],
+    "origin_language": "English",
+    "popularity": 47,
+    "in_deck": true
+  },
+  {
+    "id": 194,
+    "title": "The Last Dance",
+    "year": 2020,
+    "genres": [
+      "Documentary"
+    ],
+    "origin_language": "English",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 195,
+    "title": "Singin' in the Rain",
+    "year": 1952,
+    "genres": [
+      "Musical"
+    ],
+    "origin_language": "English",
+    "popularity": 62,
+    "in_deck": true
+  },
+  {
+    "id": 196,
+    "title": "West Side Story",
+    "year": 1961,
+    "genres": [
+      "Musical"
+    ],
+    "origin_language": "English",
+    "popularity": 60,
+    "in_deck": true
+  },
+  {
+    "id": 197,
+    "title": "Chicago",
+    "year": 2002,
+    "genres": [
+      "Musical"
+    ],
+    "origin_language": "English",
+    "popularity": 56,
+    "in_deck": true
+  },
+  {
+    "id": 198,
+    "title": "The Sound of Music",
+    "year": 1965,
+    "genres": [
+      "Musical"
+    ],
+    "origin_language": "English",
+    "popularity": 64,
+    "in_deck": true
+  },
+  {
+    "id": 199,
+    "title": "Dil Se..",
+    "year": 1998,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 50,
+    "in_deck": true
+  },
+  {
+    "id": 200,
+    "title": "Devdas",
+    "year": 2002,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 48,
+    "in_deck": true
+  },
+  {
+    "id": 201,
+    "title": "Barfi!",
+    "year": 2012,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 52,
+    "in_deck": true
+  },
+  {
+    "id": 202,
+    "title": "Swades",
+    "year": 2004,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 54,
+    "in_deck": true
+  },
+  {
+    "id": 203,
+    "title": "Queen",
+    "year": 2013,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 53,
+    "in_deck": true
+  },
+  {
+    "id": 204,
+    "title": "Udaan",
+    "year": 2010,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 45,
+    "in_deck": true
+  },
+  {
+    "id": 205,
+    "title": "Ship of Theseus",
+    "year": 2012,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 40,
+    "in_deck": true
+  },
+  {
+    "id": 206,
+    "title": "Tumbbad",
+    "year": 2018,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 46,
+    "in_deck": true
+  },
+  {
+    "id": 207,
+    "title": "Stree",
+    "year": 2018,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "Hindi",
+    "popularity": 44,
+    "in_deck": true
+  },
+  {
+    "id": 208,
+    "title": "Us",
+    "year": 2019,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "English",
+    "popularity": 62,
+    "in_deck": true
+  },
+  {
+    "id": 209,
+    "title": "Nope",
+    "year": 2022,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "English",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 210,
+    "title": "The Babadook",
+    "year": 2014,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "English",
+    "popularity": 55,
+    "in_deck": true
+  },
+  {
+    "id": 211,
+    "title": "Let the Right One In",
+    "year": 2008,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "Swedish",
+    "popularity": 53,
+    "in_deck": true
+  },
+  {
+    "id": 212,
+    "title": "Raw",
+    "year": 2016,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "French",
+    "popularity": 42,
+    "in_deck": true
+  },
+  {
+    "id": 213,
+    "title": "A Girl Walks Home Alone at Night",
+    "year": 2014,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "Persian",
+    "popularity": 41,
+    "in_deck": true
+  },
+  {
+    "id": 214,
+    "title": "Under the Shadow",
+    "year": 2016,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "Persian",
+    "popularity": 38,
+    "in_deck": true
+  },
+  {
+    "id": 215,
+    "title": "The Host",
+    "year": 2006,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "Korean",
+    "popularity": 57,
+    "in_deck": true
+  },
+  {
+    "id": 216,
+    "title": "Mother",
+    "year": 2009,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Korean",
+    "popularity": 52,
+    "in_deck": true
+  },
+  {
+    "id": 217,
+    "title": "The Chaser",
+    "year": 2008,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Korean",
+    "popularity": 49,
+    "in_deck": true
+  },
+  {
+    "id": 218,
+    "title": "I Saw the Devil",
+    "year": 2010,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Korean",
+    "popularity": 51,
+    "in_deck": true
+  },
+  {
+    "id": 219,
+    "title": "A Bittersweet Life",
+    "year": 2005,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "Korean",
+    "popularity": 44,
+    "in_deck": true
+  },
+  {
+    "id": 220,
+    "title": "The Man from Nowhere",
+    "year": 2010,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "Korean",
+    "popularity": 50,
+    "in_deck": true
+  },
+  {
+    "id": 221,
+    "title": "Ong-Bak",
+    "year": 2003,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "Thai",
+    "popularity": 46,
+    "in_deck": true
+  },
+  {
+    "id": 222,
+    "title": "Ip Man",
+    "year": 2008,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "Cantonese",
+    "popularity": 55,
+    "in_deck": true
+  },
+  {
+    "id": 223,
+    "title": "Hero",
+    "year": 2002,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "Mandarin",
+    "popularity": 62,
+    "in_deck": true
+  },
+  {
+    "id": 224,
+    "title": "House of Flying Daggers",
+    "year": 2004,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "Mandarin",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 225,
+    "title": "Raise the Red Lantern",
+    "year": 1991,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Mandarin",
+    "popularity": 50,
+    "in_deck": true
+  },
+  {
+    "id": 226,
+    "title": "Farewell My Concubine",
+    "year": 1993,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Mandarin",
+    "popularity": 52,
+    "in_deck": true
+  },
+  {
+    "id": 227,
+    "title": "Still Life",
+    "year": 2006,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Mandarin",
+    "popularity": 38,
+    "in_deck": true
+  },
+  {
+    "id": 228,
+    "title": "A Touch of Sin",
+    "year": 2013,
+    "genres": [
+      "Crime"
+    ],
+    "origin_language": "Mandarin",
+    "popularity": 40,
+    "in_deck": true
+  },
+  {
+    "id": 229,
+    "title": "Nobody Knows",
+    "year": 2004,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 43,
+    "in_deck": true
+  },
+  {
+    "id": 230,
+    "title": "Like Father, Like Son",
+    "year": 2013,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 45,
+    "in_deck": true
+  },
+  {
+    "id": 231,
+    "title": "Our Little Sister",
+    "year": 2015,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 41,
+    "in_deck": true
+  },
+  {
+    "id": 232,
+    "title": "After the Storm",
+    "year": 2016,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 39,
+    "in_deck": true
+  },
+  {
+    "id": 233,
+    "title": "The Taste of Tea",
+    "year": 2004,
+    "genres": [
+      "Comedy"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 36,
+    "in_deck": true
+  },
+  {
+    "id": 234,
+    "title": "Perfect Days",
+    "year": 2023,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 48,
+    "in_deck": true
+  },
+  {
+    "id": 235,
+    "title": "The Fabelmans",
+    "year": 2022,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 57,
+    "in_deck": true
+  },
+  {
+    "id": 236,
+    "title": "The Holdovers",
+    "year": 2023,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "English",
+    "popularity": 56,
+    "in_deck": true
+  },
+  {
+    "id": 237,
+    "title": "Anatomy of a Fall",
+    "year": 2023,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "French",
+    "popularity": 60,
+    "in_deck": true
+  },
+  {
+    "id": 238,
+    "title": "The Zone of Interest",
+    "year": 2023,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "German",
+    "popularity": 55,
+    "in_deck": true
+  },
+  {
+    "id": 239,
+    "title": "All Quiet on the Western Front",
+    "year": 2022,
+    "genres": [
+      "War"
+    ],
+    "origin_language": "German",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 240,
+    "title": "Decision to Leave",
+    "year": 2022,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "Korean",
+    "popularity": 54,
+    "in_deck": true
+  },
+  {
+    "id": 241,
+    "title": "Broker",
+    "year": 2022,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Korean",
+    "popularity": 46,
+    "in_deck": true
+  },
+  {
+    "id": 242,
+    "title": "The Worst Person in the World",
+    "year": 2021,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "Norwegian",
+    "popularity": 50,
+    "in_deck": true
+  },
+  {
+    "id": 243,
+    "title": "Another Round",
+    "year": 2020,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Danish",
+    "popularity": 52,
+    "in_deck": true
+  },
+  {
+    "id": 244,
+    "title": "The Hand of God",
+    "year": 2021,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Italian",
+    "popularity": 44,
+    "in_deck": true
+  },
+  {
+    "id": 245,
+    "title": "The Great Beauty",
+    "year": 2013,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Italian",
+    "popularity": 51,
+    "in_deck": true
+  },
+  {
+    "id": 246,
+    "title": "Il Postino",
+    "year": 1994,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "Italian",
+    "popularity": 48,
+    "in_deck": true
+  },
+  {
+    "id": 247,
+    "title": "Life Is Beautiful",
+    "year": 1997,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Italian",
+    "popularity": 62,
+    "in_deck": true
+  },
+  {
+    "id": 248,
+    "title": "The Bicycle Thieves",
+    "year": 1948,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Italian",
+    "popularity": 54,
+    "in_deck": true
+  },
+  {
+    "id": 249,
+    "title": "The Platform",
+    "year": 2019,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Spanish",
+    "popularity": 49,
+    "in_deck": true
+  },
+  {
+    "id": 250,
+    "title": "The Orphanage",
+    "year": 2007,
+    "genres": [
+      "Horror"
+    ],
+    "origin_language": "Spanish",
+    "popularity": 47,
+    "in_deck": true
+  },
+  {
+    "id": 251,
+    "title": "Talk to Her",
+    "year": 2002,
+    "genres": [
+      "Romance"
+    ],
+    "origin_language": "Spanish",
+    "popularity": 50,
+    "in_deck": true
+  },
+  {
+    "id": 252,
+    "title": "All About My Mother",
+    "year": 1999,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Spanish",
+    "popularity": 53,
+    "in_deck": true
+  },
+  {
+    "id": 253,
+    "title": "Volver",
+    "year": 2006,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Spanish",
+    "popularity": 46,
+    "in_deck": true
+  },
+  {
+    "id": 254,
+    "title": "The Skin I Live In",
+    "year": 2011,
+    "genres": [
+      "Thriller"
+    ],
+    "origin_language": "Spanish",
+    "popularity": 44,
+    "in_deck": true
+  },
+  {
+    "id": 255,
+    "title": "The Motorcycle Diaries",
+    "year": 2004,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Spanish",
+    "popularity": 51,
+    "in_deck": true
+  },
+  {
+    "id": 256,
+    "title": "Central Station",
+    "year": 1998,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Portuguese",
+    "popularity": 45,
+    "in_deck": true
+  },
+  {
+    "id": 257,
+    "title": "City of Men",
+    "year": 2007,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Portuguese",
+    "popularity": 40,
+    "in_deck": true
+  },
+  {
+    "id": 258,
+    "title": "Elite Squad",
+    "year": 2007,
+    "genres": [
+      "Action"
+    ],
+    "origin_language": "Portuguese",
+    "popularity": 43,
+    "in_deck": true
+  },
+  {
+    "id": 259,
+    "title": "The Second Mother",
+    "year": 2015,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Portuguese",
+    "popularity": 41,
+    "in_deck": true
+  },
+  {
+    "id": 260,
+    "title": "Aquarius",
+    "year": 2016,
+    "genres": [
+      "Drama"
+    ],
+    "origin_language": "Portuguese",
+    "popularity": 38,
+    "in_deck": true
+  },
+  {
+    "id": 261,
+    "title": "Bacurau",
+    "year": 2019,
+    "genres": [
+      "Western"
+    ],
+    "origin_language": "Portuguese",
+    "popularity": 42,
+    "in_deck": true
+  },
+  {
+    "id": 262,
+    "title": "Wolfwalkers",
+    "year": 2020,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 47,
+    "in_deck": true
+  },
+  {
+    "id": 263,
+    "title": "Song of the Sea",
+    "year": 2014,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 44,
+    "in_deck": true
+  },
+  {
+    "id": 264,
+    "title": "The Breadwinner",
+    "year": 2017,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 43,
+    "in_deck": true
+  },
+  {
+    "id": 265,
+    "title": "The Red Turtle",
+    "year": 2016,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "French",
+    "popularity": 40,
+    "in_deck": true
+  },
+  {
+    "id": 266,
+    "title": "Mirai",
+    "year": 2018,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 42,
+    "in_deck": true
+  },
+  {
+    "id": 267,
+    "title": "The Boy and the Heron",
+    "year": 2023,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 268,
+    "title": "Belle",
+    "year": 2021,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 45,
+    "in_deck": true
+  },
+  {
+    "id": 269,
+    "title": "Puss in Boots: The Last Wish",
+    "year": 2022,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 56,
+    "in_deck": true
+  },
+  {
+    "id": 270,
+    "title": "Turning Red",
+    "year": 2022,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 52,
+    "in_deck": true
+  },
+  {
+    "id": 271,
+    "title": "Encanto",
+    "year": 2021,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 54,
+    "in_deck": true
+  },
+  {
+    "id": 272,
+    "title": "Moana",
+    "year": 2016,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 57,
+    "in_deck": true
+  },
+  {
+    "id": 273,
+    "title": "Zootopia",
+    "year": 2016,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 55,
+    "in_deck": true
+  },
+  {
+    "id": 274,
+    "title": "The Mitchells vs. the Machines",
+    "year": 2021,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 50,
+    "in_deck": true
+  },
+  {
+    "id": 275,
+    "title": "Klaus",
+    "year": 2019,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 48,
+    "in_deck": true
+  },
+  {
+    "id": 276,
+    "title": "The Iron Giant",
+    "year": 1999,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "English",
+    "popularity": 46,
+    "in_deck": true
+  },
+  {
+    "id": 277,
+    "title": "Akira",
+    "year": 1988,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 52,
+    "in_deck": true
+  },
+  {
+    "id": 278,
+    "title": "Ghost in the Shell",
+    "year": 1995,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 54,
+    "in_deck": true
+  },
+  {
+    "id": 279,
+    "title": "Redline",
+    "year": 2009,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 38,
+    "in_deck": true
+  },
+  {
+    "id": 280,
+    "title": "The Tale of The Princess Kaguya",
+    "year": 2013,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 44,
+    "in_deck": true
+  },
+  {
+    "id": 281,
+    "title": "A Silent Voice",
+    "year": 2016,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 50,
+    "in_deck": true
+  },
+  {
+    "id": 282,
+    "title": "Weathering with You",
+    "year": 2019,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 48,
+    "in_deck": true
+  },
+  {
+    "id": 283,
+    "title": "The Wind Rises",
+    "year": 2013,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 47,
+    "in_deck": true
+  },
+  {
+    "id": 284,
+    "title": "Nausicaä of the Valley of the Wind",
+    "year": 1984,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 49,
+    "in_deck": true
+  },
+  {
+    "id": 285,
+    "title": "Castle in the Sky",
+    "year": 1986,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 48,
+    "in_deck": true
+  },
+  {
+    "id": 286,
+    "title": "My Neighbor Totoro",
+    "year": 1988,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 55,
+    "in_deck": true
+  },
+  {
+    "id": 287,
+    "title": "Kiki's Delivery Service",
+    "year": 1989,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 50,
+    "in_deck": true
+  },
+  {
+    "id": 288,
+    "title": "Princess Mononoke",
+    "year": 1997,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 58,
+    "in_deck": true
+  },
+  {
+    "id": 289,
+    "title": "The Cat Returns",
+    "year": 2002,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 42,
+    "in_deck": true
+  },
+  {
+    "id": 290,
+    "title": "Ponyo",
+    "year": 2008,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 46,
+    "in_deck": true
+  },
+  {
+    "id": 291,
+    "title": "The Secret World of Arrietty",
+    "year": 2010,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 41,
+    "in_deck": true
+  },
+  {
+    "id": 292,
+    "title": "When Marnie Was There",
+    "year": 2014,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 39,
+    "in_deck": true
+  },
+  {
+    "id": 293,
+    "title": "The Boy and the Beast",
+    "year": 2015,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 37,
+    "in_deck": true
+  },
+  {
+    "id": 294,
+    "title": "Lu Over the Wall",
+    "year": 2017,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 35,
+    "in_deck": true
+  },
+  {
+    "id": 295,
+    "title": "The First Slam Dunk",
+    "year": 2022,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 46,
+    "in_deck": true
+  },
+  {
+    "id": 296,
+    "title": "Suzume",
+    "year": 2022,
+    "genres": [
+      "Animation"
+    ],
+    "origin_language": "Japanese",
+    "popularity": 47,
+    "in_deck": true
+  }
 ]
 
-export const movieTitleSet = movieCatalog.map((movie) => movie.title)
-export const movieTitlesByLanguage = {
-  english: movieCatalog.map((movie) => movie.title),
-  hindi: [
-    '3 Idiots', 'Lagaan', 'Dangal', 'PK', 'Bajrangi Bhaijaan', 'Slumdog Millionaire', 'Gully Boy', 'RRR', 'Sholay', 'K.G.F: Chapter 1', 'Kabir Singh'
-  ],
-  japanese: ['Spirited Away', 'Your Name', 'Akira', 'Princess Mononoke', 'A Silent Voice', 'Howl’s Moving Castle', 'Kimi no Nawa'],
-  korean: ['Parasite', 'Train to Busan', 'The Handmaiden', 'Oldboy', 'Memories of Murder', 'The Wailing', 'Burning'],
-  french: ['Amélie', 'The Intouchables', 'Portrait of a Lady on Fire', 'Lovers Rock', 'Le Fabuleux Destin d’Amélie Poulain'],
-  spanish: ['Roma', 'Y tu mamá también', 'The Spirit of the Beehive', 'The Secret in Their Eyes'],
-  tamil: ['Baahubali: The Beginning', 'Baahubali 2: The Conclusion', 'K.G.F: Chapter 1', 'K.G.F: Chapter 2'],
-  telugu: ['RRR', 'Baahubali: The Beginning', 'Baahubali 2: The Conclusion'],
-  arabic: ['Theeb', 'Capernaum', 'Wadjda'],
-  chinese: ['Crouching Tiger, Hidden Dragon', 'The Farewell', 'Yi Yi', 'Wong Kar-wai classics']
-}
+export const MOVIE_COUNT = 296
