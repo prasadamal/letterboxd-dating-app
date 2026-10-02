@@ -116,6 +116,9 @@ export function mapUserRow(row, taste = { loved: [], hated: [] }) {
       `https://api.dicebear.com/7.x/thumbs/svg?seed=${seed}`,
     photo_url: row.photo_url || null,
     referral_code: row.referral_code || null,
+    email_verified: Boolean(row.email_verified_at),
+    profile_completion: row.profile_completion ?? 0,
+    discovery_prefs: row.discovery_prefs || {},
     loved: taste.loved,
     hated: taste.hated
   }

@@ -1,16 +1,16 @@
 import { createClient } from '@supabase/supabase-js'
+import { env } from './config/env.js'
 
-const supabaseUrl = process.env.SUPABASE_URL
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY
+const key = env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_ANON_KEY
 
-if (!supabaseUrl || !supabaseServiceKey) {
-  throw new Error('Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_ANON_KEY for local dev) in .env.')
+if (!key) {
+  throw new Error('Supabase key missing after env validation.')
 }
 
-if (!process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.NODE_ENV === 'production') {
-  console.warn('Warning: using SUPABASE_ANON_KEY in production. Set SUPABASE_SERVICE_ROLE_KEY.')
+if (env.NODE_ENV === 'production' && !env.SUPABASE_SERVICE_ROLE_KEY) {
+  throw new Error('SUPABASE_SERVICE_ROLE_KEY is required in production.')
 }
 
-export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+export const supabase = createClient(env.SUPABASE_URL, key, {
   auth: { persistSession: false, autoRefreshToken: false }
 })

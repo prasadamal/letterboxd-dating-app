@@ -1,0 +1,2 @@
+-- See Supabase migration production_hardening_v1 applied remotely.
+-- RLS, audit_logs, auth_tokens, profile columns, avatars bucket.
