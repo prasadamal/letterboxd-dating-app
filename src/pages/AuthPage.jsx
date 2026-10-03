@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { apiFetch, setToken } from '../lib/api.js'
+import { apiFetch, setSession } from '../lib/api.js'
 import { BrandMark } from '../components/BrandMark.jsx'
 
 export default function AuthPage({ onAuth }) {
@@ -40,7 +40,7 @@ export default function AuthPage({ onAuth }) {
         body: JSON.stringify(payload)
       })
 
-      setToken(data.token)
+      setSession(data.token, data.refreshToken)
       onAuth(data.user)
     } catch (err) {
       setError(err.message)

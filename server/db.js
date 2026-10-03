@@ -2,6 +2,7 @@ import { supabase } from './supabaseClient.js'
 import { notifyUser } from './services/notificationService.js'
 import { broadcastChatEvent, chatChannelName } from './services/realtimeService.js'
 import { movieCatalog } from './movieCatalog.js'
+import { pendingDailyMovies } from './lib/dailyMovies.js'
 
 function formatMovieLabel(movie) {
   return `${movie.title} (${movie.year})`
@@ -205,6 +206,17 @@ export async function updateUserProfile(userId, updates) {
   return data
 }
 
+async function ratedMovieIdsSince(userId, sinceIso) {
+  const { data, error } = await supabase
+    .from('user_ratings')
+    .select('movie_id')
+    .eq('user_id', userId)
+    .gte('rated_at', sinceIso)
+
+  if (error) throw error
+  return new Set((data || []).map((row) => row.movie_id))
+}
+
 export async function getMovieById(id) {
   const { data, error } = await supabase.from('movies').select('*').eq('id', Number(id)).maybeSingle()
   if (error) throw error
@@ -228,7 +240,9 @@ export async function getDailyMovies(userId) {
     const { data: movies, error } = await supabase.from('movies').select('*').in('id', batch.movie_ids)
     if (error) throw error
     const order = new Map(batch.movie_ids.map((id, index) => [id, index]))
-    return (movies || []).sort((a, b) => order.get(a.id) - order.get(b.id))
+    const sorted = (movies || []).sort((a, b) => order.get(a.id) - order.get(b.id))
+    const ratedToday = await ratedMovieIdsSince(userId, `${day}T00:00:00.000Z`)
+    return pendingDailyMovies(sorted, ratedToday)
   }
 
   const { data: ratedRows, error: ratedError } = await supabase
@@ -425,11 +439,19 @@ export async function getChatMeta(userId, peerId) {
   const match = await getMutualMatchRow(userId, peerId)
   if (!match) return null
   const conversation = await getOrCreateConversation(match.id)
+  const [userA] = await orderedMatchUsers(userId, peerId)
+  const viewerIsA = userId === userA
+  const viewerIntroSent = Boolean(viewerIsA ? match.user_a_intro_sent : match.user_b_intro_sent)
+  const peerIntroSent = Boolean(viewerIsA ? match.user_b_intro_sent : match.user_a_intro_sent)
+  const chatUnlocked = Boolean(match.chat_unlocked)
   return {
     conversationId: conversation.id,
     realtimeChannel: chatChannelName(conversation.id),
-    chatUnlocked: Boolean(match.chat_unlocked),
-    introPending: Boolean(!match.chat_unlocked)
+    chatUnlocked,
+    introPending: !chatUnlocked && !viewerIntroSent,
+    waitingOnPeer: !chatUnlocked && viewerIntroSent && !peerIntroSent,
+    viewerIntroSent,
+    peerIntroSent
   }
 }
 
@@ -501,7 +523,7 @@ export async function sendMessage(userId, peerId, text) {
   if (!match.chat_unlocked) {
     const introSent = isUserA ? match.user_a_intro_sent : match.user_b_intro_sent
     if (introSent) {
-      const error = new Error('Send one intro message first. Chat unlocks after you both say hello.')
+      const error = new Error('You already sent your hello. Chat unlocks after they reply once.')
       error.code = 'INTRO_LIMIT'
       throw error
     }

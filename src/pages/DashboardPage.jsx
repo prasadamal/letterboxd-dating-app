@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { apiFetch, clearToken, getToken, movieLabel } from '../lib/api.js'
+import { apiFetch, clearToken, getRefreshToken, getToken, movieLabel } from '../lib/api.js'
 import { BrandMark } from '../components/BrandMark.jsx'
 import { EmptyState } from '../components/EmptyState.jsx'
 import { TasteProfileCard } from '../components/TasteProfileCard.jsx'
@@ -13,16 +13,21 @@ export default function DashboardPage({ user, setUser }) {
   const [chatPeer, setChatPeer] = useState(null)
   const [chatMessages, setChatMessages] = useState([])
   const [chatText, setChatText] = useState('')
+  const [platform, setPlatform] = useState(null)
+  const [deck, setDeck] = useState(null)
+  const [deckMessage, setDeckMessage] = useState('')
+  const [loadError, setLoadError] = useState('')
 
   useEffect(() => {
     async function loadData() {
       try {
         const token = getToken()
-        const [moviesData, matchesData, profileData, inbox] = await Promise.all([
+        const [moviesData, matchesData, profileData, inbox, platformData] = await Promise.all([
           apiFetch('/movies/daily', {}, token),
           apiFetch('/matches', {}, token),
           apiFetch('/users/profile', {}, token),
-          apiFetch('/messages/conversations', {}, token).catch(() => ({ conversations: [] }))
+          apiFetch('/messages/conversations', {}, token).catch(() => ({ conversations: [] })),
+          apiFetch('/platform/status', {}, null)
         ])
 
         setMovies(moviesData.movies || [])
@@ -30,13 +35,46 @@ export default function DashboardPage({ user, setUser }) {
         setConversations(inbox.conversations || [])
         setProfile(profileData.user || user)
         setUser(profileData.user || user)
+        setPlatform(platformData)
+        setLoadError('')
+        if (platformData?.datingLaunched) {
+          await loadDeck()
+        }
       } catch (err) {
-        console.error(err)
+        setLoadError(err.message || 'Could not load ReelMates')
       }
     }
 
     loadData()
   }, [])
+
+  async function loadDeck() {
+    try {
+      const data = await apiFetch('/dating/deck', {}, getToken())
+      setDeck(data.profile || null)
+      setDeckMessage(data.profile ? '' : 'No new profiles in your deck right now.')
+    } catch (err) {
+      setDeck(null)
+      setDeckMessage(err.message || 'Dating deck unavailable')
+    }
+  }
+
+  async function swipe(action) {
+    if (!deck) return
+    try {
+      const result = await apiFetch(
+        '/dating/swipe',
+        { method: 'POST', body: JSON.stringify({ targetId: deck.id, action }) },
+        getToken()
+      )
+      if (result.matched) setDeckMessage('It’s a match — say hello in Messages.')
+      await loadDeck()
+      const freshMatches = await apiFetch('/dating/matches', {}, getToken()).catch(() => apiFetch('/matches', {}, getToken()))
+      setMatches(freshMatches.matches || [])
+    } catch (err) {
+      setDeckMessage(err.message || 'Could not save swipe')
+    }
+  }
 
   async function rateMovie(movie, reaction) {
     try {
@@ -111,7 +149,7 @@ export default function DashboardPage({ user, setUser }) {
         <BrandMark />
 
         <nav className="nav">
-          {['discover', 'matches', 'messages', 'profile'].map((name) => (
+          {['discover', 'dating', 'matches', 'messages', 'profile'].map((name) => (
             <button key={name} className={tab === name ? 'nav-pill active' : 'nav-pill'} onClick={() => setTab(name)}>
               {name}
             </button>
@@ -120,7 +158,11 @@ export default function DashboardPage({ user, setUser }) {
 
         <button
           className="primary-button small"
-          onClick={() => {
+          onClick={async () => {
+            const refreshToken = getRefreshToken()
+            if (refreshToken) {
+              await apiFetch('/auth/logout', { method: 'POST', body: JSON.stringify({ refreshToken }) }).catch(() => null)
+            }
             clearToken()
             window.location.reload()
           }}
@@ -130,6 +172,19 @@ export default function DashboardPage({ user, setUser }) {
       </header>
 
       <main className="page-grid">
+        {loadError && <p className="error-text">{loadError}</p>}
+        {platform && (
+          <section className="card-panel">
+            <p className="eyebrow accent">Launch gate</p>
+            <h3>{platform.datingLaunched ? 'Dating is live' : 'Dating unlocks at balanced registration'}</h3>
+            <p className="hero-text">
+              {platform.maleCount}/{platform.maleTarget} men · {platform.femaleCount}/{platform.femaleTarget} women · {platform.progressPercent}%
+            </p>
+            {profile && !profile.matchmaking_enabled && (
+              <p className="hero-text">Add a profile photo (Profile tab) before the dating deck will include you. Daily ratings still count.</p>
+            )}
+          </section>
+        )}
         <section className="hero card-panel">
           <div className="hero-copy">
             <p className="eyebrow accent">Curated by taste</p>
@@ -153,7 +208,7 @@ export default function DashboardPage({ user, setUser }) {
 
           <div className="profile-mini card-panel">
             <div className="avatar-ring">
-              <img src={profile.avatar_url} alt={profile.name} />
+              {profile?.avatar_url ? <img src={profile.avatar_url} alt={profile.name || 'You'} /> : null}
             </div>
             <div className="mini-meta">
               <p className="eyebrow accent">Your taste profile</p>
@@ -195,6 +250,33 @@ export default function DashboardPage({ user, setUser }) {
                     </div>
                   </article>
                 ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        {tab === 'dating' && (
+          <section className="discover card-panel">
+            <div className="section-head">
+              <p className="eyebrow accent">Dating deck</p>
+              <h3>One profile at a time</h3>
+            </div>
+            {!platform?.datingLaunched ? (
+              <EmptyState emoji="🚀" title="Dating is locked" body="Play the daily game while the community reaches its launch targets." />
+            ) : !deck ? (
+              <EmptyState emoji="🍿" title="Deck empty" body={deckMessage || 'Check back after more people finish their profiles.'} />
+            ) : (
+              <div className="person-card card-panel">
+                <TasteProfileCard user={profile} person={deck} />
+                {deckMessage && <p className="hero-text">{deckMessage}</p>}
+                <div className="action-row">
+                  <button className="ghost-button" type="button" onClick={() => swipe('pass')}>
+                    Pass
+                  </button>
+                  <button className="primary-button" type="button" onClick={() => swipe('like')}>
+                    Like
+                  </button>
+                </div>
               </div>
             )}
           </section>

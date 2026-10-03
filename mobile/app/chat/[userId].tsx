@@ -13,6 +13,7 @@ export default function ChatScreen() {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [text, setText] = useState('')
   const [introPending, setIntroPending] = useState(false)
+  const [waitingOnPeer, setWaitingOnPeer] = useState(false)
   const [chatUnlocked, setChatUnlocked] = useState(true)
   const [realtimeChannel, setRealtimeChannel] = useState<string | null>(null)
   const lastSyncRef = useRef<string | null>(null)
@@ -34,6 +35,7 @@ export default function ChatScreen() {
       const data = await apiFetch<{
         messages: ChatMessage[]
         introPending?: boolean
+        waitingOnPeer?: boolean
         chatUnlocked?: boolean
         realtimeChannel?: string
       }>(`/messages/${userId}${query}`, {}, token)
@@ -49,6 +51,7 @@ export default function ChatScreen() {
       }
 
       setIntroPending(Boolean(data.introPending))
+      setWaitingOnPeer(Boolean(data.waitingOnPeer))
       setChatUnlocked(Boolean(data.chatUnlocked))
       await apiFetch(`/messages/${userId}/read`, { method: 'POST' }, token).catch(() => null)
     },
@@ -87,10 +90,7 @@ export default function ChatScreen() {
       )
       mergeMessage(data.message)
       setText('')
-      if (introPending) {
-        setIntroPending(false)
-        setChatUnlocked(true)
-      }
+      await loadMessages()
     } catch (err) {
       Alert.alert('Message not sent', err instanceof Error ? err.message : 'Try again')
     }
@@ -109,6 +109,9 @@ export default function ChatScreen() {
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       {introPending && !chatUnlocked && (
         <Text style={styles.banner}>Send one hello — chat unlocks after you both message once.</Text>
+      )}
+      {waitingOnPeer && (
+        <Text style={styles.banner}>Your hello is in. Wait for them to reply before sending more.</Text>
       )}
       {realtimeChannel ? <Text style={styles.live}>Live chat connected</Text> : null}
       <FlatList

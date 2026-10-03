@@ -42,8 +42,13 @@ export default function DatingScreen() {
 
   async function swipe(action: 'like' | 'pass') {
     if (!token || !profile) return
-    await apiFetch('/dating/swipe', { method: 'POST', body: JSON.stringify({ targetId: profile.id, action }) }, token)
-    await load()
+    try {
+      const result = await apiFetch<{ matched?: boolean }>('/dating/swipe', { method: 'POST', body: JSON.stringify({ targetId: profile.id, action }) }, token)
+      if (result.matched) setMessage('It’s a match. Open Matches to say hello.')
+      await load()
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : 'Could not save swipe')
+    }
   }
 
   if (!platform?.datingLaunched) {

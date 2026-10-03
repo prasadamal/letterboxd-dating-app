@@ -16,8 +16,5 @@ export default function Index() {
 
   if (!user) return <Redirect href="/login" />
 
-  const completion = user.profile_completion ?? 0
-  if (completion < 80) return <Redirect href="/onboarding/welcome" />
-
   return <Redirect href="/(tabs)/home" />
 }
