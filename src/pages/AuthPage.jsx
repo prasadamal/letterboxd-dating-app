@@ -4,6 +4,8 @@ import { BrandMark } from '../components/BrandMark.jsx'
 
 export default function AuthPage({ onAuth }) {
   const [mode, setMode] = useState('login')
+  const [notice, setNotice] = useState('')
+  const [devResetUrl, setDevResetUrl] = useState('')
   const [form, setForm] = useState({
     email: 'maya@example.com',
     password: '123456',
@@ -31,9 +33,10 @@ export default function AuthPage({ onAuth }) {
               name: form.name,
               age: Number(form.age),
               country: form.country,
+              city: form.city,
               gender: form.gender,
               bio: form.bio,
-              termsAccepted: true
+              termsAccepted: form.termsAccepted === true
             }
       const data = await apiFetch(`/auth/${mode === 'login' ? 'login' : 'signup'}`, {
         method: 'POST',
@@ -42,6 +45,23 @@ export default function AuthPage({ onAuth }) {
 
       setSession(data.token, data.refreshToken)
       onAuth(data.user)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  async function forgot(e) {
+    e.preventDefault()
+    setError('')
+    setNotice('')
+    setDevResetUrl('')
+    try {
+      const data = await apiFetch('/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify({ email: form.email })
+      })
+      setNotice(data.message)
+      if (data.devResetUrl) setDevResetUrl(data.devResetUrl)
     } catch (err) {
       setError(err.message)
     }
@@ -59,8 +79,26 @@ export default function AuthPage({ onAuth }) {
           <button className={mode === 'signup' ? 'nav-pill active' : 'nav-pill'} onClick={() => setMode('signup')}>
             Sign up
           </button>
+          <button className={mode === 'forgot' ? 'nav-pill active' : 'nav-pill'} onClick={() => setMode('forgot')}>
+            Reset
+          </button>
         </div>
 
+        {mode === 'forgot' ? (
+          <form className="auth-form" onSubmit={forgot}>
+            <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="Email" type="email" required />
+            {error && <p className="error-text">{error}</p>}
+            {notice && <p className="hero-text">{notice}</p>}
+            {devResetUrl && (
+              <p className="hero-text">
+                Dev reset link: <a href={devResetUrl}>{devResetUrl}</a>
+              </p>
+            )}
+            <button className="primary-button auth-submit" type="submit">
+              Send reset link
+            </button>
+          </form>
+        ) : (
         <form className="auth-form" onSubmit={submit}>
           {mode === 'signup' && (
             <>
@@ -92,7 +130,13 @@ export default function AuthPage({ onAuth }) {
           <button className="primary-button auth-submit" type="submit">
             {mode === 'login' ? 'Login to your profile' : 'Create my taste profile'}
           </button>
+          {mode === 'login' && (
+            <button type="button" className="ghost-button" onClick={() => setMode('forgot')}>
+              Forgot password
+            </button>
+          )}
         </form>
+        )}
       </div>
     </div>
   )

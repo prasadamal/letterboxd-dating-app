@@ -283,6 +283,44 @@ export async function getMutualMatches(userId) {
     .filter(Boolean)
 }
 
+export async function undoLastSwipe(userId) {
+  await assertDatingLaunched()
+  await assertMatchmakingReady(userId)
+
+  const { data: swipe, error } = await supabase
+    .from('user_swipes')
+    .select('target_id, action, created_at')
+    .eq('swiper_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error) throw error
+  if (!swipe) {
+    const missing = new Error('Nothing to undo')
+    missing.code = 'NO_SWIPE'
+    throw missing
+  }
+
+  if (swipe.action === 'like') {
+    const match = await getMutualMatchRow(userId, swipe.target_id)
+    if (match) {
+      const locked = new Error('A match cannot be undone')
+      locked.code = 'MATCH_LOCKED'
+      throw locked
+    }
+  }
+
+  const { error: deleteError } = await supabase
+    .from('user_swipes')
+    .delete()
+    .eq('swiper_id', userId)
+    .eq('target_id', swipe.target_id)
+
+  if (deleteError) throw deleteError
+  return { ok: true, targetId: swipe.target_id, action: swipe.action }
+}
+
 export async function getReferralInfo(userId) {
   const user = await findUserById(userId)
   if (!user) throw new Error('User not found')

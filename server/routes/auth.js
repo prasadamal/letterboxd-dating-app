@@ -36,7 +36,7 @@ router.post(
   '/signup',
   validateBody(signupSchema),
   asyncHandler(async (req, res) => {
-    const { email, password, name, age, country, bio, gender, referralCode } = req.body
+    const { email, password, name, age, country, city, bio, gender, referralCode } = req.body
 
     if (await findUserByEmail(email)) {
       throw new AppError('User already exists', 409, 'USER_EXISTS')
@@ -49,7 +49,7 @@ router.post(
       display_name: name,
       age,
       country,
-      city: country,
+      city: city || country,
       bio: bio || 'Connecting through the world of movies.',
       hobbies: ['Cinema'],
       gender,
@@ -109,8 +109,10 @@ router.post(
 )
 
 router.post('/forgot-password', validateBody(forgotPasswordSchema), asyncHandler(async (req, res) => {
-  await requestPasswordReset(req.body.email)
-  return res.json({ ok: true, message: 'If that email exists, a reset link was sent.' })
+  const result = await requestPasswordReset(req.body.email)
+  const body = { ok: true, message: 'If that email exists, a reset link was sent.' }
+  if (env.NODE_ENV !== 'production' && result.devResetUrl) body.devResetUrl = result.devResetUrl
+  return res.json(body)
 }))
 
 router.post('/reset-password', validateBody(resetPasswordSchema), asyncHandler(async (req, res) => {
@@ -123,8 +125,10 @@ router.post('/reset-password', validateBody(resetPasswordSchema), asyncHandler(a
 }))
 
 router.post('/verify-email/request', authMiddleware, asyncHandler(async (req, res) => {
-  await requestEmailVerification(req.user.id)
-  return res.json({ ok: true })
+  const result = await requestEmailVerification(req.user.id)
+  const body = { ok: true, alreadyVerified: Boolean(result.alreadyVerified) }
+  if (env.NODE_ENV !== 'production' && result.devVerifyUrl) body.devVerifyUrl = result.devVerifyUrl
+  return res.json(body)
 }))
 
 router.post('/verify-email/confirm', validateBody(verifyEmailSchema), asyncHandler(async (req, res) => {

@@ -4,6 +4,8 @@ import { apiFetch, clearToken, getToken } from './lib/api.js'
 import AuthPage from './pages/AuthPage.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
 import AdminPage from './pages/AdminPage.jsx'
+import ResetPasswordPage from './pages/ResetPasswordPage.jsx'
+import VerifyEmailPage from './pages/VerifyEmailPage.jsx'
 
 export default function App() {
   const [user, setUser] = useState(null)
@@ -35,6 +37,8 @@ export default function App() {
   return (
     <Routes>
       <Route path="/admin" element={<AdminPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
+      <Route path="/verify-email" element={<VerifyEmailPage />} />
       <Route path="/*" element={user ? <DashboardPage user={user} setUser={setUser} /> : <AuthPage onAuth={setUser} />} />
     </Routes>
   )

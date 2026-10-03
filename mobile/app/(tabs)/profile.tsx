@@ -17,8 +17,8 @@ export default function ProfileScreen() {
   const [referralShare, setReferralShare] = useState('')
   const [friendCode, setFriendCode] = useState('')
   const [saving, setSaving] = useState(false)
-  const [minAge, setMinAge] = useState('18')
-  const [maxAge, setMaxAge] = useState('45')
+  const [minAge, setMinAge] = useState(String(user?.discovery_prefs?.minAge || 18))
+  const [maxAge, setMaxAge] = useState(String(user?.discovery_prefs?.maxAge || 99))
 
   useEffect(() => {
     if (!token) return
@@ -46,8 +46,8 @@ export default function ProfileScreen() {
             bio,
             discoveryPrefs: {
               minAge: Number(minAge) || 18,
-              maxAge: Number(maxAge) || 45,
-              countries: []
+              maxAge: Number(maxAge) || 99,
+              countries: user?.discovery_prefs?.countries || []
             }
           })
         },
@@ -114,6 +114,29 @@ export default function ProfileScreen() {
     router.replace('/login')
   }
 
+  async function requestEmailVerify() {
+    if (!token) return
+    try {
+      const data = await apiFetch<{ alreadyVerified?: boolean; devVerifyUrl?: string }>(
+        '/auth/verify-email/request',
+        { method: 'POST' },
+        token
+      )
+      if (data.alreadyVerified) {
+        Alert.alert('Already verified', 'This email is already confirmed.')
+        return
+      }
+      Alert.alert(
+        'Check your email',
+        data.devVerifyUrl
+          ? `Mail is not configured in this environment. Open this link:\n${data.devVerifyUrl}`
+          : 'We sent a verification link.'
+      )
+    } catch (err) {
+      Alert.alert('Could not send email', err instanceof Error ? err.message : 'Try again')
+    }
+  }
+
   async function requestVerification() {
     if (!token) return
     await apiFetch('/users/verification/request', { method: 'POST', body: JSON.stringify({ notes: 'Mobile verification request' }) }, token)
@@ -140,6 +163,12 @@ export default function ProfileScreen() {
       <Text style={styles.meta}>
         {user.gender} · {user.country || user.city} · {user.age} · {verificationLabel}
       </Text>
+
+      {!user.email_verified && (
+        <Pressable style={styles.secondaryBtn} onPress={requestEmailVerify}>
+          <Text style={styles.secondaryText}>Verify email</Text>
+        </Pressable>
+      )}
 
       {user.verification_status !== 'verified' && user.verification_status !== 'pending' && (
         <Pressable style={styles.secondaryBtn} onPress={requestVerification}>

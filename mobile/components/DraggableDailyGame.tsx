@@ -34,6 +34,9 @@ export function DraggableDailyGame({ movies, onRate }: Props) {
     pan.setValue({ x: 0, y: 0 })
     try {
       await onRate(current, reaction)
+    } catch (err) {
+      setPending((list) => [current, ...list.filter((item) => item.id !== current.id)])
+      throw err
     } finally {
       ratingRef.current = false
     }

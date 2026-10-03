@@ -17,6 +17,8 @@ export default function DashboardPage({ user, setUser }) {
   const [deck, setDeck] = useState(null)
   const [deckMessage, setDeckMessage] = useState('')
   const [loadError, setLoadError] = useState('')
+  const [chatNotice, setChatNotice] = useState('')
+  const [chatError, setChatError] = useState('')
 
   useEffect(() => {
     async function loadData() {
@@ -102,9 +104,17 @@ export default function DashboardPage({ user, setUser }) {
       setChatPeer(person)
       setChatMessages(data.messages || [])
       setChatText('')
+      setChatError('')
+      setChatNotice(
+        data.introPending
+          ? 'Send one hello. Chat opens after you both message once.'
+          : data.waitingOnPeer
+            ? 'Your hello is in. Wait for their reply.'
+            : ''
+      )
       await apiFetch(`/messages/${person.id}/read`, { method: 'POST' }, getToken())
     } catch (err) {
-      console.error(err)
+      setLoadError(err.message || 'Could not open chat')
     }
   }
 
@@ -120,8 +130,53 @@ export default function DashboardPage({ user, setUser }) {
       )
       setChatMessages((current) => [...current, data.message])
       setChatText('')
+      setChatError('')
+      const fresh = await apiFetch(`/messages/${chatPeer.id}`, {}, getToken())
+      setChatNotice(
+        fresh.introPending
+          ? 'Send one hello. Chat opens after you both message once.'
+          : fresh.waitingOnPeer
+            ? 'Your hello is in. Wait for their reply.'
+            : ''
+      )
     } catch (err) {
-      console.error(err)
+      setChatError(err.message || 'Could not send message')
+    }
+  }
+
+  async function uploadPhoto(event) {
+    const file = event.target.files?.[0]
+    if (!file) return
+    const contentType = ['image/jpeg', 'image/png', 'image/webp'].includes(file.type) ? file.type : ''
+    if (!contentType) {
+      setLoadError('Use a JPEG, PNG, or WebP photo.')
+      return
+    }
+    const buffer = await file.arrayBuffer()
+    const bytes = new Uint8Array(buffer)
+    let binary = ''
+    for (const byte of bytes) binary += String.fromCharCode(byte)
+    const imageBase64 = btoa(binary)
+    try {
+      const data = await apiFetch('/users/avatar', {
+        method: 'POST',
+        body: JSON.stringify({ imageBase64, contentType })
+      })
+      setUser(data.user)
+      setProfile(data.user)
+      setLoadError('')
+    } catch (err) {
+      setLoadError(err.message || 'Could not upload photo')
+    }
+  }
+
+  async function undoSwipe() {
+    try {
+      await apiFetch('/dating/undo', { method: 'POST' })
+      await loadDeck()
+      setDeckMessage('Last swipe undone.')
+    } catch (err) {
+      setDeckMessage(err.message || 'Could not undo')
     }
   }
 
@@ -139,8 +194,9 @@ export default function DashboardPage({ user, setUser }) {
       const data = await apiFetch('/users/profile', { method: 'PUT', body: JSON.stringify(payload) }, getToken())
       setUser(data.user)
       setProfile(data.user)
+      setLoadError('')
     } catch (err) {
-      console.error(err)
+      setLoadError(err.message || 'Could not save profile')
     }
   }
 
@@ -274,6 +330,9 @@ export default function DashboardPage({ user, setUser }) {
                   <button className="ghost-button" type="button" onClick={() => swipe('pass')}>
                     Pass
                   </button>
+                  <button className="ghost-button" type="button" onClick={undoSwipe}>
+                    Undo
+                  </button>
                   <button className="primary-button" type="button" onClick={() => swipe('like')}>
                     Like
                   </button>
@@ -344,6 +403,11 @@ export default function DashboardPage({ user, setUser }) {
               <h3>{profile.name}</h3>
             </div>
 
+            <p className="hero-text">Profile {profile.profile_completion ?? 0}% complete. A photo unlocks dating.</p>
+            <label className="ghost-button">
+              {profile.photo_url ? 'Change photo' : 'Add profile photo'}
+              <input type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={uploadPhoto} />
+            </label>
             <form onSubmit={handleSaveProfile} className="profile-editor">
               <div className="profile-grid">
                 <div className="profile-details">
@@ -392,6 +456,8 @@ export default function DashboardPage({ user, setUser }) {
                 Close
               </button>
             </div>
+            {chatNotice && <p className="hero-text">{chatNotice}</p>}
+            {chatError && <p className="error-text">{chatError}</p>}
             <div className="chat-thread">
               {chatMessages.map((message) => (
                 <p key={message.id} className={message.from_user_id === profile.id ? 'chat-bubble mine' : 'chat-bubble'}>

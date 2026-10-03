@@ -44,8 +44,8 @@ export default function DatingScreen() {
     if (!token || !profile) return
     try {
       const result = await apiFetch<{ matched?: boolean }>('/dating/swipe', { method: 'POST', body: JSON.stringify({ targetId: profile.id, action }) }, token)
-      if (result.matched) setMessage('It’s a match. Open Matches to say hello.')
       await load()
+      if (result.matched) setMessage('It’s a match. Open Matches to say hello.')
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Could not save swipe')
     }
@@ -78,6 +78,21 @@ export default function DatingScreen() {
         <Pressable style={styles.primaryBtn} onPress={() => load()}>
           <Text style={styles.primaryText}>Refresh deck</Text>
         </Pressable>
+        <Pressable
+          style={styles.primaryBtn}
+          onPress={async () => {
+            if (!token) return
+            try {
+              await apiFetch('/dating/undo', { method: 'POST' }, token)
+              await load()
+              setMessage('Last swipe undone.')
+            } catch (err) {
+              setMessage(err instanceof Error ? err.message : 'Could not undo')
+            }
+          }}
+        >
+          <Text style={styles.primaryText}>Undo last swipe</Text>
+        </Pressable>
       </View>
     )
   }
@@ -91,6 +106,21 @@ export default function DatingScreen() {
       <View style={styles.actions}>
         <Pressable style={styles.passBtn} onPress={() => swipe('pass')}>
           <Text style={styles.passText}>Pass</Text>
+        </Pressable>
+        <Pressable
+          style={styles.passBtn}
+          onPress={async () => {
+            if (!token) return
+            try {
+              await apiFetch('/dating/undo', { method: 'POST' }, token)
+              await load()
+              setMessage('Last swipe undone.')
+            } catch (err) {
+              setMessage(err instanceof Error ? err.message : 'Could not undo')
+            }
+          }}
+        >
+          <Text style={styles.passText}>Undo</Text>
         </Pressable>
         <Pressable style={styles.likeBtn} onPress={() => swipe('like')}>
           <Text style={styles.likeText}>Like</Text>

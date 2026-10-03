@@ -584,11 +584,30 @@ export async function getConversationsForUser(userId) {
   if (error) throw error
   if (!matches?.length) return []
 
-  const peerIds = matches.map((m) => (m.user_a === userId ? m.user_b : m.user_a))
+  const { data: blockRows, error: blockError } = await supabase
+    .from('blocks')
+    .select('blocker_id, blocked_id')
+    .or(`blocker_id.eq.${userId},blocked_id.eq.${userId}`)
+
+  if (blockError) throw blockError
+
+  const blocked = new Set()
+  for (const row of blockRows || []) {
+    if (row.blocker_id === userId) blocked.add(row.blocked_id)
+    if (row.blocked_id === userId) blocked.add(row.blocker_id)
+  }
+
+  const peerIds = matches
+    .map((m) => (m.user_a === userId ? m.user_b : m.user_a))
+    .filter((peerId) => !blocked.has(peerId))
+
+  if (!peerIds.length) return []
+
   const { data: users, error: usersError } = await supabase
     .from('users')
-    .select('id, display_name, photo_url, age')
+    .select('id, display_name, photo_url, age, deleted_at')
     .in('id', peerIds)
+    .is('deleted_at', null)
 
   if (usersError) throw usersError
   const byId = new Map((users || []).map((u) => [u.id, u]))

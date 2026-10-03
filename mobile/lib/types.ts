@@ -25,6 +25,7 @@ export type User = {
   profile_completion?: number
   matchmaking_enabled?: boolean
   email_verified?: boolean
+  discovery_prefs?: { minAge?: number; maxAge?: number; countries?: string[] }
   verification_status?: 'unverified' | 'pending' | 'verified' | 'rejected'
   verified_at?: string | null
   loved: string[]

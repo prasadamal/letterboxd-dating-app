@@ -53,7 +53,13 @@ export default function MatchesScreen() {
             <Pressable
               style={styles.ghostBtn}
               onPress={async () => {
-                await apiFetch('/safety/block', { method: 'POST', body: JSON.stringify({ userId: item.id }) }, token)
+                try {
+                  await apiFetch('/safety/block', { method: 'POST', body: JSON.stringify({ userId: item.id }) }, token)
+                  setMatches((current) => current.filter((match) => match.id !== item.id))
+                } catch (err) {
+                  setMatches((current) => current)
+                  console.error(err)
+                }
               }}
             >
               <Text style={styles.ghostText}>Block</Text>

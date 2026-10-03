@@ -13,6 +13,8 @@ const SWIPE_THRESHOLD = 96
 
 export function SwipeDatingCard({ profile, onSwipe }: Props) {
   const position = useRef(new Animated.ValueXY()).current
+  const onSwipeRef = useRef(onSwipe)
+  onSwipeRef.current = onSwipe
 
   const panResponder = useRef(
     PanResponder.create({
@@ -24,14 +26,14 @@ export function SwipeDatingCard({ profile, onSwipe }: Props) {
         if (gesture.dx > SWIPE_THRESHOLD) {
           Animated.timing(position, { toValue: { x: 420, y: gesture.dy }, duration: 180, useNativeDriver: false }).start(() => {
             position.setValue({ x: 0, y: 0 })
-            onSwipe('like')
+            onSwipeRef.current('like')
           })
           return
         }
         if (gesture.dx < -SWIPE_THRESHOLD) {
           Animated.timing(position, { toValue: { x: -420, y: gesture.dy }, duration: 180, useNativeDriver: false }).start(() => {
             position.setValue({ x: 0, y: 0 })
-            onSwipe('pass')
+            onSwipeRef.current('pass')
           })
           return
         }

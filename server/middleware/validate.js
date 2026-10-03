@@ -44,6 +44,7 @@ export const signupSchema = z.object({
   name: z.string().min(2).max(80),
   age: z.coerce.number().int().min(18).max(100),
   country: z.string().min(2).max(80),
+  city: z.string().max(80).optional(),
   bio: z.string().max(280).optional(),
   gender: z.enum(['male', 'female']),
   termsAccepted: z.literal(true),

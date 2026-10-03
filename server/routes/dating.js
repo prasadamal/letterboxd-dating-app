@@ -5,7 +5,8 @@ import {
   getDatingDeckMeta,
   getMutualMatches,
   getReferralInfo,
-  recordSwipe
+  recordSwipe,
+  undoLastSwipe
 } from '../datingService.js'
 import { authMiddleware } from '../middleware/auth.js'
 import { validateBody, swipeSchema } from '../middleware/validate.js'
@@ -44,6 +45,18 @@ router.post('/swipe', authMiddleware, validateBody(swipeSchema), async (req, res
     }
     console.error(error)
     return res.status(400).json({ message: error.message || 'Could not save swipe' })
+  }
+})
+
+router.post('/undo', authMiddleware, async (req, res) => {
+  try {
+    const result = await undoLastSwipe(req.user.id)
+    return res.json(result)
+  } catch (error) {
+    if (error.code === 'DATING_LOCKED' || error.code === 'PROFILE_INCOMPLETE') {
+      return res.status(403).json({ message: error.message, code: error.code, details: error.details || null })
+    }
+    return res.status(400).json({ message: error.message || 'Could not undo swipe' })
   }
 })
 
