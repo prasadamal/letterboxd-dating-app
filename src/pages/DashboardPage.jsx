@@ -88,8 +88,9 @@ export default function DashboardPage({ user, setUser }) {
       const freshMatches = await apiFetch('/matches', {}, getToken())
       setMatches(freshMatches.matches || [])
       setMovies((current) => current.filter((item) => item.id !== movie.id))
+      setLoadError('')
     } catch (err) {
-      console.error(err)
+      setLoadError(err.message || 'Could not save rating')
     }
   }
 
