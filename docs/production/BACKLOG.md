@@ -19,18 +19,18 @@
 
 ## Next — app features
 
-- [ ] Push notification provider (Expo push + device tokens table)
-- [ ] Message moderation queue + admin review UI
-- [ ] Advanced match filters using `discovery_prefs`
+- [x] Push notification provider (Expo push + device tokens table)
+- [x] Message moderation queue + admin review UI (`/admin`)
+- [x] Advanced match filters using `discovery_prefs`
 - [ ] Inactivity cleanup job (pg_cron or external worker)
 - [ ] Age/location verification (manual or vendor)
-- [ ] Onboarding wizard screens (mobile)
-- [ ] Premium UI pass (motion, onboarding, chat, deck)
+- [x] Onboarding wizard screens (mobile)
+- [x] Premium UI pass (motion, onboarding, chat, deck)
 
 ## Next — platform
 
 - [ ] Full OpenAPI spec + Swagger UI
 - [ ] Integration tests against test Supabase project
-- [ ] Staging environment + seed scripts
-- [ ] Admin role + RBAC for moderation
+- [x] Staging environment + seed scripts (`STAGING.md`)
+- [x] Admin role + RBAC for moderation (`ADMIN_API_KEY`)
 - [ ] E2E mobile tests (Detox/Maestro)
