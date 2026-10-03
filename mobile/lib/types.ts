@@ -51,6 +51,14 @@ export type Match = DatingProfile & {
   introPending?: boolean
 }
 
+export type ConversationPreview = {
+  matchId: string | number
+  peer: { id: string; name: string; age?: number; avatar_url?: string | null }
+  compatibility: number
+  chatUnlocked: boolean
+  lastMessage: { text: string; at: string; fromSelf: boolean } | null
+}
+
 export type ChatMessage = {
   id: number | string
   from_user_id: string

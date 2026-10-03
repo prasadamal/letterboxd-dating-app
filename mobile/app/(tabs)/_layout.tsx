@@ -31,6 +31,13 @@ export default function TabsLayout() {
           href: platform?.datingLaunched ? undefined : null
         }}
       />
+      <Tabs.Screen
+        name="messages"
+        options={{
+          title: 'Messages',
+          href: platform?.datingLaunched ? undefined : null
+        }}
+      />
       <Tabs.Screen name="profile" options={{ title: 'Profile' }} />
       <Tabs.Screen name="discover" options={{ href: null }} />
     </Tabs>

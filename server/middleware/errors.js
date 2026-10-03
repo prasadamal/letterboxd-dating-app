@@ -28,6 +28,7 @@ export function errorHandler(err, req, res, _next) {
 
   if (status >= 500) {
     req.log?.error?.('Unhandled error', { error: err.message, stack: err.stack, code: err.code })
+    import('../lib/observability.js').then(({ captureException }) => captureException(err, { requestId: req.requestId }))
   }
 
   res.status(status).json({

@@ -25,27 +25,27 @@ Use branch prefix: `cursor/production-*-e9d8`. Merge to `main` via PR after each
 - [x] Mobile onboarding wizard + cinematic theme tokens
 - [x] `expo-image-picker` profile photo flow
 
-## Phase 3 — Social & realtime (this pass)
+## Phase 3 — Social & realtime ✅
 
 - [x] Discovery filters from `discovery_prefs` in deck API
 - [x] Seen-profile / swipe history analytics (`meta` on deck + `user_deck_stats`)
-- [ ] Supabase Realtime for chat (polling v2 shipped instead)
+- [ ] Supabase Realtime for chat (polling v2 + read receipts shipped)
 - [x] Read receipts on messages
-- [x] Push: new match, new message (Expo push sender; daily reminder hook pending)
+- [x] Push: new match, new message + daily reminder cron endpoint
 
-## Phase 4 — Premium UI (web + mobile)
+## Phase 4 — Premium UI (web + mobile) ✅
 
-- [ ] Web: `src/components/*`, `src/pages/*`, design tokens CSS
-- [ ] Mobile: reanimated swipe deck, Lottie empty states
-- [ ] Taste profile card component (shared loves/hates)
-- [ ] Conversation list + messaging center UI
+- [x] Web: `src/components/*`, `src/pages/*`, design tokens CSS
+- [x] Mobile: swipe deck (Animated + PanResponder), cinematic empty states
+- [x] Taste profile card component (shared loves/hates)
+- [x] Conversation list + messaging center UI (mobile Messages tab + web inbox)
 
-## Phase 5 — Launch ops
+## Phase 5 — Launch ops (this pass)
 
-- [ ] Staging env + runbook
-- [ ] Sentry + analytics (PostHog/Mixpanel)
-- [ ] Admin moderation UI for `moderation_queue`
-- [ ] Store assets + final QA
+- [x] Staging env + runbook (`docs/production/STAGING.md`)
+- [x] Sentry + analytics hooks (`server/lib/observability.js`, env vars)
+- [x] Admin moderation UI for `moderation_queue` (`/admin` + `/api/v1/admin/*`)
+- [ ] Store assets + final QA (see `docs/store/SUBMISSION_CHECKLIST.md`)
 
 ---
 

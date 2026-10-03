@@ -20,6 +20,8 @@ import platformRoutes from './routes/platform.js'
 import datingRoutes from './routes/dating.js'
 import safetyRoutes from './routes/safety.js'
 import notificationsRoutes from './routes/notifications.js'
+import adminRoutes from './routes/admin.js'
+import internalRoutes from './routes/internal.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -100,6 +102,8 @@ export function createApp() {
     app.use(`${prefix}/dating`, datingRoutes)
     app.use(`${prefix}/safety`, safetyRoutes)
     app.use(`${prefix}/notifications`, notificationsRoutes)
+    app.use(`${prefix}/admin`, adminRoutes)
+    app.use(`${prefix}/internal`, internalRoutes)
   }
 
   mount('/api/v1')

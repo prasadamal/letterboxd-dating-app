@@ -18,7 +18,12 @@ const envSchema = z.object({
   AUTH_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(40),
   RESEND_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().email().optional(),
-  APP_PUBLIC_URL: z.string().url().optional()
+  APP_PUBLIC_URL: z.string().url().optional(),
+  ADMIN_API_KEY: z.string().min(16).optional(),
+  CRON_SECRET: z.string().min(16).optional(),
+  SENTRY_DSN: z.string().url().optional(),
+  POSTHOG_API_KEY: z.string().optional(),
+  POSTHOG_HOST: z.string().url().optional()
 })
 
 export function loadEnv() {

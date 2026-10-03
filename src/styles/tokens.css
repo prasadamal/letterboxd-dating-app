@@ -1,0 +1,21 @@
+/* ReelMates design tokens — shared with component CSS */
+:root {
+  --bg: #0d1016;
+  --card: rgba(18, 22, 30, 0.9);
+  --card-alt: rgba(22, 27, 36, 0.86);
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #edf5ff;
+  --muted: #b0bfce;
+  --soft: #dfe9ff;
+  --accent: #f4a261;
+  --pink: #ff6993;
+  --purple: #ad7cff;
+  --peach: #ffb38d;
+  --green: #73e0a7;
+  --error: #fb7185;
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+}
