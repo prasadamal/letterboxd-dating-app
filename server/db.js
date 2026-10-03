@@ -116,6 +116,10 @@ export function mapUserRow(row, taste = { loved: [], hated: [] }) {
       `https://api.dicebear.com/7.x/thumbs/svg?seed=${seed}`,
     photo_url: row.photo_url || null,
     referral_code: row.referral_code || null,
+    email_verified: Boolean(row.email_verified_at),
+    profile_completion: row.profile_completion ?? 0,
+    matchmaking_enabled: Boolean(row.matchmaking_enabled),
+    discovery_prefs: row.discovery_prefs || {},
     loved: taste.loved,
     hated: taste.hated
   }
@@ -490,6 +494,68 @@ export async function sendMessage(userId, peerId, text) {
     text: data.body,
     created_at: data.created_at
   }
+}
+
+export async function getConversationsForUser(userId) {
+  const { data: matches, error } = await supabase
+    .from('matches')
+    .select('id, user_a, user_b, compatibility, chat_unlocked, updated_at')
+    .or(`user_a.eq.${userId},user_b.eq.${userId}`)
+    .order('updated_at', { ascending: false })
+
+  if (error) throw error
+  if (!matches?.length) return []
+
+  const peerIds = matches.map((m) => (m.user_a === userId ? m.user_b : m.user_a))
+  const { data: users, error: usersError } = await supabase
+    .from('users')
+    .select('id, display_name, photo_url, age')
+    .in('id', peerIds)
+
+  if (usersError) throw usersError
+  const byId = new Map((users || []).map((u) => [u.id, u]))
+
+  const results = []
+  for (const match of matches) {
+    const peerId = match.user_a === userId ? match.user_b : match.user_a
+    const peer = byId.get(peerId)
+    if (!peer) continue
+
+    const { data: conversation } = await supabase
+      .from('conversations')
+      .select('id')
+      .eq('match_id', match.id)
+      .maybeSingle()
+
+    let lastMessage = null
+    if (conversation?.id) {
+      const { data: msg } = await supabase
+        .from('messages')
+        .select('body, created_at, sender_id')
+        .eq('conversation_id', conversation.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+      lastMessage = msg
+    }
+
+    results.push({
+      matchId: match.id,
+      peer: {
+        id: peer.id,
+        name: peer.display_name,
+        age: peer.age,
+        avatar_url: peer.photo_url
+      },
+      compatibility: match.compatibility,
+      chatUnlocked: match.chat_unlocked,
+      lastMessage: lastMessage
+        ? { text: lastMessage.body, at: lastMessage.created_at, fromSelf: lastMessage.sender_id === userId }
+        : null
+    })
+  }
+
+  return results
 }
 
 export async function seedMoviesIfEmpty() {

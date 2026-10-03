@@ -50,6 +50,12 @@ export async function reportUser(reporterId, reportedId, reason, details = '') {
     .single()
 
   if (error) throw error
+
+  await supabase.from('moderation_queue').insert({
+    report_id: data.id,
+    status: 'open'
+  })
+
   return data
 }
 

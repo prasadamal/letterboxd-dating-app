@@ -142,20 +142,21 @@ npm run db:seed:demo
 
 ## Production & stores
 
+- **Architecture / backlog / deploy:** `docs/production/ARCHITECTURE.md`, `BACKLOG.md`, `DEPLOYMENT.md`
 - Deploy API over **HTTPS**; set `EXPO_PUBLIC_API_URL` in EAS.
+- Run `npm test` in CI; use Docker for API hosting.
 - See `docs/store/SUBMISSION_CHECKLIST.md` for Play/App Store steps.
 - Legal: `docs/legal/PRIVACY_POLICY.md`, `docs/legal/TERMS_OF_SERVICE.md`.
 
 ---
 
-## Database migration
+## Database migrations
 
-Applied on Supabase: `reelmates_dating_launch_v1` (gender, country, swipes, launch settings, chat intro flags). SQL copy: `supabase/migrations/20261002120000_reelmates_dating_launch_v1.sql`.
+- `supabase/migrations/20261002120000_reelmates_dating_launch_v1.sql`
+- `supabase/migrations/20261002200000_production_hardening_v1.sql` (+ remote `production_hardening_v1`)
 
 ---
 
-## What’s intentionally out of scope (v1)
+## What’s intentionally out of scope (next passes)
 
-- Push notifications, photo upload pipeline, ID verification, payments, realtime websockets, advanced ML recommendations.
-
-These can be added once the first **1,000 balanced users** are onboarded.
+- Push notifications delivery, ID verification vendor, payments, realtime websockets, full admin moderation UI.

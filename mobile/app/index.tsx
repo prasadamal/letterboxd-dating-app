@@ -9,11 +9,15 @@ export default function Index() {
   if (!ready) {
     return (
       <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator color={colors.pink} size="large" />
+        <ActivityIndicator color={colors.accent} size="large" />
       </View>
     )
   }
 
-  if (user) return <Redirect href="/(tabs)/home" />
-  return <Redirect href="/login" />
+  if (!user) return <Redirect href="/login" />
+
+  const completion = user.profile_completion ?? 0
+  if (completion < 80) return <Redirect href="/onboarding/welcome" />
+
+  return <Redirect href="/(tabs)/home" />
 }

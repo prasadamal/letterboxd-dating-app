@@ -15,8 +15,12 @@ router.get('/deck', authMiddleware, async (req, res) => {
     const deck = await getDatingDeck(req.user.id, 1)
     return res.json({ profile: deck[0] || null })
   } catch (error) {
-    if (error.code === 'DATING_LOCKED') {
-      return res.status(403).json({ message: error.message, code: error.code })
+    if (error.code === 'DATING_LOCKED' || error.code === 'PROFILE_INCOMPLETE') {
+      return res.status(403).json({
+        message: error.message,
+        code: error.code,
+        details: error.details || null
+      })
     }
     console.error(error)
     return res.status(500).json({ message: error.message || 'Could not load dating deck' })
@@ -32,8 +36,12 @@ router.post('/swipe', authMiddleware, async (req, res) => {
     const result = await recordSwipe(req.user.id, targetId, action)
     return res.json(result)
   } catch (error) {
-    if (error.code === 'DATING_LOCKED') {
-      return res.status(403).json({ message: error.message, code: error.code })
+    if (error.code === 'DATING_LOCKED' || error.code === 'PROFILE_INCOMPLETE') {
+      return res.status(403).json({
+        message: error.message,
+        code: error.code,
+        details: error.details || null
+      })
     }
     console.error(error)
     return res.status(400).json({ message: error.message || 'Could not save swipe' })
@@ -45,8 +53,12 @@ router.get('/matches', authMiddleware, async (req, res) => {
     const matches = await getMutualMatches(req.user.id)
     return res.json({ matches })
   } catch (error) {
-    if (error.code === 'DATING_LOCKED') {
-      return res.status(403).json({ message: error.message, code: error.code })
+    if (error.code === 'DATING_LOCKED' || error.code === 'PROFILE_INCOMPLETE') {
+      return res.status(403).json({
+        message: error.message,
+        code: error.code,
+        details: error.details || null
+      })
     }
     console.error(error)
     return res.status(500).json({ message: 'Could not load matches' })
