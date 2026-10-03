@@ -39,7 +39,7 @@ export function validateQuery(schema) {
 }
 
 export const signupSchema = z.object({
-  email: z.string().email().max(254),
+  email: z.string().trim().toLowerCase().email().max(254),
   password: z.string().min(8).max(128),
   name: z.string().min(2).max(80),
   age: z.coerce.number().int().min(18).max(100),
@@ -52,7 +52,7 @@ export const signupSchema = z.object({
 })
 
 export const loginSchema = z.object({
-  email: z.string().email(),
+  email: z.string().trim().toLowerCase().email(),
   password: z.string().min(1).max(128)
 })
 
@@ -66,10 +66,19 @@ export const messageSchema = z.object({
   text: z.string().min(1).max(2000)
 })
 
+// Must match the reports.reason / reports.details constraints in the database.
+export const REPORT_REASONS = ['spam', 'harassment', 'fake_profile', 'inappropriate', 'other']
+
 export const reportSchema = z.object({
   userId: z.string().uuid(),
-  reason: z.string().min(3).max(120),
-  details: z.string().max(2000).optional()
+  reason: z.enum(REPORT_REASONS),
+  details: z.string().max(1000).optional(),
+  block: z.boolean().optional()
+})
+
+export const blockSchema = z.object({
+  userId: z.string().uuid(),
+  reason: z.string().max(200).optional()
 })
 
 export const forgotPasswordSchema = z.object({

@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { apiFetch } from './api'
-import { registerDevicePushToken } from './push'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { ApiError, apiFetch } from './api'
+import { clearRegisteredPushToken, getRegisteredPushToken, registerDevicePushToken } from './push'
 import { clearTokens, getAccessToken, getRefreshToken, saveTokens } from './session'
 import type { PlatformStatus, User } from './types'
 
@@ -9,6 +9,9 @@ type AuthContextValue = {
   token: string | null
   platform: PlatformStatus | null
   ready: boolean
+  // Set when a saved session exists but the server could not be reached; the UI offers a retry.
+  offline: boolean
+  retryRestore: () => Promise<void>
   setSession: (
     token: string,
     user: User,
@@ -26,24 +29,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null)
   const [platform, setPlatform] = useState<PlatformStatus | null>(null)
   const [ready, setReady] = useState(false)
+  const [offline, setOffline] = useState(false)
+
+  const restore = useCallback(async () => {
+    setOffline(false)
+    try {
+      const stored = await getAccessToken()
+      if (!stored) return
+      const data = await apiFetch<{ user: User; platform: PlatformStatus }>('/auth/me', {}, stored)
+      setToken((await getAccessToken()) ?? stored)
+      setUser(data.user)
+      setPlatform(data.platform)
+      registerDevicePushToken(stored).catch(() => null)
+    } catch (err) {
+      // Only drop the saved session when the server rejects it, never because the phone is offline.
+      if (err instanceof ApiError && (err.status === 401 || err.status === 404)) await clearTokens()
+      else setOffline(true)
+    } finally {
+      setReady(true)
+    }
+  }, [])
 
   useEffect(() => {
-    ;(async () => {
-      try {
-        const stored = await getAccessToken()
-        if (!stored) return
-        const data = await apiFetch<{ user: User; platform: PlatformStatus }>('/auth/me', {}, stored)
-        setToken(stored)
-        setUser(data.user)
-        setPlatform(data.platform)
-        registerDevicePushToken(stored).catch(() => null)
-      } catch {
-        await clearTokens()
-      } finally {
-        setReady(true)
-      }
-    })()
-  }, [])
+    restore()
+  }, [restore])
 
   const value = useMemo<AuthContextValue>(
     () => ({
@@ -51,6 +60,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       token,
       platform,
       ready,
+      offline,
+      retryRestore: restore,
       async setSession(nextToken, nextUser, nextPlatform = null, refreshToken = null) {
         await saveTokens(nextToken, refreshToken)
         setToken(nextToken)
@@ -66,23 +77,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       async signOut() {
         const refreshToken = await getRefreshToken()
-        if (refreshToken) {
+        const pushToken = await getRegisteredPushToken()
+        if (refreshToken || pushToken) {
           try {
             await apiFetch('/auth/logout', {
               method: 'POST',
-              body: JSON.stringify({ refreshToken })
+              body: JSON.stringify({ refreshToken, pushToken })
             })
           } catch {
             // still clear local session
           }
         }
         await clearTokens()
+        await clearRegisteredPushToken()
         setToken(null)
         setUser(null)
         setPlatform(null)
       }
     }),
-    [user, token, platform, ready]
+    [user, token, platform, ready, offline, restore]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

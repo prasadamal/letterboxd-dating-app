@@ -102,8 +102,27 @@ export async function getRatingsForUsers(userIds) {
   return byUser
 }
 
+// Fields another member may see. Never add email, referral code or account state here.
+export function mapPublicUser(row, taste = { loved: [], hated: [] }) {
+  return {
+    id: row.id,
+    name: row.display_name,
+    age: row.age ?? null,
+    city: row.city ?? '',
+    country: row.country ?? '',
+    gender: row.gender ?? null,
+    bio: row.bio ?? '',
+    hobbies: row.hobbies ?? [],
+    avatar_url: row.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${encodeURIComponent(row.id)}`,
+    photo_url: row.photo_url || null,
+    verification_status: row.verification_status === 'verified' ? 'verified' : 'unverified',
+    loved: taste.loved,
+    hated: taste.hated
+  }
+}
+
 export function mapUserRow(row, taste = { loved: [], hated: [] }) {
-  const seed = encodeURIComponent(row.display_name || row.email || row.id)
+  const seed = encodeURIComponent(row.id)
   return {
     id: row.id,
     email: row.email,
@@ -161,7 +180,7 @@ export async function findUserByEmail(email) {
   const { data, error } = await supabase
     .from('users')
     .select('*')
-    .ilike('email', String(email).trim())
+    .eq('email', String(email).trim().toLowerCase())
     .maybeSingle()
 
   if (error) throw error
@@ -176,7 +195,7 @@ export async function findUserById(id) {
 
 export async function getUserProfile(userId) {
   const user = await findUserById(userId)
-  if (!user) return null
+  if (!user || user.deleted_at) return null
 
   const ratings = await getRatingsForUsers([userId])
   const taste = ratings.get(userId)?.labels || { love: [], hate: [] }
@@ -378,31 +397,6 @@ export function buildTasteSummary(userLabels, candidateLabels) {
   return parts.join(' · ') || 'Different taste, but worth a conversation.'
 }
 
-export async function getMatchesForUser(userId) {
-  const { data: users, error } = await supabase
-    .from('users')
-    .select('id, email, display_name, bio, hobbies, city, age')
-    .neq('id', userId)
-
-  if (error) throw error
-
-  const ids = [userId, ...(users || []).map((user) => user.id)]
-  const ratings = await getRatingsForUsers(ids)
-  const selfMap = ratings.get(userId)
-
-  return (users || [])
-    .map((candidate) => {
-      const stats = computeCompatibilityFromMaps(selfMap, ratings.get(candidate.id))
-      const taste = ratings.get(candidate.id)?.labels || { love: [], hate: [] }
-      return {
-        ...mapUserRow(candidate, { loved: taste.love, hated: taste.hate }),
-        score: stats.score,
-        tasteSummary: stats.summary
-      }
-    })
-    .sort((a, b) => b.score - a.score)
-}
-
 export async function orderedMatchUsers(a, b) {
   return a < b ? [a, b] : [b, a]
 }
@@ -435,7 +429,23 @@ async function getOrCreateConversation(matchId) {
   return data
 }
 
+// A match stops being a conversation once either side blocks the other or deletes their account.
+async function isChatClosed(userId, peerId) {
+  const peer = await findUserById(peerId)
+  if (!peer || peer.deleted_at || peer.is_active === false) return true
+
+  const { data, error } = await supabase
+    .from('blocks')
+    .select('blocker_id')
+    .or(`and(blocker_id.eq.${userId},blocked_id.eq.${peerId}),and(blocker_id.eq.${peerId},blocked_id.eq.${userId})`)
+    .limit(1)
+
+  if (error) throw error
+  return (data || []).length > 0
+}
+
 export async function getChatMeta(userId, peerId) {
+  if (await isChatClosed(userId, peerId)) return null
   const match = await getMutualMatchRow(userId, peerId)
   if (!match) return null
   const conversation = await getOrCreateConversation(match.id)
@@ -456,6 +466,7 @@ export async function getChatMeta(userId, peerId) {
 }
 
 export async function getMessagesBetween(userId, peerId, options = {}) {
+  if (await isChatClosed(userId, peerId)) return []
   const match = await getMutualMatchRow(userId, peerId)
   if (!match) return []
 
@@ -486,6 +497,7 @@ export async function getMessagesBetween(userId, peerId, options = {}) {
 }
 
 export async function markMessagesRead(userId, peerId) {
+  if (await isChatClosed(userId, peerId)) return 0
   const match = await getMutualMatchRow(userId, peerId)
   if (!match) return 0
 
@@ -509,6 +521,12 @@ export async function markMessagesRead(userId, peerId) {
 }
 
 export async function sendMessage(userId, peerId, text) {
+  if (await isChatClosed(userId, peerId)) {
+    const error = new Error('This conversation is no longer available.')
+    error.code = 'CHAT_CLOSED'
+    throw error
+  }
+
   const match = await getMutualMatchRow(userId, peerId)
   if (!match) {
     const error = new Error('You can only message mutual matches.')
@@ -608,6 +626,7 @@ export async function getConversationsForUser(userId) {
     .select('id, display_name, photo_url, age, deleted_at')
     .in('id', peerIds)
     .is('deleted_at', null)
+    .eq('is_active', true)
 
   if (usersError) throw usersError
   const byId = new Map((users || []).map((u) => [u.id, u]))

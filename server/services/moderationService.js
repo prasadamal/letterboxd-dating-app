@@ -1,4 +1,5 @@
 import { supabase } from '../supabaseClient.js'
+import { revokeAllRefreshTokens } from './authService.js'
 
 export async function listModerationQueue(status = 'open') {
   let query = supabase
@@ -40,7 +41,26 @@ export async function updateModerationItem(queueId, status) {
 
   if (error) throw error
   if (data?.report_id) {
-    await supabase.from('reports').update({ status }).eq('id', data.report_id)
+    // reports.status only allows open / reviewed / dismissed.
+    const reportStatus = status === 'dismissed' ? 'dismissed' : status === 'resolved' ? 'reviewed' : 'open'
+    const { error: reportError } = await supabase.from('reports').update({ status: reportStatus }).eq('id', data.report_id)
+    if (reportError) throw reportError
   }
+  return data
+}
+
+// Suspension hides the person from discovery and chat and ends their sessions; lifting it restores access.
+export async function setUserSuspended(userId, suspended) {
+  const { data, error } = await supabase
+    .from('users')
+    .update({ is_active: !suspended, ...(suspended ? { matchmaking_enabled: false } : {}) })
+    .eq('id', userId)
+    .is('deleted_at', null)
+    .select('id, is_active')
+    .maybeSingle()
+
+  if (error) throw error
+  if (!data) return null
+  if (suspended) await revokeAllRefreshTokens(userId)
   return data
 }

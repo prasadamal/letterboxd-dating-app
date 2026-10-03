@@ -5,7 +5,7 @@ import {
   findUserById,
   getMutualMatchRow,
   getRatingsForUsers,
-  mapUserRow,
+  mapPublicUser,
   orderedMatchUsers
 } from './db.js'
 import { assertDatingLaunched } from './platformService.js'
@@ -51,6 +51,8 @@ async function createMutualMatch(userId, peerId) {
     .select('*')
     .single()
 
+  // Both people liking at the same moment race to insert the same pair; the loser reads the winner's row.
+  if (error?.code === '23505') return getMutualMatchRow(userId, peerId)
   if (error) throw error
   return data
 }
@@ -152,9 +154,12 @@ export async function getDatingDeck(userId, limit = 1) {
 
   let query = supabase
     .from('users')
-    .select('id, email, display_name, bio, hobbies, city, age, country, gender, photo_url')
+    .select('id, display_name, bio, hobbies, city, age, country, gender, photo_url, verification_status')
     .neq('id', userId)
     .is('deleted_at', null)
+    // Only complete, active profiles (photo, bio, country) that the inactivity job has not paused.
+    .eq('matchmaking_enabled', true)
+    .eq('is_active', true)
 
   if (targetGender) query = query.eq('gender', targetGender)
 
@@ -178,7 +183,7 @@ export async function getDatingDeck(userId, limit = 1) {
       const taste = ratings.get(candidate.id)?.labels || { love: [], hate: [] }
       const lines = buildTasteLines(selfMap?.labels, taste, candidate.display_name)
       return {
-        ...mapUserRow(candidate, { loved: taste.love, hated: taste.hate }),
+        ...mapPublicUser(candidate, { loved: taste.love, hated: taste.hate }),
         score: stats.score,
         tasteSummary: stats.summary,
         likedLine: lines.likedLine,
@@ -203,7 +208,13 @@ export async function getDatingDeckMeta(userId) {
   const targetGender = oppositeGender(self.gender)
   const prefs = self.discovery_prefs || {}
 
-  let query = supabase.from('users').select('id, age, country, gender').neq('id', userId).is('deleted_at', null)
+  let query = supabase
+    .from('users')
+    .select('id, age, country, gender')
+    .neq('id', userId)
+    .is('deleted_at', null)
+    .eq('matchmaking_enabled', true)
+    .eq('is_active', true)
   if (targetGender) query = query.eq('gender', targetGender)
 
   const { data: candidates, error } = await query
@@ -251,9 +262,10 @@ export async function getMutualMatches(userId) {
 
   const { data: users, error: usersError } = await supabase
     .from('users')
-    .select('id, email, display_name, bio, hobbies, city, age, country, gender, photo_url')
+    .select('id, display_name, bio, hobbies, city, age, country, gender, photo_url, verification_status')
     .in('id', peerIds)
     .is('deleted_at', null)
+    .eq('is_active', true)
 
   if (usersError) throw usersError
 
@@ -270,7 +282,7 @@ export async function getMutualMatches(userId) {
       const taste = ratings.get(peerId)?.labels || { love: [], hate: [] }
       const lines = buildTasteLines(selfMap?.labels, taste, candidate.display_name)
       return {
-        ...mapUserRow(candidate, { loved: taste.love, hated: taste.hate }),
+        ...mapPublicUser(candidate, { loved: taste.love, hated: taste.hate }),
         score: row.compatibility,
         matchId: row.id,
         chatUnlocked: row.chat_unlocked,

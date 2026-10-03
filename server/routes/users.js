@@ -4,7 +4,8 @@ import { getUserProfile, updateUserProfile, ensureUserProfile, findUserById } fr
 import { authMiddleware } from '../middleware/auth.js'
 import { asyncHandler, AppError } from '../middleware/errors.js'
 import { validateBody } from '../middleware/validate.js'
-import { uploadAvatar } from '../services/storageService.js'
+import { containsBlockedContent } from '../lib/contentFilter.js'
+import { detectImageType, uploadAvatar } from '../services/storageService.js'
 import { writeAuditLog } from '../services/auditService.js'
 import { saveProfilePhotoRecord, syncProfileCompletion } from '../services/profileService.js'
 import { setUserVerification } from '../services/verificationService.js'
@@ -17,7 +18,6 @@ const profileUpdateSchema = z.object({
   country: z.string().min(2).max(80).optional(),
   bio: z.string().max(280).optional(),
   age: z.coerce.number().int().min(18).max(100).optional(),
-  photoUrl: z.string().url().optional(),
   hobbies: z.array(z.string()).optional(),
   discoveryPrefs: z
     .object({
@@ -48,14 +48,16 @@ router.put(
   authMiddleware,
   validateBody(profileUpdateSchema),
   asyncHandler(async (req, res) => {
-    const { name, city, country, bio, hobbies, age, photoUrl, discoveryPrefs } = req.body
+    const { name, city, country, bio, hobbies, age, discoveryPrefs } = req.body
+    if ([name, bio, city, country].some(containsBlockedContent)) {
+      throw new AppError('Your profile text breaks our community rules.', 422, 'CONTENT_BLOCKED')
+    }
     const updates = {}
 
     if (name) updates.display_name = name
     if (city !== undefined) updates.city = city
     if (country !== undefined) updates.country = country
     if (bio !== undefined) updates.bio = bio
-    if (photoUrl !== undefined) updates.photo_url = photoUrl
     if (age !== undefined) updates.age = age
     if (hobbies) updates.hobbies = hobbies
     if (discoveryPrefs) updates.discovery_prefs = discoveryPrefs
@@ -77,7 +79,10 @@ router.post(
     const buffer = Buffer.from(req.body.imageBase64, 'base64')
     if (buffer.length > 2_500_000) throw new AppError('Image too large (max 2.5MB)', 400, 'FILE_TOO_LARGE')
 
-    const publicUrl = await uploadAvatar(req.user.id, buffer, req.body.contentType)
+    const detected = detectImageType(buffer)
+    if (!detected) throw new AppError('Upload a JPEG, PNG or WebP photo', 400, 'INVALID_IMAGE')
+
+    const publicUrl = await uploadAvatar(req.user.id, buffer, detected)
     const state = await saveProfilePhotoRecord(req.user.id, publicUrl, true)
 
     await writeAuditLog({

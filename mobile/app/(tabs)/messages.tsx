@@ -18,7 +18,7 @@ export default function MessagesScreen() {
     if (!token || !platform?.datingLaunched) return
     apiFetch<{ conversations: ConversationPreview[] }>('/messages/conversations', {}, token)
       .then((data) => setConversations(data.conversations || []))
-      .catch(console.error)
+      .catch(() => null)
   }, [token, platform?.datingLaunched])
 
   if (!platform?.datingLaunched) {

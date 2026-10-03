@@ -1,5 +1,6 @@
 import * as Notifications from 'expo-notifications'
 import Constants from 'expo-constants'
+import * as SecureStore from 'expo-secure-store'
 import { Platform } from 'react-native'
 import { apiFetch } from './api'
 
@@ -13,8 +14,29 @@ Notifications.setNotificationHandler({
   })
 })
 
+const PUSH_TOKEN_KEY = 'reelmates_push_token'
+
+export async function getRegisteredPushToken() {
+  return SecureStore.getItemAsync(PUSH_TOKEN_KEY)
+}
+
+export async function clearRegisteredPushToken() {
+  await SecureStore.deleteItemAsync(PUSH_TOKEN_KEY)
+}
+
 export async function registerDevicePushToken(accessToken: string) {
   if (Platform.OS === 'web') return
+
+  // Push tokens are scoped to the EAS project; without one (before `eas init`) there is nothing to register.
+  const projectId = Constants.expoConfig?.extra?.eas?.projectId ?? Constants.easConfig?.projectId
+  if (!projectId) return
+
+  if (Platform.OS === 'android') {
+    await Notifications.setNotificationChannelAsync('default', {
+      name: 'Matches and messages',
+      importance: Notifications.AndroidImportance.HIGH
+    })
+  }
 
   const permissions = await Notifications.getPermissionsAsync()
   const status =
@@ -22,14 +44,12 @@ export async function registerDevicePushToken(accessToken: string) {
 
   if (status !== 'granted') return
 
-  const projectId = Constants.expoConfig?.extra?.eas?.projectId
-  const tokenData = projectId
-    ? await Notifications.getExpoPushTokenAsync({ projectId })
-    : await Notifications.getExpoPushTokenAsync()
+  const tokenData = await Notifications.getExpoPushTokenAsync({ projectId })
 
   const platform = Platform.OS === 'ios' ? 'ios' : 'android'
   await apiFetch('/notifications/register', {
     method: 'POST',
     body: JSON.stringify({ token: tokenData.data, platform })
   }, accessToken)
+  await SecureStore.setItemAsync(PUSH_TOKEN_KEY, tokenData.data)
 }

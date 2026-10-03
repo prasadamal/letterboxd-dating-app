@@ -21,7 +21,7 @@ export default function TasteScreen() {
   }, [token])
 
   useEffect(() => {
-    load().catch(console.error)
+    load().catch((err) => setError(err instanceof Error ? err.message : 'Could not load today’s films'))
   }, [load])
 
   async function rate(movie: Movie, reaction: 'love' | 'hate') {

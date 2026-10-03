@@ -3,8 +3,17 @@ import { findUserById, getMessagesBetween, getMutualMatchRow, sendMessage, getCo
 import { authMiddleware } from '../middleware/auth.js'
 import { asyncHandler, AppError } from '../middleware/errors.js'
 import { validateBody, messageSchema } from '../middleware/validate.js'
+import { containsBlockedContent } from '../lib/contentFilter.js'
 
 const router = express.Router()
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+// Peer ids end up in PostgREST filters; reject anything that isn't a UUID before it gets there.
+router.param('userId', (req, res, next, value) => {
+  if (!UUID_RE.test(value)) return res.status(404).json({ message: 'User not found', code: 'NOT_FOUND' })
+  next()
+})
 
 router.get(
   '/conversations',
@@ -51,6 +60,9 @@ router.post('/:userId/read', authMiddleware, async (req, res) => {
 router.post('/', authMiddleware, validateBody(messageSchema), async (req, res) => {
   try {
     const { toUserId, text } = req.body
+    if (containsBlockedContent(text)) {
+      return res.status(422).json({ message: 'This message breaks our community rules and was not sent.', code: 'CONTENT_BLOCKED' })
+    }
 
     const peer = await findUserById(toUserId)
     if (!peer) return res.status(404).json({ message: 'User not found' })
@@ -58,7 +70,7 @@ router.post('/', authMiddleware, validateBody(messageSchema), async (req, res) =
     const message = await sendMessage(req.user.id, toUserId, String(text).trim())
     return res.status(201).json({ message })
   } catch (error) {
-    if (error.code === 'NO_MATCH' || error.code === 'INTRO_LIMIT') {
+    if (error.code === 'NO_MATCH' || error.code === 'INTRO_LIMIT' || error.code === 'CHAT_CLOSED') {
       return res.status(403).json({ message: error.message, code: error.code })
     }
     console.error(error)

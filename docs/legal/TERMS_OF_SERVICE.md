@@ -1,6 +1,6 @@
 # Terms of Service — ReelMates
 
-**Effective date:** October 2, 2026
+**Effective date:** October 3, 2026
 
 By using ReelMates you agree to these terms.
 
@@ -8,9 +8,19 @@ By using ReelMates you agree to these terms.
 
 You must be at least **18** years old and able to form a binding contract.
 
-## Acceptable use
+## Acceptable use — zero tolerance
 
-Do not harass others, spam, impersonate, or upload unlawful content. We may suspend accounts that violate these rules.
+ReelMates has **zero tolerance for objectionable content and abusive users**. You must not:
+
+- harass, threaten, bully or demean anyone, including hate speech of any kind;
+- post sexual, violent or otherwise objectionable photos or messages;
+- impersonate anyone, create fake profiles, or misrepresent your age;
+- spam, scam, solicit money, or advertise;
+- upload unlawful content or content you do not have the right to share.
+
+## Reporting and blocking
+
+You can **report** or **block** any person from their dating card, your matches, or a chat. Blocking hides you from each other immediately. We review reports within **24 hours** and remove offending content and accounts. Accounts that break these rules are suspended or removed without notice.
 
 ## Matching & content
 
@@ -22,7 +32,7 @@ The service is provided **“as is”** without warranties. To the extent permit
 
 ## Termination
 
-You may stop using the app at any time. We may terminate access for violations.
+You may delete your account at any time from **Profile → Delete account**; this permanently removes your data as described in the Privacy Policy. We may terminate access for violations of these terms.
 
 ## Contact
 

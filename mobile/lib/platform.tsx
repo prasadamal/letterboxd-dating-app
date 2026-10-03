@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { AppState } from 'react-native'
 import { apiFetch } from './api'
 import type { PlatformStatus } from './types'
 import { useAuth } from './auth'
@@ -23,9 +24,22 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
   }, [token])
 
   useEffect(() => {
-    refreshPlatform().catch(console.error)
-    const timer = setInterval(() => refreshPlatform().catch(() => null), 15000)
-    return () => clearInterval(timer)
+    refreshPlatform().catch(() => null)
+    // Poll only while the app is in the foreground; refresh immediately when it comes back.
+    let timer: ReturnType<typeof setInterval> | null = setInterval(() => refreshPlatform().catch(() => null), 15000)
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state === 'active') {
+        refreshPlatform().catch(() => null)
+        if (!timer) timer = setInterval(() => refreshPlatform().catch(() => null), 15000)
+      } else if (timer) {
+        clearInterval(timer)
+        timer = null
+      }
+    })
+    return () => {
+      if (timer) clearInterval(timer)
+      sub.remove()
+    }
   }, [refreshPlatform])
 
   const value = useMemo(() => ({ platform, refreshPlatform }), [platform, refreshPlatform])

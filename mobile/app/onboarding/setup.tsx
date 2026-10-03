@@ -15,24 +15,28 @@ export default function OnboardingSetup() {
   const [saving, setSaving] = useState(false)
 
   async function pickPhoto() {
-    const perm = await ImagePicker.requestMediaLibraryPermissionsAsync()
-    if (!perm.granted) {
-      Alert.alert('Permission needed', 'Allow photo access to add a profile picture.')
-      return
-    }
-    const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.8, base64: true })
-    if (!result.canceled && result.assets[0]?.uri) {
-      setPhotoUri(result.assets[0].uri)
-      if (result.assets[0].base64 && token) {
-        await apiFetch(
-          '/users/avatar',
-          {
-            method: 'POST',
-            body: JSON.stringify({ imageBase64: result.assets[0].base64, contentType: 'image/jpeg' })
-          },
-          token
-        )
-      }
+    // The system photo picker needs no library permission; a square crop keeps uploads well under the 2.5MB cap.
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.5,
+      base64: true
+    })
+    const asset = result.assets?.[0]
+    if (result.canceled || !asset?.base64 || !token) return
+    try {
+      await apiFetch(
+        '/users/avatar',
+        {
+          method: 'POST',
+          body: JSON.stringify({ imageBase64: asset.base64, contentType: asset.mimeType === 'image/png' ? 'image/png' : 'image/jpeg' })
+        },
+        token
+      )
+      setPhotoUri(asset.uri)
+    } catch (err) {
+      Alert.alert('Upload failed', err instanceof Error ? err.message : 'Try a different photo')
     }
   }
 

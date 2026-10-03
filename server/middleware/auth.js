@@ -2,7 +2,8 @@ import jwt from 'jsonwebtoken'
 import { env } from '../config/env.js'
 
 export function signToken(payload) {
-  return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '7d' })
+  // Short-lived: clients renew through /auth/refresh, so revoking refresh tokens ends a session within the hour.
+  return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' })
 }
 
 export function authMiddleware(req, res, next) {

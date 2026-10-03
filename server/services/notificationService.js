@@ -52,10 +52,31 @@ async function sendExpoPush(tokens, title, body, data = {}) {
   }
 
   const result = await response.json()
+  await pruneDeadTokens(tokens, result?.data)
   return { delivered: tokens.length, result }
 }
 
+// Expo answers DeviceNotRegistered for uninstalled apps; stop sending to those tokens.
+async function pruneDeadTokens(tokens, tickets) {
+  if (!Array.isArray(tickets)) return
+  const dead = tickets
+    .map((ticket, index) => (ticket?.details?.error === 'DeviceNotRegistered' ? tokens[index] : null))
+    .filter(Boolean)
+  if (!dead.length) return
+  const { error } = await supabase.from('push_tokens').delete().in('token', dead)
+  if (error) logger.warn('Pruning dead push tokens failed', { error: error.message })
+}
+
+export async function unregisterPushToken(token) {
+  const { error } = await supabase.from('push_tokens').delete().eq('token', token)
+  if (error) throw error
+}
+
 export async function registerPushToken(userId, token, platform) {
+  // A device belongs to whoever signed in last on it.
+  const { error: claimError } = await supabase.from('push_tokens').delete().eq('token', token).neq('user_id', userId)
+  if (claimError) throw claimError
+
   const { error } = await supabase.from('push_tokens').upsert(
     {
       user_id: userId,

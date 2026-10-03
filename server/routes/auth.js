@@ -2,7 +2,7 @@ import express from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
-import { createUser, ensureUserProfile, findUserByEmail, getUserProfile, updateUserProfile } from '../db.js'
+import { createUser, ensureUserProfile, findUserByEmail, findUserById, getUserProfile, updateUserProfile } from '../db.js'
 import { signToken, authMiddleware } from '../middleware/auth.js'
 import { getPlatformStatus } from '../platformService.js'
 import { applyReferralCode } from '../datingService.js'
@@ -25,8 +25,14 @@ import {
 } from '../services/authLifecycleService.js'
 import { issueRefreshToken, rotateRefreshToken, revokeRefreshToken } from '../services/authService.js'
 import { syncProfileCompletion } from '../services/profileService.js'
+import { authRateLimiter } from '../middleware/security.js'
+import { unregisterPushToken } from '../services/notificationService.js'
+import { containsBlockedContent } from '../lib/contentFilter.js'
 
 const router = express.Router()
+
+// Strict limit on endpoints that take credentials or send email; session endpoints use the global limit.
+const credentialLimiter = authRateLimiter()
 
 function referralCodeFromEmail(email) {
   return `REEL${crypto.createHash('sha1').update(String(email)).digest('hex').slice(0, 6).toUpperCase()}`
@@ -34,9 +40,13 @@ function referralCodeFromEmail(email) {
 
 router.post(
   '/signup',
+  credentialLimiter,
   validateBody(signupSchema),
   asyncHandler(async (req, res) => {
     const { email, password, name, age, country, city, bio, gender, referralCode } = req.body
+    if ([name, bio, city, country].some(containsBlockedContent)) {
+      throw new AppError('Your profile text breaks our community rules.', 422, 'CONTENT_BLOCKED')
+    }
 
     if (await findUserByEmail(email)) {
       throw new AppError('User already exists', 409, 'USER_EXISTS')
@@ -88,6 +98,7 @@ router.post(
 
 router.post(
   '/login',
+  credentialLimiter,
   validateBody(loginSchema),
   asyncHandler(async (req, res) => {
     const { email, password } = req.body
@@ -95,6 +106,9 @@ router.post(
 
     if (!user || user.deleted_at || !(await bcrypt.compare(password, user.password_hash))) {
       throw new AppError('Invalid email or password', 401, 'INVALID_CREDENTIALS')
+    }
+    if (user.is_active === false) {
+      throw new AppError('This account has been suspended. Contact support@reelmates.app.', 403, 'ACCOUNT_SUSPENDED')
     }
 
     await updateUserProfile(user.id, { last_active_at: new Date().toISOString() })
@@ -108,14 +122,14 @@ router.post(
   })
 )
 
-router.post('/forgot-password', validateBody(forgotPasswordSchema), asyncHandler(async (req, res) => {
+router.post('/forgot-password', credentialLimiter, validateBody(forgotPasswordSchema), asyncHandler(async (req, res) => {
   const result = await requestPasswordReset(req.body.email)
   const body = { ok: true, message: 'If that email exists, a reset link was sent.' }
   if (env.NODE_ENV !== 'production' && result.devResetUrl) body.devResetUrl = result.devResetUrl
   return res.json(body)
 }))
 
-router.post('/reset-password', validateBody(resetPasswordSchema), asyncHandler(async (req, res) => {
+router.post('/reset-password', credentialLimiter, validateBody(resetPasswordSchema), asyncHandler(async (req, res) => {
   try {
     await resetPassword(req.body.token, req.body.password)
   } catch (error) {
@@ -124,14 +138,14 @@ router.post('/reset-password', validateBody(resetPasswordSchema), asyncHandler(a
   return res.json({ ok: true })
 }))
 
-router.post('/verify-email/request', authMiddleware, asyncHandler(async (req, res) => {
+router.post('/verify-email/request', credentialLimiter, authMiddleware, asyncHandler(async (req, res) => {
   const result = await requestEmailVerification(req.user.id)
   const body = { ok: true, alreadyVerified: Boolean(result.alreadyVerified) }
   if (env.NODE_ENV !== 'production' && result.devVerifyUrl) body.devVerifyUrl = result.devVerifyUrl
   return res.json(body)
 }))
 
-router.post('/verify-email/confirm', validateBody(verifyEmailSchema), asyncHandler(async (req, res) => {
+router.post('/verify-email/confirm', credentialLimiter, validateBody(verifyEmailSchema), asyncHandler(async (req, res) => {
   try {
     await verifyEmail(req.body.token)
   } catch (error) {
@@ -147,6 +161,10 @@ router.post('/refresh', asyncHandler(async (req, res) => {
   const rotated = await rotateRefreshToken(refreshToken)
   if (!rotated) throw new AppError('Invalid refresh token', 401, 'INVALID_REFRESH')
 
+  const account = await findUserById(rotated.userId)
+  if (!account || account.deleted_at || account.is_active === false) {
+    throw new AppError('Session ended', 401, 'INVALID_REFRESH')
+  }
   const profile = await getUserProfile(rotated.userId)
   const token = signToken({ id: rotated.userId, email: profile.email })
   return res.json({
@@ -158,8 +176,10 @@ router.post('/refresh', asyncHandler(async (req, res) => {
 }))
 
 router.post('/logout', asyncHandler(async (req, res) => {
-  const { refreshToken } = req.body
+  const { refreshToken, pushToken } = req.body
   if (refreshToken) await revokeRefreshToken(refreshToken)
+  // The next person to sign in on this device must not get the previous user's notifications.
+  if (typeof pushToken === 'string' && /^Expo(nent)?PushToken\[/.test(pushToken)) await unregisterPushToken(pushToken)
   return res.json({ ok: true })
 }))
 
