@@ -11,6 +11,9 @@ import {
 import { assertDatingLaunched } from './platformService.js'
 import { getBlockedUserIds } from './safetyService.js'
 import { assertMatchmakingReady } from './services/profileService.js'
+import { passesDiscoveryFilters } from './services/discoveryPrefs.js'
+import { notifyUser } from './services/notificationService.js'
+import { logger } from './lib/logger.js'
 
 function oppositeGender(gender) {
   if (gender === 'male') return 'female'
@@ -83,6 +86,8 @@ export async function recordSwipe(userId, targetId, action) {
 
   if (error) throw error
 
+  await bumpSwipeStats(userId, action)
+
   let matched = false
   let matchRow = null
 
@@ -98,10 +103,38 @@ export async function recordSwipe(userId, targetId, action) {
     if (reverse?.action === 'like') {
       matchRow = await createMutualMatch(userId, targetId)
       matched = true
+      await Promise.all([
+        notifyUser(userId, 'new_match', { peerId: targetId }),
+        notifyUser(targetId, 'new_match', { peerId: userId })
+      ])
     }
   }
 
   return { ok: true, matched, matchId: matchRow?.id || null }
+}
+
+async function bumpSwipeStats(userId, action) {
+  const { data, error: readError } = await supabase
+    .from('user_deck_stats')
+    .select('swipes_total, likes_total, passes_total')
+    .eq('user_id', userId)
+    .maybeSingle()
+
+  if (readError && readError.code !== 'PGRST116') {
+    logger.warn('deck stats read skipped', { message: readError.message })
+    return
+  }
+
+  const base = data || { swipes_total: 0, likes_total: 0, passes_total: 0 }
+  const { error } = await supabase.from('user_deck_stats').upsert({
+    user_id: userId,
+    swipes_total: base.swipes_total + 1,
+    likes_total: base.likes_total + (action === 'like' ? 1 : 0),
+    passes_total: base.passes_total + (action === 'pass' ? 1 : 0),
+    updated_at: new Date().toISOString()
+  })
+
+  if (error) logger.warn('deck stats write skipped', { message: error.message })
 }
 
 export async function getDatingDeck(userId, limit = 1) {
@@ -115,6 +148,8 @@ export async function getDatingDeck(userId, limit = 1) {
   const swipes = await getSwipeMap(userId)
   const targetGender = oppositeGender(self.gender)
 
+  const prefs = self.discovery_prefs || {}
+
   let query = supabase
     .from('users')
     .select('id, email, display_name, bio, hobbies, city, age, country, gender, photo_url')
@@ -126,7 +161,12 @@ export async function getDatingDeck(userId, limit = 1) {
   const { data: candidates, error } = await query
   if (error) throw error
 
-  const filtered = (candidates || []).filter((candidate) => !blocked.has(candidate.id) && !swipes.has(candidate.id))
+  const filtered = (candidates || []).filter(
+    (candidate) =>
+      !blocked.has(candidate.id) &&
+      !swipes.has(candidate.id) &&
+      passesDiscoveryFilters(candidate, prefs)
+  )
 
   const ids = [userId, ...filtered.map((row) => row.id)]
   const ratings = await getRatingsForUsers(ids)
@@ -149,6 +189,45 @@ export async function getDatingDeck(userId, limit = 1) {
     .slice(0, limit)
 
   return deck
+}
+
+export async function getDatingDeckMeta(userId) {
+  await assertDatingLaunched()
+  await assertMatchmakingReady(userId)
+
+  const self = await findUserById(userId)
+  if (!self) throw new Error('User not found')
+
+  const blocked = await getBlockedUserIds(userId)
+  const swipes = await getSwipeMap(userId)
+  const targetGender = oppositeGender(self.gender)
+  const prefs = self.discovery_prefs || {}
+
+  let query = supabase.from('users').select('id, age, country, gender').neq('id', userId).is('deleted_at', null)
+  if (targetGender) query = query.eq('gender', targetGender)
+
+  const { data: candidates, error } = await query
+  if (error) throw error
+
+  const eligible = (candidates || []).filter(
+    (candidate) =>
+      !blocked.has(candidate.id) &&
+      !swipes.has(candidate.id) &&
+      passesDiscoveryFilters(candidate, prefs)
+  )
+
+  const { data: statsRow } = await supabase
+    .from('user_deck_stats')
+    .select('swipes_total, likes_total, passes_total')
+    .eq('user_id', userId)
+    .maybeSingle()
+
+  return {
+    swipedCount: swipes.size,
+    remainingInPool: eligible.length,
+    discoveryPrefs: prefs,
+    stats: statsRow || { swipes_total: swipes.size, likes_total: 0, passes_total: 0 }
+  }
 }
 
 export async function getMutualMatches(userId) {

@@ -2,18 +2,20 @@ import express from 'express'
 import {
   applyReferralCode,
   getDatingDeck,
+  getDatingDeckMeta,
   getMutualMatches,
   getReferralInfo,
   recordSwipe
 } from '../datingService.js'
 import { authMiddleware } from '../middleware/auth.js'
+import { validateBody, swipeSchema } from '../middleware/validate.js'
 
 const router = express.Router()
 
 router.get('/deck', authMiddleware, async (req, res) => {
   try {
-    const deck = await getDatingDeck(req.user.id, 1)
-    return res.json({ profile: deck[0] || null })
+    const [deck, meta] = await Promise.all([getDatingDeck(req.user.id, 1), getDatingDeckMeta(req.user.id)])
+    return res.json({ profile: deck[0] || null, meta })
   } catch (error) {
     if (error.code === 'DATING_LOCKED' || error.code === 'PROFILE_INCOMPLETE') {
       return res.status(403).json({
@@ -27,12 +29,9 @@ router.get('/deck', authMiddleware, async (req, res) => {
   }
 })
 
-router.post('/swipe', authMiddleware, async (req, res) => {
+router.post('/swipe', authMiddleware, validateBody(swipeSchema), async (req, res) => {
   try {
     const { targetId, action } = req.body
-    if (!targetId || !action) {
-      return res.status(400).json({ message: 'targetId and action are required' })
-    }
     const result = await recordSwipe(req.user.id, targetId, action)
     return res.json(result)
   } catch (error) {

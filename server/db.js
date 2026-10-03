@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient.js'
+import { notifyUser } from './services/notificationService.js'
 import { movieCatalog } from './movieCatalog.js'
 
 function formatMovieLabel(movie) {
@@ -417,17 +418,23 @@ async function getOrCreateConversation(matchId) {
   return data
 }
 
-export async function getMessagesBetween(userId, peerId) {
+export async function getMessagesBetween(userId, peerId, options = {}) {
   const match = await getMutualMatchRow(userId, peerId)
   if (!match) return []
 
   const conversation = await getOrCreateConversation(match.id)
 
-  const { data, error } = await supabase
+  let query = supabase
     .from('messages')
-    .select('id, sender_id, body, created_at')
+    .select('id, sender_id, body, created_at, read_at')
     .eq('conversation_id', conversation.id)
     .order('created_at', { ascending: true })
+
+  if (options.since) {
+    query = query.gt('created_at', options.since)
+  }
+
+  const { data, error } = await query
 
   if (error) throw error
 
@@ -436,8 +443,28 @@ export async function getMessagesBetween(userId, peerId) {
     from_user_id: row.sender_id,
     to_user_id: row.sender_id === userId ? peerId : userId,
     text: row.body,
-    created_at: row.created_at
+    created_at: row.created_at,
+    read_at: row.read_at
   }))
+}
+
+export async function markMessagesRead(userId, peerId) {
+  const match = await getMutualMatchRow(userId, peerId)
+  if (!match) return 0
+
+  const conversation = await getOrCreateConversation(match.id)
+  const now = new Date().toISOString()
+
+  const { data, error } = await supabase
+    .from('messages')
+    .update({ read_at: now })
+    .eq('conversation_id', conversation.id)
+    .neq('sender_id', userId)
+    .is('read_at', null)
+    .select('id')
+
+  if (error) throw error
+  return (data || []).length
 }
 
 export async function sendMessage(userId, peerId, text) {
@@ -486,6 +513,11 @@ export async function sendMessage(userId, peerId, text) {
       })
       .eq('id', match.id)
   }
+
+  await notifyUser(peerId, 'new_message', {
+    fromUserId: userId,
+    preview: text.slice(0, 120)
+  })
 
   return {
     id: data.id,

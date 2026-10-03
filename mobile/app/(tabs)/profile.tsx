@@ -15,6 +15,8 @@ export default function ProfileScreen() {
   const [referralCode, setReferralCode] = useState('')
   const [referralShare, setReferralShare] = useState('')
   const [saving, setSaving] = useState(false)
+  const [minAge, setMinAge] = useState('18')
+  const [maxAge, setMaxAge] = useState('45')
 
   useEffect(() => {
     if (!token) return
@@ -34,7 +36,19 @@ export default function ProfileScreen() {
     try {
       await apiFetch(
         '/users/profile',
-        { method: 'PUT', body: JSON.stringify({ name, country, bio }) },
+        {
+          method: 'PUT',
+          body: JSON.stringify({
+            name,
+            country,
+            bio,
+            discoveryPrefs: {
+              minAge: Number(minAge) || 18,
+              maxAge: Number(maxAge) || 45,
+              countries: country ? [country] : []
+            }
+          })
+        },
         token
       )
       await refreshUser()
@@ -78,6 +92,29 @@ export default function ProfileScreen() {
       <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Name" placeholderTextColor={colors.muted} />
       <TextInput style={styles.input} value={country} onChangeText={setCountry} placeholder="Country" placeholderTextColor={colors.muted} />
       <TextInput style={[styles.input, styles.multiline]} value={bio} onChangeText={setBio} placeholder="One line about you & movies" placeholderTextColor={colors.muted} multiline />
+
+      <View style={styles.block}>
+        <Text style={styles.blockTitle}>Discovery preferences</Text>
+        <Text style={styles.listItem}>Age range for dating deck</Text>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
+          <TextInput
+            style={[styles.input, { flex: 1 }]}
+            value={minAge}
+            onChangeText={setMinAge}
+            keyboardType="number-pad"
+            placeholder="Min age"
+            placeholderTextColor={colors.muted}
+          />
+          <TextInput
+            style={[styles.input, { flex: 1 }]}
+            value={maxAge}
+            onChangeText={setMaxAge}
+            keyboardType="number-pad"
+            placeholder="Max age"
+            placeholderTextColor={colors.muted}
+          />
+        </View>
+      </View>
 
       <Pressable style={styles.primaryBtn} onPress={save} disabled={saving}>
         <Text style={styles.primaryText}>{saving ? 'Saving…' : 'Save profile'}</Text>

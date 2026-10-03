@@ -13,25 +13,25 @@ Use branch prefix: `cursor/production-*-e9d8`. Merge to `main` via PR after each
 - [x] Avatar upload + profile completeness API
 - [x] CI + Docker + `npm test`
 
-## Phase 2 — Trust & profile gate (this pass)
+## Phase 2 — Trust & profile gate ✅
 
-- [ ] Migration: `refresh_tokens`, `push_tokens`, `profile_photos`, `moderation_queue`
-- [ ] `JWT_REFRESH_SECRET` + `/auth/refresh` + `/auth/logout`
-- [ ] Matchmaking gate: `profile_completion >= 80` + `matchmaking_enabled`
-- [ ] `GET /messages/conversations` inbox
-- [ ] `notificationService` + `POST /notifications/register`
-- [ ] Validate **all** route bodies (movies, platform, dating, safety)
-- [ ] `/api/v1/health/db` and `/health/storage`
-- [ ] Mobile onboarding wizard + cinematic theme tokens
-- [ ] `expo-image-picker` profile photo flow
+- [x] Migration: `refresh_tokens`, `push_tokens`, `profile_photos`, `moderation_queue`
+- [x] `JWT_REFRESH_SECRET` + `/auth/refresh` + `/auth/logout`
+- [x] Matchmaking gate: `profile_completion >= 80` + `matchmaking_enabled`
+- [x] `GET /messages/conversations` inbox
+- [x] `notificationService` + `POST /notifications/register`
+- [x] Validate **all** route bodies (movies, platform, dating, safety)
+- [x] `/api/v1/health/db` and `/health/storage`
+- [x] Mobile onboarding wizard + cinematic theme tokens
+- [x] `expo-image-picker` profile photo flow
 
-## Phase 3 — Social & realtime
+## Phase 3 — Social & realtime (this pass)
 
-- [ ] Discovery filters from `discovery_prefs` in deck API
-- [ ] Seen-profile / swipe history analytics
-- [ ] Supabase Realtime for chat (or polling v2)
-- [ ] Read receipts on messages
-- [ ] Push: new match, new message, daily game reminder
+- [x] Discovery filters from `discovery_prefs` in deck API
+- [x] Seen-profile / swipe history analytics (`meta` on deck + `user_deck_stats`)
+- [ ] Supabase Realtime for chat (polling v2 shipped instead)
+- [x] Read receipts on messages
+- [x] Push: new match, new message (Expo push sender; daily reminder hook pending)
 
 ## Phase 4 — Premium UI (web + mobile)
 

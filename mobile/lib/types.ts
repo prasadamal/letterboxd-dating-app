@@ -57,4 +57,5 @@ export type ChatMessage = {
   to_user_id: string
   text: string
   created_at: string
+  read_at?: string | null
 }
