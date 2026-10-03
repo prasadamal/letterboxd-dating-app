@@ -4,6 +4,9 @@ import { AuthProvider } from '../lib/auth'
 import { PlatformProvider } from '../lib/platform'
 import { colors } from '../lib/theme'
 
+// Shows expo-router's recovery screen instead of a white crash if any screen throws while rendering.
+export { ErrorBoundary } from 'expo-router'
+
 export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -13,7 +16,7 @@ export default function RootLayout() {
             <Stack.Screen name="index" />
             <Stack.Screen name="login" />
             <Stack.Screen name="onboarding" />
-        <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="(tabs)" />
             <Stack.Screen
               name="chat/[userId]"
               options={{

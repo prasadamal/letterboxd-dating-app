@@ -142,6 +142,7 @@ npm run db:seed:demo
 
 ## Production & stores
 
+- **Launch checklist (start here):** `docs/production/LAUNCH_CHECKLIST.md`
 - **Architecture / backlog / deploy:** `docs/production/ARCHITECTURE.md`, `BACKLOG.md`, `DEPLOYMENT.md`, `STAGING.md`
 - Deploy API over **HTTPS**; set `EXPO_PUBLIC_API_URL` in EAS.
 - Run `npm test` in CI; use Docker for API hosting.

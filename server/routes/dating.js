@@ -26,7 +26,7 @@ router.get('/deck', authMiddleware, async (req, res) => {
       })
     }
     console.error(error)
-    return res.status(500).json({ message: error.message || 'Could not load dating deck' })
+    return res.status(500).json({ message: 'Could not load dating deck' })
   }
 })
 

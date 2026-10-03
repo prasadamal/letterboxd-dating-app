@@ -4,6 +4,8 @@ import { z } from 'zod'
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(4000),
+  // Number of reverse proxies in front of the API (load balancer, CDN). Needed for per-client rate limits.
+  TRUST_PROXY: z.coerce.number().int().min(0).max(5).optional(),
   JWT_SECRET: z.string().min(16),
   JWT_REFRESH_SECRET: z.string().min(16).optional(),
   CLIENT_URL: z.string().url().optional(),

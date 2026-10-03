@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useRouter } from 'expo-router'
 import { apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
@@ -19,7 +19,7 @@ export default function MatchesScreen() {
     if (!token || !platform?.datingLaunched) return
     apiFetch<{ matches: Match[] }>('/dating/matches', {}, token)
       .then((data) => setMatches(data.matches || []))
-      .catch(console.error)
+      .catch(() => null)
   }, [token, platform?.datingLaunched])
 
   if (!platform?.datingLaunched) {
@@ -52,15 +52,23 @@ export default function MatchesScreen() {
             </Pressable>
             <Pressable
               style={styles.ghostBtn}
-              onPress={async () => {
-                try {
-                  await apiFetch('/safety/block', { method: 'POST', body: JSON.stringify({ userId: item.id }) }, token)
-                  setMatches((current) => current.filter((match) => match.id !== item.id))
-                } catch (err) {
-                  setMatches((current) => current)
-                  console.error(err)
-                }
-              }}
+              onPress={() =>
+                Alert.alert(`Block ${item.name}?`, 'You will no longer see or message each other. They are not notified.', [
+                  { text: 'Cancel', style: 'cancel' },
+                  {
+                    text: 'Block',
+                    style: 'destructive',
+                    onPress: async () => {
+                      try {
+                        await apiFetch('/safety/block', { method: 'POST', body: JSON.stringify({ userId: item.id }) }, token)
+                        setMatches((current) => current.filter((match) => match.id !== item.id))
+                      } catch (err) {
+                        Alert.alert('Could not block', err instanceof Error ? err.message : 'Try again')
+                      }
+                    }
+                  }
+                ])
+              }
             >
               <Text style={styles.ghostText}>Block</Text>
             </Pressable>

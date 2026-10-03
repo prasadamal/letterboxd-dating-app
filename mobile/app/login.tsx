@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import {
   KeyboardAvoidingView,
+  Linking,
   Platform,
   Pressable,
   ScrollView,
@@ -10,6 +11,7 @@ import {
   View
 } from 'react-native'
 import { useRouter } from 'expo-router'
+import Constants from 'expo-constants'
 import { login, signup, useAuth } from '../lib/auth'
 import { apiFetch } from '../lib/api'
 import { colors } from '../lib/theme'
@@ -26,7 +28,7 @@ export default function LoginScreen() {
     email: '',
     password: '',
     name: '',
-    age: '25',
+    age: '',
     country: '',
     bio: '',
     gender: 'female' as 'male' | 'female',
@@ -52,6 +54,12 @@ export default function LoginScreen() {
 
   async function submit() {
     if (mode === 'forgot') return forgot()
+    if (mode === 'signup') {
+      const age = Number(form.age)
+      if (!Number.isInteger(age) || age < 18) return setError('You must be 18 or older to use ReelMates.')
+      if (!termsAccepted) return setError('Please accept the Terms and Privacy Policy.')
+      if (form.password.length < 8) return setError('Password must be at least 8 characters.')
+    }
     setError('')
     setNotice('')
     setLoading(true)
@@ -103,10 +111,27 @@ export default function LoginScreen() {
                 ))}
               </View>
               <TextInput style={styles.input} placeholder="Friend referral code (optional)" placeholderTextColor={colors.muted} autoCapitalize="characters" value={form.referralCode} onChangeText={(referralCode) => setForm({ ...form, referralCode })} />
-              <Pressable style={styles.termsRow} onPress={() => setTermsAccepted((value) => !value)}>
-                <View style={[styles.checkbox, termsAccepted && styles.checkboxOn]} />
-                <Text style={styles.termsText}>I am 18+, and I accept the Privacy Policy & Terms.</Text>
-              </Pressable>
+              <View style={styles.termsRow}>
+                <Pressable
+                  onPress={() => setTermsAccepted((value) => !value)}
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: termsAccepted }}
+                  hitSlop={8}
+                >
+                  <View style={[styles.checkbox, termsAccepted && styles.checkboxOn]} />
+                </Pressable>
+                <Text style={styles.termsText}>
+                  I am 18+ and accept the{' '}
+                  <Text style={styles.termsLink} onPress={() => Linking.openURL(String(Constants.expoConfig?.extra?.termsUrl))}>
+                    Terms
+                  </Text>
+                  {' '}(no tolerance for abusive content or users) and the{' '}
+                  <Text style={styles.termsLink} onPress={() => Linking.openURL(String(Constants.expoConfig?.extra?.privacyPolicyUrl))}>
+                    Privacy Policy
+                  </Text>
+                  .
+                </Text>
+              </View>
             </>
           )}
 
@@ -148,6 +173,7 @@ const styles = StyleSheet.create({
   checkbox: { width: 18, height: 18, borderRadius: 4, borderWidth: 1, borderColor: colors.border },
   checkboxOn: { backgroundColor: colors.pink, borderColor: colors.pink },
   termsText: { flex: 1, color: colors.muted, fontSize: 12, lineHeight: 16 },
+  termsLink: { color: colors.text, textDecorationLine: 'underline' },
   input: { borderWidth: 1, borderColor: colors.border, backgroundColor: 'rgba(255,255,255,0.03)', color: colors.text, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, marginBottom: 10 },
   multiline: { minHeight: 72, textAlignVertical: 'top' },
   error: { color: colors.error, marginBottom: 8 },

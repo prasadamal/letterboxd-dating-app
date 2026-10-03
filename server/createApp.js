@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url'
 import { env } from './config/env.js'
 import { logger } from './lib/logger.js'
 import { requestIdMiddleware } from './middleware/requestId.js'
-import { applySecurityMiddleware, authRateLimiter } from './middleware/security.js'
+import { applySecurityMiddleware } from './middleware/security.js'
 import { errorHandler, notFoundHandler } from './middleware/errors.js'
 import { supabase } from './supabaseClient.js'
 
@@ -33,6 +33,9 @@ export function createApp() {
   const distPath = path.join(__dirname, '..', 'dist')
   const isProduction = env.NODE_ENV === 'production'
 
+  // Behind a hosting proxy every request would otherwise share the proxy's IP and one rate-limit bucket.
+  app.set('trust proxy', env.TRUST_PROXY ?? (isProduction ? 1 : 0))
+
   app.use(requestIdMiddleware)
   app.use((req, res, next) => {
     req.log = logger.child({ requestId: req.requestId })
@@ -47,7 +50,9 @@ export function createApp() {
       credentials: true
     })
   )
-  app.use(express.json({ limit: '2mb' }))
+  // Avatar uploads arrive base64-encoded (~4/3 of the 2.5MB image cap); everything else stays small.
+  app.use(['/api/users/avatar', '/api/v1/users/avatar'], express.json({ limit: '4mb' }))
+  app.use(express.json({ limit: '200kb' }))
   app.use(express.urlencoded({ extended: true }))
 
   async function healthPayload() {
@@ -89,7 +94,7 @@ export function createApp() {
   app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openApiDocument, { customSiteTitle: 'ReelMates API' }))
 
   const mount = (prefix) => {
-    app.use(`${prefix}/auth`, authRateLimiter(), authRoutes)
+    app.use(`${prefix}/auth`, authRoutes)
     app.use(`${prefix}/movies`, moviesRoutes)
     app.use(`${prefix}/matches`, matchesRoutes)
     app.use(`${prefix}/users`, usersRoutes)

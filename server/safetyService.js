@@ -1,5 +1,7 @@
 import { supabase } from './supabaseClient.js'
 import { findUserById } from './db.js'
+import { AppError } from './middleware/errors.js'
+import { removeUserAvatars } from './services/storageService.js'
 
 export async function getBlockedUserIds(userId) {
   const { data, error } = await supabase
@@ -18,9 +20,9 @@ export async function getBlockedUserIds(userId) {
 }
 
 export async function blockUser(blockerId, blockedId, reason = '') {
-  if (blockerId === blockedId) throw new Error('Cannot block yourself')
+  if (blockerId === blockedId) throw new AppError('You cannot block yourself', 400, 'INVALID_TARGET')
   const peer = await findUserById(blockedId)
-  if (!peer) throw new Error('User not found')
+  if (!peer) throw new AppError('User not found', 404, 'NOT_FOUND')
 
   const { error } = await supabase.from('blocks').insert({
     blocker_id: blockerId,
@@ -33,9 +35,9 @@ export async function blockUser(blockerId, blockedId, reason = '') {
 }
 
 export async function reportUser(reporterId, reportedId, reason, details = '') {
-  if (reporterId === reportedId) throw new Error('Cannot report yourself')
+  if (reporterId === reportedId) throw new AppError('You cannot report yourself', 400, 'INVALID_TARGET')
   const peer = await findUserById(reportedId)
-  if (!peer) throw new Error('User not found')
+  if (!peer) throw new AppError('User not found', 404, 'NOT_FOUND')
 
   const { data, error } = await supabase
     .from('reports')
@@ -59,17 +61,73 @@ export async function reportUser(reporterId, reportedId, reason, details = '') {
   return data
 }
 
+async function deleteWhere(table, column, values) {
+  const { error } = await supabase.from(table).delete().in(column, values)
+  if (error) throw error
+}
+
+// Removes everything tied to the account. Every step is idempotent, so a failed request can simply be retried.
 export async function deleteUserAccount(userId) {
+  const { data: matches, error: matchError } = await supabase
+    .from('matches')
+    .select('id')
+    .or(`user_a.eq.${userId},user_b.eq.${userId}`)
+  if (matchError) throw matchError
+
+  const matchIds = (matches || []).map((row) => row.id)
+  if (matchIds.length) {
+    const { data: conversations, error: convError } = await supabase
+      .from('conversations')
+      .select('id')
+      .in('match_id', matchIds)
+    if (convError) throw convError
+
+    const conversationIds = (conversations || []).map((row) => row.id)
+    if (conversationIds.length) {
+      await deleteWhere('messages', 'conversation_id', conversationIds)
+      await deleteWhere('conversations', 'id', conversationIds)
+    }
+    await deleteWhere('matches', 'id', matchIds)
+  }
+
+  await deleteWhere('messages', 'sender_id', [userId])
+  await deleteWhere('user_swipes', 'swiper_id', [userId])
+  await deleteWhere('user_swipes', 'target_id', [userId])
+  for (const table of ['user_ratings', 'daily_batches', 'user_deck_stats', 'profile_photos', 'push_tokens', 'auth_tokens', 'refresh_tokens']) {
+    await deleteWhere(table, 'user_id', [userId])
+  }
+  await deleteWhere('blocks', 'blocker_id', [userId])
+  await deleteWhere('blocks', 'blocked_id', [userId])
+
+  const { error: referralError } = await supabase.from('users').update({ referred_by: null }).eq('referred_by', userId)
+  if (referralError) throw referralError
+
+  await removeUserAvatars(userId)
+
+  // Keep an anonymous tombstone so reports filed about this account stay reviewable.
   const now = new Date().toISOString()
   const { error } = await supabase
     .from('users')
     .update({
       deleted_at: now,
       email: `deleted+${userId}@reelmates.invalid`,
+      password_hash: 'deleted',
       display_name: 'Deleted user',
       bio: '',
+      hobbies: [],
       photo_url: null,
-      password_hash: 'deleted'
+      referral_code: null,
+      taste_vector: {},
+      discovery_prefs: {},
+      birth_date: null,
+      age: null,
+      city: '',
+      country: '',
+      gender: null,
+      language: null,
+      verification_notes: null,
+      matchmaking_enabled: false,
+      is_active: false
     })
     .eq('id', userId)
 

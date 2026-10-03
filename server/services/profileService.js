@@ -43,7 +43,8 @@ export async function assertMatchmakingReady(userId) {
 
 export async function saveProfilePhotoRecord(userId, url, isPrimary = true) {
   if (isPrimary) {
-    await supabase.from('profile_photos').update({ is_primary: false }).eq('user_id', userId)
+    // Previous avatar files are removed from storage on upload, so their rows would point at nothing.
+    await supabase.from('profile_photos').delete().eq('user_id', userId)
   }
   await supabase.from('profile_photos').insert({ user_id: userId, url, is_primary: isPrimary })
   await updateUserProfile(userId, { photo_url: url })

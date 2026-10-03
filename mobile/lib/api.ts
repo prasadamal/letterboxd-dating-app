@@ -7,7 +7,20 @@ const fallbackDev =
     ? 'http://localhost:4000/api'
     : `http://${Constants.expoConfig?.hostUri?.split(':').shift() || '10.0.2.2'}:4000/api`
 
-export const API_BASE = process.env.EXPO_PUBLIC_API_URL || fallbackDev
+// Release builds must be built with EXPO_PUBLIC_API_URL (set per profile in eas.json); the LAN fallback is dev-only.
+export const API_BASE = process.env.EXPO_PUBLIC_API_URL || (__DEV__ ? fallbackDev : '')
+export const API_CONFIGURED = Boolean(API_BASE) && !API_BASE.includes('YOUR_PRODUCTION_API_HOST')
+
+export class ApiError extends Error {
+  status: number
+  code?: string
+
+  constructor(message: string, status: number, code?: string) {
+    super(message)
+    this.status = status
+    this.code = code
+  }
+}
 
 let refreshInFlight: Promise<string | null> | null = null
 
@@ -18,14 +31,20 @@ async function refreshAccessToken(): Promise<string | null> {
     const refreshToken = await getRefreshToken()
     if (!refreshToken) return null
 
-    const res = await fetch(`${API_BASE}/auth/refresh`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refreshToken })
-    })
+    let res: Response
+    try {
+      res = await fetch(`${API_BASE}/auth/refresh`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken })
+      })
+    } catch {
+      return null
+    }
 
     if (!res.ok) {
-      await clearTokens()
+      // Only a rejected refresh token ends the session; a server hiccup should not sign the user out.
+      if (res.status === 400 || res.status === 401) await clearTokens()
       return null
     }
 
@@ -59,8 +78,16 @@ export async function apiFetch<T>(
       }
     })
 
-  let accessToken = token ?? (await getAccessToken())
-  let res = await request(accessToken)
+  if (!API_CONFIGURED) throw new ApiError('This build has no server configured. Please update the app.', 0, 'NO_API')
+
+  // Prefer the stored token: it is the freshest after a background refresh, while callers may hold an old one.
+  let accessToken = (await getAccessToken()) ?? token
+  let res: Response
+  try {
+    res = await request(accessToken)
+  } catch {
+    throw new ApiError('No connection. Check your internet and try again.', 0, 'NETWORK')
+  }
 
   if (res.status === 401 && !skipRefresh) {
     const nextToken = await refreshAccessToken()
@@ -72,7 +99,7 @@ export async function apiFetch<T>(
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({ message: 'Request failed' }))
-    throw new Error(error.message || 'Request failed')
+    throw new ApiError(error.message || 'Request failed', res.status, error.code)
   }
 
   return res.json()

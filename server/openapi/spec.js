@@ -43,11 +43,12 @@ export const openApiDocument = {
     '/users/verification/request': { post: { summary: 'Request manual age/location verification' } },
     '/notifications/register': { post: { summary: 'Register Expo push token' } },
     '/safety/block': { post: { summary: 'Block user' } },
-    '/safety/report': { post: { summary: 'Report user' } },
+    '/safety/report': { post: { summary: 'Report user (reason: spam|harassment|fake_profile|inappropriate|other; block?: boolean)' } },
     '/safety/account': { delete: { summary: 'Delete account' } },
     '/admin/moderation/queue': { get: { summary: 'Moderation queue (x-admin-key)' } },
     '/admin/moderation/{id}': { patch: { summary: 'Update moderation item' } },
     '/admin/users/{userId}/verification': { patch: { summary: 'Set verification status' } },
+    '/admin/users/{userId}/suspension': { patch: { summary: 'Suspend or restore an account ({ suspended, reason })' } },
     '/internal/daily-reminders': { post: { summary: 'Cron: daily game push (x-cron-secret)' } },
     '/internal/inactivity-cleanup': { post: { summary: 'Cron: pause inactive matchmaking (x-cron-secret)' } }
   }

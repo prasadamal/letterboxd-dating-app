@@ -5,6 +5,7 @@ import { useAuth } from '../../lib/auth'
 import { usePlatform } from '../../lib/platform'
 import { EmptyState } from '../../components/EmptyState'
 import { SwipeDatingCard } from '../../components/SwipeDatingCard'
+import { ReportSheet } from '../../components/ReportSheet'
 import { colors } from '../../lib/theme'
 import type { DatingProfile } from '../../lib/types'
 
@@ -15,6 +16,7 @@ export default function DatingScreen() {
   const [meta, setMeta] = useState<{ remainingInPool?: number; swipedCount?: number } | null>(null)
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState('')
+  const [reporting, setReporting] = useState(false)
 
   const load = useCallback(async () => {
     if (!token || !platform?.datingLaunched) return
@@ -37,7 +39,7 @@ export default function DatingScreen() {
   }, [token, platform?.datingLaunched])
 
   useEffect(() => {
-    load().catch(console.error)
+    load().catch(() => null)
   }, [load])
 
   async function swipe(action: 'like' | 'pass') {
@@ -103,6 +105,21 @@ export default function DatingScreen() {
       <Text style={styles.meta}>
         {meta?.remainingInPool ?? 0} left in pool · swipe card or use buttons
       </Text>
+      <Pressable onPress={() => setReporting(true)} accessibilityRole="button">
+        <Text style={styles.reportText}>Report or block {profile.name}</Text>
+      </Pressable>
+      <ReportSheet
+        visible={reporting}
+        userId={profile.id}
+        userName={profile.name}
+        onClose={() => setReporting(false)}
+        onReported={async (blocked) => {
+          setReporting(false)
+          if (blocked) await load().catch(() => null)
+          setMessage(blocked ? 'Thanks for reporting. You won’t see them again.' : 'Thanks — our team will review this profile.')
+        }}
+      />
+      {!!message && <Text style={styles.meta}>{message}</Text>}
       <View style={styles.actions}>
         <Pressable style={styles.passBtn} onPress={() => swipe('pass')}>
           <Text style={styles.passText}>Pass</Text>
@@ -139,5 +156,6 @@ const styles = StyleSheet.create({
   likeBtn: { flex: 1, borderRadius: 999, backgroundColor: colors.pink, paddingVertical: 14, alignItems: 'center' },
   likeText: { color: '#fff', fontWeight: '800' },
   primaryBtn: { alignSelf: 'center', backgroundColor: colors.purple, borderRadius: 999, paddingHorizontal: 18, paddingVertical: 10 },
-  primaryText: { color: '#fff', fontWeight: '700' }
+  primaryText: { color: '#fff', fontWeight: '700' },
+  reportText: { color: colors.muted, textAlign: 'center', fontSize: 12, textDecorationLine: 'underline' }
 })

@@ -47,3 +47,11 @@ export async function revokeRefreshToken(rawToken) {
   const tokenHash = hash(`${rawToken}:${secret}`)
   await supabase.from('refresh_tokens').update({ revoked_at: new Date().toISOString() }).eq('token_hash', tokenHash)
 }
+
+export async function revokeAllRefreshTokens(userId) {
+  await supabase
+    .from('refresh_tokens')
+    .update({ revoked_at: new Date().toISOString() })
+    .eq('user_id', userId)
+    .is('revoked_at', null)
+}

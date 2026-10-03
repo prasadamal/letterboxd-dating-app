@@ -1,7 +1,8 @@
-import { useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, FlatList, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
-import { apiFetch } from '../../lib/api'
+import { ApiError, apiFetch } from '../../lib/api'
+import { ReportSheet } from '../../components/ReportSheet'
 import { useAuth } from '../../lib/auth'
 import { subscribeChatChannel } from '../../lib/realtime'
 import { colors } from '../../lib/theme'
@@ -16,7 +17,10 @@ export default function ChatScreen() {
   const [waitingOnPeer, setWaitingOnPeer] = useState(false)
   const [chatUnlocked, setChatUnlocked] = useState(true)
   const [realtimeChannel, setRealtimeChannel] = useState<string | null>(null)
+  const [closed, setClosed] = useState(false)
+  const [reporting, setReporting] = useState(false)
   const lastSyncRef = useRef<string | null>(null)
+  const router = useRouter()
 
   const mergeMessage = useCallback((msg: ChatMessage) => {
     setMessages((current) => {
@@ -30,15 +34,31 @@ export default function ChatScreen() {
 
   const loadMessages = useCallback(
     async (since?: string | null) => {
-      if (!token || !userId) return
+      if (!token || !userId || closed) return
       const query = since ? `?since=${encodeURIComponent(since)}` : ''
-      const data = await apiFetch<{
+      let data: {
+        messages: ChatMessage[]
+        introPending?: boolean
+        waitingOnPeer?: boolean
+        chatUnlocked?: boolean
+        realtimeChannel?: string
+      }
+      try {
+        data = await apiFetch<{
         messages: ChatMessage[]
         introPending?: boolean
         waitingOnPeer?: boolean
         chatUnlocked?: boolean
         realtimeChannel?: string
       }>(`/messages/${userId}${query}`, {}, token)
+      } catch (err) {
+        // 404: the match ended (blocked, unmatched or account deleted). Stop polling.
+        if (err instanceof ApiError && err.status === 404) {
+          setClosed(true)
+          return
+        }
+        throw err
+      }
 
       if (data.realtimeChannel) setRealtimeChannel(data.realtimeChannel)
 
@@ -53,19 +73,22 @@ export default function ChatScreen() {
       setIntroPending(Boolean(data.introPending))
       setWaitingOnPeer(Boolean(data.waitingOnPeer))
       setChatUnlocked(Boolean(data.chatUnlocked))
-      await apiFetch(`/messages/${userId}/read`, { method: 'POST' }, token).catch(() => null)
+      // Only mark read when something new arrived from the other person, not on every poll.
+      const incoming = (data.messages || []).some((m) => m.from_user_id !== user?.id && !m.read_at)
+      if (incoming) await apiFetch(`/messages/${userId}/read`, { method: 'POST' }, token).catch(() => null)
     },
-    [token, userId, mergeMessage]
+    [token, userId, mergeMessage, closed, user?.id]
   )
 
   useEffect(() => {
-    loadMessages().catch(console.error)
+    if (closed) return
+    loadMessages().catch(() => null)
     const intervalMs = realtimeChannel ? 20000 : 5000
     const timer = setInterval(() => {
-      loadMessages(lastSyncRef.current).catch(console.error)
+      loadMessages(lastSyncRef.current).catch(() => null)
     }, intervalMs)
     return () => clearInterval(timer)
-  }, [loadMessages, realtimeChannel])
+  }, [loadMessages, realtimeChannel, closed])
 
   useEffect(() => {
     if (!realtimeChannel) return
@@ -75,7 +98,7 @@ export default function ChatScreen() {
         if (msg?.id) mergeMessage(msg)
       },
       onRead: () => {
-        loadMessages(lastSyncRef.current).catch(console.error)
+        loadMessages(lastSyncRef.current).catch(() => null)
       }
     })
   }, [realtimeChannel, mergeMessage, loadMessages])
@@ -96,13 +119,22 @@ export default function ChatScreen() {
     }
   }
 
-  async function reportUser() {
-    await apiFetch(
-      '/safety/report',
-      { method: 'POST', body: JSON.stringify({ userId, reason: 'inappropriate', details: 'Reported from chat' }) },
-      token
-    )
-    Alert.alert('Report submitted', 'Our team will review this profile.')
+  function blockUser() {
+    Alert.alert('Block this person?', 'You will no longer see or message each other. They are not notified.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Block',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await apiFetch('/safety/block', { method: 'POST', body: JSON.stringify({ userId }) }, token)
+            router.back()
+          } catch (err) {
+            Alert.alert('Could not block', err instanceof Error ? err.message : 'Try again')
+          }
+        }
+      }
+    ])
   }
 
   return (
@@ -128,15 +160,43 @@ export default function ChatScreen() {
           )
         }}
       />
-      <View style={styles.composer}>
-        <TextInput style={styles.input} value={text} onChangeText={setText} placeholder="Say hello…" placeholderTextColor={colors.muted} />
-        <Pressable style={styles.sendBtn} onPress={send}>
-          <Text style={styles.sendText}>Send</Text>
-        </Pressable>
-      </View>
-      <Pressable style={styles.reportBtn} onPress={reportUser}>
-        <Text style={styles.reportText}>Report user</Text>
-      </Pressable>
+      {closed ? (
+        <Text style={[styles.banner, { paddingBottom: 12 }]}>This conversation is no longer available.</Text>
+      ) : (
+        <View style={styles.composer}>
+          <TextInput
+            style={styles.input}
+            value={text}
+            onChangeText={setText}
+            placeholder="Say hello…"
+            placeholderTextColor={colors.muted}
+            maxLength={2000}
+          />
+          <Pressable style={styles.sendBtn} onPress={send} accessibilityRole="button">
+            <Text style={styles.sendText}>Send</Text>
+          </Pressable>
+        </View>
+      )}
+      {!closed && (
+        <View style={styles.safetyRow}>
+          <Pressable style={styles.reportBtn} onPress={() => setReporting(true)}>
+            <Text style={styles.reportText}>Report</Text>
+          </Pressable>
+          <Pressable style={styles.reportBtn} onPress={blockUser}>
+            <Text style={styles.reportText}>Block</Text>
+          </Pressable>
+        </View>
+      )}
+      <ReportSheet
+        visible={reporting}
+        userId={String(userId)}
+        onClose={() => setReporting(false)}
+        onReported={(blocked) => {
+          setReporting(false)
+          if (blocked) router.back()
+          else Alert.alert('Report submitted', 'Our team will review this conversation within 24 hours.')
+        }}
+      />
     </KeyboardAvoidingView>
   )
 }
@@ -153,6 +213,7 @@ const styles = StyleSheet.create({
   input: { flex: 1, borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: 12, paddingVertical: 10, color: colors.text, backgroundColor: colors.card },
   sendBtn: { backgroundColor: colors.pink, borderRadius: 12, paddingHorizontal: 16, justifyContent: 'center' },
   sendText: { color: '#fff', fontWeight: '700' },
+  safetyRow: { flexDirection: 'row', justifyContent: 'center', gap: 24 },
   reportBtn: { paddingBottom: 12, alignItems: 'center' },
   reportText: { color: colors.muted, fontSize: 12, textDecorationLine: 'underline' }
 })

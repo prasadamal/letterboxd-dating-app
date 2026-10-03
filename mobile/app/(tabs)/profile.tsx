@@ -54,6 +54,9 @@ export default function ProfileScreen() {
         token
       )
       await refreshUser()
+      Alert.alert('Saved', 'Your profile is up to date.')
+    } catch (err) {
+      Alert.alert('Could not save', err instanceof Error ? err.message : 'Try again')
     } finally {
       setSaving(false)
     }
@@ -72,12 +75,14 @@ export default function ProfileScreen() {
 
   async function pickPhoto() {
     if (!token) return
-    const perm = await ImagePicker.requestMediaLibraryPermissionsAsync()
-    if (!perm.granted) {
-      Alert.alert('Permission needed', 'Allow photo access to add a profile picture.')
-      return
-    }
-    const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.7, base64: true })
+    // The system photo picker needs no library permission; a square crop keeps uploads well under the 2.5MB cap.
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.5,
+      base64: true
+    })
     const asset = result.assets?.[0]
     if (result.canceled || !asset?.base64) return
     const contentType = asset.mimeType === 'image/png' ? 'image/png' : 'image/jpeg'
@@ -95,13 +100,18 @@ export default function ProfileScreen() {
   }
 
   async function deleteAccount() {
-    Alert.alert('Delete account', 'This permanently removes your profile and taste history.', [
+    Alert.alert('Delete account', 'This permanently deletes your profile, photos, ratings, matches and messages. It cannot be undone.', [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Delete',
         style: 'destructive',
         onPress: async () => {
-          await apiFetch('/safety/account', { method: 'DELETE' }, token)
+          try {
+            await apiFetch('/safety/account', { method: 'DELETE' }, token)
+          } catch (err) {
+            Alert.alert('Could not delete account', err instanceof Error ? err.message : 'Try again')
+            return
+          }
           await signOut()
           router.replace('/login')
         }
@@ -139,9 +149,13 @@ export default function ProfileScreen() {
 
   async function requestVerification() {
     if (!token) return
-    await apiFetch('/users/verification/request', { method: 'POST', body: JSON.stringify({ notes: 'Mobile verification request' }) }, token)
-    await refreshUser()
-    Alert.alert('Submitted', 'Our team will review your age and location details.')
+    try {
+      await apiFetch('/users/verification/request', { method: 'POST', body: JSON.stringify({ notes: 'Mobile verification request' }) }, token)
+      await refreshUser()
+      Alert.alert('Submitted', 'Our team will review your age and location details.')
+    } catch (err) {
+      Alert.alert('Could not submit', err instanceof Error ? err.message : 'Try again')
+    }
   }
 
   const verificationLabel =
@@ -155,7 +169,7 @@ export default function ProfileScreen() {
     <ScrollView style={styles.screen} contentContainerStyle={{ padding: 16, gap: 12 }}>
       <Text style={styles.eyebrow}>YOUR MOVIE PROFILE</Text>
       <Pressable onPress={pickPhoto}>
-        <Image source={{ uri: user.avatar_url }} style={styles.avatar} />
+        <Image source={{ uri: user.photo_url || user.avatar_url }} style={styles.avatar} accessibilityLabel="Profile photo" />
         <Text style={styles.photoLink}>{user.photo_url ? 'Change photo' : 'Add photo (required for dating)'}</Text>
       </Pressable>
       <Text style={styles.heading}>{user.name}</Text>
@@ -240,7 +254,13 @@ export default function ProfileScreen() {
       </Pressable>
 
       <Pressable onPress={() => Linking.openURL(Constants.expoConfig?.extra?.privacyPolicyUrl as string)}>
-        <Text style={styles.link}>Privacy Policy & Terms</Text>
+        <Text style={styles.link}>Privacy Policy</Text>
+      </Pressable>
+      <Pressable onPress={() => Linking.openURL(Constants.expoConfig?.extra?.termsUrl as string)}>
+        <Text style={styles.link}>Terms of Service</Text>
+      </Pressable>
+      <Pressable onPress={() => Linking.openURL(`mailto:${Constants.expoConfig?.extra?.supportEmail}`)}>
+        <Text style={styles.link}>Contact support</Text>
       </Pressable>
     </ScrollView>
   )
