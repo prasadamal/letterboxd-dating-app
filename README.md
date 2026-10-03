@@ -154,10 +154,27 @@ npm run db:seed:demo
 
 - `supabase/migrations/20261002120000_reelmates_dating_launch_v1.sql`
 - `supabase/migrations/20261002200000_production_hardening_v1.sql` (+ remote `production_hardening_v1`)
+- `supabase/migrations/20261002210000_production_phase2_v1.sql`
+- `supabase/migrations/20261002220000_production_phase3_v1.sql`
+- `supabase/migrations/20261003000000_production_complete_v1.sql`
+- `supabase/migrations/20261003210000_enable_rls_remaining_tables.sql`
+
+RLS is enabled on every `public` table with no policies, so client keys get no table access. The API must use `SUPABASE_SERVICE_ROLE_KEY`.
 
 ---
 
+## Shipped since v1.0
+
+- Supabase Realtime chat broadcast (`chat:{conversationId}`), with polling as a fallback
+- OpenAPI spec and Swagger UI at `/api/v1/docs`
+- Manual age/location verification (user request + admin review)
+- Inactivity cleanup job (`POST /api/v1/internal/inactivity-cleanup`)
+- Integration tests (`npm run test:integration`) and a Maestro smoke flow (`mobile/.maestro/smoke.yaml`)
+
+See `CHANGELOG.md` and `docs/production/BACKLOG.md`.
+
 ## What's intentionally out of scope (next passes)
 
-- ID verification vendor, payments, Supabase Realtime channels (polling used today)
-- Full OpenAPI/Swagger UI, Detox/Maestro E2E, pg_cron inactivity cleanup
+- Third-party ID verification vendor (Persona/Onfido), payments
+- Postgres Realtime RLS policies for direct client reads (broadcast is used today)
+- Detox suite in CI
