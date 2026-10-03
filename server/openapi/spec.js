@@ -2,7 +2,7 @@ export const openApiDocument = {
   openapi: '3.0.3',
   info: {
     title: 'ReelMates API',
-    version: '1.0.0',
+    version: '1.1.0',
     description: 'Movie-taste dating platform API (v1). Authenticate with Bearer JWT from /auth/login or /auth/signup.'
   },
   servers: [{ url: '/api/v1' }],
@@ -16,6 +16,7 @@ export const openApiDocument = {
     '/health': { get: { summary: 'Health + DB probe', security: [] } },
     '/health/db': { get: { summary: 'Database health', security: [] } },
     '/health/storage': { get: { summary: 'Storage health', security: [] } },
+    '/platform/version': { get: { summary: 'API + mobile version policy', security: [] } },
     '/platform/status': { get: { summary: 'Launch counters', security: [] } },
     '/auth/signup': { post: { summary: 'Register', security: [] } },
     '/auth/login': { post: { summary: 'Login', security: [] } },

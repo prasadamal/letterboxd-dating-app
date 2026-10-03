@@ -43,7 +43,7 @@ export default function LoginScreen() {
               age: Number(form.age),
               termsAccepted
             })
-      await setSession(data.token, data.user, data.platform)
+      await setSession(data.token, data.user, data.platform, data.refreshToken)
       router.replace('/(tabs)/home')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
