@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View, Linking } from 'react-native'
+import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View, Linking } from 'react-native'
 import Constants from 'expo-constants'
+import * as ImagePicker from 'expo-image-picker'
 import { useRouter } from 'expo-router'
 import { apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
@@ -12,15 +13,18 @@ export default function ProfileScreen() {
   const [name, setName] = useState(user?.name || '')
   const [country, setCountry] = useState(user?.country || user?.city || '')
   const [bio, setBio] = useState(user?.bio || '')
-  const [referralCode, setReferralCode] = useState('')
+  const [ownReferral, setOwnReferral] = useState('')
   const [referralShare, setReferralShare] = useState('')
+  const [friendCode, setFriendCode] = useState('')
   const [saving, setSaving] = useState(false)
+  const [minAge, setMinAge] = useState(String(user?.discovery_prefs?.minAge || 18))
+  const [maxAge, setMaxAge] = useState(String(user?.discovery_prefs?.maxAge || 99))
 
   useEffect(() => {
     if (!token) return
     apiFetch<{ code: string; shareMessage: string }>('/dating/referral', {}, token)
       .then((data) => {
-        setReferralCode(data.code)
+        setOwnReferral(data.code)
         setReferralShare(data.shareMessage)
       })
       .catch(() => null)
@@ -34,7 +38,19 @@ export default function ProfileScreen() {
     try {
       await apiFetch(
         '/users/profile',
-        { method: 'PUT', body: JSON.stringify({ name, country, bio }) },
+        {
+          method: 'PUT',
+          body: JSON.stringify({
+            name,
+            country,
+            bio,
+            discoveryPrefs: {
+              minAge: Number(minAge) || 18,
+              maxAge: Number(maxAge) || 99,
+              countries: user?.discovery_prefs?.countries || []
+            }
+          })
+        },
         token
       )
       await refreshUser()
@@ -44,9 +60,38 @@ export default function ProfileScreen() {
   }
 
   async function applyReferral() {
-    if (!token || !referralCode.trim()) return
-    await apiFetch('/dating/referral/apply', { method: 'POST', body: JSON.stringify({ code: referralCode }) }, token)
-    Alert.alert('Referral applied', 'Thanks for joining through a friend.')
+    if (!token || !friendCode.trim()) return
+    try {
+      await apiFetch('/dating/referral/apply', { method: 'POST', body: JSON.stringify({ code: friendCode.trim() }) }, token)
+      setFriendCode('')
+      Alert.alert('Referral applied', 'Thanks for joining through a friend.')
+    } catch (err) {
+      Alert.alert('Could not apply code', err instanceof Error ? err.message : 'Try again')
+    }
+  }
+
+  async function pickPhoto() {
+    if (!token) return
+    const perm = await ImagePicker.requestMediaLibraryPermissionsAsync()
+    if (!perm.granted) {
+      Alert.alert('Permission needed', 'Allow photo access to add a profile picture.')
+      return
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.7, base64: true })
+    const asset = result.assets?.[0]
+    if (result.canceled || !asset?.base64) return
+    const contentType = asset.mimeType === 'image/png' ? 'image/png' : 'image/jpeg'
+    try {
+      await apiFetch(
+        '/users/avatar',
+        { method: 'POST', body: JSON.stringify({ imageBase64: asset.base64, contentType }) },
+        token
+      )
+      await refreshUser()
+      Alert.alert('Photo saved', 'Your profile can now enter the dating deck once launch is open.')
+    } catch (err) {
+      Alert.alert('Upload failed', err instanceof Error ? err.message : 'Try a smaller photo')
+    }
   }
 
   async function deleteAccount() {
@@ -69,15 +114,94 @@ export default function ProfileScreen() {
     router.replace('/login')
   }
 
+  async function requestEmailVerify() {
+    if (!token) return
+    try {
+      const data = await apiFetch<{ alreadyVerified?: boolean; devVerifyUrl?: string }>(
+        '/auth/verify-email/request',
+        { method: 'POST' },
+        token
+      )
+      if (data.alreadyVerified) {
+        Alert.alert('Already verified', 'This email is already confirmed.')
+        return
+      }
+      Alert.alert(
+        'Check your email',
+        data.devVerifyUrl
+          ? `Mail is not configured in this environment. Open this link:\n${data.devVerifyUrl}`
+          : 'We sent a verification link.'
+      )
+    } catch (err) {
+      Alert.alert('Could not send email', err instanceof Error ? err.message : 'Try again')
+    }
+  }
+
+  async function requestVerification() {
+    if (!token) return
+    await apiFetch('/users/verification/request', { method: 'POST', body: JSON.stringify({ notes: 'Mobile verification request' }) }, token)
+    await refreshUser()
+    Alert.alert('Submitted', 'Our team will review your age and location details.')
+  }
+
+  const verificationLabel =
+    user.verification_status === 'verified'
+      ? 'Verified profile'
+      : user.verification_status === 'pending'
+        ? 'Verification pending'
+        : 'Not verified'
+
   return (
     <ScrollView style={styles.screen} contentContainerStyle={{ padding: 16, gap: 12 }}>
       <Text style={styles.eyebrow}>YOUR MOVIE PROFILE</Text>
+      <Pressable onPress={pickPhoto}>
+        <Image source={{ uri: user.avatar_url }} style={styles.avatar} />
+        <Text style={styles.photoLink}>{user.photo_url ? 'Change photo' : 'Add photo (required for dating)'}</Text>
+      </Pressable>
       <Text style={styles.heading}>{user.name}</Text>
-      <Text style={styles.meta}>{user.gender} · {user.country || user.city} · {user.age}</Text>
+      <Text style={styles.meta}>Profile {user.profile_completion ?? 0}% complete</Text>
+      <Text style={styles.meta}>
+        {user.gender} · {user.country || user.city} · {user.age} · {verificationLabel}
+      </Text>
+
+      {!user.email_verified && (
+        <Pressable style={styles.secondaryBtn} onPress={requestEmailVerify}>
+          <Text style={styles.secondaryText}>Verify email</Text>
+        </Pressable>
+      )}
+
+      {user.verification_status !== 'verified' && user.verification_status !== 'pending' && (
+        <Pressable style={styles.secondaryBtn} onPress={requestVerification}>
+          <Text style={styles.secondaryText}>Request age & location verification</Text>
+        </Pressable>
+      )}
 
       <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Name" placeholderTextColor={colors.muted} />
       <TextInput style={styles.input} value={country} onChangeText={setCountry} placeholder="Country" placeholderTextColor={colors.muted} />
       <TextInput style={[styles.input, styles.multiline]} value={bio} onChangeText={setBio} placeholder="One line about you & movies" placeholderTextColor={colors.muted} multiline />
+
+      <View style={styles.block}>
+        <Text style={styles.blockTitle}>Discovery preferences</Text>
+        <Text style={styles.listItem}>Age range for dating deck</Text>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
+          <TextInput
+            style={[styles.input, { flex: 1 }]}
+            value={minAge}
+            onChangeText={setMinAge}
+            keyboardType="number-pad"
+            placeholder="Min age"
+            placeholderTextColor={colors.muted}
+          />
+          <TextInput
+            style={[styles.input, { flex: 1 }]}
+            value={maxAge}
+            onChangeText={setMaxAge}
+            keyboardType="number-pad"
+            placeholder="Max age"
+            placeholderTextColor={colors.muted}
+          />
+        </View>
+      </View>
 
       <Pressable style={styles.primaryBtn} onPress={save} disabled={saving}>
         <Text style={styles.primaryText}>{saving ? 'Saving…' : 'Save profile'}</Text>
@@ -85,8 +209,9 @@ export default function ProfileScreen() {
 
       <View style={styles.block}>
         <Text style={styles.blockTitle}>Refer friends</Text>
-        <Text style={styles.listItem}>{referralShare || 'Your referral code loads here.'}</Text>
-        <TextInput style={styles.input} value={referralCode} onChangeText={setReferralCode} placeholder="Enter a friend's code" placeholderTextColor={colors.muted} />
+        <Text style={styles.listItem}>{ownReferral ? `Your code: ${ownReferral}` : 'Your referral code loads here.'}</Text>
+        <Text style={styles.listItem}>{referralShare}</Text>
+        <TextInput style={styles.input} value={friendCode} onChangeText={setFriendCode} placeholder="Enter a friend's code" placeholderTextColor={colors.muted} autoCapitalize="characters" />
         <Pressable style={styles.secondaryBtn} onPress={applyReferral}>
           <Text style={styles.secondaryText}>Apply referral code</Text>
         </Pressable>
@@ -123,6 +248,8 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
+  avatar: { width: 96, height: 96, borderRadius: 48, backgroundColor: colors.card, marginTop: 8 },
+  photoLink: { color: colors.peach, marginTop: 8, marginBottom: 4 },
   eyebrow: { color: colors.peach, fontSize: 11, letterSpacing: 1.1 },
   heading: { color: colors.text, fontSize: 26, fontWeight: '700' },
   meta: { color: colors.muted, marginBottom: 8 },

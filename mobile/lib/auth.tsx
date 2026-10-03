@@ -1,16 +1,20 @@
-import * as SecureStore from 'expo-secure-store'
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { apiFetch } from './api'
+import { registerDevicePushToken } from './push'
+import { clearTokens, getAccessToken, getRefreshToken, saveTokens } from './session'
 import type { PlatformStatus, User } from './types'
-
-const TOKEN_KEY = 'reelmates_token'
 
 type AuthContextValue = {
   user: User | null
   token: string | null
   platform: PlatformStatus | null
   ready: boolean
-  setSession: (token: string, user: User, platform?: PlatformStatus | null) => Promise<void>
+  setSession: (
+    token: string,
+    user: User,
+    platform?: PlatformStatus | null,
+    refreshToken?: string | null
+  ) => Promise<void>
   refreshUser: () => Promise<void>
   signOut: () => Promise<void>
 }
@@ -26,14 +30,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     ;(async () => {
       try {
-        const stored = await SecureStore.getItemAsync(TOKEN_KEY)
+        const stored = await getAccessToken()
         if (!stored) return
         const data = await apiFetch<{ user: User; platform: PlatformStatus }>('/auth/me', {}, stored)
         setToken(stored)
         setUser(data.user)
         setPlatform(data.platform)
+        registerDevicePushToken(stored).catch(() => null)
       } catch {
-        await SecureStore.deleteItemAsync(TOKEN_KEY)
+        await clearTokens()
       } finally {
         setReady(true)
       }
@@ -46,11 +51,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       token,
       platform,
       ready,
-      async setSession(nextToken, nextUser, nextPlatform = null) {
-        await SecureStore.setItemAsync(TOKEN_KEY, nextToken)
+      async setSession(nextToken, nextUser, nextPlatform = null, refreshToken = null) {
+        await saveTokens(nextToken, refreshToken)
         setToken(nextToken)
         setUser(nextUser)
         if (nextPlatform) setPlatform(nextPlatform)
+        registerDevicePushToken(nextToken).catch(() => null)
       },
       async refreshUser() {
         if (!token) return
@@ -59,7 +65,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setPlatform(data.platform)
       },
       async signOut() {
-        await SecureStore.deleteItemAsync(TOKEN_KEY)
+        const refreshToken = await getRefreshToken()
+        if (refreshToken) {
+          try {
+            await apiFetch('/auth/logout', {
+              method: 'POST',
+              body: JSON.stringify({ refreshToken })
+            })
+          } catch {
+            // still clear local session
+          }
+        }
+        await clearTokens()
         setToken(null)
         setUser(null)
         setPlatform(null)
@@ -78,14 +95,14 @@ export function useAuth() {
 }
 
 export async function login(email: string, password: string) {
-  return apiFetch<{ token: string; user: User; platform: PlatformStatus }>('/auth/login', {
+  return apiFetch<{ token: string; refreshToken: string; user: User; platform: PlatformStatus }>('/auth/login', {
     method: 'POST',
     body: JSON.stringify({ email, password })
   })
 }
 
 export async function signup(payload: Record<string, unknown>) {
-  return apiFetch<{ token: string; user: User; platform: PlatformStatus }>('/auth/signup', {
+  return apiFetch<{ token: string; refreshToken: string; user: User; platform: PlatformStatus }>('/auth/signup', {
     method: 'POST',
     body: JSON.stringify(payload)
   })

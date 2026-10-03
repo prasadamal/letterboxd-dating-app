@@ -4,11 +4,13 @@ import { useRouter } from 'expo-router'
 import { apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
 import { usePlatform } from '../../lib/platform'
+import { TasteProfileCard } from '../../components/TasteProfileCard'
+import { EmptyState } from '../../components/EmptyState'
 import { colors } from '../../lib/theme'
 import type { Match } from '../../lib/types'
 
 export default function MatchesScreen() {
-  const { token, user } = useAuth()
+  const { token } = useAuth()
   const { platform } = usePlatform()
   const router = useRouter()
   const [matches, setMatches] = useState<Match[]>([])
@@ -40,15 +42,10 @@ export default function MatchesScreen() {
             <Text style={styles.heading}>You both liked each other</Text>
           </>
         }
-        ListEmptyComponent={<Text style={styles.empty}>Like profiles in Dating to create matches.</Text>}
+        ListEmptyComponent={<EmptyState title="No matches yet" body="Like profiles in Dating when someone likes you back, they appear here." emoji="💞" />}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Text style={styles.name}>
-              {item.name}, {item.age}
-            </Text>
-            <Text style={styles.sub}>{item.country || item.city} · {Math.round(item.score)}% match</Text>
-            {!!item.likedLine && <Text style={styles.good}>{item.likedLine}</Text>}
-            {!!item.dislikedLine && <Text style={styles.bad}>{item.dislikedLine}</Text>}
+            <TasteProfileCard profile={item} compact />
             {item.introPending && <Text style={styles.intro}>Send one hello each to unlock full chat.</Text>}
             <Pressable style={styles.primaryBtn} onPress={() => router.push(`/chat/${item.id}`)}>
               <Text style={styles.primaryText}>Message</Text>
@@ -56,7 +53,13 @@ export default function MatchesScreen() {
             <Pressable
               style={styles.ghostBtn}
               onPress={async () => {
-                await apiFetch('/safety/block', { method: 'POST', body: JSON.stringify({ userId: item.id }) }, token)
+                try {
+                  await apiFetch('/safety/block', { method: 'POST', body: JSON.stringify({ userId: item.id }) }, token)
+                  setMatches((current) => current.filter((match) => match.id !== item.id))
+                } catch (err) {
+                  setMatches((current) => current)
+                  console.error(err)
+                }
               }}
             >
               <Text style={styles.ghostText}>Block</Text>

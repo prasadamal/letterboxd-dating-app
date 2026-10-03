@@ -1,13 +1,19 @@
 import { z } from 'zod'
 
+function firstFieldMessage(fieldErrors) {
+  const first = Object.entries(fieldErrors || {}).find(([, messages]) => Array.isArray(messages) && messages.length)
+  return first ? `${first[0]}: ${first[1][0]}` : 'Validation failed'
+}
+
 export function validateBody(schema) {
   return (req, res, next) => {
     const parsed = schema.safeParse(req.body)
     if (!parsed.success) {
+      const fieldErrors = parsed.error.flatten().fieldErrors
       return res.status(400).json({
-        message: 'Validation failed',
+        message: firstFieldMessage(fieldErrors),
         code: 'VALIDATION_ERROR',
-        details: parsed.error.flatten().fieldErrors,
+        details: fieldErrors,
         requestId: req.requestId
       })
     }
@@ -38,6 +44,7 @@ export const signupSchema = z.object({
   name: z.string().min(2).max(80),
   age: z.coerce.number().int().min(18).max(100),
   country: z.string().min(2).max(80),
+  city: z.string().max(80).optional(),
   bio: z.string().max(280).optional(),
   gender: z.enum(['male', 'female']),
   termsAccepted: z.literal(true),

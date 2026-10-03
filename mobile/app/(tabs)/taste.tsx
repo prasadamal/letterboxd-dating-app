@@ -12,6 +12,7 @@ export default function TasteScreen() {
   const { platform, refreshPlatform } = usePlatform()
   const [movies, setMovies] = useState<Movie[]>([])
   const [refreshing, setRefreshing] = useState(false)
+  const [error, setError] = useState('')
 
   const load = useCallback(async () => {
     if (!token) return
@@ -25,9 +26,15 @@ export default function TasteScreen() {
 
   async function rate(movie: Movie, reaction: 'love' | 'hate') {
     if (!token) return
-    await apiFetch(`/movies/${movie.id}/rate`, { method: 'POST', body: JSON.stringify({ reaction }) }, token)
-    await refreshUser()
-    setMovies((current) => current.filter((item) => item.id !== movie.id))
+    try {
+      await apiFetch(`/movies/${movie.id}/rate`, { method: 'POST', body: JSON.stringify({ reaction }) }, token)
+      await refreshUser()
+      setMovies((current) => current.filter((item) => item.id !== movie.id))
+      setError('')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not save that rating')
+      throw err
+    }
   }
 
   return (
@@ -53,6 +60,7 @@ export default function TasteScreen() {
           Dating unlocks at {platform?.maleTarget ?? 500} men + {platform?.femaleTarget ?? 500} women. Keep playing daily.
         </Text>
       )}
+      {!!error && <Text style={styles.error}>{error}</Text>}
       <DraggableDailyGame movies={movies} onRate={rate} />
     </ScrollView>
   )
@@ -62,5 +70,6 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   eyebrow: { color: colors.peach, fontSize: 11, letterSpacing: 1.1, marginBottom: 6 },
   heading: { color: colors.text, fontSize: 22, fontWeight: '700', marginBottom: 8 },
-  note: { color: colors.muted, marginBottom: 12, lineHeight: 20 }
+  note: { color: colors.muted, marginBottom: 12, lineHeight: 20 },
+  error: { color: colors.error, marginBottom: 8 }
 })

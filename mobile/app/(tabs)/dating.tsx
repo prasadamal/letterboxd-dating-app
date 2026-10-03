@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
-import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native'
 import { apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
 import { usePlatform } from '../../lib/platform'
+import { EmptyState } from '../../components/EmptyState'
+import { SwipeDatingCard } from '../../components/SwipeDatingCard'
 import { colors } from '../../lib/theme'
 import type { DatingProfile } from '../../lib/types'
 
@@ -10,6 +12,7 @@ export default function DatingScreen() {
   const { token } = useAuth()
   const { platform } = usePlatform()
   const [profile, setProfile] = useState<DatingProfile | null>(null)
+  const [meta, setMeta] = useState<{ remainingInPool?: number; swipedCount?: number } | null>(null)
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState('')
 
@@ -17,8 +20,13 @@ export default function DatingScreen() {
     if (!token || !platform?.datingLaunched) return
     setLoading(true)
     try {
-      const data = await apiFetch<{ profile: DatingProfile | null }>('/dating/deck', {}, token)
+      const data = await apiFetch<{ profile: DatingProfile | null; meta?: { remainingInPool?: number; swipedCount?: number } }>(
+        '/dating/deck',
+        {},
+        token
+      )
       setProfile(data.profile)
+      setMeta(data.meta || null)
       setMessage('')
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Could not load profiles')
@@ -34,15 +42,19 @@ export default function DatingScreen() {
 
   async function swipe(action: 'like' | 'pass') {
     if (!token || !profile) return
-    await apiFetch('/dating/swipe', { method: 'POST', body: JSON.stringify({ targetId: profile.id, action }) }, token)
-    await load()
+    try {
+      const result = await apiFetch<{ matched?: boolean }>('/dating/swipe', { method: 'POST', body: JSON.stringify({ targetId: profile.id, action }) }, token)
+      await load()
+      if (result.matched) setMessage('It’s a match. Open Matches to say hello.')
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : 'Could not save swipe')
+    }
   }
 
   if (!platform?.datingLaunched) {
     return (
       <View style={styles.screen}>
-        <Text style={styles.lockedTitle}>Dating opens after launch</Text>
-        <Text style={styles.lockedBody}>Check the Home tab for live male/female counters.</Text>
+        <EmptyState title="Dating opens after launch" body="Watch the Home tab for live male/female counters." emoji="🚀" />
       </View>
     )
   }
@@ -58,9 +70,28 @@ export default function DatingScreen() {
   if (!profile) {
     return (
       <View style={styles.screen}>
-        <Text style={styles.lockedTitle}>{message || 'No new profiles right now'}</Text>
+        <EmptyState
+          title={message || 'No new profiles'}
+          body={`You've seen ${meta?.swipedCount ?? 0} profiles. ${meta?.remainingInPool ?? 0} remain in your filtered pool.`}
+          emoji="🍿"
+        />
         <Pressable style={styles.primaryBtn} onPress={() => load()}>
-          <Text style={styles.primaryText}>Refresh</Text>
+          <Text style={styles.primaryText}>Refresh deck</Text>
+        </Pressable>
+        <Pressable
+          style={styles.primaryBtn}
+          onPress={async () => {
+            if (!token) return
+            try {
+              await apiFetch('/dating/undo', { method: 'POST' }, token)
+              await load()
+              setMessage('Last swipe undone.')
+            } catch (err) {
+              setMessage(err instanceof Error ? err.message : 'Could not undo')
+            }
+          }}
+        >
+          <Text style={styles.primaryText}>Undo last swipe</Text>
         </Pressable>
       </View>
     )
@@ -68,21 +99,28 @@ export default function DatingScreen() {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.card}>
-        <Image source={{ uri: profile.avatar_url }} style={styles.photo} />
-        <Text style={styles.name}>
-          {profile.name}, {profile.age}
-        </Text>
-        <Text style={styles.sub}>{profile.country || profile.city}</Text>
-        <Text style={styles.bio}>{profile.bio}</Text>
-        {!!profile.likedLine && <Text style={styles.tasteGood}>{profile.likedLine}</Text>}
-        {!!profile.dislikedLine && <Text style={styles.tasteBad}>{profile.dislikedLine}</Text>}
-        <Text style={styles.score}>{Math.round(profile.score)}% taste match</Text>
-      </View>
-
+      <SwipeDatingCard profile={profile} onSwipe={swipe} />
+      <Text style={styles.meta}>
+        {meta?.remainingInPool ?? 0} left in pool · swipe card or use buttons
+      </Text>
       <View style={styles.actions}>
         <Pressable style={styles.passBtn} onPress={() => swipe('pass')}>
           <Text style={styles.passText}>Pass</Text>
+        </Pressable>
+        <Pressable
+          style={styles.passBtn}
+          onPress={async () => {
+            if (!token) return
+            try {
+              await apiFetch('/dating/undo', { method: 'POST' }, token)
+              await load()
+              setMessage('Last swipe undone.')
+            } catch (err) {
+              setMessage(err instanceof Error ? err.message : 'Could not undo')
+            }
+          }}
+        >
+          <Text style={styles.passText}>Undo</Text>
         </Pressable>
         <Pressable style={styles.likeBtn} onPress={() => swipe('like')}>
           <Text style={styles.likeText}>Like</Text>
@@ -94,16 +132,7 @@ export default function DatingScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg, padding: 16, justifyContent: 'center', gap: 16 },
-  lockedTitle: { color: colors.text, fontSize: 20, fontWeight: '700', textAlign: 'center' },
-  lockedBody: { color: colors.muted, textAlign: 'center', lineHeight: 20 },
-  card: { backgroundColor: colors.card, borderRadius: 22, padding: 16, borderWidth: 1, borderColor: colors.border, gap: 8 },
-  photo: { width: '100%', height: 280, borderRadius: 18, backgroundColor: colors.border },
-  name: { color: colors.text, fontSize: 26, fontWeight: '800' },
-  sub: { color: colors.muted },
-  bio: { color: colors.soft, lineHeight: 21 },
-  tasteGood: { color: colors.green, lineHeight: 20 },
-  tasteBad: { color: colors.error, lineHeight: 20 },
-  score: { color: colors.peach, fontWeight: '700', marginTop: 4 },
+  meta: { color: colors.muted, textAlign: 'center', fontSize: 12 },
   actions: { flexDirection: 'row', gap: 12 },
   passBtn: { flex: 1, borderRadius: 999, borderWidth: 1, borderColor: colors.border, paddingVertical: 14, alignItems: 'center' },
   passText: { color: colors.text, fontWeight: '700' },

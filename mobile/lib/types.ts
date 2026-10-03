@@ -25,6 +25,9 @@ export type User = {
   profile_completion?: number
   matchmaking_enabled?: boolean
   email_verified?: boolean
+  discovery_prefs?: { minAge?: number; maxAge?: number; countries?: string[] }
+  verification_status?: 'unverified' | 'pending' | 'verified' | 'rejected'
+  verified_at?: string | null
   loved: string[]
   hated: string[]
 }
@@ -51,10 +54,19 @@ export type Match = DatingProfile & {
   introPending?: boolean
 }
 
+export type ConversationPreview = {
+  matchId: string | number
+  peer: { id: string; name: string; age?: number; avatar_url?: string | null }
+  compatibility: number
+  chatUnlocked: boolean
+  lastMessage: { text: string; at: string; fromSelf: boolean } | null
+}
+
 export type ChatMessage = {
   id: number | string
   from_user_id: string
   to_user_id: string
   text: string
   created_at: string
+  read_at?: string | null
 }

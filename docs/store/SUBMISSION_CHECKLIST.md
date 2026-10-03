@@ -81,4 +81,14 @@ cd mobile && cp .env.example .env
 npx expo start
 ```
 
+## Final QA
+
+Complete `docs/production/QA_CHECKLIST.md` before submitting builds.
+
+Generate Play feature graphic template:
+
+```bash
+node scripts/generate-store-assets.mjs
+```
+
 Use Expo Go on your phone; set `EXPO_PUBLIC_API_URL` to your LAN IP.

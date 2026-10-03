@@ -1,5 +1,8 @@
 import { supabase } from './supabaseClient.js'
+import { notifyUser } from './services/notificationService.js'
+import { broadcastChatEvent, chatChannelName } from './services/realtimeService.js'
 import { movieCatalog } from './movieCatalog.js'
+import { pendingDailyMovies } from './lib/dailyMovies.js'
 
 function formatMovieLabel(movie) {
   return `${movie.title} (${movie.year})`
@@ -120,6 +123,8 @@ export function mapUserRow(row, taste = { loved: [], hated: [] }) {
     profile_completion: row.profile_completion ?? 0,
     matchmaking_enabled: Boolean(row.matchmaking_enabled),
     discovery_prefs: row.discovery_prefs || {},
+    verification_status: row.verification_status || 'unverified',
+    verified_at: row.verified_at || null,
     loved: taste.loved,
     hated: taste.hated
   }
@@ -201,6 +206,17 @@ export async function updateUserProfile(userId, updates) {
   return data
 }
 
+async function ratedMovieIdsSince(userId, sinceIso) {
+  const { data, error } = await supabase
+    .from('user_ratings')
+    .select('movie_id')
+    .eq('user_id', userId)
+    .gte('rated_at', sinceIso)
+
+  if (error) throw error
+  return new Set((data || []).map((row) => row.movie_id))
+}
+
 export async function getMovieById(id) {
   const { data, error } = await supabase.from('movies').select('*').eq('id', Number(id)).maybeSingle()
   if (error) throw error
@@ -224,7 +240,9 @@ export async function getDailyMovies(userId) {
     const { data: movies, error } = await supabase.from('movies').select('*').in('id', batch.movie_ids)
     if (error) throw error
     const order = new Map(batch.movie_ids.map((id, index) => [id, index]))
-    return (movies || []).sort((a, b) => order.get(a.id) - order.get(b.id))
+    const sorted = (movies || []).sort((a, b) => order.get(a.id) - order.get(b.id))
+    const ratedToday = await ratedMovieIdsSince(userId, `${day}T00:00:00.000Z`)
+    return pendingDailyMovies(sorted, ratedToday)
   }
 
   const { data: ratedRows, error: ratedError } = await supabase
@@ -417,17 +435,43 @@ async function getOrCreateConversation(matchId) {
   return data
 }
 
-export async function getMessagesBetween(userId, peerId) {
+export async function getChatMeta(userId, peerId) {
+  const match = await getMutualMatchRow(userId, peerId)
+  if (!match) return null
+  const conversation = await getOrCreateConversation(match.id)
+  const [userA] = await orderedMatchUsers(userId, peerId)
+  const viewerIsA = userId === userA
+  const viewerIntroSent = Boolean(viewerIsA ? match.user_a_intro_sent : match.user_b_intro_sent)
+  const peerIntroSent = Boolean(viewerIsA ? match.user_b_intro_sent : match.user_a_intro_sent)
+  const chatUnlocked = Boolean(match.chat_unlocked)
+  return {
+    conversationId: conversation.id,
+    realtimeChannel: chatChannelName(conversation.id),
+    chatUnlocked,
+    introPending: !chatUnlocked && !viewerIntroSent,
+    waitingOnPeer: !chatUnlocked && viewerIntroSent && !peerIntroSent,
+    viewerIntroSent,
+    peerIntroSent
+  }
+}
+
+export async function getMessagesBetween(userId, peerId, options = {}) {
   const match = await getMutualMatchRow(userId, peerId)
   if (!match) return []
 
   const conversation = await getOrCreateConversation(match.id)
 
-  const { data, error } = await supabase
+  let query = supabase
     .from('messages')
-    .select('id, sender_id, body, created_at')
+    .select('id, sender_id, body, created_at, read_at')
     .eq('conversation_id', conversation.id)
     .order('created_at', { ascending: true })
+
+  if (options.since) {
+    query = query.gt('created_at', options.since)
+  }
+
+  const { data, error } = await query
 
   if (error) throw error
 
@@ -436,8 +480,32 @@ export async function getMessagesBetween(userId, peerId) {
     from_user_id: row.sender_id,
     to_user_id: row.sender_id === userId ? peerId : userId,
     text: row.body,
-    created_at: row.created_at
+    created_at: row.created_at,
+    read_at: row.read_at
   }))
+}
+
+export async function markMessagesRead(userId, peerId) {
+  const match = await getMutualMatchRow(userId, peerId)
+  if (!match) return 0
+
+  const conversation = await getOrCreateConversation(match.id)
+  const now = new Date().toISOString()
+
+  const { data, error } = await supabase
+    .from('messages')
+    .update({ read_at: now })
+    .eq('conversation_id', conversation.id)
+    .neq('sender_id', userId)
+    .is('read_at', null)
+    .select('id')
+
+  if (error) throw error
+  const count = (data || []).length
+  if (count) {
+    await broadcastChatEvent(conversation.id, 'read', { readerId: userId, readAt: now, count })
+  }
+  return count
 }
 
 export async function sendMessage(userId, peerId, text) {
@@ -455,7 +523,7 @@ export async function sendMessage(userId, peerId, text) {
   if (!match.chat_unlocked) {
     const introSent = isUserA ? match.user_a_intro_sent : match.user_b_intro_sent
     if (introSent) {
-      const error = new Error('Send one intro message first. Chat unlocks after you both say hello.')
+      const error = new Error('You already sent your hello. Chat unlocks after they reply once.')
       error.code = 'INTRO_LIMIT'
       throw error
     }
@@ -487,13 +555,23 @@ export async function sendMessage(userId, peerId, text) {
       .eq('id', match.id)
   }
 
-  return {
+  await notifyUser(peerId, 'new_message', {
+    fromUserId: userId,
+    preview: text.slice(0, 120)
+  })
+
+  const message = {
     id: data.id,
     from_user_id: data.sender_id,
     to_user_id: peerId,
     text: data.body,
-    created_at: data.created_at
+    created_at: data.created_at,
+    read_at: null
   }
+
+  await broadcastChatEvent(conversation.id, 'message', message)
+
+  return message
 }
 
 export async function getConversationsForUser(userId) {
@@ -506,11 +584,30 @@ export async function getConversationsForUser(userId) {
   if (error) throw error
   if (!matches?.length) return []
 
-  const peerIds = matches.map((m) => (m.user_a === userId ? m.user_b : m.user_a))
+  const { data: blockRows, error: blockError } = await supabase
+    .from('blocks')
+    .select('blocker_id, blocked_id')
+    .or(`blocker_id.eq.${userId},blocked_id.eq.${userId}`)
+
+  if (blockError) throw blockError
+
+  const blocked = new Set()
+  for (const row of blockRows || []) {
+    if (row.blocker_id === userId) blocked.add(row.blocked_id)
+    if (row.blocked_id === userId) blocked.add(row.blocker_id)
+  }
+
+  const peerIds = matches
+    .map((m) => (m.user_a === userId ? m.user_b : m.user_a))
+    .filter((peerId) => !blocked.has(peerId))
+
+  if (!peerIds.length) return []
+
   const { data: users, error: usersError } = await supabase
     .from('users')
-    .select('id, display_name, photo_url, age')
+    .select('id, display_name, photo_url, age, deleted_at')
     .in('id', peerIds)
+    .is('deleted_at', null)
 
   if (usersError) throw usersError
   const byId = new Map((users || []).map((u) => [u.id, u]))

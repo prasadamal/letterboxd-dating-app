@@ -11,13 +11,15 @@ import {
 } from 'react-native'
 import { useRouter } from 'expo-router'
 import { login, signup, useAuth } from '../lib/auth'
+import { apiFetch } from '../lib/api'
 import { colors } from '../lib/theme'
 
 export default function LoginScreen() {
   const router = useRouter()
   const { setSession } = useAuth()
-  const [mode, setMode] = useState<'login' | 'signup'>('signup')
+  const [mode, setMode] = useState<'login' | 'signup' | 'forgot'>('signup')
   const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
   const [loading, setLoading] = useState(false)
   const [termsAccepted, setTermsAccepted] = useState(false)
   const [form, setForm] = useState({
@@ -31,8 +33,27 @@ export default function LoginScreen() {
     referralCode: ''
   })
 
-  async function submit() {
+  async function forgot() {
     setError('')
+    setNotice('')
+    setLoading(true)
+    try {
+      const data = await apiFetch<{ message: string; devResetUrl?: string }>('/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify({ email: form.email })
+      })
+      setNotice(data.devResetUrl ? `${data.message}\n${data.devResetUrl}` : data.message)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not send reset link')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function submit() {
+    if (mode === 'forgot') return forgot()
+    setError('')
+    setNotice('')
     setLoading(true)
     try {
       const data =
@@ -43,7 +64,7 @@ export default function LoginScreen() {
               age: Number(form.age),
               termsAccepted
             })
-      await setSession(data.token, data.user, data.platform)
+      await setSession(data.token, data.user, data.platform, data.refreshToken)
       router.replace('/(tabs)/home')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
@@ -61,9 +82,9 @@ export default function LoginScreen() {
           <Text style={styles.sub}>Register with your movie line. Play 10 films daily. Dating unlocks at 500 men + 500 women.</Text>
 
           <View style={styles.toggleRow}>
-            {(['signup', 'login'] as const).map((item) => (
+            {(['signup', 'login', 'forgot'] as const).map((item) => (
               <Pressable key={item} style={[styles.toggle, mode === item && styles.toggleActive]} onPress={() => setMode(item)}>
-                <Text style={styles.toggleText}>{item === 'login' ? 'Login' : 'Register'}</Text>
+                <Text style={styles.toggleText}>{item === 'login' ? 'Login' : item === 'forgot' ? 'Reset' : 'Register'}</Text>
               </Pressable>
             ))}
           </View>
@@ -90,12 +111,17 @@ export default function LoginScreen() {
           )}
 
           <TextInput style={styles.input} placeholder="Email" placeholderTextColor={colors.muted} autoCapitalize="none" keyboardType="email-address" value={form.email} onChangeText={(email) => setForm({ ...form, email })} />
-          <TextInput style={styles.input} placeholder="Password" placeholderTextColor={colors.muted} secureTextEntry value={form.password} onChangeText={(password) => setForm({ ...form, password })} />
+          {mode !== 'forgot' && (
+            <TextInput style={styles.input} placeholder="Password" placeholderTextColor={colors.muted} secureTextEntry value={form.password} onChangeText={(password) => setForm({ ...form, password })} />
+          )}
 
           {!!error && <Text style={styles.error}>{error}</Text>}
+          {!!notice && <Text style={styles.sub}>{notice}</Text>}
 
           <Pressable style={[styles.primaryBtn, loading && { opacity: 0.7 }]} onPress={submit} disabled={loading}>
-            <Text style={styles.primaryBtnText}>{loading ? 'Please wait…' : mode === 'login' ? 'Login' : 'Create account'}</Text>
+            <Text style={styles.primaryBtnText}>
+              {loading ? 'Please wait…' : mode === 'login' ? 'Login' : mode === 'forgot' ? 'Send reset link' : 'Create account'}
+            </Text>
           </Pressable>
         </View>
       </ScrollView>

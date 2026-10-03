@@ -18,7 +18,13 @@ const envSchema = z.object({
   AUTH_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(40),
   RESEND_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().email().optional(),
-  APP_PUBLIC_URL: z.string().url().optional()
+  APP_PUBLIC_URL: z.string().url().optional(),
+  ADMIN_API_KEY: z.string().min(16).optional(),
+  CRON_SECRET: z.string().min(16).optional(),
+  SENTRY_DSN: z.string().url().optional(),
+  POSTHOG_API_KEY: z.string().optional(),
+  POSTHOG_HOST: z.string().url().optional(),
+  INACTIVE_USER_DAYS: z.coerce.number().int().min(30).max(730).default(180)
 })
 
 export function loadEnv() {
@@ -44,8 +50,10 @@ export function loadEnv() {
       console.error('Production requires JWT_REFRESH_SECRET (32+ chars).')
       process.exit(1)
     }
-  } else if (!env.SUPABASE_SERVICE_ROLE_KEY && !env.SUPABASE_ANON_KEY) {
-    console.error('Set SUPABASE_SERVICE_ROLE_KEY (preferred) or SUPABASE_ANON_KEY for local development.')
+  } else if (!env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error(
+      'SUPABASE_SERVICE_ROLE_KEY is required. Direct anon access is revoked by RLS; the API must use the service role.'
+    )
     process.exit(1)
   }
 

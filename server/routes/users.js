@@ -5,8 +5,9 @@ import { authMiddleware } from '../middleware/auth.js'
 import { asyncHandler, AppError } from '../middleware/errors.js'
 import { validateBody } from '../middleware/validate.js'
 import { uploadAvatar } from '../services/storageService.js'
-import { computeProfileCompletion, writeAuditLog } from '../services/auditService.js'
+import { writeAuditLog } from '../services/auditService.js'
 import { saveProfilePhotoRecord, syncProfileCompletion } from '../services/profileService.js'
+import { setUserVerification } from '../services/verificationService.js'
 
 const router = express.Router()
 
@@ -61,11 +62,10 @@ router.put(
     updates.last_active_at = new Date().toISOString()
 
     const row = await updateUserProfile(req.user.id, updates)
-    updates.profile_completion = computeProfileCompletion({ ...row, ...updates })
-    await updateUserProfile(req.user.id, { profile_completion: updates.profile_completion })
+    const state = await syncProfileCompletion(req.user.id)
 
     const user = await getUserProfile(req.user.id)
-    return res.json({ user: ensureUserProfile(user) })
+    return res.json({ user: ensureUserProfile(user), profile: state })
   })
 )
 
@@ -107,6 +107,20 @@ router.get(
       if (!user.email_verified) missing.push('email_verification')
     }
     return res.json({ completion, complete: completion >= 80, missing })
+  })
+)
+
+const verificationRequestSchema = z.object({
+  notes: z.string().max(500).optional()
+})
+
+router.post(
+  '/verification/request',
+  authMiddleware,
+  validateBody(verificationRequestSchema),
+  asyncHandler(async (req, res) => {
+    const user = await setUserVerification(req.user.id, 'pending', req.body.notes || 'User requested verification')
+    return res.json({ user })
   })
 )
 

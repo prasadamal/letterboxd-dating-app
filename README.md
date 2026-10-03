@@ -142,7 +142,7 @@ npm run db:seed:demo
 
 ## Production & stores
 
-- **Architecture / backlog / deploy:** `docs/production/ARCHITECTURE.md`, `BACKLOG.md`, `DEPLOYMENT.md`
+- **Architecture / backlog / deploy:** `docs/production/ARCHITECTURE.md`, `BACKLOG.md`, `DEPLOYMENT.md`, `STAGING.md`
 - Deploy API over **HTTPS**; set `EXPO_PUBLIC_API_URL` in EAS.
 - Run `npm test` in CI; use Docker for API hosting.
 - See `docs/store/SUBMISSION_CHECKLIST.md` for Play/App Store steps.
@@ -157,6 +157,7 @@ npm run db:seed:demo
 
 ---
 
-## What’s intentionally out of scope (next passes)
+## What's intentionally out of scope (next passes)
 
-- Push notifications delivery, ID verification vendor, payments, realtime websockets, full admin moderation UI.
+- ID verification vendor, payments, Supabase Realtime channels (polling used today)
+- Full OpenAPI/Swagger UI, Detox/Maestro E2E, pg_cron inactivity cleanup

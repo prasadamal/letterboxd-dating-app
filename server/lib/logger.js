@@ -5,7 +5,7 @@ export function createLogger(base = {}) {
     const payload = {
       level,
       message,
-      time: new Date().toISOISOString(),
+      time: new Date().toISOString(),
       ...base,
       ...meta
     }
