@@ -1,0 +1,4 @@
+appId: com.reelmates.app
+---
+- launchApp
+- assertVisible: "ReelMates"

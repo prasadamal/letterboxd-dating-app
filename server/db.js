@@ -1,5 +1,6 @@
 import { supabase } from './supabaseClient.js'
 import { notifyUser } from './services/notificationService.js'
+import { broadcastChatEvent, chatChannelName } from './services/realtimeService.js'
 import { movieCatalog } from './movieCatalog.js'
 
 function formatMovieLabel(movie) {
@@ -121,6 +122,8 @@ export function mapUserRow(row, taste = { loved: [], hated: [] }) {
     profile_completion: row.profile_completion ?? 0,
     matchmaking_enabled: Boolean(row.matchmaking_enabled),
     discovery_prefs: row.discovery_prefs || {},
+    verification_status: row.verification_status || 'unverified',
+    verified_at: row.verified_at || null,
     loved: taste.loved,
     hated: taste.hated
   }
@@ -418,6 +421,18 @@ async function getOrCreateConversation(matchId) {
   return data
 }
 
+export async function getChatMeta(userId, peerId) {
+  const match = await getMutualMatchRow(userId, peerId)
+  if (!match) return null
+  const conversation = await getOrCreateConversation(match.id)
+  return {
+    conversationId: conversation.id,
+    realtimeChannel: chatChannelName(conversation.id),
+    chatUnlocked: Boolean(match.chat_unlocked),
+    introPending: Boolean(!match.chat_unlocked)
+  }
+}
+
 export async function getMessagesBetween(userId, peerId, options = {}) {
   const match = await getMutualMatchRow(userId, peerId)
   if (!match) return []
@@ -464,7 +479,11 @@ export async function markMessagesRead(userId, peerId) {
     .select('id')
 
   if (error) throw error
-  return (data || []).length
+  const count = (data || []).length
+  if (count) {
+    await broadcastChatEvent(conversation.id, 'read', { readerId: userId, readAt: now, count })
+  }
+  return count
 }
 
 export async function sendMessage(userId, peerId, text) {
@@ -519,13 +538,18 @@ export async function sendMessage(userId, peerId, text) {
     preview: text.slice(0, 120)
   })
 
-  return {
+  const message = {
     id: data.id,
     from_user_id: data.sender_id,
     to_user_id: peerId,
     text: data.body,
-    created_at: data.created_at
+    created_at: data.created_at,
+    read_at: null
   }
+
+  await broadcastChatEvent(conversation.id, 'message', message)
+
+  return message
 }
 
 export async function getConversationsForUser(userId) {

@@ -2,6 +2,7 @@ import express from 'express'
 import { adminMiddleware } from '../middleware/admin.js'
 import { asyncHandler } from '../middleware/errors.js'
 import { listModerationQueue, updateModerationItem } from '../services/moderationService.js'
+import { setUserVerification } from '../services/verificationService.js'
 import { validateBody } from '../middleware/validate.js'
 import { z } from 'zod'
 
@@ -26,6 +27,20 @@ router.patch(
   asyncHandler(async (req, res) => {
     const item = await updateModerationItem(Number(req.params.id), req.body.status)
     return res.json({ item })
+  })
+)
+
+const verificationSchema = z.object({
+  status: z.enum(['unverified', 'pending', 'verified', 'rejected']),
+  notes: z.string().max(500).optional()
+})
+
+router.patch(
+  '/users/:userId/verification',
+  validateBody(verificationSchema),
+  asyncHandler(async (req, res) => {
+    const user = await setUserVerification(req.params.userId, req.body.status, req.body.notes)
+    return res.json({ user })
   })
 )
 

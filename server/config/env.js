@@ -23,7 +23,8 @@ const envSchema = z.object({
   CRON_SECRET: z.string().min(16).optional(),
   SENTRY_DSN: z.string().url().optional(),
   POSTHOG_API_KEY: z.string().optional(),
-  POSTHOG_HOST: z.string().url().optional()
+  POSTHOG_HOST: z.string().url().optional(),
+  INACTIVE_USER_DAYS: z.coerce.number().int().min(30).max(730).default(180)
 })
 
 export function loadEnv() {

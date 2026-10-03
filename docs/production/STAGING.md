@@ -48,7 +48,15 @@ Schedule a daily POST (GitHub Actions, Cloud Scheduler, etc.):
 ```bash
 curl -X POST https://STAGING/api/v1/internal/daily-reminders \
   -H "x-cron-secret: $CRON_SECRET"
+
+curl -X POST https://STAGING/api/v1/internal/inactivity-cleanup \
+  -H "x-cron-secret: $CRON_SECRET"
 ```
+
+## API docs
+
+- Swagger UI: `https://STAGING/api/v1/docs`
+- OpenAPI JSON: `https://STAGING/api/v1/openapi.json`
 
 Sends Expo push reminders to users who have not rated any film today.
 

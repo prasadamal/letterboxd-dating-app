@@ -67,6 +67,8 @@
     "extra": {
       "privacyPolicyUrl": "https://github.com/prasadamal/letterboxd-dating-app/blob/main/docs/legal/PRIVACY_POLICY.md",
       "supportEmail": "support@reelmates.app",
+      "supabaseUrl": "",
+      "supabaseAnonKey": "",
       "eas": {
         "projectId": "REPLACE_WITH_EAS_PROJECT_ID"
       },

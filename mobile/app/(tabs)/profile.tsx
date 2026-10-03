@@ -83,11 +83,33 @@ export default function ProfileScreen() {
     router.replace('/login')
   }
 
+  async function requestVerification() {
+    if (!token) return
+    await apiFetch('/users/verification/request', { method: 'POST', body: JSON.stringify({ notes: 'Mobile verification request' }) }, token)
+    await refreshUser()
+    Alert.alert('Submitted', 'Our team will review your age and location details.')
+  }
+
+  const verificationLabel =
+    user.verification_status === 'verified'
+      ? 'Verified profile'
+      : user.verification_status === 'pending'
+        ? 'Verification pending'
+        : 'Not verified'
+
   return (
     <ScrollView style={styles.screen} contentContainerStyle={{ padding: 16, gap: 12 }}>
       <Text style={styles.eyebrow}>YOUR MOVIE PROFILE</Text>
       <Text style={styles.heading}>{user.name}</Text>
-      <Text style={styles.meta}>{user.gender} · {user.country || user.city} · {user.age}</Text>
+      <Text style={styles.meta}>
+        {user.gender} · {user.country || user.city} · {user.age} · {verificationLabel}
+      </Text>
+
+      {user.verification_status !== 'verified' && user.verification_status !== 'pending' && (
+        <Pressable style={styles.secondaryBtn} onPress={requestVerification}>
+          <Text style={styles.secondaryText}>Request age & location verification</Text>
+        </Pressable>
+      )}
 
       <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Name" placeholderTextColor={colors.muted} />
       <TextInput style={styles.input} value={country} onChangeText={setCountry} placeholder="Country" placeholderTextColor={colors.muted} />

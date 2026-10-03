@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, FlatList, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
+import { subscribeChatChannel } from '../../lib/realtime'
 import { colors } from '../../lib/theme'
 import type { ChatMessage } from '../../lib/types'
 
@@ -13,45 +14,68 @@ export default function ChatScreen() {
   const [text, setText] = useState('')
   const [introPending, setIntroPending] = useState(false)
   const [chatUnlocked, setChatUnlocked] = useState(true)
+  const [realtimeChannel, setRealtimeChannel] = useState<string | null>(null)
   const lastSyncRef = useRef<string | null>(null)
+
+  const mergeMessage = useCallback((msg: ChatMessage) => {
+    setMessages((current) => {
+      if (current.some((m) => String(m.id) === String(msg.id))) {
+        return current.map((m) => (String(m.id) === String(msg.id) ? { ...m, ...msg } : m))
+      }
+      return [...current, msg].sort((a, b) => a.created_at.localeCompare(b.created_at))
+    })
+    lastSyncRef.current = msg.created_at
+  }, [])
 
   const loadMessages = useCallback(
     async (since?: string | null) => {
       if (!token || !userId) return
       const query = since ? `?since=${encodeURIComponent(since)}` : ''
-      const data = await apiFetch<{ messages: ChatMessage[]; introPending?: boolean; chatUnlocked?: boolean }>(
-        `/messages/${userId}${query}`,
-        {},
-        token
-      )
+      const data = await apiFetch<{
+        messages: ChatMessage[]
+        introPending?: boolean
+        chatUnlocked?: boolean
+        realtimeChannel?: string
+      }>(`/messages/${userId}${query}`, {}, token)
+
+      if (data.realtimeChannel) setRealtimeChannel(data.realtimeChannel)
+
       if (since && data.messages?.length) {
-        setMessages((current) => {
-          const known = new Set(current.map((m) => String(m.id)))
-          const merged = [...current]
-          for (const msg of data.messages) {
-            if (!known.has(String(msg.id))) merged.push(msg)
-          }
-          return merged.sort((a, b) => a.created_at.localeCompare(b.created_at))
-        })
+        for (const msg of data.messages) mergeMessage(msg)
       } else if (!since) {
         setMessages(data.messages || [])
+        const latest = data.messages?.[data.messages.length - 1]?.created_at
+        if (latest) lastSyncRef.current = latest
       }
+
       setIntroPending(Boolean(data.introPending))
       setChatUnlocked(Boolean(data.chatUnlocked))
-      const latest = data.messages?.[data.messages.length - 1]?.created_at
-      if (latest) lastSyncRef.current = latest
       await apiFetch(`/messages/${userId}/read`, { method: 'POST' }, token).catch(() => null)
     },
-    [token, userId]
+    [token, userId, mergeMessage]
   )
 
   useEffect(() => {
     loadMessages().catch(console.error)
+    const intervalMs = realtimeChannel ? 20000 : 5000
     const timer = setInterval(() => {
       loadMessages(lastSyncRef.current).catch(console.error)
-    }, 4000)
+    }, intervalMs)
     return () => clearInterval(timer)
-  }, [loadMessages])
+  }, [loadMessages, realtimeChannel])
+
+  useEffect(() => {
+    if (!realtimeChannel) return
+    return subscribeChatChannel(realtimeChannel, {
+      onMessage: (payload) => {
+        const msg = payload as ChatMessage
+        if (msg?.id) mergeMessage(msg)
+      },
+      onRead: () => {
+        loadMessages(lastSyncRef.current).catch(console.error)
+      }
+    })
+  }, [realtimeChannel, mergeMessage, loadMessages])
 
   async function send() {
     if (!token || !userId || !text.trim()) return
@@ -61,9 +85,8 @@ export default function ChatScreen() {
         { method: 'POST', body: JSON.stringify({ toUserId: userId, text }) },
         token
       )
-      setMessages((current) => [...current, data.message])
+      mergeMessage(data.message)
       setText('')
-      lastSyncRef.current = data.message.created_at
       if (introPending) {
         setIntroPending(false)
         setChatUnlocked(true)
@@ -87,6 +110,7 @@ export default function ChatScreen() {
       {introPending && !chatUnlocked && (
         <Text style={styles.banner}>Send one hello — chat unlocks after you both message once.</Text>
       )}
+      {realtimeChannel ? <Text style={styles.live}>Live chat connected</Text> : null}
       <FlatList
         data={messages}
         keyExtractor={(item) => String(item.id)}
@@ -117,6 +141,7 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   banner: { color: colors.peach, paddingHorizontal: 16, paddingTop: 8, fontSize: 12 },
+  live: { color: colors.green, paddingHorizontal: 16, fontSize: 11, letterSpacing: 0.5 },
   bubble: { alignSelf: 'flex-start', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 10, borderWidth: 1, borderColor: colors.border, maxWidth: '85%' },
   mine: { alignSelf: 'flex-end', backgroundColor: 'rgba(173,124,255,0.15)' },
   bubbleText: { color: colors.text },

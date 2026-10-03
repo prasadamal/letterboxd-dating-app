@@ -1,5 +1,5 @@
 import express from 'express'
-import { findUserById, getMessagesBetween, getMutualMatchRow, sendMessage, getConversationsForUser, markMessagesRead } from '../db.js'
+import { findUserById, getMessagesBetween, getMutualMatchRow, sendMessage, getConversationsForUser, markMessagesRead, getChatMeta } from '../db.js'
 import { authMiddleware } from '../middleware/auth.js'
 import { asyncHandler, AppError } from '../middleware/errors.js'
 import { validateBody, messageSchema } from '../middleware/validate.js'
@@ -21,12 +21,16 @@ router.get('/:userId', authMiddleware, async (req, res) => {
     if (!peer) return res.status(404).json({ message: 'User not found' })
 
     const since = typeof req.query.since === 'string' ? req.query.since : null
-    const match = await getMutualMatchRow(req.user.id, req.params.userId)
+    const meta = await getChatMeta(req.user.id, req.params.userId)
+    if (!meta) return res.status(404).json({ message: 'No conversation' })
+
     const messages = await getMessagesBetween(req.user.id, req.params.userId, { since })
     return res.json({
       messages,
-      chatUnlocked: Boolean(match?.chat_unlocked),
-      introPending: Boolean(match && !match.chat_unlocked)
+      conversationId: meta.conversationId,
+      realtimeChannel: meta.realtimeChannel,
+      chatUnlocked: meta.chatUnlocked,
+      introPending: meta.introPending
     })
   } catch (error) {
     console.error(error)

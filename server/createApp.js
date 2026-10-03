@@ -22,6 +22,8 @@ import safetyRoutes from './routes/safety.js'
 import notificationsRoutes from './routes/notifications.js'
 import adminRoutes from './routes/admin.js'
 import internalRoutes from './routes/internal.js'
+import { openApiDocument } from './openapi/spec.js'
+import swaggerUi from 'swagger-ui-express'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -79,18 +81,12 @@ export function createApp() {
   })
 
   app.get('/api/v1/openapi.json', (req, res) => {
-    res.json({
-      openapi: '3.0.3',
-      info: { title: 'ReelMates API', version: '1.0.0' },
-      paths: {
-        '/api/v1/auth/signup': { post: { summary: 'Register' } },
-        '/api/v1/auth/login': { post: { summary: 'Login' } },
-        '/api/v1/platform/status': { get: { summary: 'Launch counters' } },
-        '/api/v1/movies/daily': { get: { summary: 'Daily taste game films' } },
-        '/api/v1/dating/deck': { get: { summary: 'Dating profile card' } }
-      }
-    })
+    res.json(openApiDocument)
   })
+
+  app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(openApiDocument, { customSiteTitle: 'ReelMates API' }))
+  app.get('/api/openapi.json', (req, res) => res.json(openApiDocument))
+  app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openApiDocument, { customSiteTitle: 'ReelMates API' }))
 
   const mount = (prefix) => {
     app.use(`${prefix}/auth`, authRateLimiter(), authRoutes)
