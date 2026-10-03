@@ -1,9 +1,8 @@
 import { supabase } from '../supabaseClient.js'
 import { logger } from '../lib/logger.js'
+import { chatChannelName } from '../lib/chatChannel.js'
 
-export function chatChannelName(conversationId) {
-  return `chat:${conversationId}`
-}
+export { chatChannelName } from '../lib/chatChannel.js'
 
 export async function broadcastChatEvent(conversationId, event, payload) {
   if (!conversationId) return
