@@ -657,6 +657,14 @@ h1 { letter-spacing: -0.06em; }
   .hero, .discover, .profile-panel { padding: 18px 16px; }
 }
 
+.terms-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 .empty-state {
   text-align: center;
   padding: 28px 16px;

@@ -50,8 +50,10 @@ export function loadEnv() {
       console.error('Production requires JWT_REFRESH_SECRET (32+ chars).')
       process.exit(1)
     }
-  } else if (!env.SUPABASE_SERVICE_ROLE_KEY && !env.SUPABASE_ANON_KEY) {
-    console.error('Set SUPABASE_SERVICE_ROLE_KEY (preferred) or SUPABASE_ANON_KEY for local development.')
+  } else if (!env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error(
+      'SUPABASE_SERVICE_ROLE_KEY is required. Direct anon access is revoked by RLS; the API must use the service role.'
+    )
     process.exit(1)
   }
 

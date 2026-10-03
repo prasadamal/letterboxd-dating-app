@@ -5,7 +5,7 @@ import { authMiddleware } from '../middleware/auth.js'
 import { asyncHandler, AppError } from '../middleware/errors.js'
 import { validateBody } from '../middleware/validate.js'
 import { uploadAvatar } from '../services/storageService.js'
-import { computeProfileCompletion, writeAuditLog } from '../services/auditService.js'
+import { writeAuditLog } from '../services/auditService.js'
 import { saveProfilePhotoRecord, syncProfileCompletion } from '../services/profileService.js'
 import { setUserVerification } from '../services/verificationService.js'
 
@@ -62,11 +62,10 @@ router.put(
     updates.last_active_at = new Date().toISOString()
 
     const row = await updateUserProfile(req.user.id, updates)
-    updates.profile_completion = computeProfileCompletion({ ...row, ...updates })
-    await updateUserProfile(req.user.id, { profile_completion: updates.profile_completion })
+    const state = await syncProfileCompletion(req.user.id)
 
     const user = await getUserProfile(req.user.id)
-    return res.json({ user: ensureUserProfile(user) })
+    return res.json({ user: ensureUserProfile(user), profile: state })
   })
 )
 

@@ -10,7 +10,10 @@ export default function AuthPage({ onAuth }) {
     name: 'Maya',
     age: 27,
     city: 'Brooklyn',
-    bio: 'I like thoughtful cinema, slow-burn romance, and good conversations.'
+    country: 'United States',
+    gender: 'female',
+    bio: 'I like thoughtful cinema, slow-burn romance, and good conversations.',
+    termsAccepted: false
   })
   const [error, setError] = useState('')
 
@@ -19,7 +22,19 @@ export default function AuthPage({ onAuth }) {
     setError('')
 
     try {
-      const payload = mode === 'login' ? { email: form.email, password: form.password } : form
+      const payload =
+        mode === 'login'
+          ? { email: form.email, password: form.password }
+          : {
+              email: form.email,
+              password: form.password,
+              name: form.name,
+              age: Number(form.age),
+              country: form.country,
+              gender: form.gender,
+              bio: form.bio,
+              termsAccepted: true
+            }
       const data = await apiFetch(`/auth/${mode === 'login' ? 'login' : 'signup'}`, {
         method: 'POST',
         body: JSON.stringify(payload)
@@ -52,12 +67,26 @@ export default function AuthPage({ onAuth }) {
               <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Full name" />
               <input value={form.age} onChange={(e) => setForm({ ...form, age: e.target.value })} placeholder="Age" type="number" />
               <input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="City" />
+              <input value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} placeholder="Country" required />
+              <select value={form.gender} onChange={(e) => setForm({ ...form, gender: e.target.value })}>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+              </select>
               <textarea value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} placeholder="A few words about your movie vibe" rows="3" />
+              <label className="terms-row">
+                <input
+                  type="checkbox"
+                  checked={form.termsAccepted}
+                  onChange={(e) => setForm({ ...form, termsAccepted: e.target.checked })}
+                  required
+                />
+                I accept the Terms and Privacy Policy
+              </label>
             </>
           )}
 
           <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="Email" type="email" />
-          <input value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="Password" type="password" />
+          <input value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder={mode === 'signup' ? 'Password (8+ characters)' : 'Password'} type="password" minLength={mode === 'signup' ? 8 : 1} />
 
           {error && <p className="error-text">{error}</p>}
           <button className="primary-button auth-submit" type="submit">
