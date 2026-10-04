@@ -47,9 +47,17 @@ export default function MatchesScreen() {
           <View style={styles.card}>
             <TasteProfileCard profile={item} compact />
             {item.introPending && <Text style={styles.intro}>Send one hello each to unlock full chat.</Text>}
-            <Pressable style={styles.primaryBtn} onPress={() => router.push({ pathname: '/chat/[userId]', params: { userId: item.id, name: item.name } })}>
-              <Text style={styles.primaryText}>Message</Text>
-            </Pressable>
+            <View style={styles.actionRow}>
+              <Pressable
+                style={styles.ghostPill}
+                onPress={() => router.push({ pathname: '/compare/[userId]', params: { userId: item.id, name: item.name } })}
+              >
+                <Text style={styles.ghostPillText}>Watch together ideas</Text>
+              </Pressable>
+              <Pressable style={styles.primaryBtn} onPress={() => router.push({ pathname: '/chat/[userId]', params: { userId: item.id, name: item.name } })}>
+                <Text style={styles.primaryText}>Message</Text>
+              </Pressable>
+            </View>
             <Pressable
               style={styles.ghostBtn}
               onPress={() =>
@@ -80,6 +88,9 @@ export default function MatchesScreen() {
 }
 
 const styles = StyleSheet.create({
+  actionRow: { flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
+  ghostPill: { borderRadius: 999, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 14, paddingVertical: 10 },
+  ghostPillText: { color: colors.text, fontWeight: '600' },
   screen: { flex: 1, backgroundColor: colors.bg },
   locked: { color: colors.muted, padding: 16, lineHeight: 20 },
   eyebrow: { color: colors.peach, fontSize: 11, letterSpacing: 1.1, marginBottom: 6 },

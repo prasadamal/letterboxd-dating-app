@@ -22,6 +22,14 @@ export default function RootLayout() {
             <Stack.Screen name="onboarding" />
             <Stack.Screen name="(tabs)" />
             <Stack.Screen
+              name="friends"
+              options={{ headerShown: true, headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text, title: 'Film friends' }}
+            />
+            <Stack.Screen
+              name="compare/[userId]"
+              options={{ headerShown: true, headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text, title: 'Compare' }}
+            />
+            <Stack.Screen
               name="chat/[userId]"
               options={{
                 presentation: 'modal',

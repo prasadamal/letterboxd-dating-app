@@ -7,6 +7,7 @@ import { validateBody } from '../middleware/validate.js'
 import { z } from 'zod'
 import { writeAuditLog } from '../services/auditService.js'
 import { getPlatformStatus, updatePlatformSettings } from '../platformService.js'
+import { supabase } from '../supabaseClient.js'
 
 const router = express.Router()
 
@@ -93,6 +94,31 @@ router.patch(
       requestId: req.requestId
     })
     return res.json({ platform })
+  })
+)
+
+router.get(
+  '/feedback',
+  asyncHandler(async (req, res) => {
+    const status = ['new', 'read', 'done'].includes(req.query.status) ? req.query.status : 'new'
+    const { data, error } = await supabase
+      .from('feedback')
+      .select('id, category, message, app_version, platform, status, created_at')
+      .eq('status', status)
+      .order('created_at', { ascending: false })
+      .limit(200)
+    if (error) throw error
+    return res.json({ items: data || [] })
+  })
+)
+
+router.patch(
+  '/feedback/:id',
+  validateBody(z.object({ status: z.enum(['new', 'read', 'done']) })),
+  asyncHandler(async (req, res) => {
+    const { error } = await supabase.from('feedback').update({ status: req.body.status }).eq('id', Number(req.params.id))
+    if (error) throw error
+    return res.json({ ok: true })
   })
 )
 

@@ -91,8 +91,12 @@ Use two phones, or one phone plus the web app at http://localhost:3000.
 5. **Messages:** each sends one hello → full chat unlocks → send a few messages, see *Read*.
 6. **Safety:** Report (pick a reason) and Block from the chat; the conversation should close.
 7. **Reset password:** Login screen → *Reset* → enter the email. Without email configured, the reset link appears on screen in dev mode; open it in a browser.
-8. **Offline:** turn Wi‑Fi off, reopen the app → *Can't reach ReelMates / Try again* (you stay signed in).
-9. **Delete account** from Profile on one test account → it disappears from the other account's matches.
+8. **Films tab → Explore & chart:** search a film, rate it Like / Dislike / Haven't seen; switch collections.
+9. **Profile:** choose your all-time favourite; it shows on the other account's dating card. Check *Your taste* stats.
+10. **Film friends** (Profile or Launch tab): add the other account's code → compare → Watch together.
+11. **Send feedback** (Profile) → it appears in `/admin` → Feedback inbox.
+12. **Offline:** turn Wi‑Fi off, reopen the app → *Can't reach ReelMates / Try again* (you stay signed in).
+13. **Delete account** from Profile on one test account → it disappears from the other account's matches.
 
 Anything that fails here: note the screen and the message, and send it to me — this is the first real end-to-end run.
 
@@ -123,6 +127,7 @@ Open `https://<your-service>.onrender.com/admin`, paste `ADMIN_API_KEY`, **Load 
 - **Launch gate:** current counts, change the 500/500 targets, or **Open dating now** (e.g. for store reviewers).
 - **Reports:** Review / Resolve / Dismiss, and **Suspend reported user**. Check this at least once a day after launch —
   the Terms promise action within 24 hours.
+- **Feedback inbox:** messages from *Send feedback* in the app (ideas, bugs, missing films). Mark read / done.
 
 ### 2.4 Email (password reset + verification) — Resend
 1. Sign up at **resend.com** → **Domains** → add a domain you own (e.g. `reelmates.app`) → add the DNS records it shows at
@@ -204,7 +209,11 @@ Once the Expo project exists and the GitHub repo is linked to it (expo.dev → p
    npm run db:prelaunch-cleanup -- --yes --emails you+a@x.com,you+b@x.com
    ```
    Run it from your computer with the secret key in `.env`. Set `FORCE_DATING_OPEN=false` (or remove it) afterwards.
-4. **Decide the launch gate.** 500 men + 500 women means early users only see the daily game. Options in `/admin`:
+4. **Film catalog:** 436 films are loaded. The genre/language/popularity values for the 140 films added from your list
+   are my estimates (`server/data/curatedFilmsMeta.js`) — popularity drives the rarity bonus in matching, so skim and
+   correct any that look off, then run `npm run db:seed` to top up. To grow beyond this list (e.g. Empire's 500), add
+   films to `server/movieCatalog.js` (or send me the list) — the sites can't be fetched from my environment.
+5. **Decide the launch gate.** 500 men + 500 women means early users only see the daily game. Options in `/admin`:
    keep 500/500, lower the targets, or open dating now.
 
 ### 4.2 Google Play

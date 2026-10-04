@@ -51,6 +51,27 @@ export async function getRatingsForUsers(userIds) {
     }
   }
 
+  // Each person's single all-time favourite also feeds the match (see lib/tasteMatch.js).
+  const favorites = await selectAllIn(userIds, (ids) =>
+    supabase
+      .from('users')
+      .select('id, favorite_movie_id, favorite:movies!users_favorite_movie_id_fkey(title, year, popularity)')
+      .in('id', ids)
+      .not('favorite_movie_id', 'is', null)
+      .order('id')
+  )
+  for (const row of favorites) {
+    if (!byUser.has(row.id)) {
+      byUser.set(row.id, { love: new Set(), hate: new Set(), labels: { love: [], hate: [] }, titles: new Map(), popularity: new Map() })
+    }
+    const bucket = byUser.get(row.id)
+    bucket.favorite = row.favorite_movie_id
+    if (row.favorite) {
+      bucket.titles.set(row.favorite_movie_id, formatMovieLabel(row.favorite))
+      if (row.favorite.popularity != null) bucket.popularity.set(row.favorite_movie_id, row.favorite.popularity)
+    }
+  }
+
   return byUser
 }
 
@@ -141,8 +162,12 @@ export async function getUserProfile(userId) {
   if (!user || user.deleted_at) return null
 
   const ratings = await getRatingsForUsers([userId])
-  const taste = ratings.get(userId)?.labels || { love: [], hate: [] }
-  return mapUserRow(user, { loved: taste.love, hated: taste.hate })
+  const bucket = ratings.get(userId)
+  const taste = bucket?.labels || { love: [], hate: [] }
+  const favorite = user.favorite_movie_id
+    ? { id: user.favorite_movie_id, title: bucket?.titles?.get(user.favorite_movie_id) || null }
+    : null
+  return { ...mapUserRow(user, { loved: taste.love, hated: taste.hate }), favorite }
 }
 
 export async function createUser(payload) {
@@ -228,7 +253,8 @@ export async function getDailyMovies(userId) {
 
 export async function rateMovie(userId, movieId, reaction) {
   if (reaction === 'skip') {
-    await supabase.from('user_ratings').upsert(
+    // "Haven't seen": recorded so it isn't offered again today and feeds "watch together", never the match score.
+    const { error: skipError } = await supabase.from('user_ratings').upsert(
       {
         user_id: userId,
         movie_id: movieId,
@@ -237,6 +263,7 @@ export async function rateMovie(userId, movieId, reaction) {
       },
       { onConflict: 'user_id,movie_id' }
     )
+    if (skipError) throw skipError
     return getUserProfile(userId)
   }
 
@@ -589,9 +616,10 @@ export async function getConversationsForUser(userId) {
 }
 
 export async function seedMoviesIfEmpty() {
+  // Seeds an empty database; also tops up a database that is missing catalog films (e.g. newly added ones).
   const { count, error: countError } = await supabase.from('movies').select('*', { count: 'exact', head: true })
   if (countError) throw countError
-  if (count && count > 0) return { seeded: 0, total: count }
+  if (count && count >= movieCatalog.length) return { seeded: 0, total: count }
 
   const rows = movieCatalog.map((movie) => ({
     id: movie.id,
@@ -601,6 +629,7 @@ export async function seedMoviesIfEmpty() {
     popularity: movie.popularity,
     in_deck: movie.in_deck,
     origin_language: movie.origin_language,
+    tags: movie.tags || [],
     franchise: null
   }))
 

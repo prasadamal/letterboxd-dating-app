@@ -30,7 +30,12 @@ export type User = {
   verified_at?: string | null
   loved: string[]
   hated: string[]
+  favorite?: { id: number; title: string | null } | null
 }
+
+export type Reaction = 'love' | 'hate' | 'skip'
+
+export type FavoriteRelation = { title: string; relation: 'same' | 'you_liked' | 'you_disliked' | 'not_rated' }
 
 export type Movie = {
   id: number
@@ -47,6 +52,7 @@ export type DatingProfile = User & {
   sharedCount?: number
   sharedLoved?: string[]
   sharedHated?: string[]
+  favorite?: FavoriteRelation | null
   tasteSummary?: string
   likedLine?: string | null
   dislikedLine?: string | null
@@ -73,4 +79,45 @@ export type ChatMessage = {
   text: string
   created_at: string
   read_at?: string | null
+}
+
+export type FilmItem = {
+  id: number
+  title: string
+  year: number
+  genres: string[]
+  origin_language?: string
+  tags: string[]
+  myRating: Reaction | null
+  // People's chart only
+  rank?: number | null
+  likedPercent?: number | null
+  votes?: number
+}
+
+export type Collection = { key: string; name: string; count: number }
+
+export type Friend = DatingProfile
+
+export type TasteComparison = {
+  person: DatingProfile
+  score: number
+  sharedCount: number
+  conflicts: number
+  sharedLoved: string[]
+  sharedHated: string[]
+  theirFavorite: FavoriteRelation | null
+  myFavorite: string | null
+  watchTogether: { forYou: string[]; forThem: string[] }
+}
+
+export type TasteStats = {
+  liked: number
+  disliked: number
+  notSeen: number
+  likeRate: number | null
+  topGenres: { name: string; count: number }[]
+  topLanguages: { name: string; count: number }[]
+  topDecades: { name: string; count: number }[]
+  leastLikedGenres: { name: string; count: number }[]
 }

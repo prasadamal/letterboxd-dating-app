@@ -9,6 +9,8 @@ import { detectImageType, uploadAvatar } from '../services/storageService.js'
 import { writeAuditLog } from '../services/auditService.js'
 import { saveProfilePhotoRecord, syncProfileCompletion } from '../services/profileService.js'
 import { setUserVerification } from '../services/verificationService.js'
+import { getTasteStats } from '../services/filmService.js'
+import { supabase } from '../supabaseClient.js'
 
 const router = express.Router()
 
@@ -126,6 +128,34 @@ router.post(
   asyncHandler(async (req, res) => {
     const user = await setUserVerification(req.user.id, 'pending', req.body.notes || 'User requested verification')
     return res.json({ user })
+  })
+)
+
+// One all-time favourite film (or null to clear). Used in matching and shown on profile cards.
+const favoriteSchema = z.object({ movieId: z.number().int().positive().nullable() })
+
+router.put(
+  '/favorite',
+  authMiddleware,
+  validateBody(favoriteSchema),
+  asyncHandler(async (req, res) => {
+    const { movieId } = req.body
+    if (movieId !== null) {
+      const { data: movie, error } = await supabase.from('movies').select('id').eq('id', movieId).maybeSingle()
+      if (error) throw error
+      if (!movie) throw new AppError('Film not found', 404, 'NOT_FOUND')
+    }
+    await updateUserProfile(req.user.id, { favorite_movie_id: movieId, last_active_at: new Date().toISOString() })
+    const user = await getUserProfile(req.user.id)
+    return res.json({ user: ensureUserProfile(user) })
+  })
+)
+
+router.get(
+  '/taste-stats',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    return res.json({ stats: await getTasteStats(req.user.id) })
   })
 )
 

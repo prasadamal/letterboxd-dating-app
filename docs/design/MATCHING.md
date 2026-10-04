@@ -8,6 +8,7 @@
 | I don't like | shared dislike → raises the match by the same amount |
 | one liked, the other didn't | clash → lowers the match |
 | only one of you rated it | ignored |
+| either of you said *Haven't seen* | ignored (not a dislike) |
 
 - **Rarity weighting:** agreeing on an obscure film (e.g. *Supa Modo*) counts up to 2× more than agreeing on
   *The Godfather*, using each film's popularity (35–90) from the catalog. Shared films are listed rarest first.
@@ -17,13 +18,38 @@
 - **Deck order:** match %, then number of films in common. Age range, country, gender, photo and profile
   completeness decide *who* can appear; they never change the score.
 
+- **All-time favourite (one film each):** the same favourite adds 4 to *agree*. Liking the other person's
+  favourite adds 2 to *agree*; disliking it adds 2 to *clash* (both directions). The card shows their favourite and
+  whether it's *Same as yours*, *You liked it too* or *You didn't like it*.
+
 Code: `server/lib/tasteMatch.js` (tests: `server/tests/tasteMatch.test.js`).
+
+## Haven't seen
+
+Every film can be rated **Like**, **Dislike** or **Haven't seen** (daily game bucket/button and everywhere in Explore).
+*Haven't seen* is stored (rating `skip`) so the film isn't asked again and counts in your stats, but it never affects
+matching or the people's chart.
+
+## People's chart (best films, ranked by members)
+
+`score = (likes + 2) / (likes + dislikes + 4)` — the share of likes, pulled toward 50% until enough people have voted,
+so one early like can't top the chart. Films with votes are ranked by score; films nobody has rated yet follow, most
+famous first. Filter by collection: The canon, World cinema, Indian cinema, Malayalam cinema, Crowd favourites,
+Underseen gems, Love it or hate it, Most debated (from the curated list in `server/data/curatedFilmList.txt`).
+Cached 5 minutes. Code: `server/services/filmService.js` (tests: `server/tests/filmChart.test.js`).
+
+## Film friends and Watch together
+
+Anyone can add anyone by friend code (the referral code) — family, friends, people you'd never date — and works before
+dating opens. Compare shows the same taste score, both favourites, shared likes/dislikes, and **Watch together**: films
+one of you loved that the other hasn't rated, rarest first. Compare is also open between mutual matches, never with
+blocked users. Code: `server/services/friendsService.js`.
 
 ## Daily films (the same for everyone)
 
 Every player gets the **same films each day** (UTC), so anyone active builds up films in common with everyone else —
 up to 10 more per day. The catalog is shuffled once per cycle and handed out 10 films a day, so nothing repeats until
-every film has been shown (≈29 days with the current 296 films); the next cycle reshuffles, and re-rating a film
+every film has been shown (≈44 days with the current 436 films); the next cycle reshuffles, and re-rating a film
 updates the earlier answer. Code: `sharedDailySet` in `server/lib/dailyMovies.js`.
 
 To keep it fresh for long-term players, grow the catalog (`npm run db:seed` loads `server/movieCatalog.js`).

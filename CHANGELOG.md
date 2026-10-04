@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.0] — standalone film app
+
+- Like / Dislike / **Haven't seen** in the daily game and everywhere else; unseen never affects matching.
+- **Explore & chart:** search any film; **People's chart** of best films ranked by members, with collections.
+- Catalog 296 → 436 films from the curated list; `movies.tags` collections.
+- **All-time favourite film**: on the card and in matching (same +4, liked/disliked +2).
+- **Film friends** by code, taste compare, **Watch together** ideas; button from Matches.
+- **Taste stats** on Profile. **Send feedback** in the app; feedback inbox in `/admin`.
+- Migrations `20261004120000_favorite_film_and_friends.sql`, `20261004130000_collections_feedback_stats.sql`.
+
 ## [1.2.0] — unified launch build
 
 One tree with the production stack, the workable-app fixes, the README/RLS sync, and App Store / Play readiness.

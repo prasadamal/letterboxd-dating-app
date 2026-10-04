@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Animated, PanResponder, Pressable, StyleSheet, Text, View } from 'react-native'
-import type { Movie } from '../lib/types'
+import type { Movie, Reaction } from '../lib/types'
 import { colors } from '../lib/theme'
 import { movieLabel } from '../lib/api'
 
 type Props = {
   movies: Movie[]
-  onRate: (movie: Movie, reaction: 'love' | 'hate') => Promise<void>
+  onRate: (movie: Movie, reaction: Reaction) => Promise<void>
 }
 
 type Rect = { x: number; y: number; width: number; height: number }
@@ -15,8 +15,10 @@ export function DraggableDailyGame({ movies, onRate }: Props) {
   const [pending, setPending] = useState<Movie[]>(movies)
   const likeZone = useRef<Rect | null>(null)
   const hateZone = useRef<Rect | null>(null)
+  const unseenZone = useRef<Rect | null>(null)
   const likeRef = useRef<View>(null)
   const hateRef = useRef<View>(null)
+  const unseenRef = useRef<View>(null)
 
   // Measure through refs (event.target is not a measurable view on every platform) and re-measure when a
   // drag starts, so drops still land correctly after the screen has scrolled.
@@ -26,6 +28,9 @@ export function DraggableDailyGame({ movies, onRate }: Props) {
     })
     hateRef.current?.measureInWindow((x, y, width, height) => {
       hateZone.current = { x, y, width, height }
+    })
+    unseenRef.current?.measureInWindow((x, y, width, height) => {
+      unseenZone.current = { x, y, width, height }
     })
   }
   const pan = useRef(new Animated.ValueXY()).current
@@ -39,7 +44,7 @@ export function DraggableDailyGame({ movies, onRate }: Props) {
   const active = pending[0] || null
   activeRef.current = active
 
-  async function commit(reaction: 'love' | 'hate') {
+  async function commit(reaction: Reaction) {
     const current = activeRef.current
     if (!current || ratingRef.current) return
     ratingRef.current = true
@@ -65,21 +70,15 @@ export function DraggableDailyGame({ movies, onRate }: Props) {
         if (!current) return
         const dropX = gesture.moveX
         const dropY = gesture.moveY
-        let reaction: 'love' | 'hate' | null = null
-
-        const like = likeZone.current
-        const hate = hateZone.current
-        if (like && dropX >= like.x && dropX <= like.x + like.width && dropY >= like.y && dropY <= like.y + like.height) {
-          reaction = 'love'
-        } else if (
-          hate &&
-          dropX >= hate.x &&
-          dropX <= hate.x + hate.width &&
-          dropY >= hate.y &&
-          dropY <= hate.y + hate.height
-        ) {
-          reaction = 'hate'
-        }
+        const inside = (zone: Rect | null) =>
+          Boolean(zone && dropX >= zone.x && dropX <= zone.x + zone.width && dropY >= zone.y && dropY <= zone.y + zone.height)
+        const reaction: Reaction | null = inside(likeZone.current)
+          ? 'love'
+          : inside(hateZone.current)
+            ? 'hate'
+            : inside(unseenZone.current)
+              ? 'skip'
+              : null
 
         if (reaction) {
           await commit(reaction)
@@ -92,7 +91,10 @@ export function DraggableDailyGame({ movies, onRate }: Props) {
 
   return (
     <View style={styles.wrap}>
-      <Text style={styles.help}>Everyone rates these same films today, so you build up films in common. Drag each one into a bucket, or tap Like / Dislike.</Text>
+      <Text style={styles.help}>
+        Everyone rates these same films today, so you build up films in common. Drag each one into a bucket, or tap a button.
+        Haven't seen it? That's fine — it won't count against anyone.
+      </Text>
       <Text style={styles.counter}>{pending.length} left today</Text>
       <View style={styles.deckArea}>
         {active ? (
@@ -101,13 +103,16 @@ export function DraggableDailyGame({ movies, onRate }: Props) {
             <Text style={styles.title}>{movieLabel(active)}</Text>
             <Text style={styles.hint}>Drag down into a bucket</Text>
             <View style={styles.actions}>
-              <Pressable style={styles.dislikeBtn} onPress={() => commit('hate')}>
+              <Pressable style={styles.dislikeBtn} onPress={() => commit('hate')} accessibilityRole="button">
                 <Text style={styles.actionText}>Dislike</Text>
               </Pressable>
-              <Pressable style={styles.likeBtn} onPress={() => commit('love')}>
+              <Pressable style={styles.likeBtn} onPress={() => commit('love')} accessibilityRole="button">
                 <Text style={styles.actionText}>Like</Text>
               </Pressable>
             </View>
+            <Pressable style={styles.unseenBtn} onPress={() => commit('skip')} accessibilityRole="button">
+              <Text style={styles.unseenText}>Haven't seen it</Text>
+            </Pressable>
           </Animated.View>
         ) : (
           <Text style={styles.done}>Today's taste game is complete. See you tomorrow for more films.</Text>
@@ -121,6 +126,9 @@ export function DraggableDailyGame({ movies, onRate }: Props) {
         <View ref={likeRef} style={[styles.zone, styles.likeZone]} onLayout={measureZones}>
           <Text style={styles.zoneTitle}>I like</Text>
         </View>
+      </View>
+      <View ref={unseenRef} style={[styles.zone, styles.unseenZone]} onLayout={measureZones}>
+        <Text style={styles.zoneTitle}>Haven't seen</Text>
       </View>
     </View>
   )
@@ -151,5 +159,8 @@ const styles = StyleSheet.create({
   zone: { flex: 1, minHeight: 110, borderRadius: 18, borderWidth: 2, borderStyle: 'dashed', alignItems: 'center', justifyContent: 'center', padding: 10 },
   hateZone: { borderColor: 'rgba(255,157,172,0.7)', backgroundColor: 'rgba(255,105,147,0.08)' },
   likeZone: { borderColor: 'rgba(115,224,167,0.8)', backgroundColor: 'rgba(115,224,167,0.08)' },
-  zoneTitle: { color: colors.text, fontWeight: '700', textAlign: 'center' }
+  zoneTitle: { color: colors.text, fontWeight: '700', textAlign: 'center' },
+  unseenZone: { flex: 0, minHeight: 64, borderColor: 'rgba(154,167,184,0.6)', backgroundColor: 'rgba(154,167,184,0.06)', marginBottom: 8 },
+  unseenBtn: { marginTop: 10, alignItems: 'center', paddingVertical: 8 },
+  unseenText: { color: colors.muted, fontWeight: '600', textDecorationLine: 'underline' }
 })
