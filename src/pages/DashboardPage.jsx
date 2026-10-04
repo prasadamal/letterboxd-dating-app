@@ -3,6 +3,7 @@ import { apiFetch, clearToken, getRefreshToken, getToken, movieLabel } from '../
 import { BrandMark } from '../components/BrandMark.jsx'
 import { EmptyState } from '../components/EmptyState.jsx'
 import { TasteProfileCard } from '../components/TasteProfileCard.jsx'
+import { ReportDialog } from '../components/ReportDialog.jsx'
 
 export default function DashboardPage({ user, setUser }) {
   const [tab, setTab] = useState('discover')
@@ -19,6 +20,7 @@ export default function DashboardPage({ user, setUser }) {
   const [loadError, setLoadError] = useState('')
   const [chatNotice, setChatNotice] = useState('')
   const [chatError, setChatError] = useState('')
+  const [reportTarget, setReportTarget] = useState(null)
 
   useEffect(() => {
     async function loadData() {
@@ -336,6 +338,9 @@ export default function DashboardPage({ user, setUser }) {
                   <button className="primary-button" type="button" onClick={() => swipe('like')}>
                     Like
                   </button>
+                  <button className="ghost-button" type="button" onClick={() => setReportTarget(deck)}>
+                    Report
+                  </button>
                 </div>
               </div>
             )}
@@ -358,6 +363,9 @@ export default function DashboardPage({ user, setUser }) {
                     <div className="action-row">
                       <button className="primary-button" onClick={() => openChat(person)}>
                         Message
+                      </button>
+                      <button className="ghost-button" type="button" onClick={() => setReportTarget(person)}>
+                        Report
                       </button>
                     </div>
                   </div>
@@ -444,6 +452,24 @@ export default function DashboardPage({ user, setUser }) {
         )}
       </main>
 
+      {reportTarget && (
+        <ReportDialog
+          person={reportTarget}
+          onClose={() => setReportTarget(null)}
+          onDone={(blocked) => {
+            const id = reportTarget.id
+            setReportTarget(null)
+            setDeckMessage('Report submitted.')
+            if (blocked) {
+              setMatches((current) => current.filter((person) => person.id !== id))
+              setConversations((current) => current.filter((row) => row.peer.id !== id))
+              if (deck?.id === id) setDeck(null)
+              if (chatPeer?.id === id) setChatPeer(null)
+            }
+          }}
+        />
+      )}
+
       {chatPeer && (
         <div className="chat-overlay">
           <div className="chat-panel card-panel">
@@ -465,6 +491,9 @@ export default function DashboardPage({ user, setUser }) {
                 </p>
               ))}
             </div>
+            <button type="button" className="ghost-button" onClick={() => setReportTarget(chatPeer)}>
+              Report
+            </button>
             <form className="chat-form" onSubmit={sendChatMessage}>
               <input value={chatText} onChange={(e) => setChatText(e.target.value)} placeholder="Say hello…" />
               <button type="submit" className="primary-button">

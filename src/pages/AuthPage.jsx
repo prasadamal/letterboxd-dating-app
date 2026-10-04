@@ -118,7 +118,14 @@ export default function AuthPage({ onAuth }) {
                   onChange={(e) => setForm({ ...form, termsAccepted: e.target.checked })}
                   required
                 />
-                I accept the Terms and Privacy Policy
+                I accept the{' '}
+                <a href="https://github.com/prasadamal/letterboxd-dating-app/blob/main/docs/legal/TERMS_OF_SERVICE.md" target="_blank" rel="noreferrer">
+                  Terms
+                </a>{' '}
+                and{' '}
+                <a href="https://github.com/prasadamal/letterboxd-dating-app/blob/main/docs/legal/PRIVACY_POLICY.md" target="_blank" rel="noreferrer">
+                  Privacy Policy
+                </a>
               </label>
             </>
           )}

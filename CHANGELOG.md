@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.0] — unified launch build
+
+One tree with the production stack, the workable-app fixes, the README/RLS sync, and App Store / Play readiness.
+
+- Web dating, matches, and chat can report and block, matching the mobile safety sheet.
+- Dating cards show shared likes and dislikes in the taste line.
+- Signup links the Terms and Privacy Policy.
+- App version 1.2.0 (iOS build 3, Android versionCode 3).
+
 ## [Unreleased] — launch readiness
 
 ### Security & privacy
