@@ -24,7 +24,7 @@ export function TasteProfileCard({ user, person, compact = false }) {
 
         <div className="taste-quote">
           <strong>Movie taste</strong>
-          <p>{buildTasteSummary(user, person)}</p>
+          <p>{person.likedLine || person.dislikedLine ? [person.likedLine, person.dislikedLine].filter(Boolean).join(' · ') : buildTasteSummary(user, person)}</p>
         </div>
 
         {!compact && (

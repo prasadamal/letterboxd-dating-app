@@ -22,7 +22,7 @@ test(
     const res = await fetch(`${base}/api/v1/platform/version`)
     assert.equal(res.ok, true)
     const body = await res.json()
-    assert.equal(body.apiVersion, '1.1.0')
+    assert.equal(body.apiVersion, '1.2.0')
     assert.equal(typeof body.minMobileVersion, 'string')
     assert.equal(typeof body.recommendedMobileVersion, 'string')
   }
