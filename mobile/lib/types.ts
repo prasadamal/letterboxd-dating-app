@@ -43,6 +43,10 @@ export type Movie = {
 
 export type DatingProfile = User & {
   score: number
+  // Films you both rated the same way, rarest first (the core of the match).
+  sharedCount?: number
+  sharedLoved?: string[]
+  sharedHated?: string[]
   tasteSummary?: string
   likedLine?: string | null
   dislikedLine?: string | null

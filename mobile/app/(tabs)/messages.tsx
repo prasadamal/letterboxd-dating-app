@@ -45,7 +45,7 @@ export default function MessagesScreen() {
           <EmptyState title="No chats yet" body="Match with someone in Dating, then say hello here." emoji="✨" />
         }
         renderItem={({ item }) => (
-          <Pressable style={styles.row} onPress={() => router.push(`/chat/${item.peer.id}`)}>
+          <Pressable style={styles.row} onPress={() => router.push({ pathname: '/chat/[userId]', params: { userId: item.peer.id, name: item.peer.name } })}>
             <View style={{ flex: 1, gap: 4 }}>
               <Text style={styles.name}>
                 {item.peer.name}

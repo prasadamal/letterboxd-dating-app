@@ -1,3 +1,5 @@
+import { Ionicons } from '@expo/vector-icons'
+import { useFonts } from 'expo-font'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Stack } from 'expo-router'
 import { AuthProvider } from '../lib/auth'
@@ -8,6 +10,8 @@ import { colors } from '../lib/theme'
 export { ErrorBoundary } from 'expo-router'
 
 export default function RootLayout() {
+  // Preload the tab-bar icon font so icons never render as empty boxes or pop in late.
+  useFonts(Ionicons.font)
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>

@@ -14,6 +14,7 @@ import { assertMatchmakingReady } from './services/profileService.js'
 import { passesDiscoveryFilters } from './services/discoveryPrefs.js'
 import { notifyUser } from './services/notificationService.js'
 import { logger } from './lib/logger.js'
+import { rankByTaste } from './lib/tasteMatch.js'
 import { selectAll, selectAllIn } from './lib/paging.js'
 
 function oppositeGender(gender) {
@@ -141,6 +142,22 @@ async function bumpSwipeStats(userId, action) {
   if (error) logger.warn('deck stats write skipped', { message: error.message })
 }
 
+// What a profile card shows: the person, then what you two agree on. Their full lists stay private.
+function tasteCardFields(candidate, stats) {
+  const lines = buildTasteLines(stats, candidate.display_name)
+  return {
+    ...mapPublicUser(candidate),
+    score: stats.score,
+    sharedCount: stats.sharedCount,
+    sharedLoved: stats.sharedLovedTitles.slice(0, 12),
+    sharedHated: stats.sharedHatedTitles.slice(0, 12),
+    conflicts: stats.conflicts,
+    tasteSummary: stats.summary,
+    likedLine: lines.likedLine,
+    dislikedLine: lines.dislikedLine
+  }
+}
+
 // Candidates scored per request. The rest of the pool is still counted, and swiping moves new people in.
 const DECK_SCORING_POOL = 300
 
@@ -174,6 +191,7 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
     (candidate) => !blocked.has(candidate.id) && !swipes.has(candidate.id) && passesDiscoveryFilters(candidate, prefs)
   )
 
+  const activeAt = new Map(eligible.map((candidate) => [candidate.id, String(candidate.last_active_at || '')]))
   const shortlistIds = [...eligible]
     .sort((a, b) => String(b.last_active_at || '').localeCompare(String(a.last_active_at || '')))
     .slice(0, DECK_SCORING_POOL)
@@ -193,18 +211,12 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
   const deck = profiles
     .map((candidate) => {
       const stats = computeCompatibilityFromMaps(selfMap, ratings.get(candidate.id))
-      const taste = ratings.get(candidate.id)?.labels || { love: [], hate: [] }
-      const lines = buildTasteLines(selfMap?.labels, taste, candidate.display_name)
-      return {
-        ...mapPublicUser(candidate, { loved: taste.love, hated: taste.hate }),
-        score: stats.score,
-        tasteSummary: stats.summary,
-        likedLine: lines.likedLine,
-        dislikedLine: lines.dislikedLine
-      }
+      return { ...tasteCardFields(candidate, stats), _lastActive: activeAt.get(candidate.id) || '' }
     })
-    .sort((a, b) => b.score - a.score)
+    // Taste first (match %, then films in common); recent activity only breaks exact ties.
+    .sort((a, b) => rankByTaste(a, b) || b._lastActive.localeCompare(a._lastActive))
     .slice(0, limit)
+    .map(({ _lastActive, ...card }) => card)
 
   const { data: statsRow } = await supabase
     .from('user_deck_stats')
@@ -263,17 +275,12 @@ export async function getMutualMatches(userId) {
       const candidate = byId.get(peerId)
       if (!candidate) return null
 
-      const taste = ratings.get(peerId)?.labels || { love: [], hate: [] }
-      const lines = buildTasteLines(selfMap?.labels, taste, candidate.display_name)
+      const stats = computeCompatibilityFromMaps(selfMap, ratings.get(peerId))
       return {
-        ...mapPublicUser(candidate, { loved: taste.love, hated: taste.hate }),
-        score: row.compatibility,
+        ...tasteCardFields(candidate, stats),
         matchId: row.id,
         chatUnlocked: row.chat_unlocked,
-        introPending: !row.chat_unlocked,
-        tasteSummary: buildTasteLines(selfMap?.labels, taste, candidate.display_name).likedLine,
-        likedLine: lines.likedLine,
-        dislikedLine: lines.dislikedLine
+        introPending: !row.chat_unlocked
       }
     })
     .filter(Boolean)

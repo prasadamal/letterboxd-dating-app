@@ -30,12 +30,12 @@ export function TasteProfileCard({ user, person, compact = false }) {
         {!compact && (
           <div className="favorite-lists">
             <div>
-              <span>Loved</span>
-              <p>{(person.loved || []).slice(0, 2).join(' · ')}</p>
+              <span>You both liked</span>
+              <p>{(person.sharedLoved || []).slice(0, 4).join(' · ') || '—'}</p>
             </div>
             <div>
-              <span>Hated</span>
-              <p>{(person.hated || []).slice(0, 2).join(' · ')}</p>
+              <span>You both disliked</span>
+              <p>{(person.sharedHated || []).slice(0, 4).join(' · ') || '—'}</p>
             </div>
           </div>
         )}

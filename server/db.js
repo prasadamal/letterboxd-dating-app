@@ -4,6 +4,7 @@ import { broadcastChatEvent, chatChannelName } from './services/realtimeService.
 import { movieCatalog } from './movieCatalog.js'
 import { pendingDailyMovies } from './lib/dailyMovies.js'
 import { mapLimit, selectAll, selectAllIn } from './lib/paging.js'
+import { compareTaste } from './lib/tasteMatch.js'
 
 function formatMovieLabel(movie) {
   return `${movie.title} (${movie.year})`
@@ -80,7 +81,7 @@ export async function getRatingsForUsers(userIds) {
   const data = await selectAllIn(userIds, (ids) =>
     supabase
       .from('user_ratings')
-      .select('user_id, rating, movie_id, movies(title, year)')
+      .select('user_id, rating, movie_id, movies(title, year, popularity)')
       .in('user_id', ids)
       .in('rating', ['love', 'hate'])
       .order('user_id')
@@ -90,10 +91,18 @@ export async function getRatingsForUsers(userIds) {
   const byUser = new Map()
   for (const row of data || []) {
     if (!byUser.has(row.user_id)) {
-      byUser.set(row.user_id, { love: new Set(), hate: new Set(), labels: { love: [], hate: [] } })
+      byUser.set(row.user_id, {
+        love: new Set(),
+        hate: new Set(),
+        labels: { love: [], hate: [] },
+        titles: new Map(),
+        popularity: new Map()
+      })
     }
     const bucket = byUser.get(row.user_id)
     const label = row.movies ? formatMovieLabel(row.movies) : String(row.movie_id)
+    bucket.titles.set(row.movie_id, label)
+    if (row.movies?.popularity != null) bucket.popularity.set(row.movie_id, row.movies.popularity)
     if (row.rating === 'love') {
       bucket.love.add(row.movie_id)
       bucket.labels.love.push(label)
@@ -154,21 +163,12 @@ export function mapUserRow(row, taste = { loved: [], hated: [] }) {
   }
 }
 
-export function buildTasteLines(userLabels, candidateLabels, candidateName = 'They') {
-  const sharedLoved = (candidateLabels?.love || [])
-    .filter((title) => (userLabels?.love || []).includes(title))
-    .slice(0, 2)
-  const sharedHated = (candidateLabels?.hate || [])
-    .filter((title) => (userLabels?.hate || []).includes(title))
-    .slice(0, 2)
-
+export function buildTasteLines(result, candidateName = 'They') {
+  const loved = result?.sharedLovedTitles?.slice(0, 2) || []
+  const hated = result?.sharedHatedTitles?.slice(0, 2) || []
   return {
-    likedLine: sharedLoved.length
-      ? `${candidateName} liked ${sharedLoved.join(' and ')} like you`
-      : null,
-    dislikedLine: sharedHated.length
-      ? `${candidateName} didn't like ${sharedHated.join(' and ')} like you`
-      : null
+    likedLine: loved.length ? `${candidateName} liked ${loved.join(' and ')} like you` : null,
+    dislikedLine: hated.length ? `${candidateName} didn't like ${hated.join(' and ')} like you` : null
   }
 }
 
@@ -360,27 +360,17 @@ async function updateTasteVector(userId, movieId, reaction) {
   await supabase.from('users').update({ taste_vector: next }).eq('id', userId)
 }
 
+// Scoring lives in lib/tasteMatch.js (shared likes + shared dislikes on films both people rated).
 export function computeCompatibilityFromMaps(userMap, candidateMap) {
-  if (!userMap || !candidateMap) return { score: 50, summary: 'Still discovering taste overlap.' }
+  const result = compareTaste(userMap, candidateMap)
+  return { ...result, summary: tasteSummaryFrom(result) }
+}
 
-  let sharedLove = 0
-  let sharedHate = 0
-  let conflicts = 0
-
-  for (const movieId of userMap.love) {
-    if (candidateMap.love.has(movieId)) sharedLove += 1
-    if (candidateMap.hate.has(movieId)) conflicts += 1
-  }
-
-  for (const movieId of userMap.hate) {
-    if (candidateMap.hate.has(movieId)) sharedHate += 1
-    if (candidateMap.love.has(movieId)) conflicts += 1
-  }
-
-  const score = Math.max(0, Math.min(99, 45 + sharedLove * 14 + sharedHate * 9 - conflicts * 16))
-  const summary = buildTasteSummary(userMap.labels, candidateMap.labels)
-
-  return { score, summary, sharedLove, sharedHate, conflicts }
+function tasteSummaryFrom(result) {
+  const parts = []
+  if (result.sharedLovedTitles.length) parts.push(`Loved: ${result.sharedLovedTitles.slice(0, 2).join(' · ')}`)
+  if (result.sharedHatedTitles.length) parts.push(`Disliked: ${result.sharedHatedTitles.slice(0, 2).join(' · ')}`)
+  return parts.join(' · ') || 'No films in common yet.'
 }
 
 export function buildTasteSummary(userLabels, candidateLabels) {

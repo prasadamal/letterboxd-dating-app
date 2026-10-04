@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
 import { usePlatform } from '../../lib/platform'
@@ -100,26 +100,8 @@ export default function DatingScreen() {
   }
 
   return (
-    <View style={styles.screen}>
+    <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentContainerStyle={styles.deck}>
       <SwipeDatingCard profile={profile} onSwipe={swipe} />
-      <Text style={styles.meta}>
-        {meta?.remainingInPool ?? 0} left in pool · swipe card or use buttons
-      </Text>
-      <Pressable onPress={() => setReporting(true)} accessibilityRole="button">
-        <Text style={styles.reportText}>Report or block {profile.name}</Text>
-      </Pressable>
-      <ReportSheet
-        visible={reporting}
-        userId={profile.id}
-        userName={profile.name}
-        onClose={() => setReporting(false)}
-        onReported={async (blocked) => {
-          setReporting(false)
-          if (blocked) await load().catch(() => null)
-          setMessage(blocked ? 'Thanks for reporting. You won’t see them again.' : 'Thanks — our team will review this profile.')
-        }}
-      />
-      {!!message && <Text style={styles.meta}>{message}</Text>}
       <View style={styles.actions}>
         <Pressable style={styles.passBtn} onPress={() => swipe('pass')}>
           <Text style={styles.passText}>Pass</Text>
@@ -143,12 +125,31 @@ export default function DatingScreen() {
           <Text style={styles.likeText}>Like</Text>
         </Pressable>
       </View>
-    </View>
+      <Text style={styles.meta}>
+        {meta?.remainingInPool ?? 0} left in pool · swipe card or use buttons
+      </Text>
+      <Pressable onPress={() => setReporting(true)} accessibilityRole="button">
+        <Text style={styles.reportText}>Report or block {profile.name}</Text>
+      </Pressable>
+      <ReportSheet
+        visible={reporting}
+        userId={profile.id}
+        userName={profile.name}
+        onClose={() => setReporting(false)}
+        onReported={async (blocked) => {
+          setReporting(false)
+          if (blocked) await load().catch(() => null)
+          setMessage(blocked ? 'Thanks for reporting. You won’t see them again.' : 'Thanks — our team will review this profile.')
+        }}
+      />
+      {!!message && <Text style={styles.meta}>{message}</Text>}
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg, padding: 16, justifyContent: 'center', gap: 16 },
+  deck: { padding: 16, gap: 14, paddingBottom: 32 },
   meta: { color: colors.muted, textAlign: 'center', fontSize: 12 },
   actions: { flexDirection: 'row', gap: 12 },
   passBtn: { flex: 1, borderRadius: 999, borderWidth: 1, borderColor: colors.border, paddingVertical: 14, alignItems: 'center' },

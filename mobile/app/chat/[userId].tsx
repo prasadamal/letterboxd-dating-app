@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, FlatList, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { ApiError, apiFetch } from '../../lib/api'
@@ -9,7 +9,7 @@ import { colors } from '../../lib/theme'
 import type { ChatMessage } from '../../lib/types'
 
 export default function ChatScreen() {
-  const { userId } = useLocalSearchParams<{ userId: string }>()
+  const { userId, name } = useLocalSearchParams<{ userId: string; name?: string }>()
   const { token, user } = useAuth()
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [text, setText] = useState('')
@@ -135,6 +135,7 @@ export default function ChatScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <Stack.Screen options={{ title: name || 'Chat' }} />
       {introPending && !chatUnlocked && (
         <Text style={styles.banner}>Send one hello — chat unlocks after you both message once.</Text>
       )}
