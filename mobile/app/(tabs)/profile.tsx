@@ -6,6 +6,9 @@ import { useRouter } from 'expo-router'
 import { apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
 import { colors } from '../../lib/theme'
+import { FavoriteFilmPicker } from '../../components/FavoriteFilmPicker'
+import { TasteStatsCard } from '../../components/TasteStatsCard'
+import { FeedbackSheet } from '../../components/FeedbackSheet'
 
 export default function ProfileScreen() {
   const { user, token, refreshUser, signOut } = useAuth()
@@ -17,6 +20,7 @@ export default function ProfileScreen() {
   const [referralShare, setReferralShare] = useState('')
   const [friendCode, setFriendCode] = useState('')
   const [saving, setSaving] = useState(false)
+  const [feedbackOpen, setFeedbackOpen] = useState(false)
   const [minAge, setMinAge] = useState(String(user?.discovery_prefs?.minAge || 18))
   const [maxAge, setMaxAge] = useState(String(user?.discovery_prefs?.maxAge || 99))
 
@@ -190,6 +194,12 @@ export default function ProfileScreen() {
         </Pressable>
       )}
 
+      <FavoriteFilmPicker user={user} onSaved={refreshUser} />
+
+      <Pressable style={styles.secondaryBtn} onPress={() => router.push('/friends')}>
+        <Text style={styles.secondaryText}>Film friends — compare taste & watch together</Text>
+      </Pressable>
+
       <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Name" placeholderTextColor={colors.muted} />
       <TextInput style={styles.input} value={country} onChangeText={setCountry} placeholder="Country" placeholderTextColor={colors.muted} />
       <TextInput style={[styles.input, styles.multiline]} value={bio} onChangeText={setBio} placeholder="One line about you & movies" placeholderTextColor={colors.muted} multiline />
@@ -231,16 +241,18 @@ export default function ProfileScreen() {
         </Pressable>
       </View>
 
+      <TasteStatsCard refreshKey={user.loved?.length} />
+
       <View style={styles.block}>
         <Text style={styles.blockTitle}>I like</Text>
-        {(user.loved || []).map((movie) => (
+        {(user.loved || []).slice(-8).reverse().map((movie) => (
           <Text key={movie} style={styles.listItem}>{movie}</Text>
         ))}
       </View>
 
       <View style={styles.block}>
         <Text style={styles.blockTitle}>I don't like</Text>
-        {(user.hated || []).map((movie) => (
+        {(user.hated || []).slice(-8).reverse().map((movie) => (
           <Text key={movie} style={styles.listItem}>{movie}</Text>
         ))}
       </View>
@@ -252,6 +264,11 @@ export default function ProfileScreen() {
       <Pressable style={styles.dangerBtn} onPress={deleteAccount}>
         <Text style={styles.dangerText}>Delete account</Text>
       </Pressable>
+
+      <Pressable style={styles.secondaryBtn} onPress={() => setFeedbackOpen(true)}>
+        <Text style={styles.secondaryText}>Send feedback</Text>
+      </Pressable>
+      <FeedbackSheet visible={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
 
       <Pressable onPress={() => Linking.openURL(Constants.expoConfig?.extra?.privacyPolicyUrl as string)}>
         <Text style={styles.link}>Privacy Policy</Text>

@@ -42,6 +42,17 @@ export default function HomeScreen() {
         Then the dating deck opens with taste-based matches and chat.
       </Text>
 
+      <View style={styles.featureRow}>
+        <Pressable style={styles.feature} onPress={() => router.push('/friends')}>
+          <Text style={styles.featureTitle}>Film friends</Text>
+          <Text style={styles.featureBody}>Compare taste with anyone and find films to watch together.</Text>
+        </Pressable>
+        <Pressable style={styles.feature} onPress={() => router.push('/(tabs)/taste')}>
+          <Text style={styles.featureTitle}>People's chart</Text>
+          <Text style={styles.featureBody}>The best films, ranked by everyone's likes. Films → Explore.</Text>
+        </Pressable>
+      </View>
+
       <CounterCard label="Men registered" count={platform.maleCount} target={platform.maleTarget} />
       <CounterCard label="Women registered" count={platform.femaleCount} target={platform.femaleTarget} />
 
@@ -67,6 +78,10 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  featureRow: { flexDirection: 'row', gap: 10, marginBottom: 12 },
+  feature: { flex: 1, backgroundColor: colors.card, borderRadius: 18, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 6 },
+  featureTitle: { color: colors.text, fontSize: 16, fontWeight: '800' },
+  featureBody: { color: colors.muted, fontSize: 13, lineHeight: 18 },
   screen: { flex: 1, backgroundColor: colors.bg, padding: 16, gap: 12 },
   eyebrow: { color: colors.peach, fontSize: 11, letterSpacing: 1.1 },
   heading: { color: colors.text, fontSize: 24, fontWeight: '800' },

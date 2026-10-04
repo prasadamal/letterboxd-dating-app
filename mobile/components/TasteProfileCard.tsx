@@ -6,10 +6,28 @@ import type { DatingProfile } from '../lib/types'
 type Props = {
   profile: Pick<
     DatingProfile,
-    'name' | 'age' | 'country' | 'city' | 'bio' | 'avatar_url' | 'photo_url' | 'score' | 'sharedCount' | 'sharedLoved' | 'sharedHated'
+    | 'name'
+    | 'age'
+    | 'country'
+    | 'city'
+    | 'bio'
+    | 'avatar_url'
+    | 'photo_url'
+    | 'score'
+    | 'sharedCount'
+    | 'sharedLoved'
+    | 'sharedHated'
+    | 'favorite'
   >
   compact?: boolean
 }
+
+const FAVORITE_NOTE = {
+  same: 'Same as yours!',
+  you_liked: 'You liked it too',
+  you_disliked: "You didn't like it",
+  not_rated: ''
+} as const
 
 const CHIPS_FULL = 4
 const CHIPS_COMPACT = 2
@@ -47,6 +65,24 @@ export function TasteProfileCard({ profile, compact = false }: Props) {
         <Text style={styles.match}>{Math.round(profile.score)}% taste match</Text>
         <Text style={styles.common}>{common ? `${common} films in common` : 'No films in common yet'}</Text>
       </View>
+      {profile.favorite && (
+        <View style={styles.favorite}>
+          <Text style={styles.favoriteLabel}>❤ ALL-TIME FAVOURITE</Text>
+          <Text style={styles.favoriteTitle} numberOfLines={2}>
+            {profile.favorite.title}
+          </Text>
+          {!!FAVORITE_NOTE[profile.favorite.relation] && (
+            <Text
+              style={[
+                styles.favoriteNote,
+                profile.favorite.relation === 'you_disliked' ? { color: colors.error } : { color: colors.green }
+              ]}
+            >
+              {FAVORITE_NOTE[profile.favorite.relation]}
+            </Text>
+          )}
+        </View>
+      )}
       {loved.length > 0 && (
         <View style={styles.section}>
           <Text style={[styles.label, { color: colors.green }]}>YOU BOTH LIKED</Text>
@@ -125,6 +161,10 @@ const styles = StyleSheet.create({
   match: { color: colors.peach, fontSize: 18, fontWeight: '800' },
   common: { color: colors.muted, fontSize: 12 },
   section: { gap: 6 },
+  favorite: { backgroundColor: 'rgba(255,95,138,0.08)', borderColor: 'rgba(255,95,138,0.3)', borderWidth: 1, borderRadius: 14, padding: 10, gap: 2 },
+  favoriteLabel: { color: colors.pink, fontSize: 11, fontWeight: '800', letterSpacing: 1.2 },
+  favoriteTitle: { color: colors.text, fontSize: 15, fontWeight: '700' },
+  favoriteNote: { fontSize: 12, fontWeight: '600' },
   label: { fontSize: 11, fontWeight: '800', letterSpacing: 1.2 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, alignItems: 'center' },
   chip: { borderRadius: 999, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, maxWidth: '100%' },

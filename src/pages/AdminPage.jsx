@@ -9,6 +9,8 @@ export default function AdminPage() {
   const [notice, setNotice] = useState('')
   const [platform, setPlatform] = useState(null)
   const [targets, setTargets] = useState({ male: '', female: '' })
+  const [feedback, setFeedback] = useState([])
+  const [feedbackStatus, setFeedbackStatus] = useState('new')
 
   async function adminRequest(path, options = {}, key = adminKey) {
     const res = await fetch(`/api/v1/admin${path}`, {
@@ -24,6 +26,31 @@ export default function AdminPage() {
     const data = await adminRequest('/platform', {}, key)
     setPlatform(data.platform)
     setTargets({ male: String(data.platform.maleTarget), female: String(data.platform.femaleTarget) })
+  }
+
+  async function loadFeedback(key = adminKey, status = feedbackStatus) {
+    const data = await adminRequest(`/feedback?status=${status}`, {}, key)
+    setFeedback(data.items || [])
+  }
+
+  async function markFeedback(id, status) {
+    setError('')
+    try {
+      await adminRequest(`/feedback/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) })
+      await loadFeedback()
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  async function switchFeedback(status) {
+    setFeedbackStatus(status)
+    setError('')
+    try {
+      await loadFeedback(adminKey, status)
+    } catch (err) {
+      setError(err.message)
+    }
   }
 
   async function updatePlatform(body, message) {
@@ -64,6 +91,7 @@ export default function AdminPage() {
       setItems(data.items || [])
       localStorage.setItem(ADMIN_KEY_STORAGE, key)
       await loadPlatform(key)
+      await loadFeedback(key)
     } catch (err) {
       setError(err.message)
     }
@@ -184,6 +212,53 @@ export default function AdminPage() {
           ))
         )}
       </div>
+
+      <section className="admin-table card-panel">
+        <h2>Feedback inbox</h2>
+        <div className="action-row">
+          {['new', 'read', 'done'].map((status) => (
+            <button
+              key={status}
+              className={status === feedbackStatus ? 'primary-button' : 'ghost-button'}
+              type="button"
+              onClick={() => switchFeedback(status)}
+            >
+              {status === 'new' ? 'New' : status === 'read' ? 'Read' : 'Done'}
+            </button>
+          ))}
+        </div>
+        {!feedback.length ? (
+          <p className="hero-text">No {feedbackStatus} feedback.</p>
+        ) : (
+          feedback.map((item) => (
+            <article key={item.id} className="admin-row">
+              <div>
+                <strong>
+                  #{item.id} · {item.category}
+                </strong>
+                <p style={{ whiteSpace: 'pre-wrap' }}>{item.message}</p>
+                <p className="hero-text">
+                  {new Date(item.created_at).toLocaleString()}
+                  {item.platform ? ` · ${item.platform}` : ''}
+                  {item.app_version ? ` · v${item.app_version}` : ''}
+                </p>
+              </div>
+              <div className="action-row">
+                {item.status !== 'read' && (
+                  <button className="ghost-button" type="button" onClick={() => markFeedback(item.id, 'read')}>
+                    Mark read
+                  </button>
+                )}
+                {item.status !== 'done' && (
+                  <button className="primary-button" type="button" onClick={() => markFeedback(item.id, 'done')}>
+                    Done
+                  </button>
+                )}
+              </div>
+            </article>
+          ))
+        )}
+      </section>
     </div>
   )
 }

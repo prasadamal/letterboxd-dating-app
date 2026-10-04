@@ -54,3 +54,23 @@ test('ranking: match % first, then films in common', () => {
   ].sort(rankByTaste)
   assert.deepEqual(cards.map((c) => c.id), ['b', 'c', 'a'])
 })
+
+test('the same all-time favourite raises the match and is reported as "same"', () => {
+  const me = { ...person([1], []), favorite: 9 }
+  const plain = compareTaste(me, person([1], []))
+  const r = compareTaste(me, { ...person([1], []), favorite: 9 })
+  assert.equal(r.favorite.relation, 'same')
+  assert.ok(r.score > plain.score)
+})
+
+test('liking or disliking the other person\'s favourite moves the match', () => {
+  const them = { ...person([1], []), favorite: 7 }
+  const liked = compareTaste(person([1, 7], []), them)
+  const disliked = compareTaste(person([1], [7]), them)
+  const unrated = compareTaste(person([1], []), them)
+  assert.equal(liked.favorite.relation, 'you_liked')
+  assert.equal(disliked.favorite.relation, 'you_disliked')
+  assert.equal(unrated.favorite.relation, 'not_rated')
+  assert.ok(liked.score > unrated.score)
+  assert.ok(disliked.score < unrated.score)
+})
