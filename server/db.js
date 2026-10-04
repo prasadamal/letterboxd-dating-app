@@ -51,6 +51,27 @@ export async function getRatingsForUsers(userIds) {
     }
   }
 
+  // Each person's single all-time favourite also feeds the match (see lib/tasteMatch.js).
+  const favorites = await selectAllIn(userIds, (ids) =>
+    supabase
+      .from('users')
+      .select('id, favorite_movie_id, favorite:movies!users_favorite_movie_id_fkey(title, year, popularity)')
+      .in('id', ids)
+      .not('favorite_movie_id', 'is', null)
+      .order('id')
+  )
+  for (const row of favorites) {
+    if (!byUser.has(row.id)) {
+      byUser.set(row.id, { love: new Set(), hate: new Set(), labels: { love: [], hate: [] }, titles: new Map(), popularity: new Map() })
+    }
+    const bucket = byUser.get(row.id)
+    bucket.favorite = row.favorite_movie_id
+    if (row.favorite) {
+      bucket.titles.set(row.favorite_movie_id, formatMovieLabel(row.favorite))
+      if (row.favorite.popularity != null) bucket.popularity.set(row.favorite_movie_id, row.favorite.popularity)
+    }
+  }
+
   return byUser
 }
 
@@ -141,8 +162,12 @@ export async function getUserProfile(userId) {
   if (!user || user.deleted_at) return null
 
   const ratings = await getRatingsForUsers([userId])
-  const taste = ratings.get(userId)?.labels || { love: [], hate: [] }
-  return mapUserRow(user, { loved: taste.love, hated: taste.hate })
+  const bucket = ratings.get(userId)
+  const taste = bucket?.labels || { love: [], hate: [] }
+  const favorite = user.favorite_movie_id
+    ? { id: user.favorite_movie_id, title: bucket?.titles?.get(user.favorite_movie_id) || null }
+    : null
+  return { ...mapUserRow(user, { loved: taste.love, hated: taste.hate }), favorite }
 }
 
 export async function createUser(payload) {

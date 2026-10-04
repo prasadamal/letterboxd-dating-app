@@ -8,11 +8,16 @@
 // The percentage starts at 50% (no shared films = no opinion) and moves with evidence, so one lucky
 // overlap can't beat ten real ones:  match = (agree + K/2) / (agree + conflict + K)
 //
+// All-time favourite (one film each): the same favourite is strong evidence (FAV_SAME); liking or disliking
+// the other person's favourite counts more than an ordinary film (FAV_RATED).
+//
 // Ranking order: match %, then number of films in common. Photo, age and place are filters, not score.
 
 const POPULARITY_MOST = 90 // The Godfather
 const POPULARITY_LEAST = 35 // the most obscure films in the catalog
 const PRIOR = 3 // weighted films of "no opinion" blended in; bigger = needs more shared films to move
+const FAV_SAME = 4
+const FAV_RATED = 2
 
 export function rarityWeight(popularity) {
   if (!Number.isFinite(popularity)) return 1.5
@@ -20,9 +25,10 @@ export function rarityWeight(popularity) {
   return 1 + (POPULARITY_MOST - clamped) / (POPULARITY_MOST - POPULARITY_LEAST) // 1.0 … 2.0
 }
 
-// `a` and `b`: { love: Set<movieId>, hate: Set<movieId>, titles?: Map<movieId,label>, popularity?: Map<movieId,number> }
+// `a` and `b`: { love: Set<movieId>, hate: Set<movieId>, favorite?: movieId,
+//                titles?: Map<movieId,label>, popularity?: Map<movieId,number> }
 export function compareTaste(a, b) {
-  const empty = { score: 50, sharedLove: 0, sharedHate: 0, conflicts: 0, sharedCount: 0, sharedLovedTitles: [], sharedHatedTitles: [] }
+  const empty = { score: 50, sharedLove: 0, sharedHate: 0, conflicts: 0, sharedCount: 0, sharedLovedTitles: [], sharedHatedTitles: [], favorite: null }
   if (!a || !b) return empty
 
   const weightOf = (id) => rarityWeight(a.popularity?.get(id) ?? b.popularity?.get(id))
@@ -50,6 +56,28 @@ export function compareTaste(a, b) {
     }
   }
 
+  // Favourites: `favorite.relation` describes the OTHER person's favourite from a's point of view.
+  let favorite = null
+  if (b.favorite != null) {
+    const id = b.favorite
+    let relation = 'not_rated'
+    if (a.favorite === id) {
+      relation = 'same'
+      agree += FAV_SAME
+    } else if (a.love.has(id)) {
+      relation = 'you_liked'
+      agree += FAV_RATED
+    } else if (a.hate.has(id)) {
+      relation = 'you_disliked'
+      disagree += FAV_RATED
+    }
+    favorite = { title: titleOf(id), relation }
+  }
+  if (a.favorite != null && a.favorite !== b.favorite) {
+    if (b.love.has(a.favorite)) agree += FAV_RATED
+    else if (b.hate.has(a.favorite)) disagree += FAV_RATED
+  }
+
   const conflicts = [...a.love].filter((id) => b.hate.has(id)).length + [...a.hate].filter((id) => b.love.has(id)).length
   const ratio = (agree + PRIOR / 2) / (agree + disagree + PRIOR)
   const score = Math.max(1, Math.min(99, Math.round(ratio * 100)))
@@ -63,7 +91,8 @@ export function compareTaste(a, b) {
     conflicts,
     sharedCount: sharedLoved.length + sharedHated.length,
     sharedLovedTitles: sharedLoved.sort(byRarity).map(titleOf),
-    sharedHatedTitles: sharedHated.sort(byRarity).map(titleOf)
+    sharedHatedTitles: sharedHated.sort(byRarity).map(titleOf),
+    favorite
   }
 }
 
