@@ -1,6 +1,6 @@
 import * as Notifications from 'expo-notifications'
 import Constants from 'expo-constants'
-import * as SecureStore from 'expo-secure-store'
+import { secureStorage } from './session'
 import { Platform } from 'react-native'
 import { apiFetch } from './api'
 
@@ -17,11 +17,11 @@ Notifications.setNotificationHandler({
 const PUSH_TOKEN_KEY = 'reelmates_push_token'
 
 export async function getRegisteredPushToken() {
-  return SecureStore.getItemAsync(PUSH_TOKEN_KEY)
+  return secureStorage.getItem(PUSH_TOKEN_KEY)
 }
 
 export async function clearRegisteredPushToken() {
-  await SecureStore.deleteItemAsync(PUSH_TOKEN_KEY)
+  await secureStorage.removeItem(PUSH_TOKEN_KEY)
 }
 
 export async function registerDevicePushToken(accessToken: string) {
@@ -51,5 +51,5 @@ export async function registerDevicePushToken(accessToken: string) {
     method: 'POST',
     body: JSON.stringify({ token: tokenData.data, platform })
   }, accessToken)
-  await SecureStore.setItemAsync(PUSH_TOKEN_KEY, tokenData.data)
+  await secureStorage.setItem(PUSH_TOKEN_KEY, tokenData.data)
 }

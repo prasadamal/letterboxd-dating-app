@@ -4,7 +4,7 @@ import path from 'path'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
 
-import { env } from './config/env.js'
+import { env, missingProductionConfig } from './config/env.js'
 import { logger } from './lib/logger.js'
 import { requestIdMiddleware } from './middleware/requestId.js'
 import { applySecurityMiddleware } from './middleware/security.js'
@@ -57,12 +57,15 @@ export function createApp() {
 
   async function healthPayload() {
     const { error } = await supabase.from('platform_settings').select('id').limit(1)
+    // `setup` lists features that are switched off until their env vars are set (no secrets are shown).
     return {
       ok: !error,
       status: error ? 'degraded' : 'healthy',
       env: env.NODE_ENV,
       version: 'v1',
       db: error ? 'down' : 'up',
+      email: env.RESEND_API_KEY && env.EMAIL_FROM ? 'configured' : 'not_configured',
+      setup: missingProductionConfig(env).map((item) => item.split(':')[0]),
       time: new Date().toISOString()
     }
   }

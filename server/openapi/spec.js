@@ -48,6 +48,10 @@ export const openApiDocument = {
     '/admin/moderation/queue': { get: { summary: 'Moderation queue (x-admin-key)' } },
     '/admin/moderation/{id}': { patch: { summary: 'Update moderation item' } },
     '/admin/users/{userId}/verification': { patch: { summary: 'Set verification status' } },
+    '/admin/platform': {
+      get: { summary: 'Launch gate status (x-admin-key)' },
+      patch: { summary: 'Set launch targets or open/close dating ({ maleTarget, femaleTarget, datingOpen })' }
+    },
     '/admin/users/{userId}/suspension': { patch: { summary: 'Suspend or restore an account ({ suspended, reason })' } },
     '/internal/daily-reminders': { post: { summary: 'Cron: daily game push (x-cron-secret)' } },
     '/internal/inactivity-cleanup': { post: { summary: 'Cron: pause inactive matchmaking (x-cron-secret)' } }

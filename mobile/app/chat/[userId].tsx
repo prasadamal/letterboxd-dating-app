@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, FlatList, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { ApiError, apiFetch } from '../../lib/api'
@@ -9,7 +9,7 @@ import { colors } from '../../lib/theme'
 import type { ChatMessage } from '../../lib/types'
 
 export default function ChatScreen() {
-  const { userId } = useLocalSearchParams<{ userId: string }>()
+  const { userId, name } = useLocalSearchParams<{ userId: string; name?: string }>()
   const { token, user } = useAuth()
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [text, setText] = useState('')
@@ -92,16 +92,12 @@ export default function ChatScreen() {
 
   useEffect(() => {
     if (!realtimeChannel) return
-    return subscribeChatChannel(realtimeChannel, {
-      onMessage: (payload) => {
-        const msg = payload as ChatMessage
-        if (msg?.id) mergeMessage(msg)
-      },
-      onRead: () => {
-        loadMessages(lastSyncRef.current).catch(() => null)
-      }
-    })
-  }, [realtimeChannel, mergeMessage, loadMessages])
+    // Signals carry no content; fetch what changed through the authenticated API.
+    const refresh = () => {
+      loadMessages(lastSyncRef.current).catch(() => null)
+    }
+    return subscribeChatChannel(realtimeChannel, { onMessage: refresh, onRead: () => loadMessages().catch(() => null) })
+  }, [realtimeChannel, loadMessages])
 
   async function send() {
     if (!token || !userId || !text.trim()) return
@@ -139,6 +135,7 @@ export default function ChatScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <Stack.Screen options={{ title: name || 'Chat' }} />
       {introPending && !chatUnlocked && (
         <Text style={styles.banner}>Send one hello — chat unlocks after you both message once.</Text>
       )}

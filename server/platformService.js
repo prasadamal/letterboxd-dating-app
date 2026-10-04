@@ -1,69 +1,82 @@
 import { supabase } from './supabaseClient.js'
+import { env } from './config/env.js'
 
-const DEFAULT_MALE_TARGET = Number(process.env.LAUNCH_MALE_TARGET || 500)
-const DEFAULT_FEMALE_TARGET = Number(process.env.LAUNCH_FEMALE_TARGET || 500)
+// Every open app polls the launch status, so serve it from memory for a short while.
+const STATUS_TTL_MS = 15_000
+let cached = null
 
-export async function syncPlatformTargets() {
-  await supabase
-    .from('platform_settings')
-    .upsert(
-      {
-        id: 1,
-        male_target: DEFAULT_MALE_TARGET,
-        female_target: DEFAULT_FEMALE_TARGET,
-        updated_at: new Date().toISOString()
-      },
-      { onConflict: 'id' }
-    )
+export function invalidatePlatformStatus() {
+  cached = null
 }
 
-export async function getPlatformStatus() {
-  await syncPlatformTargets()
-  await supabase.rpc('refresh_dating_launch')
+// Creates the settings row on an empty database. Never overwrites it: targets are changed from /admin,
+// so a local API pointed at the shared database can't move the production launch gate.
+export async function ensurePlatformSettings() {
+  const { error } = await supabase.from('platform_settings').upsert(
+    {
+      id: 1,
+      male_target: env.LAUNCH_MALE_TARGET,
+      female_target: env.LAUNCH_FEMALE_TARGET,
+      updated_at: new Date().toISOString()
+    },
+    { onConflict: 'id', ignoreDuplicates: true }
+  )
+  if (error) throw error
+}
 
-  const { data: settings, error: settingsError } = await supabase
-    .from('platform_settings')
-    .select('*')
-    .eq('id', 1)
-    .maybeSingle()
-
-  if (settingsError) throw settingsError
-
-  const { data: users, error: usersError } = await supabase
+async function countUsers(gender) {
+  const { count, error } = await supabase
     .from('users')
-    .select('gender')
+    .select('id', { count: 'exact', head: true })
+    .eq('gender', gender)
     .is('deleted_at', null)
+  if (error) throw error
+  return count || 0
+}
 
-  if (usersError) throw usersError
+async function readSettings() {
+  const { data, error } = await supabase.from('platform_settings').select('*').eq('id', 1).maybeSingle()
+  if (error) throw error
+  return data
+}
 
-  let maleCount = 0
-  let femaleCount = 0
-  let otherCount = 0
-
-  for (const row of users || []) {
-    if (row.gender === 'male') maleCount += 1
-    else if (row.gender === 'female') femaleCount += 1
-    else otherCount += 1
+async function loadPlatformStatus() {
+  let settings = await readSettings()
+  if (settings && !settings.dating_launched_at) {
+    // Opens dating once both targets are met (the SQL function only ever sets the timestamp).
+    const { error } = await supabase.rpc('refresh_dating_launch')
+    if (error) throw error
+    settings = await readSettings()
   }
 
-  const maleTarget = settings?.male_target ?? DEFAULT_MALE_TARGET
-  const femaleTarget = settings?.female_target ?? DEFAULT_FEMALE_TARGET
-  const datingLaunched = Boolean(settings?.dating_launched_at)
+  const [maleCount, femaleCount] = await Promise.all([countUsers('male'), countUsers('female')])
+  const maleTarget = settings?.male_target ?? env.LAUNCH_MALE_TARGET
+  const femaleTarget = settings?.female_target ?? env.LAUNCH_FEMALE_TARGET
+  const forced = env.FORCE_DATING_OPEN
+  const datingLaunched = forced || Boolean(settings?.dating_launched_at)
 
   return {
     maleCount,
     femaleCount,
-    otherCount,
+    otherCount: 0,
     maleTarget,
     femaleTarget,
-    totalRegistered: (users || []).length,
+    totalRegistered: maleCount + femaleCount,
     datingLaunched,
     datingLaunchedAt: settings?.dating_launched_at || null,
+    forcedOpenLocally: forced,
     progressPercent: Math.min(
       100,
-      Math.round(((maleCount / maleTarget + femaleCount / femaleTarget) / 2) * 100)
+      Math.round(((Math.min(maleCount, maleTarget) / maleTarget + Math.min(femaleCount, femaleTarget) / femaleTarget) / 2) * 100)
     )
   }
+}
+
+export async function getPlatformStatus({ fresh = false } = {}) {
+  if (!fresh && cached && cached.expires > Date.now()) return cached.value
+  const value = await loadPlatformStatus()
+  cached = { value, expires: Date.now() + STATUS_TTL_MS }
+  return value
 }
 
 export async function assertDatingLaunched() {
@@ -74,4 +87,23 @@ export async function assertDatingLaunched() {
     throw error
   }
   return status
+}
+
+// Admin control: change targets and/or open or close dating by hand (e.g. for app-store reviewers).
+export async function updatePlatformSettings({ maleTarget, femaleTarget, datingOpen }) {
+  const updates = { updated_at: new Date().toISOString() }
+  if (maleTarget !== undefined) updates.male_target = maleTarget
+  if (femaleTarget !== undefined) updates.female_target = femaleTarget
+  if (datingOpen === true) updates.dating_launched_at = new Date().toISOString()
+  if (datingOpen === false) updates.dating_launched_at = null
+
+  if (datingOpen === true) {
+    const current = await readSettings()
+    if (current?.dating_launched_at) delete updates.dating_launched_at
+  }
+
+  const { error } = await supabase.from('platform_settings').update(updates).eq('id', 1)
+  if (error) throw error
+  invalidatePlatformStatus()
+  return getPlatformStatus({ fresh: true })
 }

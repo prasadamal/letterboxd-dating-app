@@ -6,6 +6,51 @@ export default function AdminPage() {
   const [adminKey, setAdminKey] = useState(localStorage.getItem(ADMIN_KEY_STORAGE) || '')
   const [items, setItems] = useState([])
   const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
+  const [platform, setPlatform] = useState(null)
+  const [targets, setTargets] = useState({ male: '', female: '' })
+
+  async function adminRequest(path, options = {}, key = adminKey) {
+    const res = await fetch(`/api/v1/admin${path}`, {
+      ...options,
+      headers: { 'Content-Type': 'application/json', 'x-admin-key': key, ...(options.headers || {}) }
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.message || 'Request failed')
+    return data
+  }
+
+  async function loadPlatform(key = adminKey) {
+    const data = await adminRequest('/platform', {}, key)
+    setPlatform(data.platform)
+    setTargets({ male: String(data.platform.maleTarget), female: String(data.platform.femaleTarget) })
+  }
+
+  async function updatePlatform(body, message) {
+    setError('')
+    setNotice('')
+    try {
+      const data = await adminRequest('/platform', { method: 'PATCH', body: JSON.stringify(body) })
+      setPlatform(data.platform)
+      setNotice(message)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  async function suspend(userId) {
+    if (!userId || !window.confirm('Suspend this account? They are signed out and hidden from everyone.')) return
+    setError('')
+    try {
+      await adminRequest(`/users/${userId}/suspension`, {
+        method: 'PATCH',
+        body: JSON.stringify({ suspended: true, reason: 'Suspended from moderation queue' })
+      })
+      setNotice('Account suspended.')
+    } catch (err) {
+      setError(err.message)
+    }
+  }
 
   async function loadQueue(key = adminKey) {
     if (!key) return
@@ -18,6 +63,7 @@ export default function AdminPage() {
       if (!res.ok) throw new Error(data.message || 'Failed to load queue')
       setItems(data.items || [])
       localStorage.setItem(ADMIN_KEY_STORAGE, key)
+      await loadPlatform(key)
     } catch (err) {
       setError(err.message)
     }
@@ -48,8 +94,8 @@ export default function AdminPage() {
   return (
     <div className="admin-shell">
       <header className="admin-head">
-        <h1>Moderation queue</h1>
-        <p className="hero-text">Review user reports flagged for trust & safety.</p>
+        <h1>ReelMates admin</h1>
+        <p className="hero-text">Launch gate and trust &amp; safety. Review open reports at least once a day.</p>
       </header>
 
       <div className="admin-key-row card-panel">
@@ -65,6 +111,49 @@ export default function AdminPage() {
       </div>
 
       {error && <p className="error-text">{error}</p>}
+      {notice && <p className="hero-text">{notice}</p>}
+
+      {platform && (
+        <section className="admin-table card-panel">
+          <h2>Launch gate</h2>
+          <p className="hero-text">
+            {platform.maleCount}/{platform.maleTarget} men · {platform.femaleCount}/{platform.femaleTarget} women ·{' '}
+            {platform.datingLaunched ? `Dating open since ${new Date(platform.datingLaunchedAt).toLocaleString()}` : 'Dating closed'}
+          </p>
+          <div className="action-row">
+            <input
+              value={targets.male}
+              onChange={(e) => setTargets({ ...targets, male: e.target.value })}
+              placeholder="Men target"
+              inputMode="numeric"
+            />
+            <input
+              value={targets.female}
+              onChange={(e) => setTargets({ ...targets, female: e.target.value })}
+              placeholder="Women target"
+              inputMode="numeric"
+            />
+            <button
+              className="ghost-button"
+              type="button"
+              onClick={() =>
+                updatePlatform({ maleTarget: Number(targets.male), femaleTarget: Number(targets.female) }, 'Targets saved.')
+              }
+            >
+              Save targets
+            </button>
+            {platform.datingLaunched ? (
+              <button className="ghost-button" type="button" onClick={() => updatePlatform({ datingOpen: false }, 'Dating closed.')}>
+                Close dating
+              </button>
+            ) : (
+              <button className="primary-button" type="button" onClick={() => updatePlatform({ datingOpen: true }, 'Dating opened.')}>
+                Open dating now
+              </button>
+            )}
+          </div>
+        </section>
+      )}
 
       <div className="admin-table card-panel">
         {!items.length ? (
@@ -86,6 +175,9 @@ export default function AdminPage() {
                 </button>
                 <button className="ghost-button" type="button" onClick={() => resolve(item.id, 'dismissed')}>
                   Dismiss
+                </button>
+                <button className="ghost-button" type="button" onClick={() => suspend(item.report?.reported_id)}>
+                  Suspend reported user
                 </button>
               </div>
             </article>

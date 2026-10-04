@@ -47,7 +47,7 @@ export default function MatchesScreen() {
           <View style={styles.card}>
             <TasteProfileCard profile={item} compact />
             {item.introPending && <Text style={styles.intro}>Send one hello each to unlock full chat.</Text>}
-            <Pressable style={styles.primaryBtn} onPress={() => router.push(`/chat/${item.id}`)}>
+            <Pressable style={styles.primaryBtn} onPress={() => router.push({ pathname: '/chat/[userId]', params: { userId: item.id, name: item.name } })}>
               <Text style={styles.primaryText}>Message</Text>
             </Pressable>
             <Pressable

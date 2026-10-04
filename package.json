@@ -16,7 +16,8 @@
     "mobile:typecheck": "cd mobile && npm run typecheck",
     "test": "node --test server/tests/*.test.js server/tests/integration/*.test.js",
     "test:integration": "INTEGRATION_TEST=1 node --test server/tests/integration/*.test.js",
-    "smoke": "node scripts/smoke-api.mjs"
+    "smoke": "node scripts/smoke-api.mjs",
+    "db:prelaunch-cleanup": "node server/scripts/prelaunchCleanup.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",

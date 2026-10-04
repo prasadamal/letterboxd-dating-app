@@ -1,8 +1,7 @@
 import express from 'express'
 import {
   applyReferralCode,
-  getDatingDeck,
-  getDatingDeckMeta,
+  getDatingDeckWithMeta,
   getMutualMatches,
   getReferralInfo,
   recordSwipe,
@@ -15,7 +14,7 @@ const router = express.Router()
 
 router.get('/deck', authMiddleware, async (req, res) => {
   try {
-    const [deck, meta] = await Promise.all([getDatingDeck(req.user.id, 1), getDatingDeckMeta(req.user.id)])
+    const { deck, meta } = await getDatingDeckWithMeta(req.user.id, 1)
     return res.json({ profile: deck[0] || null, meta })
   } catch (error) {
     if (error.code === 'DATING_LOCKED' || error.code === 'PROFILE_INCOMPLETE') {
