@@ -253,7 +253,7 @@ export const movieCatalog = [
     "genres": [
       "Drama"
     ],
-    "origin_language": "Bangla",
+    "origin_language": "Bengali",
     "popularity": 55,
     "in_deck": true,
     "tags": [

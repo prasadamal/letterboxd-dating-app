@@ -175,6 +175,21 @@ RLS is enabled on every `public` table with no policies, so client keys get no t
 
 See `CHANGELOG.md` and `docs/production/BACKLOG.md`.
 
+## Standalone film features (v1.3)
+
+ReelMates works as a film app even before (or without) dating:
+- **Like / Dislike / Haven't seen** on every film; *Haven't seen* never counts against anyone.
+- **Explore & chart** (Films tab): search the whole catalog (436 films) and the **People's chart** — best films ranked
+  by ReelMates members, filterable by collection (canon, world, Indian, Malayalam, crowd favourites, underseen gems…).
+- **All-time favourite film** (one per person): on your card and counted in matching.
+- **Film friends:** add anyone by code, compare taste, get **Watch together** ideas.
+- **Your taste stats:** liked/disliked/unseen, like rate, top genres, languages and decades.
+- **Send feedback** (Profile) → **Feedback inbox** in `/admin`.
+
+New API: `GET /movies/search`, `GET /movies/top?collection=`, `GET /movies/collections`, `PUT /users/favorite`,
+`GET /users/taste-stats`, `GET|POST /friends`, `DELETE /friends/:userId`, `GET /friends/compare/:userId`,
+`POST /feedback`, `GET|PATCH /admin/feedback`. Details in `docs/design/MATCHING.md`.
+
 ## What's intentionally out of scope (next passes)
 
 - Third-party ID verification vendor (Persona/Onfido), payments

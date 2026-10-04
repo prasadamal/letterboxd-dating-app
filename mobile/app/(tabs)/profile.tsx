@@ -209,7 +209,7 @@ export default function ProfileScreen() {
         <Text style={styles.listItem}>Age range for dating deck</Text>
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <TextInput
-            style={[styles.input, { flex: 1 }]}
+            style={[styles.input, { flex: 1, minWidth: 0 }]}
             value={minAge}
             onChangeText={setMinAge}
             keyboardType="number-pad"
@@ -217,7 +217,7 @@ export default function ProfileScreen() {
             placeholderTextColor={colors.muted}
           />
           <TextInput
-            style={[styles.input, { flex: 1 }]}
+            style={[styles.input, { flex: 1, minWidth: 0 }]}
             value={maxAge}
             onChangeText={setMaxAge}
             keyboardType="number-pad"
