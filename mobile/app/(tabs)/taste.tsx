@@ -54,7 +54,7 @@ export default function TasteScreen() {
       }
     >
       <Text style={styles.eyebrow}>DAILY TASTE GAME</Text>
-      <Text style={styles.heading}>10 films to shape your movie profile</Text>
+      <Text style={styles.heading}>Today's films — the same for everyone</Text>
       {!platform?.datingLaunched && (
         <Text style={styles.note}>
           Dating unlocks at {platform?.maleTarget ?? 500} men + {platform?.femaleTarget ?? 500} women. Keep playing daily.

@@ -25,7 +25,7 @@ Collect:
 - **Daily taste game** (10 films per calendar day, first open):
   - Titles only (name + year), global catalog (~300 films in DB).
   - User **drags** each film into **I like** or **I don't like** (kid-game buckets).
-  - Some films **repeat** on later days to refine taste.
+  - Everyone gets the **same films** each day, so people build up films in common; the catalog cycles, so films come back later to refine taste.
 - Backend stores ratings and a **taste vector** (genres/languages weighted from likes/dislikes).
 - **Dating tabs are hidden** until launch thresholds are met.
 
