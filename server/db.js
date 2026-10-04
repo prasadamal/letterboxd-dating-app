@@ -2,7 +2,7 @@ import { supabase } from './supabaseClient.js'
 import { notifyUser } from './services/notificationService.js'
 import { broadcastChatEvent, chatChannelName } from './services/realtimeService.js'
 import { movieCatalog } from './movieCatalog.js'
-import { pendingDailyMovies } from './lib/dailyMovies.js'
+import { pendingDailyMovies, sharedDailySet, utcDayNumber } from './lib/dailyMovies.js'
 import { mapLimit, selectAll, selectAllIn } from './lib/paging.js'
 import { compareTaste } from './lib/tasteMatch.js'
 
@@ -10,69 +10,7 @@ function formatMovieLabel(movie) {
   return `${movie.title} (${movie.year})`
 }
 
-function hashSeed(input) {
-  let hash = 2166136261
-  for (let i = 0; i < input.length; i += 1) {
-    hash ^= input.charCodeAt(i)
-    hash = Math.imul(hash, 16777619)
-  }
-  return hash >>> 0
-}
-
-function seededShuffle(items, seedKey) {
-  const copy = [...items]
-  let seed = hashSeed(seedKey)
-  for (let i = copy.length - 1; i > 0; i -= 1) {
-    seed = (Math.imul(seed, 1103515245) + 12345) >>> 0
-    const j = seed % (i + 1)
-    ;[copy[i], copy[j]] = [copy[j], copy[i]]
-  }
-  return copy
-}
-
 export const DAILY_MOVIE_COUNT = Number(process.env.DAILY_MOVIE_COUNT || 10)
-
-function pickDailySet(pool, userId, day, count = DAILY_MOVIE_COUNT) {
-  const famous = pool.filter((movie) => movie.popularity >= 55)
-  const underrated = pool.filter((movie) => movie.popularity < 55)
-  const genres = new Set()
-  const languages = new Set()
-  const picks = []
-
-  function tryAdd(movie) {
-    if (!movie || picks.some((item) => item.id === movie.id)) return false
-    picks.push(movie)
-    genres.add(movie.genres?.[0] || 'Drama')
-    languages.add(movie.origin_language || 'English')
-    return true
-  }
-
-  const famousOrder = seededShuffle(famous, `${userId}:${day}:famous`)
-  const hiddenOrder = seededShuffle(underrated, `${userId}:${day}:hidden`)
-  const targetFamous = Math.ceil(count / 2)
-
-  for (const movie of famousOrder) {
-    if (picks.filter((item) => item.popularity >= 55).length >= targetFamous) break
-    tryAdd(movie)
-  }
-
-  for (const movie of hiddenOrder) {
-    if (picks.length >= count) break
-    tryAdd(movie)
-  }
-
-  const remainder = seededShuffle(
-    pool.filter((movie) => !picks.some((item) => item.id === movie.id)),
-    `${userId}:${day}:fill`
-  )
-
-  for (const movie of remainder) {
-    if (picks.length >= count) break
-    tryAdd(movie)
-  }
-
-  return picks.slice(0, count)
-}
 
 export async function getRatingsForUsers(userIds) {
   if (!userIds.length) return new Map()
@@ -269,24 +207,9 @@ export async function getDailyMovies(userId) {
     return pendingDailyMovies(sorted, ratedToday)
   }
 
-  const ratedRows = await selectAll(() =>
-    supabase.from('user_ratings').select('movie_id, rating').eq('user_id', userId).in('rating', ['love', 'hate']).order('movie_id')
-  )
-
-  const ratedIds = new Set(ratedRows.map((row) => row.movie_id))
-
+  // Everyone gets the same films today (see sharedDailySet), so taste overlap grows for all players.
   const pool = await selectAll(() => supabase.from('movies').select('*').eq('in_deck', true).order('id'))
-
-  const all = pool || []
-  const unseen = all.filter((movie) => !ratedIds.has(movie.id))
-  const repeats = all.filter((movie) => ratedIds.has(movie.id))
-
-  const repeatCount = Math.min(3, Math.floor(DAILY_MOVIE_COUNT * 0.3), repeats.length)
-  const freshCount = Math.max(0, DAILY_MOVIE_COUNT - repeatCount)
-
-  const freshPicks = pickDailySet(unseen.length ? unseen : all, userId, day, freshCount)
-  const repeatPicks = seededShuffle(repeats, `${userId}:${day}:repeat`).slice(0, repeatCount)
-  const picks = seededShuffle([...freshPicks, ...repeatPicks], `${userId}:${day}:mix`).slice(0, DAILY_MOVIE_COUNT)
+  const picks = sharedDailySet(pool, utcDayNumber(), DAILY_MOVIE_COUNT)
 
   if (picks.length) {
     const { error: insertError } = await supabase.from('daily_batches').insert({

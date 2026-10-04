@@ -19,6 +19,15 @@
 
 Code: `server/lib/tasteMatch.js` (tests: `server/tests/tasteMatch.test.js`).
 
+## Daily films (the same for everyone)
+
+Every player gets the **same films each day** (UTC), so anyone active builds up films in common with everyone else —
+up to 10 more per day. The catalog is shuffled once per cycle and handed out 10 films a day, so nothing repeats until
+every film has been shown (≈29 days with the current 296 films); the next cycle reshuffles, and re-rating a film
+updates the earlier answer. Code: `sharedDailySet` in `server/lib/dailyMovies.js`.
+
+To keep it fresh for long-term players, grow the catalog (`npm run db:seed` loads `server/movieCatalog.js`).
+
 ## Card layout
 
 1. Big photo with **name, age and place** on it (like any dating app)

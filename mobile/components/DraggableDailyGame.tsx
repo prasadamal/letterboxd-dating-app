@@ -15,6 +15,19 @@ export function DraggableDailyGame({ movies, onRate }: Props) {
   const [pending, setPending] = useState<Movie[]>(movies)
   const likeZone = useRef<Rect | null>(null)
   const hateZone = useRef<Rect | null>(null)
+  const likeRef = useRef<View>(null)
+  const hateRef = useRef<View>(null)
+
+  // Measure through refs (event.target is not a measurable view on every platform) and re-measure when a
+  // drag starts, so drops still land correctly after the screen has scrolled.
+  function measureZones() {
+    likeRef.current?.measureInWindow((x, y, width, height) => {
+      likeZone.current = { x, y, width, height }
+    })
+    hateRef.current?.measureInWindow((x, y, width, height) => {
+      hateZone.current = { x, y, width, height }
+    })
+  }
   const pan = useRef(new Animated.ValueXY()).current
   const activeRef = useRef<Movie | null>(null)
   const ratingRef = useRef(false)
@@ -45,6 +58,7 @@ export function DraggableDailyGame({ movies, onRate }: Props) {
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => Boolean(activeRef.current),
+      onPanResponderGrant: () => measureZones(),
       onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], { useNativeDriver: false }),
       onPanResponderRelease: async (_, gesture) => {
         const current = activeRef.current
@@ -78,7 +92,7 @@ export function DraggableDailyGame({ movies, onRate }: Props) {
 
   return (
     <View style={styles.wrap}>
-      <Text style={styles.help}>Drag each film into a bucket, or tap Like / Dislike.</Text>
+      <Text style={styles.help}>Everyone rates these same films today, so you build up films in common. Drag each one into a bucket, or tap Like / Dislike.</Text>
       <Text style={styles.counter}>{pending.length} left today</Text>
       <View style={styles.deckArea}>
         {active ? (
@@ -101,26 +115,10 @@ export function DraggableDailyGame({ movies, onRate }: Props) {
       </View>
 
       <View style={styles.zones}>
-        <View
-          style={[styles.zone, styles.hateZone]}
-          onLayout={(event) => {
-            const target = event.target as unknown as { measureInWindow?: (cb: (x: number, y: number, w: number, h: number) => void) => void }
-            target.measureInWindow?.((x, y, width, height) => {
-              hateZone.current = { x, y, width, height }
-            })
-          }}
-        >
+        <View ref={hateRef} style={[styles.zone, styles.hateZone]} onLayout={measureZones}>
           <Text style={styles.zoneTitle}>I don't like</Text>
         </View>
-        <View
-          style={[styles.zone, styles.likeZone]}
-          onLayout={(event) => {
-            const target = event.target as unknown as { measureInWindow?: (cb: (x: number, y: number, w: number, h: number) => void) => void }
-            target.measureInWindow?.((x, y, width, height) => {
-              likeZone.current = { x, y, width, height }
-            })
-          }}
-        >
+        <View ref={likeRef} style={[styles.zone, styles.likeZone]} onLayout={measureZones}>
           <Text style={styles.zoneTitle}>I like</Text>
         </View>
       </View>
