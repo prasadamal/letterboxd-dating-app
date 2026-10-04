@@ -614,9 +614,10 @@ export async function getConversationsForUser(userId) {
 }
 
 export async function seedMoviesIfEmpty() {
+  // Seeds an empty database; also tops up a database that is missing catalog films (e.g. newly added ones).
   const { count, error: countError } = await supabase.from('movies').select('*', { count: 'exact', head: true })
   if (countError) throw countError
-  if (count && count > 0) return { seeded: 0, total: count }
+  if (count && count >= movieCatalog.length) return { seeded: 0, total: count }
 
   const rows = movieCatalog.map((movie) => ({
     id: movie.id,
@@ -626,6 +627,7 @@ export async function seedMoviesIfEmpty() {
     popularity: movie.popularity,
     in_deck: movie.in_deck,
     origin_language: movie.origin_language,
+    tags: movie.tags || [],
     franchise: null
   }))
 
