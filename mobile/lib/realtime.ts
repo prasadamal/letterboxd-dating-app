@@ -17,11 +17,12 @@ function getClient() {
   return client
 }
 
+// The server only broadcasts "something changed" signals (no message content) on these channels.
 export function subscribeChatChannel(
   channelName: string,
   handlers: {
-    onMessage?: (payload: unknown) => void
-    onRead?: (payload: unknown) => void
+    onMessage?: () => void
+    onRead?: () => void
   }
 ) {
   const sb = getClient()
@@ -29,8 +30,8 @@ export function subscribeChatChannel(
 
   const channel: RealtimeChannel = sb
     .channel(channelName, { config: { broadcast: { self: false } } })
-    .on('broadcast', { event: 'message' }, ({ payload }) => handlers.onMessage?.(payload))
-    .on('broadcast', { event: 'read' }, ({ payload }) => handlers.onRead?.(payload))
+    .on('broadcast', { event: 'message' }, () => handlers.onMessage?.())
+    .on('broadcast', { event: 'read' }, () => handlers.onRead?.())
     .subscribe()
 
   return () => {

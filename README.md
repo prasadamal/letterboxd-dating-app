@@ -42,7 +42,7 @@ LAUNCH_FEMALE_TARGET=500
 DAILY_MOVIE_COUNT=10
 ```
 
-Use `LAUNCH_MALE_TARGET=2` and `LAUNCH_FEMALE_TARGET=2` locally to test dating quickly.
+To test dating locally, set `FORCE_DATING_OPEN=true` in `.env`: it opens dating for that API instance only and never touches the shared database. In production, change targets or open dating from `/admin`.
 
 ### 4. Dating (Tinder v1 basics)
 
@@ -131,18 +131,19 @@ npm run server         # terminal 1
 cd mobile && npm start # terminal 2 — Expo Go / simulator
 ```
 
-**Demo users** (after seed):
+**Demo users** (local development only; refused when `NODE_ENV=production`):
 
 ```bash
-npm run db:seed:demo
-# maya@example.com / anna@example.com / luca@example.com — password 123456
+DEMO_PASSWORD=pick-one npm run db:seed:demo   # maya@ / anna@ / luca@example.com
+npm run db:prelaunch-cleanup -- --yes         # removes them again (run before launch)
 ```
 
 ---
 
 ## Production & stores
 
-- **Launch checklist (start here):** `docs/production/LAUNCH_CHECKLIST.md`
+- **Owner launch guide (start here):** [`LAUNCH_GUIDE.md`](LAUNCH_GUIDE.md) — every account, key and command, in order
+- **Launch checklist (status):** `docs/production/LAUNCH_CHECKLIST.md`
 - **Architecture / backlog / deploy:** `docs/production/ARCHITECTURE.md`, `BACKLOG.md`, `DEPLOYMENT.md`, `STAGING.md`
 - Deploy API over **HTTPS**; set `EXPO_PUBLIC_API_URL` in EAS.
 - Run `npm test` in CI; use Docker for API hosting.

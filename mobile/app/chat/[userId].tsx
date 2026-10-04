@@ -92,16 +92,12 @@ export default function ChatScreen() {
 
   useEffect(() => {
     if (!realtimeChannel) return
-    return subscribeChatChannel(realtimeChannel, {
-      onMessage: (payload) => {
-        const msg = payload as ChatMessage
-        if (msg?.id) mergeMessage(msg)
-      },
-      onRead: () => {
-        loadMessages(lastSyncRef.current).catch(() => null)
-      }
-    })
-  }, [realtimeChannel, mergeMessage, loadMessages])
+    // Signals carry no content; fetch what changed through the authenticated API.
+    const refresh = () => {
+      loadMessages(lastSyncRef.current).catch(() => null)
+    }
+    return subscribeChatChannel(realtimeChannel, { onMessage: refresh, onRead: () => loadMessages().catch(() => null) })
+  }, [realtimeChannel, loadMessages])
 
   async function send() {
     if (!token || !userId || !text.trim()) return

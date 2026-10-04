@@ -2,17 +2,20 @@ import { supabase } from './supabaseClient.js'
 import { findUserById } from './db.js'
 import { AppError } from './middleware/errors.js'
 import { removeUserAvatars } from './services/storageService.js'
+import { chunk, selectAll } from './lib/paging.js'
 
 export async function getBlockedUserIds(userId) {
-  const { data, error } = await supabase
-    .from('blocks')
-    .select('blocker_id, blocked_id')
-    .or(`blocker_id.eq.${userId},blocked_id.eq.${userId}`)
-
-  if (error) throw error
+  const data = await selectAll(() =>
+    supabase
+      .from('blocks')
+      .select('blocker_id, blocked_id')
+      .or(`blocker_id.eq.${userId},blocked_id.eq.${userId}`)
+      .order('blocker_id')
+      .order('blocked_id')
+  )
 
   const blocked = new Set()
-  for (const row of data || []) {
+  for (const row of data) {
     if (row.blocker_id === userId) blocked.add(row.blocked_id)
     if (row.blocked_id === userId) blocked.add(row.blocker_id)
   }
@@ -68,26 +71,19 @@ async function deleteWhere(table, column, values) {
 
 // Removes everything tied to the account. Every step is idempotent, so a failed request can simply be retried.
 export async function deleteUserAccount(userId) {
-  const { data: matches, error: matchError } = await supabase
-    .from('matches')
-    .select('id')
-    .or(`user_a.eq.${userId},user_b.eq.${userId}`)
-  if (matchError) throw matchError
+  const matches = await selectAll(() =>
+    supabase.from('matches').select('id').or(`user_a.eq.${userId},user_b.eq.${userId}`).order('id')
+  )
 
-  const matchIds = (matches || []).map((row) => row.id)
-  if (matchIds.length) {
-    const { data: conversations, error: convError } = await supabase
-      .from('conversations')
-      .select('id')
-      .in('match_id', matchIds)
-    if (convError) throw convError
-
-    const conversationIds = (conversations || []).map((row) => row.id)
+  const matchIds = matches.map((row) => row.id)
+  for (const ids of chunk(matchIds)) {
+    const conversations = await selectAll(() => supabase.from('conversations').select('id').in('match_id', ids).order('id'))
+    const conversationIds = conversations.map((row) => row.id)
     if (conversationIds.length) {
       await deleteWhere('messages', 'conversation_id', conversationIds)
       await deleteWhere('conversations', 'id', conversationIds)
     }
-    await deleteWhere('matches', 'id', matchIds)
+    await deleteWhere('matches', 'id', ids)
   }
 
   await deleteWhere('messages', 'sender_id', [userId])

@@ -9,7 +9,15 @@ One tree with the production stack, the workable-app fixes, the README/RLS sync,
 - Signup links the Terms and Privacy Policy.
 - App version 1.2.0 (iOS build 3, Android versionCode 3).
 
-## [Unreleased] — launch readiness
+## [Unreleased] — launch readiness, round 2
+
+- Owner guide `LAUNCH_GUIDE.md`, Render Blueprint, scheduled-jobs workflow, prelaunch cleanup script.
+- Launch gate controlled from `/admin` (targets, open/close); env no longer overwrites it; `FORCE_DATING_OPEN` for local tests.
+- Paging past Supabase's 1,000-row cap; faster deck, inbox and launch status; latest-200 chat history.
+- Docker image serves the web app (reset/verify links, `/admin`); `.env.example` boots as-is.
+- Realtime and push carry no message content. Daily reminders fixed. Demo data hardened.
+
+## Launch readiness, round 1
 
 ### Security & privacy
 - Other members' profiles no longer expose email, referral code or account settings.

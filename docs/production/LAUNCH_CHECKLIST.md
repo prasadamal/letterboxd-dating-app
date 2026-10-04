@@ -42,33 +42,33 @@ Items marked ⬜ need an account, a secret or a decision from the owner, in the 
 - ✅ Errors on profile save, delete, verification, upload and block are shown instead of silently failing.
 - ✅ Root error boundary; API shuts down gracefully on deploy (`SIGTERM`).
 
-## 4. Owner steps to ship (in order)
+## 4. Launch-readiness round 2 (done)
 
-1. ⬜ **Deploy the API** over HTTPS (Render, Fly.io, Railway…) with the `Dockerfile`. Required env:
-   `NODE_ENV=production`, `JWT_SECRET` and `JWT_REFRESH_SECRET` (32+ random chars each), `SUPABASE_URL`,
-   `SUPABASE_SERVICE_ROLE_KEY`, `CLIENT_URL`, `APP_PUBLIC_URL`, `ADMIN_API_KEY`, `CRON_SECRET`.
-   Check `GET https://YOUR_HOST/api/v1/health` returns `"db":"up"`.
-2. ⬜ **Email:** create a Resend account, verify your domain, set `RESEND_API_KEY` and `EMAIL_FROM`.
-   Without it password reset and email verification can't work in production.
-3. ⬜ **Cron:** schedule `POST /api/v1/internal/daily-reminders` (daily) and `/internal/inactivity-cleanup` (weekly) with the `x-cron-secret` header.
-4. ⬜ **Expo project:** `cd mobile && npx eas-cli login && npx eas init`. This writes `owner` and `extra.eas.projectId`
-   into `app.json`; push notifications stay off until it exists.
-5. ⬜ **API URL in builds:** replace `https://YOUR_PRODUCTION_API_HOST/api` in `mobile/eas.json` (`preview` and `production`).
-   Also set `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` there for live chat (optional; polling works without).
-6. ⬜ **Push credentials:** `npx eas credentials` → upload an FCM V1 service-account key (Android) and let EAS create the APNs key (iOS).
-7. ⬜ **Support email:** make sure `support@reelmates.app` receives mail, or change it in `mobile/app.json` and `docs/legal/*`.
-8. ⬜ **Build:** `npx eas build -p android --profile preview` → test on a real phone; then `--profile production` for both platforms.
-9. ⬜ **Run the QA list** in `docs/production/QA_CHECKLIST.md` on both platforms.
-10. ⬜ **Store listings:** copy from `docs/store/`, Play data-safety answers from `docs/store/google-play/data-safety.md`,
-    App Privacy answers matching `docs/legal/PRIVACY_POLICY.md`, age rating 17+/Mature, category Dating.
-11. ⬜ **Review access:** dating is gated at 500/500 sign-ups, so reviewers would only see the daily game. Create a reviewer account
-    and either lower `LAUNCH_MALE_TARGET`/`LAUNCH_FEMALE_TARGET` on a review backend or launch with the gate open; put the login
-    and a note about the launch gate in App Review notes and Play's "App access" section.
-12. ⬜ **Submit:** fill the placeholders in `eas.json` → `submit.production` (Apple ID, ASC app ID, team ID; Play service-account JSON), then `npx eas submit`.
-13. ⬜ **Legal review:** the Terms and Privacy Policy are a reasonable baseline, not legal advice; have them checked for your countries (GDPR if you launch in the EU/UK).
+- ✅ Stock `.env.example` now boots the API (empty values were rejected; `EMAIL_FROM` "Name <email>" was rejected).
+- ✅ Launch gate lives in the database: running APIs no longer overwrite targets from env. `/admin` can change targets or
+  open/close dating; `FORCE_DATING_OPEN=true` opens it for one local API only (refused in production).
+- ✅ Launch status cached 15 s and counted in SQL; the app polls every 60 s instead of 15 s.
+- ✅ Supabase 1,000-row cap handled everywhere it mattered (deck candidates, ratings, swipes, blocks, matches, inbox,
+  reminders, deletion); long `in(...)` filters chunked. Deck scores the 300 most recently active eligible people.
+- ✅ Chat loads the latest 200 messages (full history would drop the newest past 1,000).
+- ✅ Daily reminder job fixed (it filtered on a non-existent `created_at` column and never sent anything).
+- ✅ Docker image ships the web app, so password-reset / verify-email links and `/admin` work in production; runs as non-root.
+  Email links default to Render's public URL.
+- ✅ Realtime channels carry no message content (signal only); push payloads carry no message text; sends no longer wait
+  on push/realtime.
+- ✅ `/api/v1/health` reports which features are unconfigured; production logs warn at startup.
+- ✅ Demo seed refuses production and no longer uses a public password; `npm run db:prelaunch-cleanup` removes demo/test users.
+- ✅ `render.yaml` (one-click deploy), `.github/workflows/scheduled-jobs.yml` (free cron), Supabase publishable key in `eas.json`,
+  `expo-dev-client` for the `development` profile, iOS `simulator` profile.
 
-## 5. After launch
+## Owner steps
+
+Follow **[`LAUNCH_GUIDE.md`](../../LAUNCH_GUIDE.md)** at the repo root: every account, key and command, in order.
+Outstanding owner items: secret key in `.env`/Render, Render deploy, Resend, GitHub cron secrets, `eas init`, API URL in
+`eas.json`, push credentials, Supabase Pro, `db:prelaunch-cleanup` (3 demo accounts are still in the database), store accounts.
+
+## After launch
 
 - Watch the moderation queue daily (`/admin` on the web app with `ADMIN_API_KEY`).
 - Set `SENTRY_DSN` for crash and error reporting.
-- Before ~10k users: move deck generation off the request path (it scans all candidates of one gender per request).
+- Before ~10k users: precompute deck candidates in a background job (today each deck request reads the light columns of every eligible candidate).

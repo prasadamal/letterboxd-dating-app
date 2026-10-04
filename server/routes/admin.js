@@ -6,6 +6,7 @@ import { setUserVerification } from '../services/verificationService.js'
 import { validateBody } from '../middleware/validate.js'
 import { z } from 'zod'
 import { writeAuditLog } from '../services/auditService.js'
+import { getPlatformStatus, updatePlatformSettings } from '../platformService.js'
 
 const router = express.Router()
 
@@ -61,6 +62,37 @@ router.patch(
       requestId: req.requestId
     })
     return res.json({ user })
+  })
+)
+
+router.get(
+  '/platform',
+  asyncHandler(async (req, res) => {
+    return res.json({ platform: await getPlatformStatus({ fresh: true }) })
+  })
+)
+
+const platformSchema = z
+  .object({
+    maleTarget: z.number().int().min(1).max(1_000_000).optional(),
+    femaleTarget: z.number().int().min(1).max(1_000_000).optional(),
+    datingOpen: z.boolean().optional()
+  })
+  .refine((body) => Object.keys(body).length > 0, 'Send maleTarget, femaleTarget and/or datingOpen')
+
+router.patch(
+  '/platform',
+  validateBody(platformSchema),
+  asyncHandler(async (req, res) => {
+    const platform = await updatePlatformSettings(req.body)
+    await writeAuditLog({
+      action: 'admin.platform_update',
+      resourceType: 'platform_settings',
+      resourceId: '1',
+      metadata: req.body,
+      requestId: req.requestId
+    })
+    return res.json({ platform })
   })
 )
 

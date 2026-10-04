@@ -1,0 +1,11 @@
+node_modules
+mobile
+docs
+dist
+scripts
+supabase
+.git
+.github
+.env
+.env.*
+*.log

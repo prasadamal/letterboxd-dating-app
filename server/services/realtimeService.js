@@ -4,8 +4,11 @@ import { chatChannelName } from '../lib/chatChannel.js'
 
 export { chatChannelName } from '../lib/chatChannel.js'
 
-export async function broadcastChatEvent(conversationId, event, payload) {
+// Chat channels are public Supabase broadcast channels, so they only carry a content-free "changed" signal.
+// Clients react by fetching messages through the authenticated API; a listener learns nothing else.
+export async function broadcastChatEvent(conversationId, event) {
   if (!conversationId) return
+  const payload = { at: Date.now() }
   const channel = supabase.channel(chatChannelName(conversationId), {
     config: { broadcast: { self: false } }
   })

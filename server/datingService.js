@@ -14,6 +14,7 @@ import { assertMatchmakingReady } from './services/profileService.js'
 import { passesDiscoveryFilters } from './services/discoveryPrefs.js'
 import { notifyUser } from './services/notificationService.js'
 import { logger } from './lib/logger.js'
+import { selectAll, selectAllIn } from './lib/paging.js'
 
 function oppositeGender(gender) {
   if (gender === 'male') return 'female'
@@ -22,9 +23,10 @@ function oppositeGender(gender) {
 }
 
 async function getSwipeMap(userId) {
-  const { data, error } = await supabase.from('user_swipes').select('target_id, action').eq('swiper_id', userId)
-  if (error) throw error
-  return new Map((data || []).map((row) => [row.target_id, row.action]))
+  const rows = await selectAll(() =>
+    supabase.from('user_swipes').select('target_id, action').eq('swiper_id', userId).order('id')
+  )
+  return new Map(rows.map((row) => [row.target_id, row.action]))
 }
 
 async function createMutualMatch(userId, peerId) {
@@ -139,45 +141,56 @@ async function bumpSwipeStats(userId, action) {
   if (error) logger.warn('deck stats write skipped', { message: error.message })
 }
 
-export async function getDatingDeck(userId, limit = 1) {
+// Candidates scored per request. The rest of the pool is still counted, and swiping moves new people in.
+const DECK_SCORING_POOL = 300
+
+export async function getDatingDeckWithMeta(userId, limit = 1) {
   await assertDatingLaunched()
   await assertMatchmakingReady(userId)
 
   const self = await findUserById(userId)
   if (!self) throw new Error('User not found')
 
-  const blocked = await getBlockedUserIds(userId)
-  const swipes = await getSwipeMap(userId)
+  const [blocked, swipes] = await Promise.all([getBlockedUserIds(userId), getSwipeMap(userId)])
   const targetGender = oppositeGender(self.gender)
-
   const prefs = self.discovery_prefs || {}
 
-  let query = supabase
-    .from('users')
-    .select('id, display_name, bio, hobbies, city, age, country, gender, photo_url, verification_status')
-    .neq('id', userId)
-    .is('deleted_at', null)
-    // Only complete, active profiles (photo, bio, country) that the inactivity job has not paused.
-    .eq('matchmaking_enabled', true)
-    .eq('is_active', true)
+  // Light columns for the whole pool; full profiles only for the people we actually score.
+  const candidates = await selectAll(() => {
+    let query = supabase
+      .from('users')
+      .select('id, age, country, gender, last_active_at')
+      .neq('id', userId)
+      .is('deleted_at', null)
+      // Only complete, active profiles (photo, bio, country) that the inactivity job has not paused.
+      .eq('matchmaking_enabled', true)
+      .eq('is_active', true)
+      .order('id')
+    if (targetGender) query = query.eq('gender', targetGender)
+    return query
+  })
 
-  if (targetGender) query = query.eq('gender', targetGender)
-
-  const { data: candidates, error } = await query
-  if (error) throw error
-
-  const filtered = (candidates || []).filter(
-    (candidate) =>
-      !blocked.has(candidate.id) &&
-      !swipes.has(candidate.id) &&
-      passesDiscoveryFilters(candidate, prefs)
+  const eligible = candidates.filter(
+    (candidate) => !blocked.has(candidate.id) && !swipes.has(candidate.id) && passesDiscoveryFilters(candidate, prefs)
   )
 
-  const ids = [userId, ...filtered.map((row) => row.id)]
-  const ratings = await getRatingsForUsers(ids)
+  const shortlistIds = [...eligible]
+    .sort((a, b) => String(b.last_active_at || '').localeCompare(String(a.last_active_at || '')))
+    .slice(0, DECK_SCORING_POOL)
+    .map((candidate) => candidate.id)
+
+  const profiles = await selectAllIn(shortlistIds, (ids) =>
+    supabase
+      .from('users')
+      .select('id, display_name, bio, hobbies, city, age, country, gender, photo_url, verification_status')
+      .in('id', ids)
+      .order('id')
+  )
+
+  const ratings = await getRatingsForUsers([userId, ...shortlistIds])
   const selfMap = ratings.get(userId)
 
-  const deck = filtered
+  const deck = profiles
     .map((candidate) => {
       const stats = computeCompatibilityFromMaps(selfMap, ratings.get(candidate.id))
       const taste = ratings.get(candidate.id)?.labels || { love: [], hate: [] }
@@ -193,40 +206,6 @@ export async function getDatingDeck(userId, limit = 1) {
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)
 
-  return deck
-}
-
-export async function getDatingDeckMeta(userId) {
-  await assertDatingLaunched()
-  await assertMatchmakingReady(userId)
-
-  const self = await findUserById(userId)
-  if (!self) throw new Error('User not found')
-
-  const blocked = await getBlockedUserIds(userId)
-  const swipes = await getSwipeMap(userId)
-  const targetGender = oppositeGender(self.gender)
-  const prefs = self.discovery_prefs || {}
-
-  let query = supabase
-    .from('users')
-    .select('id, age, country, gender')
-    .neq('id', userId)
-    .is('deleted_at', null)
-    .eq('matchmaking_enabled', true)
-    .eq('is_active', true)
-  if (targetGender) query = query.eq('gender', targetGender)
-
-  const { data: candidates, error } = await query
-  if (error) throw error
-
-  const eligible = (candidates || []).filter(
-    (candidate) =>
-      !blocked.has(candidate.id) &&
-      !swipes.has(candidate.id) &&
-      passesDiscoveryFilters(candidate, prefs)
-  )
-
   const { data: statsRow } = await supabase
     .from('user_deck_stats')
     .select('swipes_total, likes_total, passes_total')
@@ -234,10 +213,13 @@ export async function getDatingDeckMeta(userId) {
     .maybeSingle()
 
   return {
-    swipedCount: swipes.size,
-    remainingInPool: eligible.length,
-    discoveryPrefs: prefs,
-    stats: statsRow || { swipes_total: swipes.size, likes_total: 0, passes_total: 0 }
+    deck,
+    meta: {
+      swipedCount: swipes.size,
+      remainingInPool: eligible.length,
+      discoveryPrefs: prefs,
+      stats: statsRow || { swipes_total: swipes.size, likes_total: 0, passes_total: 0 }
+    }
   }
 }
 
@@ -246,34 +228,36 @@ export async function getMutualMatches(userId) {
 
   const blocked = await getBlockedUserIds(userId)
 
-  const { data: rows, error } = await supabase
-    .from('matches')
-    .select('*')
-    .or(`user_a.eq.${userId},user_b.eq.${userId}`)
-    .order('updated_at', { ascending: false })
+  const rows = await selectAll(() =>
+    supabase
+      .from('matches')
+      .select('*')
+      .or(`user_a.eq.${userId},user_b.eq.${userId}`)
+      .order('updated_at', { ascending: false })
+      .order('id')
+  )
 
-  if (error) throw error
-
-  const peerIds = (rows || [])
+  const peerIds = rows
     .map((row) => (row.user_a === userId ? row.user_b : row.user_a))
     .filter((peerId) => !blocked.has(peerId))
 
   if (!peerIds.length) return []
 
-  const { data: users, error: usersError } = await supabase
-    .from('users')
-    .select('id, display_name, bio, hobbies, city, age, country, gender, photo_url, verification_status')
-    .in('id', peerIds)
-    .is('deleted_at', null)
-    .eq('is_active', true)
-
-  if (usersError) throw usersError
+  const users = await selectAllIn(peerIds, (ids) =>
+    supabase
+      .from('users')
+      .select('id, display_name, bio, hobbies, city, age, country, gender, photo_url, verification_status')
+      .in('id', ids)
+      .is('deleted_at', null)
+      .eq('is_active', true)
+      .order('id')
+  )
 
   const ratings = await getRatingsForUsers([userId, ...peerIds])
   const selfMap = ratings.get(userId)
   const byId = new Map((users || []).map((row) => [row.id, row]))
 
-  return (rows || [])
+  return rows
     .map((row) => {
       const peerId = row.user_a === userId ? row.user_b : row.user_a
       const candidate = byId.get(peerId)

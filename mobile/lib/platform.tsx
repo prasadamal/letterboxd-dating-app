@@ -26,11 +26,11 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     refreshPlatform().catch(() => null)
     // Poll only while the app is in the foreground; refresh immediately when it comes back.
-    let timer: ReturnType<typeof setInterval> | null = setInterval(() => refreshPlatform().catch(() => null), 15000)
+    let timer: ReturnType<typeof setInterval> | null = setInterval(() => refreshPlatform().catch(() => null), 60000)
     const sub = AppState.addEventListener('change', (state) => {
       if (state === 'active') {
         refreshPlatform().catch(() => null)
-        if (!timer) timer = setInterval(() => refreshPlatform().catch(() => null), 15000)
+        if (!timer) timer = setInterval(() => refreshPlatform().catch(() => null), 60000)
       } else if (timer) {
         clearInterval(timer)
         timer = null

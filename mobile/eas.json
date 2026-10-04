@@ -8,7 +8,8 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_URL": "http://localhost:4000/api"
+        "EXPO_PUBLIC_SUPABASE_URL": "https://kounpkxjjkuoabbofgay.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mGGVjbDjEE9KET5IjaiUmw_nuk-I_gv"
       }
     },
     "preview": {
@@ -17,13 +18,29 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://YOUR_PRODUCTION_API_HOST/api"
+        "EXPO_PUBLIC_API_URL": "https://YOUR_PRODUCTION_API_HOST/api",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://kounpkxjjkuoabbofgay.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mGGVjbDjEE9KET5IjaiUmw_nuk-I_gv"
+      },
+      "ios": {
+        "simulator": false
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://YOUR_PRODUCTION_API_HOST/api"
+        "EXPO_PUBLIC_API_URL": "https://YOUR_PRODUCTION_API_HOST/api",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://kounpkxjjkuoabbofgay.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mGGVjbDjEE9KET5IjaiUmw_nuk-I_gv"
+      }
+    },
+    "simulator": {
+      "extends": "preview",
+      "ios": {
+        "simulator": true
+      },
+      "android": {
+        "buildType": "apk"
       }
     }
   },

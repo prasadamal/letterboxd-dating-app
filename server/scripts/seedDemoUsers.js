@@ -1,11 +1,19 @@
+import crypto from 'crypto'
 import dotenv from 'dotenv'
 
 dotenv.config()
 
+// Demo accounts are for local development only. They are flagged is_demo and removed by `npm run db:prelaunch-cleanup`.
+if (process.env.NODE_ENV === 'production') {
+  console.error('Refusing to seed demo users with NODE_ENV=production.')
+  process.exit(1)
+}
+
 const bcrypt = (await import('bcryptjs')).default
 const { supabase } = await import('../supabaseClient.js')
 
-const hash = await bcrypt.hash('123456', 10)
+const password = process.env.DEMO_PASSWORD || crypto.randomBytes(9).toString('base64url')
+const hash = await bcrypt.hash(password, 10)
 
 const demoUsers = [
   {
@@ -97,3 +105,5 @@ for (const demo of demoUsers) {
   if (ratingError) throw ratingError
   console.log(`Demo user ready: ${email}`)
 }
+
+console.log(`Demo password: ${password}${process.env.DEMO_PASSWORD ? '' : ' (random; set DEMO_PASSWORD to choose one)'}`)

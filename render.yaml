@@ -1,0 +1,35 @@
+# Render Blueprint: Dashboard → New → Blueprint → pick this repo. See LAUNCH_GUIDE.md, step 3.
+services:
+  - type: web
+    name: reelmates-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    # free: sleeps after ~15 min idle (first request then takes ~1 min). Switch to starter before launch.
+    plan: free
+    branch: main
+    autoDeploy: true
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SUPABASE_URL
+        value: https://kounpkxjjkuoabbofgay.supabase.co
+      # Supabase → Project Settings → API Keys → secret / service_role key. Render asks for it on first deploy.
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      # Copy these two from the Render dashboard after the first deploy: /admin login and the cron workflow.
+      - key: ADMIN_API_KEY
+        generateValue: true
+      - key: CRON_SECRET
+        generateValue: true
+      # Resend (password reset + email verification). Leave empty until step 5 of the guide.
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
