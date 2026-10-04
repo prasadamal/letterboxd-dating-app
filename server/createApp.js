@@ -22,6 +22,8 @@ import safetyRoutes from './routes/safety.js'
 import notificationsRoutes from './routes/notifications.js'
 import adminRoutes from './routes/admin.js'
 import internalRoutes from './routes/internal.js'
+import friendsRoutes from './routes/friends.js'
+import feedbackRoutes from './routes/feedback.js'
 import { openApiDocument } from './openapi/spec.js'
 import swaggerUi from 'swagger-ui-express'
 
@@ -108,6 +110,8 @@ export function createApp() {
     app.use(`${prefix}/notifications`, notificationsRoutes)
     app.use(`${prefix}/admin`, adminRoutes)
     app.use(`${prefix}/internal`, internalRoutes)
+    app.use(`${prefix}/friends`, friendsRoutes)
+    app.use(`${prefix}/feedback`, feedbackRoutes)
   }
 
   mount('/api/v1')

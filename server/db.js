@@ -253,7 +253,8 @@ export async function getDailyMovies(userId) {
 
 export async function rateMovie(userId, movieId, reaction) {
   if (reaction === 'skip') {
-    await supabase.from('user_ratings').upsert(
+    // "Haven't seen": recorded so it isn't offered again today and feeds "watch together", never the match score.
+    const { error: skipError } = await supabase.from('user_ratings').upsert(
       {
         user_id: userId,
         movie_id: movieId,
@@ -262,6 +263,7 @@ export async function rateMovie(userId, movieId, reaction) {
       },
       { onConflict: 'user_id,movie_id' }
     )
+    if (skipError) throw skipError
     return getUserProfile(userId)
   }
 

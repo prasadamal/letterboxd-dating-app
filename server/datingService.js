@@ -152,6 +152,8 @@ function tasteCardFields(candidate, stats) {
     sharedLoved: stats.sharedLovedTitles.slice(0, 12),
     sharedHated: stats.sharedHatedTitles.slice(0, 12),
     conflicts: stats.conflicts,
+    // Their all-time favourite and how it relates to you ('same' | 'you_liked' | 'you_disliked' | 'not_rated').
+    favorite: stats.favorite,
     tasteSummary: stats.summary,
     likedLine: lines.likedLine,
     dislikedLine: lines.dislikedLine

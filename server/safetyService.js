@@ -94,6 +94,8 @@ export async function deleteUserAccount(userId) {
   }
   await deleteWhere('blocks', 'blocker_id', [userId])
   await deleteWhere('blocks', 'blocked_id', [userId])
+  await deleteWhere('film_friends', 'user_id', [userId])
+  await deleteWhere('film_friends', 'friend_id', [userId])
 
   const { error: referralError } = await supabase.from('users').update({ referred_by: null }).eq('referred_by', userId)
   if (referralError) throw referralError
@@ -113,6 +115,7 @@ export async function deleteUserAccount(userId) {
       hobbies: [],
       photo_url: null,
       referral_code: null,
+      favorite_movie_id: null,
       taste_vector: {},
       discovery_prefs: {},
       birth_date: null,
