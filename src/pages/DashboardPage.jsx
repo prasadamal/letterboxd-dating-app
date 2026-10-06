@@ -232,13 +232,19 @@ export default function DashboardPage({ user, setUser }) {
 
       <main className="page-grid">
         {loadError && <p className="error-text">{loadError}</p>}
-        {platform && (
-          <section className="card-panel">
-            <p className="eyebrow accent">Launch gate</p>
-            <h3>{platform.datingLaunched ? 'Dating is live' : 'Dating unlocks at balanced registration'}</h3>
-            <p className="hero-text">
-              {platform.maleCount}/{platform.maleTarget} men · {platform.femaleCount}/{platform.femaleTarget} women · {platform.progressPercent}%
-            </p>
+        {platform && profile?.dating_enabled !== false && (!platform.datingLaunched || !profile?.matchmaking_enabled) && (
+          <section className="card-panel gate-panel">
+            <p className="eyebrow accent">Dating</p>
+            <h3>
+              {platform.datingLaunched
+                ? 'Dating is live'
+                : `Dating opens${platform.country?.name ? ` in ${platform.country.name}` : ''} once enough people join`}
+            </h3>
+            {!platform.datingLaunched && (
+              <div className="meter" aria-label={`${platform.country?.progressPercent ?? platform.progressPercent}% there`}>
+                <span style={{ width: `${platform.country?.progressPercent ?? platform.progressPercent}%` }} />
+              </div>
+            )}
             {profile && !profile.matchmaking_enabled && (
               <p className="hero-text">Add a profile photo (Profile tab) before the dating deck will include you. Daily ratings still count.</p>
             )}
@@ -246,9 +252,9 @@ export default function DashboardPage({ user, setUser }) {
         )}
         <section className="hero card-panel">
           <div className="hero-copy">
-            <p className="eyebrow accent">Curated by taste</p>
-            <h2>Meet people who love your kind of cinema.</h2>
-            <p className="hero-text">Rate films daily, unlock dating at launch, and message mutual matches.</p>
+            <p className="eyebrow accent">Your film people</p>
+            <h2>Find people who love your kind of cinema.</h2>
+            <p className="hero-text">Rate today's films, see who shares your taste, and say hello to your matches. The full experience lives in the ReelMates app.</p>
             <div className="stat-row">
               <div>
                 <strong>{matches.length}</strong>
@@ -267,7 +273,8 @@ export default function DashboardPage({ user, setUser }) {
 
           <div className="profile-mini card-panel">
             <div className="avatar-ring">
-              {profile?.avatar_url ? <img src={profile.avatar_url} alt={profile.name || 'You'} /> : null}
+              <span aria-hidden="true">{(profile?.name || '?').charAt(0).toUpperCase()}</span>
+              {profile?.avatar_url && <img src={profile.avatar_url} alt="" onError={(e) => (e.currentTarget.style.display = 'none')} />}
             </div>
             <div className="mini-meta">
               <p className="eyebrow accent">Your taste profile</p>

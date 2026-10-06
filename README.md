@@ -1,43 +1,63 @@
 # ReelMates — product & technical README
 
-**ReelMates** is a **native-first** dating app for people who match on **movie taste**. Users play a daily 10-film sorting game before dating goes live. Dating unlocks when registration reaches **500 men and 500 women** (configurable).
+**ReelMates** is a social film app: swipe today's 10 films, see how everyone else voted, discover your **film
+personality**, and find your **film people**. Friends first, dates if you want them. It is native-first (Expo) with an
+Express API on Supabase Postgres.
+
+![ReelMates screens](docs/design/preview/overview.jpg)
 
 ---
 
-## Product flow (your spec)
+## Product
 
-### 1. Registration (first screen)
+### 1. Sign up
 
-Collect:
+Name, age (18+), country, **Here for** (*Films & friends* or *Dating too*), email + password, terms, and an optional
+friend code. People who choose dating also pick *I am* (woman / man / non-binary) and *Show me*. A photo is asked for
+last and can be skipped. There is no filler bio.
 
-- **Name**
-- **Age** (18+ enforced)
-- **Country**
-- **Gender** (`male` / `female`) — used for launch balance counters
-- **One line about you** and the world of movies (`bio`)
-- **Email + password**
-- **Terms & Privacy** acceptance (required)
-- Optional **referral code**
+### 2. Today: the daily drop
 
-### 2. Pre-launch phase (taste-only)
+- Everyone gets the **same 10 films** each UTC day (`GET /movies/daily` → `{ movies, number }`), so active members
+  build up films in common with everyone else.
+- Swipe **right = loved it**, **left = nah**, **up = haven't seen** (never counts against anyone). Each swipe reveals
+  how the crowd voted ("💚 72% loved Parasite too", "🌶️ Hot take").
+- After the last film: **Daily results** (`GET /movies/daily/results`) — how in sync you were with the crowd, the crowd
+  favourite, the most divisive film, a countdown to tomorrow's films, and a Wordle-style share text:
+  `ReelMates Daily #6 🎬 / 🟩🟥🟩⬜… / Agreed with the crowd on 6/8 · 🔥 4`.
+- **Streaks:** days in a row with at least one rating; the evening reminder uses it ("🔥 4-day streak on the line").
 
-- Home tab shows **live counters**: men registered / 500, women registered / 500.
-- **Daily taste game** (10 films per calendar day, first open):
-  - Titles only (name + year), global catalog (~300 films in DB).
-  - User **drags** each film into **I like** or **I don't like** (kid-game buckets).
-  - Everyone gets the **same films** each day, so people build up films in common; the catalog cycles, so films come back later to refine taste.
-- Backend stores ratings and a **taste vector** (genres/languages weighted from likes/dislikes).
-- **Dating tabs are hidden** until launch thresholds are met.
+### 3. Film personality
 
-### 3. Launch gate
+Revealed after 8 likes/dislikes: one of 14 archetypes (Hopeless Romantic 💘, Midnight Thrill-Seeker 🔪, Desi
+Cinephile 🪔, World Cinema Nomad 🌏, Hidden Gem Hunter 💎, Genre Hopper 🎲…) plus trait chips ("Tough critic 🧐",
+"Subtitles on 🌏"). It rewards what is *distinctive* about your taste compared with the catalog, not just big genres.
+Shown on You, on friend and match cards, in conversation starters and on the public taste card. See
+`docs/design/MATCHING.md`.
 
-- When **male count ≥ target** AND **female count ≥ target** (default **500 / 500**), `dating_launched_at` is set automatically.
-- **Regional launch:** a country opens on its own once it has `country_target` men AND women (default **150**), or when
-  an admin adds it to *open countries* in `/admin`. Until the global launch, people in an open country only meet others
-  from the same country. Home shows the member's country progress next to the global counters.
-- **Dating** and **Matches** tabs appear for everyone the gate is open for.
+### 4. Explore
 
-Env overrides (for dev/staging):
+Search the whole catalog (436 films), rate anything you've seen, and browse the **People's chart** (films ranked by
+members) with collections: the canon, world cinema, Indian and Malayalam cinema, crowd favourites, underseen gems…
+
+### 5. Film friends & taste card
+
+- Add anyone by **friend code** (the same code works as a referral at signup). Compare taste, both personalities and
+  favourites, and get **Watch together** ideas.
+- **Share my taste card** makes `/taste/<code>` public: personality, favourite, rarest loves, top genres and counts.
+  No photo, age or location. It can be hidden again.
+
+### 6. Dating (opt-in)
+
+- **Here for** is changeable in Settings (`users.dating_enabled`). Films-only members never appear in decks, need no
+  gender, and don't count towards the launch gate. The *Match* tab shows only when dating is on; *Chats* shows once
+  dating is live for you and you date (or still have matches).
+- **Who you see:** interest has to go both ways (*Show me*). To appear in decks you need a name, a photo and a country.
+- **Card:** photo, name, age, place, taste match %, personality, films in common, favourite, up to three prompts, bio.
+- **Likes you:** everyone sees how many; **ReelMates Plus** shows who, plus a minimum taste-match filter.
+- **Launch gate:** dating opens everywhere when dating-enabled men ≥ target AND women ≥ target (default 500 / 500), and
+  in a single country at `country_target` each (default 150) or by hand in `/admin`. Until the global launch, people
+  in an open country meet only each other. The app shows the member's country progress, not gender counters.
 
 ```env
 LAUNCH_MALE_TARGET=500
@@ -45,44 +65,39 @@ LAUNCH_FEMALE_TARGET=500
 DAILY_MOVIE_COUNT=10
 ```
 
-To test dating locally, set `FORCE_DATING_OPEN=true` in `.env`: it opens dating for that API instance only and never touches the shared database. In production, change targets or open dating from `/admin`.
+To test dating locally, set `FORCE_DATING_OPEN=true` in `.env`: it opens dating for that API instance only and never
+touches the shared database. In production, change targets or open dating from `/admin`.
 
-### 4. Dating (Tinder v1 basics)
+### 7. Chat
 
-- **Who you see:** members pick *I am a* (woman / man / non-binary) and *Show me* (any mix). A profile appears only when
-  interest goes both ways. Existing members keep men ↔ women until they change it.
-- **Film prompts:** up to three ("A film I will defend forever", "My comfort rewatch"…) on the card.
-- **Likes you:** everyone sees how many people liked them; **ReelMates Plus** shows who, plus a minimum taste-match filter.
+- Mutual matches only. **Intro rule:** one hello each; full chat unlocks when both have said hi.
+- **Conversation starters** from shared likes and dislikes, favourites, prompts and a shared personality.
+- **Block**, **report** and **delete account** everywhere (store safety baseline).
 
-- One profile card at a time: **photo**, **name**, **age**, **country**, **bio line**.
-- Taste copy examples:
-  - `Anna liked The Shawshank Redemption (1994) and The Godfather (1972) like you`
-  - `Anna didn't like Avengers (2018) and Pink Panther (1963) like you`
-- **Pass** or **Like** (swipe actions via buttons; native card UI).
-- **Mutual like** creates a match row.
-
-### 5. Chat
-
-- Only **mutual matches** can message.
-- **Intro rule:** each person sends **one hello**; after **both** have sent, **full chat unlocks**.
-- **Block**, **report**, and **delete account** are available (store safety baseline).
-
-### 6. Growth
-
-- **Daily streak:** days in a row with at least one rating, shown on Home.
-- **Taste card:** Profile → *Share my taste card* makes `/taste/<friend code>` public (first name, favourite, rarest likes,
-  top genres; no photo, age or place) and opens the share sheet. It can be hidden again.
-- **Conversation starters:** a new chat suggests hellos from shared likes and dislikes, favourites and prompts.
-
-### 7. ReelMates Plus
+### 8. ReelMates Plus
 
 `users.plus_until` decides access. It is set by the RevenueCat webhook (`POST /api/v1/billing/revenuecat`, header must
 equal `REVENUECAT_WEBHOOK_AUTH`; the app must call `Purchases.logIn(user.id)`) or by hand in `/admin`. The in-app
 purchase screen is not built yet.
 
-### 8. Referrals
+---
 
-- Each user gets a **referral code**; friends can apply it at signup or in Profile.
+## Mobile app tabs
+
+| Tab | What's there | When visible |
+|-----|--------------|--------------|
+| **Today** | Daily swipe deck, results, your film people, invite, dating status | Always |
+| **Explore** | Search, People's chart, collections | Always |
+| **Match** | Dating deck, undo, preferences | Dating on |
+| **Chats** | Likes you, new matches, threads with unread badges | Dating live for you, and dating on or matches exist |
+| **You** | Personality, taste card, stats, favourite, prompts, film friends, Plus, settings | Always |
+
+## Design system
+
+Dark UI with one loud accent (**marquee lime** `#D4FF3F`, always with dark text) and pink / violet / cyan support,
+**Bricolage Grotesque** for display type, and typographic genre-gradient posters, so no poster artwork is needed.
+Tokens live in `mobile/lib/theme.ts`, mirrored for the web in `src/styles/tokens.css`. Screens:
+`docs/design/preview/`.
 
 ---
 
@@ -93,46 +108,37 @@ purchase screen is not built yet.
 | **Mobile (primary)** | Expo 57, React Native, Expo Router — `mobile/` |
 | **API** | Express + JWT + bcrypt — `server/` |
 | **Database** | Supabase Postgres (project `moviematch`) |
-| **Web** | React + Vite (secondary/demo) — `src/` |
+| **Web** | React + Vite — `src/`: landing and sign-up, public taste cards, password reset, `/admin`, an older dashboard |
 
-### Main API routes
+### Main API routes (`/api/v1`)
 
 | Route | Purpose |
 |--------|---------|
-| `POST /api/auth/signup` | Register with gender, country, terms |
-| `GET /api/auth/me` | Profile + platform status |
-| `GET /api/platform/status` | Public launch counters |
-| `GET /api/movies/daily` | 10 daily films |
-| `POST /api/movies/:id/rate` | `love` / `hate` / `skip` |
-| `GET /api/dating/deck` | Next dating profile (post-launch) |
-| `POST /api/dating/swipe` | `{ targetId, action: like\|pass }` |
-| `GET /api/dating/matches` | Mutual matches |
-| `GET/POST /api/messages/...` | Chat with intro gating |
-| `POST /api/safety/block` | Block user |
-| `POST /api/safety/report` | Report user |
-| `DELETE /api/safety/account` | Delete account |
-| `GET /api/dating/referral` | Referral code + share text |
+| `POST /auth/signup` | Register (here for, optional gender, country, terms, friend code) |
+| `GET /auth/me` | Profile + platform status |
+| `GET /movies/daily` | Today's films with crowd votes, and the daily number |
+| `GET /movies/daily/results` | Agreement with the crowd, favourite, most divisive, share text |
+| `POST /movies/:id/rate` | `love` / `hate` / `skip` |
+| `GET /users/taste-stats` | Personality, genres, languages, decades |
+| `GET/POST /friends`, `GET /friends/compare/:id` | Film friends and taste compare |
+| `GET /public/taste/:code` | Public taste card (only when shared) |
+| `GET /dating/deck`, `POST /dating/swipe` | Dating deck (dating on, after launch) |
+| `GET /dating/matches`, `GET /dating/likes-you` | Matches; who liked you (Plus) |
+| `GET/POST /messages/...` | Chat with intro gating |
+| `POST /safety/block`, `POST /safety/report`, `DELETE /safety/account` | Safety |
 
-### Matching algorithm (scalable to ~1k users now)
+Full list: Swagger UI at `/api/v1/docs`.
 
-1. Per-user **love/hate** sets from daily game.
-2. Compatibility score: shared loves (+), shared hates (+), conflicts (−).
-3. Genre/language weights stored in `users.taste_vector` JSON.
-4. Dating deck: opposite-gender candidates, exclude swipes/blocks, sort by score.
+### Matching
 
-For **10k+** users: add Postgres indexes on `gender`, `user_swipes`, precompute candidate pools, or move deck generation to a background job.
+1. Per-user love / hate sets from every rating; *haven't seen* is ignored.
+2. Match % from shared likes and dislikes (rarer films count more), clashes and favourites; it starts at 50% and moves
+   as evidence adds up.
+3. Deck: dating-enabled people whose *Show me* fits both ways, same country while only that country is open, not yet
+   swiped or blocked; sorted by match, then films in common.
 
----
-
-## Mobile app tabs
-
-| Tab | When visible |
-|-----|----------------|
-| **Launch** | Always — counters & explanation |
-| **Daily game** | Always — drag 10 films |
-| **Dating** | After launch |
-| **Matches** | After launch |
-| **Profile** | Always — edit bio, referral, safety, logout, delete |
+Details and formulas: `docs/design/MATCHING.md`. For 10k+ users, precompute candidate pools or move deck generation
+to a background job.
 
 ---
 
@@ -151,6 +157,8 @@ npm run dev
 npm run server         # terminal 1
 cd mobile && npm start # terminal 2 — Expo Go / simulator
 ```
+
+Checks: `npm test` (API), `npm run mobile:typecheck`, `npm run build` (web), `npm run smoke` (running API).
 
 **Demo users** (local development only; refused when `NODE_ENV=production`):
 
@@ -175,14 +183,18 @@ npm run db:prelaunch-cleanup -- --yes         # removes them again (run before l
 
 ## Database migrations
 
-- `supabase/migrations/20261002120000_reelmates_dating_launch_v1.sql`
-- `supabase/migrations/20261002200000_production_hardening_v1.sql` (+ remote `production_hardening_v1`)
-- `supabase/migrations/20261002210000_production_phase2_v1.sql`
-- `supabase/migrations/20261002220000_production_phase3_v1.sql`
-- `supabase/migrations/20261003000000_production_complete_v1.sql`
-- `supabase/migrations/20261003210000_enable_rls_remaining_tables.sql`
+All in `supabase/migrations/`, applied in order:
 
-RLS is enabled on every `public` table with no policies, so client keys get no table access. The API must use `SUPABASE_SERVICE_ROLE_KEY`.
+- `20261002120000_reelmates_dating_launch_v1.sql` … `20261003220000_launch_readiness_v1.sql` (launch build)
+- `20261004120000_favorite_film_and_friends.sql`, `20261004130000_collections_feedback_stats.sql` (v1.3)
+- `20261005120000_inclusive_regions_plus.sql` — **not yet applied to moviematch**
+- `20261006120000_dating_optin.sql` — **not yet applied to moviematch** (apply after the one above)
+
+Apply the last two before deploying this API: it reads `users.dating_enabled`, `interested_in`, the streak columns and
+`plus_until`.
+
+RLS is enabled on every `public` table with no policies, so client keys get no table access. The API must use
+`SUPABASE_SERVICE_ROLE_KEY`.
 
 ---
 
@@ -196,23 +208,9 @@ RLS is enabled on every `public` table with no policies, so client keys get no t
 
 See `CHANGELOG.md` and `docs/production/BACKLOG.md`.
 
-## Standalone film features (v1.3)
-
-ReelMates works as a film app even before (or without) dating:
-- **Like / Dislike / Haven't seen** on every film; *Haven't seen* never counts against anyone.
-- **Explore & chart** (Films tab): search the whole catalog (436 films) and the **People's chart** — best films ranked
-  by ReelMates members, filterable by collection (canon, world, Indian, Malayalam, crowd favourites, underseen gems…).
-- **All-time favourite film** (one per person): on your card and counted in matching.
-- **Film friends:** add anyone by code, compare taste, get **Watch together** ideas.
-- **Your taste stats:** liked/disliked/unseen, like rate, top genres, languages and decades.
-- **Send feedback** (Profile) → **Feedback inbox** in `/admin`.
-
-New API: `GET /movies/search`, `GET /movies/top?collection=`, `GET /movies/collections`, `PUT /users/favorite`,
-`GET /users/taste-stats`, `GET|POST /friends`, `DELETE /friends/:userId`, `GET /friends/compare/:userId`,
-`POST /feedback`, `GET|PATCH /admin/feedback`. Details in `docs/design/MATCHING.md`.
-
 ## What's intentionally out of scope (next passes)
 
-- Third-party ID verification vendor (Persona/Onfido), payments
+- Letterboxd import and real poster artwork (TMDB) — on hold
+- Third-party ID verification vendor (Persona/Onfido), the Plus purchase screen
 - Postgres Realtime RLS policies for direct client reads (broadcast is used today)
 - Detox suite in CI

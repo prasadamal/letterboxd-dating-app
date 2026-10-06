@@ -8,6 +8,7 @@ import { publicPrompts } from '../lib/profilePrompts.js'
 import { getTasteStats } from './filmService.js'
 import { logger } from '../lib/logger.js'
 import { getPersonalities } from './personalityService.js'
+import { canonicalGenres } from '../lib/genres.js'
 
 // Called after every rating; writes only on the first rating of a UTC day.
 export async function recordDailyActivity(userId, today = utcDay()) {
@@ -38,6 +39,13 @@ function firstName(name) {
   return String(name || '').trim().split(/\s+/)[0] || 'A ReelMates member'
 }
 
+async function getFilmSummaries(ids) {
+  if (!ids.length) return new Map()
+  const { data, error } = await supabase.from('movies').select('id, title, year, genres, origin_language').in('id', ids)
+  if (error) throw error
+  return new Map((data || []).map((film) => [film.id, { ...film, genres: canonicalGenres(film.genres) }]))
+}
+
 // Public, shareable taste card (/taste/<friend code>). Only what the member chose to share:
 // first name, favourite, rarest liked films, top genres and counts. No photo, age, place or contact.
 export async function getPublicTasteCard(code) {
@@ -56,16 +64,19 @@ export async function getPublicTasteCard(code) {
 
   const [ratings, stats] = await Promise.all([getRatingsForUsers([user.id]), getTasteStats(user.id)])
   const mine = ratings.get(user.id)
-  const rarestLiked = [...(mine?.love || [])]
+  const rarestIds = [...(mine?.love || [])]
     .sort((a, b) => rarityWeight(mine.popularity?.get(b)) - rarityWeight(mine.popularity?.get(a)))
     .slice(0, 6)
-    .map((id) => mine.titles.get(id))
+  const films = await getFilmSummaries([...rarestIds, ...(mine?.favorite != null ? [mine.favorite] : [])])
 
   return {
     name: firstName(user.display_name),
     code: user.referral_code,
     favorite: mine?.favorite != null ? mine.titles.get(mine.favorite) || null : null,
-    rarestLiked,
+    rarestLiked: rarestIds.map((id) => mine.titles.get(id)),
+    // Structured versions of the two above, for drawing posters.
+    favoriteFilm: mine?.favorite != null ? films.get(mine.favorite) || null : null,
+    rarestFilms: rarestIds.map((id) => films.get(id)).filter(Boolean),
     topGenres: (stats.topGenres || []).slice(0, 3).map((g) => g.name),
     liked: stats.liked,
     disliked: stats.disliked,

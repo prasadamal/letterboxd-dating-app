@@ -4,26 +4,27 @@
 ReelMates
 
 ## Subtitle (30 chars)
-Movie taste dating
+Find your film people
 
 ## Promotional text (170 chars)
-Rate films from every corner of cinema. Get matched on what you love and hate. Message your best taste twin tonight.
+10 films a day. See how everyone voted, discover your film personality, and meet friends (and dates, if you want) who get your taste.
 
 ## Description
-ReelMates connects people through movies.
+ReelMates is where your film taste finds its people.
 
-Every day you get fresh picks — famous hits and underrated favorites across languages and genres. Like, dislike, or skip to shape your taste profile. We match you with people who share your opinions (and your guilty dislikes).
+Every day everyone gets the same 10 films, from blockbusters to Malayalam gems and Korean thrillers. Swipe right if you loved it, left if you didn't, up if you haven't seen it. Each swipe shows how the crowd voted, and when you're done you get your daily results to share.
 
-• Daily film picks — simple title + year cards  
-• Global catalog — inclusive genres and languages  
-• Compatibility scores from shared ratings  
-• Chat with matches in-app  
-• Edit your profile anytime  
+• The daily drop: 10 films, a crowd reveal on every swipe, a streak to keep
+• Your film personality: Hopeless Romantic? Midnight Thrill-Seeker? Hidden Gem Hunter?
+• Film friends: add friends by code, see your taste match and what to watch together
+• Explore: search 400+ films and the People's Chart, ranked by members
+• Taste card: share your film taste with a link
+• Dating, only if you want it: matches ranked by taste, not looks, with conversation starters from the films you share
 
 ReelMates is for adults 18+. Be kind, be honest, be cinematic.
 
 ## Keywords
-dating,movies,film,match,chat,taste,cinema,letterboxd
+movies,film,cinema,daily,game,personality,friends,taste,recommendations,dating,match,chat
 
 ## Support URL
 https://github.com/prasadamal/letterboxd-dating-app
@@ -39,7 +40,7 @@ Host `docs/legal/PRIVACY_POLICY.md` on a public URL
 
 ## Category
 Primary: Social Networking  
-Secondary: Lifestyle
+Secondary: Entertainment
 
 ## Copyright
 2026 ReelMates

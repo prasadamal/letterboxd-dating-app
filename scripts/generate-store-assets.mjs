@@ -5,20 +5,26 @@ import path from 'path'
 const outDir = path.join(process.cwd(), 'docs/store/assets')
 fs.mkdirSync(outDir, { recursive: true })
 
+const poster = (x, y, rotate, from, to, year, title) => `
+  <g transform="translate(${x} ${y}) rotate(${rotate})">
+    <linearGradient id="p${year}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${from}"/><stop offset="100%" stop-color="${to}"/></linearGradient>
+    <rect width="132" height="192" rx="18" fill="url(#p${year})"/>
+    <text x="14" y="28" fill="#fff" font-family="Bricolage Grotesque, Inter, Arial, sans-serif" font-size="13" font-weight="700">${year}</text>
+    <text x="14" y="170" fill="#fff" font-family="Bricolage Grotesque, Inter, Arial, sans-serif" font-size="21" font-weight="800">${title}</text>
+  </g>`
+
+// Same palette and type as the app (mobile/lib/theme.ts). Bricolage Grotesque must be installed to export it as designed.
 const featureGraphic = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="0 0 1024 500">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0d1016"/>
-      <stop offset="100%" stop-color="#1a1424"/>
-    </linearGradient>
-  </defs>
-  <rect width="1024" height="500" fill="url(#g)"/>
-  <text x="80" y="180" fill="#f4a261" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">REELMATES</text>
-  <text x="80" y="250" fill="#edf5ff" font-family="Inter, Arial, sans-serif" font-size="54" font-weight="800">Match through movie taste</text>
-  <text x="80" y="310" fill="#b0bfce" font-family="Inter, Arial, sans-serif" font-size="26">Daily film game · Launch gate · Cinematic dating</text>
-  <circle cx="880" cy="250" r="120" fill="#ff6993" opacity="0.25"/>
-  <circle cx="920" cy="200" r="80" fill="#ad7cff" opacity="0.35"/>
+  <rect width="1024" height="500" fill="#08080B"/>
+  <circle cx="960" cy="40" r="240" fill="#8B6CFF" opacity="0.1"/>
+  <rect x="80" y="96" width="44" height="44" rx="12" fill="#D4FF3F"/>
+  <text x="102" y="129" text-anchor="middle" fill="#0A0A0D" font-family="Bricolage Grotesque, Inter, Arial, sans-serif" font-size="28" font-weight="800">R</text>
+  <text x="138" y="129" fill="#F7F7FA" font-family="Bricolage Grotesque, Inter, Arial, sans-serif" font-size="28" font-weight="800">ReelMates</text>
+  <text x="80" y="232" fill="#F7F7FA" font-family="Bricolage Grotesque, Inter, Arial, sans-serif" font-size="64" font-weight="800" letter-spacing="-2">Find your</text>
+  <text x="80" y="300" fill="#D4FF3F" font-family="Bricolage Grotesque, Inter, Arial, sans-serif" font-size="64" font-weight="800" letter-spacing="-2">film people.</text>
+  <text x="80" y="352" fill="#9C9CAD" font-family="Inter, Arial, sans-serif" font-size="23">10 films a day · Your film personality</text>
+  <text x="80" y="386" fill="#9C9CAD" font-family="Inter, Arial, sans-serif" font-size="23">Friends first, dates if you want</text>${poster(628, 172, -8, '#FF4F9A', '#FF9A6B', 2001, 'Amélie')}${poster(748, 150, 0, '#071E3D', '#45D6FF', 2016, 'Arrival')}${poster(868, 158, 8, '#191919', '#C9A227', 2013, 'Drishyam')}
 </svg>
 `
 

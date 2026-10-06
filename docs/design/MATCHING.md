@@ -57,18 +57,50 @@ updates the earlier answer. Code: `sharedDailySet` in `server/lib/dailyMovies.js
 
 To keep it fresh for long-term players, grow the catalog (`npm run db:seed` loads `server/movieCatalog.js`).
 
+## Film personality
+
+A shareable identity from what someone liked, compared with the catalog as a whole
+(`server/lib/filmPersonality.js`, tests: `server/tests/personality.test.js`).
+
+- Revealed after **8 likes + dislikes** (until then: *Fresh Reel* with progress dots). *Haven't seen* doesn't count.
+- Each signal (romance, thrillers, horror, sci-fi/fantasy, animation, feel-good, action, drama, documentaries, Indian
+  cinema, other non-English cinema, the canon, underseen gems) gets `share² / baseline`: *share* is the fraction of
+  your liked films that match it, *baseline* the fraction of the catalog that does (floor 3%). That rewards both how
+  much of your taste it is and how unusual that is: lots of romance (7% of the catalog) says more than lots of drama.
+- The best signal with **≥ 30%** of your likes and **≥ 1.5×** its catalog share wins. Nothing qualifies → **Genre
+  Hopper**. Without the lift rule, a mixed taste in a catalog that is 36% non-English always came out *World Cinema
+  Nomad*.
+- **Traits** (up to three): *Easy to please* (like rate ≥ 80%) or *Tough critic* (≤ 40%), the runner-up signal
+  (≥ 25% share, ≥ 1.3× lift), and *Film buff* at 100 rated films.
+- Lists and cards get a compact badge (`personalityBadge`). Two matches with the same personality get a starter:
+  "Apparently we're both Hopeless Romantics. Which film made you one?"
+
+## Daily results
+
+`server/services/dailyService.js` (tests: `server/tests/daily.test.js`).
+
+- Every film in today's set carries `community.likedPercent` and `votes` from `movie_rating_stats` (likes ÷ likes +
+  dislikes). The app reveals it after each swipe.
+- **Agreement:** your own vote is taken out first, then you agree when you side with the rest of the crowd's majority.
+  Films you haven't seen, films nobody else voted on and ties are left out.
+- **Crowd favourite / most divisive:** the highest liked % and the one closest to 50%, among films with ≥ 4 votes.
+- **Share text:** `ReelMates Daily #N 🎬`, one square per film (🟩 loved, 🟥 nah, ⬜ haven't seen, ⬛ not played),
+  `Agreed with the crowd on a/c · 🔥 streak` (streak from 2 days), and the app link (`APP_PUBLIC_URL`). Day #1 is
+  1 October 2026 (UTC).
+
 ## Card layout
 
-1. Big photo with **name, age and place** on it (like any dating app)
-2. **Match %** and **films in common**
-3. **You both liked** — shared likes, rarest first
-4. **You both disliked** — shared dislikes, rarest first
-5. One-line bio
+1. Big photo with **name, age and place** on it, the **match %**, a verified tag and the **personality** badge
+2. Like / pass buttons on the photo's bottom edge (swipe works too)
+3. **Films in common** — shared likes and dislikes, rarest first
+4. **All-time favourite** and whether it's *Same as yours*, *You liked it too* or *You didn't like it*
+5. Up to three **prompts**, then the bio (if any)
 
 Other people's full like/dislike lists are not shown or sent — only what you agree on.
 
 ## Previews
 
-`docs/design/preview/` has screenshots at iPhone 15 Pro and Pixel 7 sizes and a short recording of the deck.
-They are rendered from the real app screens with React Native Web against sample data; photos are placeholders.
-Native builds use SF Pro (iOS) / Roboto (Android) and the system status bar, so small details differ.
+`docs/design/preview/` has the current screens at iPhone 13 size (`mobile-*.png`), the web landing and taste card
+(`web-*.png`) and an overview sheet. They are rendered from the real screens with React Native Web against sample
+data; photos are monogram placeholders. Native builds use the system font for body text and the system status bar,
+so small details differ.

@@ -151,7 +151,7 @@ export async function getPlatformStatusForUser(user, { includeMatches = false } 
 export async function assertDatingLaunched(user) {
   const status = user ? await getPlatformStatusForUser(user) : await getPlatformStatus()
   if (!status.datingLaunched) {
-    const error = new Error('Dating unlocks when we reach balanced registration targets.')
+    const error = new Error('Dating opens in your country once enough people join. Keep playing the daily films meanwhile.')
     error.code = 'DATING_LOCKED'
     throw error
   }
