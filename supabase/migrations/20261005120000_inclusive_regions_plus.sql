@@ -1,5 +1,5 @@
 -- Inclusive dating, regional launch, streaks, profile prompts, shareable taste card and ReelMates Plus.
--- Not yet applied to moviematch: run with `supabase db push` (or paste into the SQL editor) before deploying the API.
+-- Applied to moviematch on 2026-10-06 (migration "inclusive_regions_plus").
 
 -- 1. Who you are and who you want to see. Matching requires interest both ways (server/lib/datingEligibility.js).
 ALTER TABLE public.users DROP CONSTRAINT IF EXISTS users_gender_check;

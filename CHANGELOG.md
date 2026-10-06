@@ -26,7 +26,7 @@
   rewatch"-style starters read correctly; *Science Fiction* is one genre (*Sci-Fi*).
 - **Removed:** gender counters from Home (the gate still balances the pool, per country), the old onboarding screens,
   the drag-to-bucket game, `taste_vector` writes and the filler bio.
-- Migration `20261006120000_dating_optin.sql` (**not yet applied to moviematch**; apply after the one below).
+- Migration `20261006120000_dating_optin.sql` (applied to moviematch on 6 October 2026).
 
 ### Inclusive dating, regional launch, growth, Plus
 
@@ -39,7 +39,7 @@
 - **ReelMates Plus (backend + UI hooks):** *Likes you* (count for all, profiles with Plus), a minimum taste-match filter,
   a RevenueCat webhook and an admin grant. Purchase screen still to build.
 - Country names are stored trimmed so regional counts add up.
-- Migration `20261005120000_inclusive_regions_plus.sql` (**not yet applied to moviematch**).
+- Migration `20261005120000_inclusive_regions_plus.sql` (applied to moviematch on 6 October 2026).
 
 ## [1.3.0] — standalone film app
 
