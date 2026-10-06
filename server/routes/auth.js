@@ -6,6 +6,7 @@ import { createUser, ensureUserProfile, findUserByEmail, findUserById, getUserPr
 import { signToken, authMiddleware } from '../middleware/auth.js'
 import { getPlatformStatusForUser } from '../platformService.js'
 import { applyReferralCode } from '../datingService.js'
+import { addFriendByCode } from '../services/friendsService.js'
 import { asyncHandler, AppError } from '../middleware/errors.js'
 import {
   validateBody,
@@ -44,7 +45,7 @@ router.post(
   credentialLimiter,
   validateBody(signupSchema),
   asyncHandler(async (req, res) => {
-    const { email, password, name, age, country, city, bio, gender, interestedIn, referralCode } = req.body
+    const { email, password, name, age, country, city, bio, gender, interestedIn, datingEnabled, referralCode } = req.body
     if ([name, bio, city, country].some(containsBlockedContent)) {
       throw new AppError('Your profile text breaks our community rules.', 422, 'CONTENT_BLOCKED')
     }
@@ -61,21 +62,22 @@ router.post(
       age,
       country,
       city: city || country,
-      bio: bio || 'Connecting through the world of movies.',
+      bio: bio?.trim() || '',
       hobbies: ['Cinema'],
       gender,
       interested_in: normalizeInterestedIn(interestedIn, gender),
+      // Older app versions don't send it; they were dating-only, so default to on.
+      dating_enabled: datingEnabled ?? true,
       terms_accepted_at: new Date().toISOString(),
       referral_code: referralCodeFromEmail(email),
       last_active_at: new Date().toISOString()
     })
 
+    // The code of whoever invited you: credits the referral and makes you film friends straight away,
+    // so a new member sees their match % with the friend who brought them.
     if (referralCode) {
-      try {
-        await applyReferralCode(row.id, referralCode)
-      } catch {
-        // optional
-      }
+      await applyReferralCode(row.id, referralCode).catch(() => null)
+      await addFriendByCode(row.id, referralCode).catch(() => null)
     }
 
     await updateUserProfile(row.id, { profile_completion: computeProfileCompletion(row) })
@@ -193,7 +195,7 @@ router.get('/me', asyncHandler(async (req, res) => {
     const decoded = jwt.verify(token, env.JWT_SECRET)
     const user = await getUserProfile(decoded.id)
     if (!user) throw new AppError('User not found', 404, 'NOT_FOUND')
-    const platform = await getPlatformStatusForUser(user)
+    const platform = await getPlatformStatusForUser(user, { includeMatches: true })
     return res.json({ user: ensureUserProfile(user), platform })
   } catch (error) {
     if (error instanceof AppError) throw error

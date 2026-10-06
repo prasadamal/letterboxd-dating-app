@@ -27,7 +27,7 @@ router.get('/status', async (req, res) => {
 // Includes the member's country progress; dating may be open in their country before the global launch.
 router.get('/status/me', authMiddleware, async (req, res) => {
   try {
-    const status = await getPlatformStatusForUser(await findUserById(req.user.id))
+    const status = await getPlatformStatusForUser(await findUserById(req.user.id), { includeMatches: true })
     return res.json(status)
   } catch (error) {
     console.error(error)

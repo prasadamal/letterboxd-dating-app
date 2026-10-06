@@ -83,20 +83,24 @@ Create `mobile/.env` with `EXPO_PUBLIC_API_URL=https://something.trycloudflare.c
 Expected and harmless in Expo Go: a warning that remote push notifications need a development build.
 
 ### 1.5 What to test (you need two accounts: one man, one woman)
-Use two phones, or one phone plus the web app at http://localhost:3000.
-1. **Register** on both. The age field must be 18+; tick the Terms box.
-2. **Daily game:** drag films into *I like* / *I don't like*.
-3. **Profile:** add a photo, bio and country on both accounts (dating needs 80% completion; the photo is required).
-4. **Dating:** each account should see the other. Like each other → *It's a match*.
-5. **Messages:** each sends one hello → full chat unlocks → send a few messages, see *Read*.
-6. **Safety:** Report (pick a reason) and Block from the chat; the conversation should close.
-7. **Reset password:** Login screen → *Reset* → enter the email. Without email configured, the reset link appears on screen in dev mode; open it in a browser.
-8. **Films tab → Explore & chart:** search a film, rate it Like / Dislike / Haven't seen; switch collections.
-9. **Profile:** choose your all-time favourite; it shows on the other account's dating card. Check *Your taste* stats.
-10. **Film friends** (Profile or Launch tab): add the other account's code → compare → Watch together.
-11. **Send feedback** (Profile) → it appears in `/admin` → Feedback inbox.
-12. **Offline:** turn Wi‑Fi off, reopen the app → *Can't reach ReelMates / Try again* (you stay signed in).
-13. **Delete account** from Profile on one test account → it disappears from the other account's matches.
+Use two phones, or one phone plus the web app at http://localhost:3000 (sign-up, taste cards and an older dashboard).
+1. **Sign up** on both. Age must be 18+; pick **Dating too** and how you identify; tick the Terms box. Add a photo at
+   the last step (or later in You → Edit profile). A third account with **Films & friends** should never appear in decks.
+2. **Today:** swipe the 10 films (right = loved it, left = nah, up = haven't seen). Each swipe shows how everyone else
+   voted; after the last one you get **Daily results** with a *Share my results* button.
+3. **You:** after 8 ratings your **film personality** appears. Set an all-time favourite and prompts in Edit profile.
+4. **Match:** each account should see the other (dating needs a name, photo and country). Like each other → *It's a match*.
+5. **Chats:** each sends one hello (try a conversation starter) → full chat unlocks → send a few messages, see *Read*.
+6. **Safety:** Report (pick a reason) and Block from the chat menu; the conversation should close.
+7. **Reset password:** Log in → *Forgot password?* → enter the email. Without email configured, the reset link appears
+   on screen in dev mode; open it in a browser.
+8. **Explore:** search a film, rate it Like / Dislike / Haven't seen; switch collections in the People's chart.
+9. **Here for:** You → Settings → switch to *Films & friends*: the Match tab disappears; switch back.
+10. **Film friends** (You → Film friends): add the other account's code → compare → Watch together.
+11. **Taste card:** You → *Share my taste card* → open the link in a browser (`/taste/<code>`).
+12. **Send feedback** (Settings) → it appears in `/admin` → Feedback inbox.
+13. **Offline:** turn Wi‑Fi off, reopen the app → *Can't reach ReelMates / Try again* (you stay signed in).
+14. **Delete account** from Settings on one test account → it disappears from the other account's matches.
 
 Anything that fails here: note the screen and the message, and send it to me — this is the first real end-to-end run.
 
@@ -242,9 +246,9 @@ Once the Expo project exists and the GitHub repo is linked to it (expo.dev → p
 3. **App Privacy:** declare email, name, photos, user content (messages), identifiers (push token), usage data; all linked
    to the user, none used for tracking — matches `docs/legal/PRIVACY_POLICY.md`.
 4. **Age rating:** 17+ (frequent/intense mature themes not required; select user-generated content / unrestricted web is *No*).
-5. **App Review Information:** a working test login and this note: *"Dating unlocks after 500 men and 500 women register.
-   The review account has dating opened so you can see matching and chat. Report/block: dating card and chat; account
-   deletion: Profile → Delete account."* — open dating in `/admin` before submitting.
+5. **App Review Information:** a working test login and this note: *"ReelMates is a film app; dating is optional and opens per
+   country once enough people join. The review account has dating opened so you can see matching and chat.
+   Report/block: dating card and chat menu; account deletion: You → Settings → Delete account."* — open dating in `/admin` before submitting.
 6. Listing copy: `docs/store/app-store/listing.md`; screenshots for 6.7" and 6.5" iPhones.
 7. `eas build -p ios --profile production` → `eas submit -p ios --latest` → select the build in App Store Connect → **Submit for Review**.
 

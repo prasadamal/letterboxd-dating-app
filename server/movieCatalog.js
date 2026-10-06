@@ -4172,7 +4172,7 @@ export const movieCatalog = [
     "title": "The Empire Strikes Back",
     "year": 1980,
     "genres": [
-      "Science Fiction"
+      "Sci-Fi"
     ],
     "origin_language": "English",
     "popularity": 86,
@@ -4736,7 +4736,7 @@ export const movieCatalog = [
     "title": "Donnie Darko",
     "year": 2001,
     "genres": [
-      "Science Fiction"
+      "Sci-Fi"
     ],
     "origin_language": "English",
     "popularity": 72,
@@ -4820,7 +4820,7 @@ export const movieCatalog = [
     "title": "Southland Tales",
     "year": 2006,
     "genres": [
-      "Science Fiction"
+      "Sci-Fi"
     ],
     "origin_language": "English",
     "popularity": 42,
@@ -4848,7 +4848,7 @@ export const movieCatalog = [
     "title": "The Fountain",
     "year": 2006,
     "genres": [
-      "Science Fiction"
+      "Sci-Fi"
     ],
     "origin_language": "English",
     "popularity": 56,
@@ -4890,7 +4890,7 @@ export const movieCatalog = [
     "title": "The Man from Earth",
     "year": 2007,
     "genres": [
-      "Science Fiction"
+      "Sci-Fi"
     ],
     "origin_language": "English",
     "popularity": 44,
@@ -4904,7 +4904,7 @@ export const movieCatalog = [
     "title": "Avatar",
     "year": 2009,
     "genres": [
-      "Science Fiction"
+      "Sci-Fi"
     ],
     "origin_language": "English",
     "popularity": 88,
@@ -4960,7 +4960,7 @@ export const movieCatalog = [
     "title": "Inception",
     "year": 2010,
     "genres": [
-      "Science Fiction"
+      "Sci-Fi"
     ],
     "origin_language": "English",
     "popularity": 88,
@@ -5003,7 +5003,7 @@ export const movieCatalog = [
     "title": "Cloud Atlas",
     "year": 2012,
     "genres": [
-      "Science Fiction"
+      "Sci-Fi"
     ],
     "origin_language": "English",
     "popularity": 66,
@@ -5088,7 +5088,7 @@ export const movieCatalog = [
     "title": "Coherence",
     "year": 2013,
     "genres": [
-      "Science Fiction"
+      "Sci-Fi"
     ],
     "origin_language": "English",
     "popularity": 42,
@@ -5459,7 +5459,7 @@ export const movieCatalog = [
     "title": "The Vast of Night",
     "year": 2019,
     "genres": [
-      "Science Fiction"
+      "Sci-Fi"
     ],
     "origin_language": "English",
     "popularity": 42,
@@ -5473,7 +5473,7 @@ export const movieCatalog = [
     "title": "Tenet",
     "year": 2020,
     "genres": [
-      "Science Fiction"
+      "Sci-Fi"
     ],
     "origin_language": "English",
     "popularity": 78,

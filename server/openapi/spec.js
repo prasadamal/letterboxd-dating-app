@@ -32,6 +32,7 @@ export const openApiDocument = {
     '/dating/deck': { get: { summary: 'Next dating profile + meta' } },
     '/dating/swipe': { post: { summary: 'Like or pass profile' } },
     '/dating/matches': { get: { summary: 'Mutual matches' } },
+    '/movies/daily/results': { get: { summary: "Today's films with your votes and everyone's, plus a shareable result line" } },
     '/dating/likes-you': { get: { summary: 'People who liked you: count for everyone, profiles with ReelMates Plus' } },
     '/platform/status/me': { get: { summary: "Launch status for the signed-in member, including their country's regional launch" } },
     '/messages/{userId}/starters': { get: { summary: 'Conversation starters for a match, from shared films and prompts' } },

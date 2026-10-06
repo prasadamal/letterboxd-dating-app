@@ -1,7 +1,10 @@
+import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
+import { useState, type ReactNode } from 'react'
 import { Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native'
-import { colors, radii } from '../lib/theme'
+import { colors, fonts, radii, type } from '../lib/theme'
 import type { DatingProfile } from '../lib/types'
+import { Avatar, MatchPill, PersonalityBadge, Tag } from './ui'
 
 type Props = {
   profile: Pick<
@@ -19,174 +22,170 @@ type Props = {
     | 'sharedHated'
     | 'favorite'
     | 'prompts'
+    | 'personality'
+    | 'verification_status'
   >
   compact?: boolean
+  // Deck buttons, drawn on the photo's bottom edge so they never cover the details.
+  actions?: ReactNode
 }
 
 const FAVORITE_NOTE = {
-  same: 'Same as yours!',
-  you_liked: 'You liked it too',
-  you_disliked: "You didn't like it",
-  not_rated: ''
-} as const
+  same: { text: 'Same as yours!', tone: 'lime' as const },
+  you_liked: { text: 'You liked it too', tone: 'green' as const },
+  you_disliked: { text: "You didn't like it", tone: 'red' as const },
+  not_rated: null
+}
 
-const CHIPS_FULL = 4
-const CHIPS_COMPACT = 2
+function placeOf(profile: Props['profile']) {
+  return [profile.city, profile.country].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(', ')
+}
 
-function FilmChips({ titles, tone, max }: { titles: string[]; tone: 'liked' | 'disliked'; max: number }) {
+function FilmTags({ titles, tone, max }: { titles: string[]; tone: 'pink' | 'red'; max: number }) {
   const shown = titles.slice(0, max)
   const more = titles.length - shown.length
   return (
-    <View style={styles.chips}>
+    <View style={styles.tags}>
       {shown.map((title) => (
-        <View key={title} style={[styles.chip, tone === 'liked' ? styles.chipLiked : styles.chipDisliked]}>
-          <Text style={styles.chipText} numberOfLines={1}>
-            {title}
-          </Text>
-        </View>
+        <Tag key={title} label={title} tone={tone} icon={tone === 'pink' ? 'heart' : 'close'} />
       ))}
       {more > 0 && <Text style={styles.more}>+{more} more</Text>}
     </View>
   )
 }
 
-// Card layout: the person first (big photo, name, age, place), then what you agree on.
-export function TasteProfileCard({ profile, compact = false }: Props) {
-  const { height } = useWindowDimensions()
+// Why you two match: films in common first, then the favourite, then their own words.
+function TasteDetails({ profile, compact, actions }: Props) {
   const loved = profile.sharedLoved || []
   const hated = profile.sharedHated || []
-  const place = [profile.city, profile.country].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(', ')
-  const photo = profile.photo_url || profile.avatar_url
-  const max = compact ? CHIPS_COMPACT : CHIPS_FULL
   const common = profile.sharedCount ?? loved.length + hated.length
-
-  const taste = (
-    <View style={[styles.taste, compact && styles.tasteCompact]}>
-      <View style={styles.matchRow}>
-        <Text style={styles.match}>{Math.round(profile.score)}% taste match</Text>
-        <Text style={styles.common}>{common ? `${common} films in common` : 'No films in common yet'}</Text>
-      </View>
+  const note = profile.favorite ? FAVORITE_NOTE[profile.favorite.relation] : null
+  const max = compact ? 2 : 6
+  return (
+    <View style={[styles.details, compact && styles.detailsCompact, Boolean(actions) && { paddingTop: 52 }]}>
+      <Text style={type.label}>{common ? `${common} films in common` : 'No films in common yet'}</Text>
+      {loved.length > 0 && <FilmTags titles={loved} tone="pink" max={max} />}
+      {hated.length > 0 && <FilmTags titles={hated} tone="red" max={compact ? 1 : 4} />}
       {profile.favorite && (
         <View style={styles.favorite}>
-          <Text style={styles.favoriteLabel}>❤ ALL-TIME FAVOURITE</Text>
+          <Text style={styles.favoriteLabel}>ALL-TIME FAVOURITE</Text>
           <Text style={styles.favoriteTitle} numberOfLines={2}>
             {profile.favorite.title}
           </Text>
-          {!!FAVORITE_NOTE[profile.favorite.relation] && (
-            <Text
-              style={[
-                styles.favoriteNote,
-                profile.favorite.relation === 'you_disliked' ? { color: colors.error } : { color: colors.green }
-              ]}
-            >
-              {FAVORITE_NOTE[profile.favorite.relation]}
-            </Text>
-          )}
+          {note && <Tag label={note.text} tone={note.tone} />}
         </View>
       )}
-      {loved.length > 0 && (
-        <View style={styles.section}>
-          <Text style={[styles.label, { color: colors.green }]}>YOU BOTH LIKED</Text>
-          <FilmChips titles={loved} tone="liked" max={max} />
-        </View>
-      )}
-      {hated.length > 0 && (
-        <View style={styles.section}>
-          <Text style={[styles.label, { color: colors.error }]}>YOU BOTH DISLIKED</Text>
-          <FilmChips titles={hated} tone="disliked" max={max} />
-        </View>
-      )}
-      {!compact && !loved.length && !hated.length && (
-        <Text style={styles.hint}>Keep playing the daily game — shared films appear here.</Text>
-      )}
-    </View>
-  )
-
-  if (compact) {
-    return (
-      <View style={[styles.card, styles.compactCard]}>
-        <View style={styles.compactHead}>
-          <Image source={{ uri: photo }} style={styles.thumb} accessibilityLabel={`${profile.name}'s photo`} />
-          <View style={{ flex: 1 }}>
-            <Text style={styles.compactName}>
-              {profile.name}
-              {profile.age ? `, ${profile.age}` : ''}
-            </Text>
-            {!!place && <Text style={styles.place}>{place}</Text>}
+      {!compact &&
+        (profile.prompts || []).map((prompt) => (
+          <View key={prompt.key} style={styles.prompt}>
+            <Text style={styles.promptQuestion}>{prompt.question}</Text>
+            <Text style={styles.promptAnswer}>{prompt.answer}</Text>
           </View>
-        </View>
-        {taste}
-      </View>
-    )
-  }
-
-  return (
-    <View style={styles.card}>
-      <View>
-        <Image
-          source={{ uri: photo }}
-          style={[styles.photo, { height: Math.round(Math.max(300, height * 0.46)) }]}
-          accessibilityLabel={`${profile.name}'s photo`}
-        />
-        {/* Bottom gradient keeps the name readable on any photo. */}
-        <LinearGradient colors={['rgba(5,7,10,0)', 'rgba(5,7,10,0.85)']} style={styles.photoShade} />
-        <View style={styles.photoText}>
-          <Text style={styles.name}>
-            {profile.name}
-            {profile.age ? <Text style={styles.age}>  {profile.age}</Text> : null}
-          </Text>
-          {!!place && <Text style={styles.placeOnPhoto}>📍 {place}</Text>}
-        </View>
-      </View>
-      {taste}
-      {!!profile.bio && (
-        <Text style={styles.bio} numberOfLines={2}>
-          “{profile.bio}”
-        </Text>
+        ))}
+      {!compact && !!profile.bio && <Text style={styles.bio}>“{profile.bio}”</Text>}
+      {!compact && !loved.length && !hated.length && (
+        <Text style={type.small}>Keep playing the daily films. Shared favourites show up here.</Text>
       )}
-      {(profile.prompts || []).map((prompt) => (
-        <View key={prompt.key} style={styles.prompt}>
-          <Text style={styles.promptQuestion}>{prompt.question}</Text>
-          <Text style={styles.promptAnswer}>{prompt.answer}</Text>
-        </View>
-      ))}
     </View>
   )
 }
 
+export function TasteProfileCard({ profile, compact = false, actions }: Props) {
+  const { height } = useWindowDimensions()
+  const place = placeOf(profile)
+
+  if (compact) {
+    return (
+      <View style={styles.compact}>
+        <View style={styles.compactHead}>
+          <Avatar uri={profile.photo_url} name={profile.name} size={56} />
+          <View style={{ flex: 1, gap: 4 }}>
+            <Text style={type.h3}>
+              {profile.name}
+              {profile.age ? `, ${profile.age}` : ''}
+            </Text>
+            {!!place && <Text style={type.small}>{place}</Text>}
+          </View>
+          <MatchPill score={profile.score} size="sm" />
+        </View>
+        <PersonalityBadge personality={profile.personality} size="sm" />
+        <TasteDetails profile={profile} compact />
+      </View>
+    )
+  }
+
+  const photoHeight = Math.round(Math.max(340, height * 0.56))
+  return (
+    <View style={styles.card}>
+      <View style={{ height: photoHeight, zIndex: 2 }}>
+        <PhotoFill uri={profile.photo_url} name={profile.name} />
+        <LinearGradient colors={['rgba(8,8,11,0)', 'rgba(8,8,11,0.25)', 'rgba(8,8,11,0.92)']} locations={[0.35, 0.6, 1]} style={StyleSheet.absoluteFill} />
+        <View style={styles.topRow}>
+          <MatchPill score={profile.score} size="lg" />
+          {profile.verification_status === 'verified' && (
+            <View style={styles.verified}>
+              <Ionicons name="checkmark-circle" size={16} color={colors.cyan} />
+              <Text style={styles.verifiedText}>Verified</Text>
+            </View>
+          )}
+        </View>
+        <View style={[styles.photoText, Boolean(actions) && { bottom: 50 }]}>
+          <PersonalityBadge personality={profile.personality} />
+          <Text style={styles.name} numberOfLines={1}>
+            {profile.name}
+            {profile.age ? <Text style={styles.age}>  {profile.age}</Text> : null}
+          </Text>
+          {!!place && (
+            <View style={styles.placeRow}>
+              <Ionicons name="location-sharp" size={14} color="rgba(255,255,255,0.85)" />
+              <Text style={styles.place}>{place}</Text>
+            </View>
+          )}
+        </View>
+        {actions && <View style={styles.actions}>{actions}</View>}
+      </View>
+      <TasteDetails profile={profile} actions={actions} />
+    </View>
+  )
+}
+
+// Full-bleed photo, or a big gradient monogram when there is none (or it fails to load).
+function PhotoFill({ uri, name }: { uri?: string | null; name: string }) {
+  const [failed, setFailed] = useState(false)
+  if (uri && !failed) {
+    return <Image source={{ uri }} onError={() => setFailed(true)} style={StyleSheet.absoluteFill} resizeMode="cover" accessibilityLabel={`${name}'s photo`} />
+  }
+  return (
+    <LinearGradient colors={['#8B6CFF', '#FF4F9A']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[StyleSheet.absoluteFill, styles.monogram]}>
+      <Text style={styles.monogramText}>{name.charAt(0).toUpperCase()}</Text>
+    </LinearGradient>
+  )
+}
+
 const styles = StyleSheet.create({
-  card: { backgroundColor: colors.card, borderRadius: radii.lg, borderWidth: 1, borderColor: colors.border, overflow: 'hidden' },
-  photo: { width: '100%', backgroundColor: colors.bgElevated },
-  photoShade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 180 },
-  photoText: { position: 'absolute', left: 16, right: 16, bottom: 14 },
-  name: { color: '#fff', fontSize: 30, fontWeight: '800', letterSpacing: -0.5 },
-  age: { color: '#fff', fontSize: 26, fontWeight: '400' },
-  placeOnPhoto: { color: 'rgba(255,255,255,0.88)', fontSize: 15, marginTop: 2 },
-  taste: { paddingHorizontal: 16, paddingTop: 14, paddingBottom: 6, gap: 10 },
-  tasteCompact: { paddingHorizontal: 0 },
-  matchRow: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 },
-  match: { color: colors.peach, fontSize: 18, fontWeight: '800' },
-  common: { color: colors.muted, fontSize: 12 },
-  section: { gap: 6 },
-  favorite: { backgroundColor: 'rgba(255,95,138,0.08)', borderColor: 'rgba(255,95,138,0.3)', borderWidth: 1, borderRadius: 14, padding: 10, gap: 2 },
-  favoriteLabel: { color: colors.pink, fontSize: 11, fontWeight: '800', letterSpacing: 1.2 },
-  favoriteTitle: { color: colors.text, fontSize: 15, fontWeight: '700' },
-  favoriteNote: { fontSize: 12, fontWeight: '600' },
-  label: { fontSize: 11, fontWeight: '800', letterSpacing: 1.2 },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, alignItems: 'center' },
-  chip: { borderRadius: 999, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, maxWidth: '100%' },
-  chipLiked: { backgroundColor: 'rgba(110,231,183,0.10)', borderColor: 'rgba(110,231,183,0.35)' },
-  chipDisliked: { backgroundColor: 'rgba(251,113,133,0.10)', borderColor: 'rgba(251,113,133,0.35)' },
-  chipText: { color: colors.text, fontSize: 13 },
+  card: { backgroundColor: colors.card, borderRadius: radii.xl, borderWidth: 1, borderColor: colors.border, overflow: 'hidden' },
+  topRow: { position: 'absolute', top: 16, left: 16, right: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  verified: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: 'rgba(8,8,11,0.6)', borderRadius: radii.pill, paddingHorizontal: 10, paddingVertical: 5 },
+  verifiedText: { fontFamily: fonts.semi, color: colors.text, fontSize: 12 },
+  photoText: { position: 'absolute', left: 18, right: 18, bottom: 18, gap: 8 },
+  name: { fontFamily: fonts.display, color: '#fff', fontSize: 38, lineHeight: 42, letterSpacing: -1.2 },
+  age: { fontFamily: fonts.medium, color: 'rgba(255,255,255,0.9)', fontSize: 30 },
+  placeRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: -4 },
+  place: { color: 'rgba(255,255,255,0.88)', fontSize: 15 },
+  monogram: { alignItems: 'center', justifyContent: 'center' },
+  actions: { position: 'absolute', left: 0, right: 0, bottom: -34, flexDirection: 'row', justifyContent: 'center', gap: 36, zIndex: 10, elevation: 10 },
+  monogramText: { fontFamily: fonts.display, color: 'rgba(255,255,255,0.9)', fontSize: 140 },
+  details: { padding: 18, gap: 12 },
+  detailsCompact: { padding: 0, gap: 8 },
+  tags: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, alignItems: 'center' },
   more: { color: colors.muted, fontSize: 12 },
-  hint: { color: colors.muted, fontSize: 13 },
-  bio: { color: colors.muted, paddingHorizontal: 16, paddingBottom: 14, fontStyle: 'italic', lineHeight: 20 },
-  prompt: { marginHorizontal: 16, marginBottom: 12, padding: 12, borderRadius: 14, backgroundColor: colors.bgElevated, gap: 4 },
-  promptQuestion: { color: colors.peach, fontSize: 12, fontWeight: '700' },
-  promptAnswer: { color: colors.text, fontSize: 17, fontWeight: '700' },
-  compactCard: { backgroundColor: 'transparent', borderWidth: 0, borderRadius: 0 },
-  compactHead: { flexDirection: 'row', gap: 12, alignItems: 'center' },
-  thumb: { width: 56, height: 56, borderRadius: 28, backgroundColor: colors.bgElevated },
-  compactName: { color: colors.text, fontSize: 18, fontWeight: '800' },
-  place: { color: colors.muted, marginTop: 2 }
+  favorite: { backgroundColor: colors.cardHigh, borderRadius: radii.md, padding: 14, gap: 6 },
+  favoriteLabel: { fontFamily: fonts.semi, color: colors.pink, fontSize: 11, letterSpacing: 1.4 },
+  favoriteTitle: { fontFamily: fonts.bold, color: colors.text, fontSize: 18 },
+  prompt: { backgroundColor: colors.cardHigh, borderRadius: radii.md, padding: 16, gap: 6 },
+  promptQuestion: { fontFamily: fonts.semi, color: colors.lime, fontSize: 13 },
+  promptAnswer: { fontFamily: fonts.display, color: colors.text, fontSize: 22, lineHeight: 26, letterSpacing: -0.4 },
+  bio: { color: colors.soft, fontSize: 15, lineHeight: 22, fontStyle: 'italic' },
+  compact: { gap: 10 },
+  compactHead: { flexDirection: 'row', alignItems: 'center', gap: 12 }
 })

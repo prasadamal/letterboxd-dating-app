@@ -18,18 +18,21 @@ Run in **staging** before merging to production and before EAS store builds.
 
 ## Product flows (manual)
 
-- [ ] Registration with gender, country, terms
-- [ ] Onboarding photo + bio + country → profile ≥80%
-- [ ] Daily 10-film game saves ratings
-- [ ] Launch gate (use `LAUNCH_*=2` in staging)
-- [ ] Dating deck respects discovery prefs + swipe stats meta
-- [ ] Mutual match + intro chat unlock
+- [ ] Signup with *Films & friends* (no gender asked) and with *Dating too* (identity + Show me), country, terms
+- [ ] Photo step at the end of signup; profile ≥ 80% with name, photo and country
+- [ ] Today: swipe right / left / up saves ratings; crowd reveal after each swipe; Daily results + share text
+- [ ] Film personality appears after 8 ratings (You, friend cards, taste card)
+- [ ] Launch gate (use `LAUNCH_*=2` or `country_target` in staging); films-only members don't count
+- [ ] Match deck respects Show me, age range and min match (Plus); undo works
+- [ ] Mutual match → match overlay → intro chat unlock; conversation starters
 - [ ] Read receipts + Supabase Realtime “Live chat connected” banner
-- [ ] Messages tab inbox
+- [ ] Chats: likes-you card, new matches row, unread badges
+- [ ] Settings: switch *Here for* → Match tab hides / shows
+- [ ] Taste card link opens on the web (`/taste/<code>`)
 - [ ] Block / report → `/admin` queue resolve
 - [ ] Verification request → admin PATCH verification
-- [ ] Push token register (physical device)
-- [ ] Cron: daily reminders + inactivity cleanup (staging)
+- [ ] Push token register (physical device); tapping a push opens the right screen
+- [ ] Cron: daily reminders (streak copy) + inactivity cleanup (staging)
 
 ## Store readiness
 

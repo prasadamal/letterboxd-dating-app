@@ -1,32 +1,31 @@
-import { useEffect, useState } from 'react'
-import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Stack, useLocalSearchParams } from 'expo-router'
+import { useEffect, useState } from 'react'
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Avatar, Card, PersonalityBadge, SectionTitle, Tag } from '../../components/ui'
 import { apiFetch } from '../../lib/api'
-import { colors } from '../../lib/theme'
+import { useAuth } from '../../lib/auth'
+import { colors, fonts, radii, type } from '../../lib/theme'
 import type { TasteComparison } from '../../lib/types'
 
-const RELATION_TEXT = {
-  same: 'Same as yours!',
-  you_liked: 'You liked it too',
-  you_disliked: "You didn't like it",
-  not_rated: "You haven't rated it"
-} as const
-
-function Chips({ titles, tone }: { titles: string[]; tone: 'liked' | 'disliked' | 'neutral' }) {
-  return (
-    <View style={styles.chips}>
-      {titles.map((title) => (
-        <View key={title} style={[styles.chip, tone === 'liked' ? styles.liked : tone === 'disliked' ? styles.disliked : styles.neutral]}>
-          <Text style={styles.chipText}>{title}</Text>
-        </View>
-      ))}
-    </View>
-  )
+const RELATION = {
+  same: { text: 'Same as yours!', tone: 'lime' as const },
+  you_liked: { text: 'You liked it too', tone: 'green' as const },
+  you_disliked: { text: "You didn't like it", tone: 'red' as const },
+  not_rated: { text: "You haven't rated it", tone: 'neutral' as const }
 }
 
-// Taste comparison with a film friend or match, plus "watch together" ideas built from what each of you hasn't seen.
+function verdict(score: number) {
+  if (score >= 85) return 'Film soulmates 🎬'
+  if (score >= 70) return 'Seriously compatible'
+  if (score >= 55) return 'Good overlap'
+  if (score >= 45) return 'Still figuring it out'
+  return 'Opposites attract?'
+}
+
+// Taste comparison with a film friend or match, plus "watch together" ideas.
 export default function CompareScreen() {
   const { userId, name } = useLocalSearchParams<{ userId: string; name?: string }>()
+  const { user } = useAuth()
   const [data, setData] = useState<TasteComparison | null>(null)
   const [error, setError] = useState('')
 
@@ -37,63 +36,108 @@ export default function CompareScreen() {
   }, [userId])
 
   const title = data?.person.name || name || 'Compare'
+  const samePersonality = data?.person.personality && data.myPersonality && data.person.personality.key === data.myPersonality.key
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={{ padding: 16, gap: 16, paddingBottom: 40 }}>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Stack.Screen options={{ title }} />
-      {!data && !error && <ActivityIndicator color={colors.pink} style={{ marginTop: 40 }} />}
+      {!data && !error && <ActivityIndicator color={colors.lime} style={{ marginTop: 60 }} />}
       {!!error && <Text style={styles.error}>{error}</Text>}
       {data && (
         <>
-          <View style={styles.header}>
-            <Image source={{ uri: data.person.photo_url || data.person.avatar_url }} style={styles.avatar} />
-            <View style={{ flex: 1 }}>
-              <Text style={styles.score}>{data.score}% taste match</Text>
-              <Text style={styles.sub}>
-                {data.sharedCount} films in common{data.conflicts ? ` · ${data.conflicts} you disagree on` : ''}
+          <View style={styles.hero}>
+            <View style={styles.faces}>
+              <Avatar uri={user?.photo_url} name={user?.name} size={84} ring />
+              <View style={{ marginLeft: -18 }}>
+                <Avatar uri={data.person.photo_url} name={data.person.name} size={84} ring />
+              </View>
+            </View>
+            <Text style={styles.score}>{data.score}%</Text>
+            <Text style={type.h3}>{verdict(data.score)}</Text>
+            <Text style={type.small}>
+              {data.sharedCount} films in common{data.conflicts ? ` · ${data.conflicts} you disagree on` : ''}
+            </Text>
+          </View>
+
+          {(data.person.personality || data.myPersonality) && (
+            <Card>
+              <Text style={type.label}>{samePersonality ? 'Same film personality!' : 'Film personalities'}</Text>
+              <View style={styles.personalities}>
+                <View style={styles.personality}>
+                  <Text style={type.small}>{data.person.name}</Text>
+                  <PersonalityBadge personality={data.person.personality} size="sm" />
+                  {!data.person.personality && <Text style={type.small}>Still a Fresh Reel</Text>}
+                </View>
+                <View style={styles.personality}>
+                  <Text style={type.small}>You</Text>
+                  <PersonalityBadge personality={data.myPersonality} size="sm" />
+                  {!data.myPersonality && <Text style={type.small}>Still a Fresh Reel</Text>}
+                </View>
+              </View>
+            </Card>
+          )}
+
+          <Card>
+            <Text style={type.label}>All-time favourites</Text>
+            <View style={{ gap: 6 }}>
+              <Text style={styles.favLine}>
+                <Text style={styles.favWho}>{data.person.name}: </Text>
+                {data.theirFavorite ? data.theirFavorite.title : 'not chosen yet'}
+              </Text>
+              {data.theirFavorite && <Tag label={RELATION[data.theirFavorite.relation].text} tone={RELATION[data.theirFavorite.relation].tone} />}
+              <Text style={styles.favLine}>
+                <Text style={styles.favWho}>You: </Text>
+                {data.myFavorite || 'not chosen yet (You → Edit profile)'}
               </Text>
             </View>
-          </View>
-
-          <View style={styles.card}>
-            <Text style={styles.label}>ALL-TIME FAVOURITES</Text>
-            <Text style={styles.body}>
-              {data.person.name}: {data.theirFavorite ? data.theirFavorite.title : 'not chosen yet'}
-              {data.theirFavorite ? `  ·  ${RELATION_TEXT[data.theirFavorite.relation]}` : ''}
-            </Text>
-            <Text style={styles.body}>You: {data.myFavorite || 'not chosen yet (Profile → favourite)'}</Text>
-          </View>
+          </Card>
 
           {data.sharedLoved.length > 0 && (
-            <View style={styles.card}>
-              <Text style={[styles.label, { color: colors.green }]}>YOU BOTH LIKED</Text>
-              <Chips titles={data.sharedLoved.slice(0, 12)} tone="liked" />
-            </View>
+            <>
+              <SectionTitle title="You both loved" />
+              <View style={styles.tags}>
+                {data.sharedLoved.slice(0, 14).map((t) => (
+                  <Tag key={t} label={t} tone="pink" icon="heart" />
+                ))}
+              </View>
+            </>
           )}
           {data.sharedHated.length > 0 && (
-            <View style={styles.card}>
-              <Text style={[styles.label, { color: colors.error }]}>YOU BOTH DISLIKED</Text>
-              <Chips titles={data.sharedHated.slice(0, 12)} tone="disliked" />
-            </View>
+            <>
+              <SectionTitle title="You both passed on" />
+              <View style={styles.tags}>
+                {data.sharedHated.slice(0, 10).map((t) => (
+                  <Tag key={t} label={t} tone="red" icon="close" />
+                ))}
+              </View>
+            </>
           )}
 
-          <View style={styles.card}>
-            <Text style={styles.label}>WATCH TOGETHER</Text>
+          <SectionTitle title="Watch together" />
+          <Card>
             {data.watchTogether.forYou.length > 0 && (
-              <>
-                <Text style={styles.body}>{data.person.name} loved these — you haven't rated them yet:</Text>
-                <Chips titles={data.watchTogether.forYou} tone="neutral" />
-              </>
+              <View style={{ gap: 8 }}>
+                <Text style={type.small}>{data.person.name} loved these. You haven't rated them yet:</Text>
+                <View style={styles.tags}>
+                  {data.watchTogether.forYou.map((t) => (
+                    <Tag key={t} label={t} tone="cyan" icon="film" />
+                  ))}
+                </View>
+              </View>
             )}
             {data.watchTogether.forThem.length > 0 && (
-              <>
-                <Text style={styles.body}>You loved these — {data.person.name} hasn't rated them yet:</Text>
-                <Chips titles={data.watchTogether.forThem} tone="neutral" />
-              </>
+              <View style={{ gap: 8 }}>
+                <Text style={type.small}>You loved these. {data.person.name} hasn't rated them yet:</Text>
+                <View style={styles.tags}>
+                  {data.watchTogether.forThem.map((t) => (
+                    <Tag key={t} label={t} tone="violet" icon="film" />
+                  ))}
+                </View>
+              </View>
             )}
             {!data.watchTogether.forYou.length && !data.watchTogether.forThem.length && (
-              <Text style={styles.sub}>Rate more films and ideas will appear here.</Text>
+              <Text style={type.small}>Rate more films and ideas show up here.</Text>
             )}
-          </View>
+          </Card>
         </>
       )}
     </ScrollView>
@@ -102,18 +146,15 @@ export default function CompareScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  header: { flexDirection: 'row', alignItems: 'center', gap: 14 },
-  avatar: { width: 72, height: 72, borderRadius: 36, backgroundColor: colors.bgElevated },
-  score: { color: colors.peach, fontSize: 24, fontWeight: '800' },
-  sub: { color: colors.muted, lineHeight: 20 },
-  body: { color: colors.text, lineHeight: 21 },
-  error: { color: colors.error, marginTop: 24 },
-  card: { backgroundColor: colors.card, borderRadius: 18, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 8 },
-  label: { color: colors.peach, fontSize: 11, fontWeight: '800', letterSpacing: 1.2 },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  chip: { borderRadius: 999, borderWidth: 1, paddingHorizontal: 10, paddingVertical: 5 },
-  liked: { backgroundColor: 'rgba(110,231,183,0.10)', borderColor: 'rgba(110,231,183,0.35)' },
-  disliked: { backgroundColor: 'rgba(251,113,133,0.10)', borderColor: 'rgba(251,113,133,0.35)' },
-  neutral: { backgroundColor: 'rgba(244,162,97,0.10)', borderColor: 'rgba(244,162,97,0.35)' },
-  chipText: { color: colors.text, fontSize: 13 }
+  content: { padding: 20, gap: 12, paddingBottom: 48 },
+  error: { color: colors.red, marginTop: 24, textAlign: 'center' },
+  hero: { alignItems: 'center', gap: 6, paddingVertical: 8 },
+  faces: { flexDirection: 'row', marginBottom: 6 },
+  score: { fontFamily: fonts.display, color: colors.lime, fontSize: 72, lineHeight: 76, letterSpacing: -3 },
+  personalities: { flexDirection: 'row', gap: 12 },
+  personality: { flex: 1, gap: 6 },
+  favLine: { color: colors.text, fontSize: 15, lineHeight: 21 },
+  favWho: { color: colors.muted },
+  tags: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  card: { borderRadius: radii.lg }
 })

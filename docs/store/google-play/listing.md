@@ -4,27 +4,30 @@
 ReelMates
 
 ## Short description (80 chars max)
-Match through movies you love — rate films, find taste twins, chat.
+10 films a day, your film personality, and friends who get your taste.
 
 ## Full description
-ReelMates is a movie-taste dating app. Rate daily film picks (blockbusters and hidden gems from around the world), build your taste profile, and meet people who like and dislike the same films you do.
+ReelMates is where your film taste finds its people.
+
+Every day everyone gets the same 10 films, from blockbusters to Malayalam gems and Korean thrillers. Swipe right if you loved it, left if you didn't, up if you haven't seen it. Each swipe shows how the crowd voted, and when you're done you get your daily results to share.
 
 **Features**
-- Daily curated film picks — title and year, no spoilers required
-- Like, dislike, or skip to train your taste
-- Compatibility scores based on shared movie opinions
-- In-app messaging when you find a great match
-- Profile you control — bio, city, hobbies
+- The daily drop: 10 films, a crowd reveal on every swipe, a streak to keep
+- Your film personality: Hopeless Romantic? Midnight Thrill-Seeker? Hidden Gem Hunter?
+- Film friends: add friends by code, see your taste match and what to watch together
+- Explore: search 400+ films and the People's Chart, ranked by members
+- Taste card: share your film taste with a link
+- Dating, only if you want it: matches ranked by taste, not looks, with conversation starters from the films you share
 
-ReelMates celebrates global cinema: Hollywood, Bollywood, K-drama, anime, art house, documentaries, and more.
+ReelMates celebrates global cinema: Hollywood, Indian cinema, Korean, Japanese and European films, animation, documentaries and more.
 
 You must be 18+ to use ReelMates.
 
 ## Category
-Dating
+Social (dating is an optional mode; if you'd rather list under Dating, keep the 18+ rating)
 
 ## Tags
-dating, movies, film, match, chat, taste, letterboxd
+movies, film, cinema, friends, taste, personality, dating
 
 ## Contact
 support@reelmates.app

@@ -1,5 +1,4 @@
 import Constants from 'expo-constants'
-import type { User } from './types'
 import { clearTokens, getAccessToken, getRefreshToken, saveTokens } from './session'
 
 const fallbackDev =
@@ -103,18 +102,4 @@ export async function apiFetch<T>(
   }
 
   return res.json()
-}
-
-export function movieLabel(movie: { title: string; year: number }) {
-  return `${movie.title} (${movie.year})`
-}
-
-export function buildTasteSummary(user?: User | null, match?: User | null) {
-  if (!user || !match) return 'Still discovering taste overlap.'
-  const sharedLoved = (match.loved || []).filter((m) => (user.loved || []).includes(m)).slice(0, 2)
-  const sharedHated = (match.hated || []).filter((m) => (user.hated || []).includes(m)).slice(0, 2)
-  const parts: string[] = []
-  if (sharedLoved.length) parts.push(`Liked: ${sharedLoved.join(' · ')}`)
-  if (sharedHated.length) parts.push(`Disliked: ${sharedHated.join(' · ')}`)
-  return parts.join(' · ') || 'Different taste, worth a conversation.'
 }

@@ -18,7 +18,7 @@ router.get('/deck', authMiddleware, async (req, res) => {
     const { deck, meta } = await getDatingDeckWithMeta(req.user.id, 1)
     return res.json({ profile: deck[0] || null, meta })
   } catch (error) {
-    if (error.code === 'DATING_LOCKED' || error.code === 'PROFILE_INCOMPLETE') {
+    if (['DATING_LOCKED', 'DATING_OFF', 'PROFILE_INCOMPLETE'].includes(error.code)) {
       return res.status(403).json({
         message: error.message,
         code: error.code,
@@ -36,7 +36,7 @@ router.post('/swipe', authMiddleware, validateBody(swipeSchema), async (req, res
     const result = await recordSwipe(req.user.id, targetId, action)
     return res.json(result)
   } catch (error) {
-    if (error.code === 'DATING_LOCKED' || error.code === 'PROFILE_INCOMPLETE') {
+    if (['DATING_LOCKED', 'DATING_OFF', 'PROFILE_INCOMPLETE'].includes(error.code)) {
       return res.status(403).json({
         message: error.message,
         code: error.code,
@@ -53,7 +53,7 @@ router.post('/undo', authMiddleware, async (req, res) => {
     const result = await undoLastSwipe(req.user.id)
     return res.json(result)
   } catch (error) {
-    if (error.code === 'DATING_LOCKED' || error.code === 'PROFILE_INCOMPLETE') {
+    if (['DATING_LOCKED', 'DATING_OFF', 'PROFILE_INCOMPLETE'].includes(error.code)) {
       return res.status(403).json({ message: error.message, code: error.code, details: error.details || null })
     }
     return res.status(400).json({ message: error.message || 'Could not undo swipe' })
@@ -65,7 +65,7 @@ router.get('/matches', authMiddleware, async (req, res) => {
     const matches = await getMutualMatches(req.user.id)
     return res.json({ matches })
   } catch (error) {
-    if (error.code === 'DATING_LOCKED' || error.code === 'PROFILE_INCOMPLETE') {
+    if (['DATING_LOCKED', 'DATING_OFF', 'PROFILE_INCOMPLETE'].includes(error.code)) {
       return res.status(403).json({
         message: error.message,
         code: error.code,
@@ -82,7 +82,7 @@ router.get('/likes-you', authMiddleware, async (req, res) => {
   try {
     return res.json(await getLikesYou(req.user.id))
   } catch (error) {
-    if (error.code === 'DATING_LOCKED') return res.status(403).json({ message: error.message, code: error.code })
+    if (error.code === 'DATING_LOCKED' || error.code === 'DATING_OFF') return res.status(403).json({ message: error.message, code: error.code })
     console.error(error)
     return res.status(500).json({ message: 'Could not load likes' })
   }

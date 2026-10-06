@@ -25,6 +25,7 @@ const profileUpdateSchema = z.object({
   age: z.coerce.number().int().min(18).max(100).optional(),
   hobbies: z.array(z.string()).optional(),
   gender: z.enum(['male', 'female', 'nonbinary']).optional(),
+  datingEnabled: z.boolean().optional(),
   interestedIn: z.array(z.enum(['male', 'female', 'nonbinary'])).min(1).max(3).optional(),
   prompts: z
     .array(z.object({ key: z.enum(Object.keys(PROFILE_PROMPTS)), answer: z.string().max(MAX_PROMPT_ANSWER) }))
@@ -61,7 +62,7 @@ router.put(
   authMiddleware,
   validateBody(profileUpdateSchema),
   asyncHandler(async (req, res) => {
-    const { name, city, country, bio, hobbies, age, discoveryPrefs, gender, interestedIn, prompts } = req.body
+    const { name, city, country, bio, hobbies, age, discoveryPrefs, gender, interestedIn, prompts, datingEnabled } = req.body
     const promptAnswers = (prompts || []).map((p) => p.answer)
     if ([name, bio, city, country, ...promptAnswers].some(containsBlockedContent)) {
       throw new AppError('Your profile text breaks our community rules.', 422, 'CONTENT_BLOCKED')
@@ -81,6 +82,11 @@ router.put(
       updates.interested_in = normalizeInterestedIn(interestedIn || current?.interested_in, gender || current?.gender)
     }
     if (prompts) updates.prompts = normalizePrompts(prompts)
+    if (datingEnabled !== undefined) updates.dating_enabled = datingEnabled
+    if (datingEnabled === true && !gender) {
+      const current = await findUserById(req.user.id)
+      if (!current?.gender) throw new AppError('Choose how you identify before turning on dating.', 400, 'GENDER_REQUIRED')
+    }
     updates.last_active_at = new Date().toISOString()
 
     const row = await updateUserProfile(req.user.id, updates)

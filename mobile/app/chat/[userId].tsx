@@ -1,16 +1,30 @@
+import { Ionicons } from '@expo/vector-icons'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Alert, FlatList, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
-import { ApiError, apiFetch } from '../../lib/api'
+import { Alert, FlatList, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ReportSheet } from '../../components/ReportSheet'
+import { Avatar } from '../../components/ui'
+import { ApiError, apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
+import { haptic } from '../../lib/haptics'
 import { subscribeChatChannel } from '../../lib/realtime'
-import { colors } from '../../lib/theme'
-import type { ChatMessage } from '../../lib/types'
+import { colors, fonts, radii, type } from '../../lib/theme'
+import type { ChatMessage, TasteComparison } from '../../lib/types'
+
+type ChatPayload = {
+  messages: ChatMessage[]
+  introPending?: boolean
+  waitingOnPeer?: boolean
+  chatUnlocked?: boolean
+  realtimeChannel?: string
+}
 
 export default function ChatScreen() {
   const { userId, name } = useLocalSearchParams<{ userId: string; name?: string }>()
-  const { token, user } = useAuth()
+  const { user } = useAuth()
+  const router = useRouter()
+  const insets = useSafeAreaInsets()
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [text, setText] = useState('')
   const [introPending, setIntroPending] = useState(false)
@@ -20,8 +34,10 @@ export default function ChatScreen() {
   const [closed, setClosed] = useState(false)
   const [reporting, setReporting] = useState(false)
   const [starters, setStarters] = useState<string[]>([])
+  const [peer, setPeer] = useState<TasteComparison | null>(null)
+  const [sending, setSending] = useState(false)
   const lastSyncRef = useRef<string | null>(null)
-  const router = useRouter()
+  const listRef = useRef<FlatList<ChatMessage>>(null)
 
   const mergeMessage = useCallback((msg: ChatMessage) => {
     setMessages((current) => {
@@ -35,23 +51,11 @@ export default function ChatScreen() {
 
   const loadMessages = useCallback(
     async (since?: string | null) => {
-      if (!token || !userId || closed) return
+      if (!userId || closed) return
       const query = since ? `?since=${encodeURIComponent(since)}` : ''
-      let data: {
-        messages: ChatMessage[]
-        introPending?: boolean
-        waitingOnPeer?: boolean
-        chatUnlocked?: boolean
-        realtimeChannel?: string
-      }
+      let data: ChatPayload
       try {
-        data = await apiFetch<{
-        messages: ChatMessage[]
-        introPending?: boolean
-        waitingOnPeer?: boolean
-        chatUnlocked?: boolean
-        realtimeChannel?: string
-      }>(`/messages/${userId}${query}`, {}, token)
+        data = await apiFetch<ChatPayload>(`/messages/${userId}${query}`)
       } catch (err) {
         // 404: the match ended (blocked, unmatched or account deleted). Stop polling.
         if (err instanceof ApiError && err.status === 404) {
@@ -62,7 +66,6 @@ export default function ChatScreen() {
       }
 
       if (data.realtimeChannel) setRealtimeChannel(data.realtimeChannel)
-
       if (since && data.messages?.length) {
         for (const msg of data.messages) mergeMessage(msg)
       } else if (!since) {
@@ -76,9 +79,9 @@ export default function ChatScreen() {
       setChatUnlocked(Boolean(data.chatUnlocked))
       // Only mark read when something new arrived from the other person, not on every poll.
       const incoming = (data.messages || []).some((m) => m.from_user_id !== user?.id && !m.read_at)
-      if (incoming) await apiFetch(`/messages/${userId}/read`, { method: 'POST' }, token).catch(() => null)
+      if (incoming) await apiFetch(`/messages/${userId}/read`, { method: 'POST' }).catch(() => null)
     },
-    [token, userId, mergeMessage, closed, user?.id]
+    [userId, mergeMessage, closed, user?.id]
   )
 
   useEffect(() => {
@@ -94,46 +97,51 @@ export default function ChatScreen() {
   useEffect(() => {
     if (!realtimeChannel) return
     // Signals carry no content; fetch what changed through the authenticated API.
-    const refresh = () => {
-      loadMessages(lastSyncRef.current).catch(() => null)
-    }
-    return subscribeChatChannel(realtimeChannel, { onMessage: refresh, onRead: () => loadMessages().catch(() => null) })
+    return subscribeChatChannel(realtimeChannel, {
+      onMessage: () => loadMessages(lastSyncRef.current).catch(() => null),
+      onRead: () => loadMessages().catch(() => null)
+    })
   }, [realtimeChannel, loadMessages])
 
   useEffect(() => {
-    if (!token || !userId) return
-    apiFetch<{ starters: string[] }>(`/messages/${userId}/starters`, {}, token)
+    if (!userId) return
+    apiFetch<{ starters: string[] }>(`/messages/${userId}/starters`)
       .then((data) => setStarters(data.starters || []))
       .catch(() => null)
-  }, [token, userId])
+    apiFetch<TasteComparison>(`/friends/compare/${userId}`)
+      .then(setPeer)
+      .catch(() => null)
+  }, [userId])
 
   const sentAny = messages.some((m) => m.from_user_id === user?.id)
+  const peerName = peer?.person.name || name || 'Chat'
+  const lastMine = [...messages].reverse().find((m) => m.from_user_id === user?.id)
 
   async function send() {
-    if (!token || !userId || !text.trim()) return
+    if (!userId || !text.trim() || sending) return
+    setSending(true)
     try {
-      const data = await apiFetch<{ message: ChatMessage }>(
-        '/messages',
-        { method: 'POST', body: JSON.stringify({ toUserId: userId, text }) },
-        token
-      )
+      const data = await apiFetch<{ message: ChatMessage }>('/messages', { method: 'POST', body: JSON.stringify({ toUserId: userId, text }) })
+      haptic.tap()
       mergeMessage(data.message)
       setText('')
       await loadMessages()
     } catch (err) {
       Alert.alert('Message not sent', err instanceof Error ? err.message : 'Try again')
+    } finally {
+      setSending(false)
     }
   }
 
-  function blockUser() {
-    Alert.alert('Block this person?', 'You will no longer see or message each other. They are not notified.', [
+  function block() {
+    Alert.alert(`Block ${peerName}?`, 'You will no longer see or message each other. They are not notified.', [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Block',
         style: 'destructive',
         onPress: async () => {
           try {
-            await apiFetch('/safety/block', { method: 'POST', body: JSON.stringify({ userId }) }, token)
+            await apiFetch('/safety/block', { method: 'POST', body: JSON.stringify({ userId }) })
             router.back()
           } catch (err) {
             Alert.alert('Could not block', err instanceof Error ? err.message : 'Try again')
@@ -143,70 +151,125 @@ export default function ChatScreen() {
     ])
   }
 
+  function menu() {
+    Alert.alert(peerName, undefined, [
+      { text: 'See taste match', onPress: () => router.push({ pathname: '/compare/[userId]', params: { userId: String(userId), name: peerName } }) },
+      { text: 'Report', onPress: () => setReporting(true) },
+      { text: 'Block', style: 'destructive', onPress: block },
+      { text: 'Cancel', style: 'cancel' }
+    ])
+  }
+
+  const notice = closed
+    ? 'This conversation is no longer available.'
+    : waitingOnPeer
+      ? `Your hello is in. Chat opens when ${peerName} replies.`
+      : introPending && !chatUnlocked
+        ? 'Say hi! Chat opens once you’ve both sent a hello.'
+        : null
+
   return (
-    <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <Stack.Screen options={{ title: name || 'Chat' }} />
-      {introPending && !chatUnlocked && (
-        <Text style={styles.banner}>Send one hello — chat unlocks after you both message once.</Text>
-      )}
-      {waitingOnPeer && (
-        <Text style={styles.banner}>Your hello is in. Wait for them to reply before sending more.</Text>
-      )}
-      {realtimeChannel ? <Text style={styles.live}>Live chat connected</Text> : null}
+    <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}>
+      <Stack.Screen
+        options={{
+          headerTitle: () => (
+            <Pressable
+              style={styles.headerTitle}
+              onPress={() => router.push({ pathname: '/compare/[userId]', params: { userId: String(userId), name: peerName } })}
+              accessibilityRole="button"
+              accessibilityLabel={`${peerName}, see taste match`}
+            >
+              <Avatar uri={peer?.person.photo_url} name={peerName} size={34} />
+              <View>
+                <Text style={styles.headerName}>{peerName}</Text>
+                {peer && <Text style={styles.headerScore}>{peer.score}% taste match</Text>}
+              </View>
+            </Pressable>
+          ),
+          headerRight: () =>
+            closed ? null : (
+              <Pressable onPress={menu} hitSlop={10} accessibilityRole="button" accessibilityLabel="More options">
+                <Ionicons name="ellipsis-horizontal" size={22} color={colors.text} />
+              </Pressable>
+            )
+        }}
+      />
+
       <FlatList
+        ref={listRef}
         data={messages}
         keyExtractor={(item) => String(item.id)}
-        contentContainerStyle={{ padding: 16, gap: 8 }}
+        contentContainerStyle={styles.list}
+        onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: false })}
+        ListHeaderComponent={
+          peer && !messages.length ? (
+            <View style={styles.intro}>
+              <Avatar uri={peer.person.photo_url} name={peerName} size={88} ring />
+              <Text style={type.h2}>You matched with {peerName}</Text>
+              <Text style={[type.small, { textAlign: 'center' }]}>
+                {peer.score}% taste match · {peer.sharedCount} films in common
+              </Text>
+            </View>
+          ) : null
+        }
         renderItem={({ item }) => {
           const mine = item.from_user_id === user?.id
           return (
-            <View style={[styles.bubble, mine && styles.mine]}>
-              <Text style={styles.bubbleText}>{item.text}</Text>
-              {mine && item.read_at ? <Text style={styles.readReceipt}>Read</Text> : null}
+            <View style={[styles.bubbleRow, mine && styles.bubbleRowMine]}>
+              <View style={[styles.bubble, mine ? styles.mine : styles.theirs]}>
+                <Text style={[styles.bubbleText, mine && styles.mineText]}>{item.text}</Text>
+              </View>
+              {mine && item.id === lastMine?.id && item.read_at ? <Text style={styles.read}>Read</Text> : null}
             </View>
           )
         }}
       />
+
+      {!!notice && (
+        <View style={styles.notice}>
+          <Text style={styles.noticeText}>{notice}</Text>
+        </View>
+      )}
+
       {!closed && !sentAny && starters.length > 0 && (
-        <View style={styles.starters}>
-          <Text style={styles.startersLabel}>Need a hello? Tap one to edit it.</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.startersScroll} contentContainerStyle={styles.starters} keyboardShouldPersistTaps="handled">
           {starters.map((idea) => (
-            <Pressable key={idea} style={styles.starter} onPress={() => setText(idea)}>
+            <Pressable key={idea} style={styles.starter} onPress={() => setText(idea)} accessibilityRole="button" accessibilityLabel={`Use: ${idea}`}>
               <Text style={styles.starterText}>{idea}</Text>
             </Pressable>
           ))}
-        </View>
+        </ScrollView>
       )}
-      {closed ? (
-        <Text style={[styles.banner, { paddingBottom: 12 }]}>This conversation is no longer available.</Text>
-      ) : (
-        <View style={styles.composer}>
+
+      {!closed && (
+        <View style={[styles.composer, { paddingBottom: insets.bottom + 10 }]}>
           <TextInput
             style={styles.input}
             value={text}
             onChangeText={setText}
-            placeholder="Say hello…"
-            placeholderTextColor={colors.muted}
+            placeholder={sentAny ? 'Message' : 'Say hi…'}
+            placeholderTextColor={colors.faint}
             maxLength={2000}
+            multiline
+            // Web renders a two-row textarea by default; native grows from one line on its own.
+            {...(Platform.OS === 'web' ? { numberOfLines: 1 } : {})}
           />
-          <Pressable style={styles.sendBtn} onPress={send} accessibilityRole="button">
-            <Text style={styles.sendText}>Send</Text>
+          <Pressable
+            onPress={send}
+            disabled={!text.trim() || sending}
+            style={[styles.send, (!text.trim() || sending) && { opacity: 0.4 }]}
+            accessibilityRole="button"
+            accessibilityLabel="Send"
+          >
+            <Ionicons name="arrow-up" size={22} color={colors.onLime} />
           </Pressable>
         </View>
       )}
-      {!closed && (
-        <View style={styles.safetyRow}>
-          <Pressable style={styles.reportBtn} onPress={() => setReporting(true)}>
-            <Text style={styles.reportText}>Report</Text>
-          </Pressable>
-          <Pressable style={styles.reportBtn} onPress={blockUser}>
-            <Text style={styles.reportText}>Block</Text>
-          </Pressable>
-        </View>
-      )}
+
       <ReportSheet
         visible={reporting}
         userId={String(userId)}
+        userName={peerName}
         onClose={() => setReporting(false)}
         onReported={(blocked) => {
           setReporting(false)
@@ -220,21 +283,27 @@ export default function ChatScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  banner: { color: colors.peach, paddingHorizontal: 16, paddingTop: 8, fontSize: 12 },
-  live: { color: colors.green, paddingHorizontal: 16, fontSize: 11, letterSpacing: 0.5 },
-  bubble: { alignSelf: 'flex-start', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 10, borderWidth: 1, borderColor: colors.border, maxWidth: '85%' },
-  mine: { alignSelf: 'flex-end', backgroundColor: 'rgba(173,124,255,0.15)' },
-  bubbleText: { color: colors.text },
-  readReceipt: { color: colors.muted, fontSize: 10, marginTop: 4, alignSelf: 'flex-end' },
-  starters: { paddingHorizontal: 12, paddingBottom: 8, gap: 6 },
-  startersLabel: { color: colors.muted, fontSize: 12 },
-  starter: { borderWidth: 1, borderColor: colors.border, borderRadius: 14, paddingHorizontal: 12, paddingVertical: 8, backgroundColor: colors.card },
-  starterText: { color: colors.text, fontSize: 14 },
-  composer: { flexDirection: 'row', gap: 8, padding: 12, borderTopWidth: 1, borderTopColor: colors.border },
-  input: { flex: 1, borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: 12, paddingVertical: 10, color: colors.text, backgroundColor: colors.card },
-  sendBtn: { backgroundColor: colors.pink, borderRadius: 12, paddingHorizontal: 16, justifyContent: 'center' },
-  sendText: { color: '#fff', fontWeight: '700' },
-  safetyRow: { flexDirection: 'row', justifyContent: 'center', gap: 24 },
-  reportBtn: { paddingBottom: 12, alignItems: 'center' },
-  reportText: { color: colors.muted, fontSize: 12, textDecorationLine: 'underline' }
+  headerTitle: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  headerName: { fontFamily: fonts.bold, color: colors.text, fontSize: 16 },
+  headerScore: { fontFamily: fonts.semi, color: colors.lime, fontSize: 12 },
+  list: { padding: 16, gap: 6, flexGrow: 1, justifyContent: 'flex-end' },
+  intro: { alignItems: 'center', gap: 8, paddingVertical: 24 },
+  bubbleRow: { alignItems: 'flex-start' },
+  bubbleRowMine: { alignItems: 'flex-end' },
+  bubble: { maxWidth: '80%', borderRadius: 22, paddingHorizontal: 14, paddingVertical: 10 },
+  mine: { backgroundColor: colors.lime, borderBottomRightRadius: 6 },
+  theirs: { backgroundColor: colors.cardHigh, borderBottomLeftRadius: 6 },
+  bubbleText: { color: colors.text, fontSize: 16, lineHeight: 21 },
+  mineText: { color: colors.onLime },
+  read: { color: colors.faint, fontSize: 11, marginTop: 3, marginRight: 4 },
+  notice: { marginHorizontal: 16, marginBottom: 8, backgroundColor: 'rgba(212,255,63,0.08)', borderColor: 'rgba(212,255,63,0.3)', borderWidth: 1, borderRadius: radii.md, padding: 10 },
+  noticeText: { color: colors.soft, fontSize: 13, textAlign: 'center' },
+  // A ScrollView grows to fill free space by default; the starters row should only be as tall as its chips.
+  startersScroll: { flexGrow: 0, flexShrink: 0 },
+  starters: { gap: 8, paddingHorizontal: 16, paddingBottom: 10, alignItems: 'flex-start' },
+  starter: { maxWidth: 260, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.borderStrong, borderRadius: radii.lg, paddingHorizontal: 14, paddingVertical: 10 },
+  starterText: { color: colors.text, fontSize: 14, lineHeight: 19 },
+  composer: { flexDirection: 'row', alignItems: 'flex-end', gap: 10, paddingHorizontal: 12, paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.border },
+  input: { flex: 1, maxHeight: 120, backgroundColor: colors.card, borderRadius: 22, borderWidth: 1, borderColor: colors.border, color: colors.text, fontSize: 16, paddingHorizontal: 16, paddingTop: 11, paddingBottom: 11 },
+  send: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.lime, alignItems: 'center', justifyContent: 'center' }
 })

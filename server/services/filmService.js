@@ -1,6 +1,8 @@
 import { supabase } from '../supabaseClient.js'
 import { selectAll, selectAllIn } from '../lib/paging.js'
 import { COLLECTIONS } from '../data/curatedFilmsMeta.js'
+import { canonicalGenres } from '../lib/genres.js'
+import { filmPersonality } from '../lib/filmPersonality.js'
 
 const FILM_COLUMNS = 'id, title, year, genres, origin_language, tags, popularity'
 const CHART_TTL_MS = 5 * 60_000
@@ -11,7 +13,7 @@ function publicFilm(movie) {
     id: movie.id,
     title: movie.title,
     year: movie.year,
-    genres: movie.genres || [],
+    genres: canonicalGenres(movie.genres),
     origin_language: movie.origin_language,
     tags: movie.tags || []
   }
@@ -106,12 +108,12 @@ function topCounts(values, n = 5) {
   return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, n).map(([name, count]) => ({ name, count }))
 }
 
-// Free taste stats (Letterboxd keeps these behind its paid tier).
+// Free taste stats (Letterboxd keeps these behind its paid tier), plus the film personality they add up to.
 export async function getTasteStats(userId) {
   const rows = await selectAll(() =>
     supabase
       .from('user_ratings')
-      .select('movie_id, rating, movies(genres, origin_language, year)')
+      .select('movie_id, rating, movies(genres, origin_language, year, popularity, tags)')
       .eq('user_id', userId)
       .order('movie_id')
   )
@@ -123,9 +125,10 @@ export async function getTasteStats(userId) {
     disliked: disliked.length,
     notSeen: rows.filter((r) => r.rating === 'skip').length,
     likeRate: liked.length + disliked.length ? Math.round((liked.length / (liked.length + disliked.length)) * 100) : null,
-    topGenres: topCounts(liked.flatMap((r) => r.movies?.genres || [])),
+    topGenres: topCounts(liked.flatMap((r) => canonicalGenres(r.movies?.genres))),
     topLanguages: topCounts(liked.map((r) => r.movies?.origin_language)),
     topDecades: topCounts(liked.map((r) => decade(r.movies?.year)), 4),
-    leastLikedGenres: topCounts(disliked.flatMap((r) => r.movies?.genres || []), 3)
+    leastLikedGenres: topCounts(disliked.flatMap((r) => canonicalGenres(r.movies?.genres)), 3),
+    personality: filmPersonality(rows.filter((r) => r.movies).map((r) => ({ rating: r.rating, ...r.movies })))
   }
 }

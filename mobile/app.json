@@ -11,7 +11,7 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0d1016"
+      "backgroundColor": "#08080B"
     },
     "ios": {
       "supportsTablet": false,
@@ -39,7 +39,7 @@
       "package": "com.reelmates.app",
       "versionCode": 3,
       "adaptiveIcon": {
-        "backgroundColor": "#0d1016",
+        "backgroundColor": "#D4FF3F",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -76,14 +76,14 @@
         "expo-notifications",
         {
           "icon": "./assets/android-icon-monochrome.png",
-          "color": "#ff6993",
+          "color": "#FF4F9A",
           "defaultChannel": "default"
         }
       ],
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#0d1016",
+          "backgroundColor": "#08080B",
           "image": "./assets/splash-icon.png",
           "imageWidth": 220
         }

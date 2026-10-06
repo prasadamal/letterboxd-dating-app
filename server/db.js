@@ -9,6 +9,7 @@ import { normalizeInterestedIn } from './lib/datingEligibility.js'
 import { publicPrompts } from './lib/profilePrompts.js'
 import { displayStreak } from './lib/streaks.js'
 import { plusSummary } from './lib/plus.js'
+import { canonicalGenres } from './lib/genres.js'
 
 function formatMovieLabel(movie) {
   return `${movie.title} (${movie.year})`
@@ -120,6 +121,7 @@ export function mapUserRow(row, taste = { loved: [], hated: [] }) {
     matchmaking_enabled: Boolean(row.matchmaking_enabled),
     discovery_prefs: row.discovery_prefs || {},
     interested_in: normalizeInterestedIn(row.interested_in, row.gender),
+    dating_enabled: row.dating_enabled !== false,
     prompts: publicPrompts(row.prompts),
     streak: displayStreak({ current: row.streak_current, best: row.streak_best, lastDay: row.streak_last_day }),
     plus: plusSummary(row),
@@ -173,8 +175,16 @@ export async function getUserProfile(userId) {
   const ratings = await getRatingsForUsers([userId])
   const bucket = ratings.get(userId)
   const taste = bucket?.labels || { love: [], hate: [] }
+  const movie = user.favorite_movie_id ? await getMovieById(user.favorite_movie_id) : null
+  // `title` stays the "Title (Year)" label older clients show; the rest lets the app draw a poster.
   const favorite = user.favorite_movie_id
-    ? { id: user.favorite_movie_id, title: bucket?.titles?.get(user.favorite_movie_id) || null }
+    ? {
+        id: user.favorite_movie_id,
+        title: bucket?.titles?.get(user.favorite_movie_id) || (movie ? formatMovieLabel(movie) : null),
+        name: movie?.title || null,
+        year: movie?.year || null,
+        genres: canonicalGenres(movie?.genres)
+      }
     : null
   return { ...mapUserRow(user, { loved: taste.love, hated: taste.hate }), favorite }
 }
@@ -287,36 +297,7 @@ export async function rateMovie(userId, movieId, reaction) {
   )
 
   if (error) throw error
-  await updateTasteVector(userId, movieId, reaction)
   return getUserProfile(userId)
-}
-
-async function updateTasteVector(userId, movieId, reaction) {
-  const movie = await getMovieById(movieId)
-  if (!movie || reaction === 'skip') return
-
-  const user = await findUserById(userId)
-  const vector = user?.taste_vector || {}
-  const genre = movie.genres?.[0] || 'Drama'
-  const language = movie.origin_language || 'English'
-
-  const next = {
-    ...vector,
-    genres: { ...(vector.genres || {}) },
-    languages: { ...(vector.languages || {}) },
-    loveCount: Number(vector.loveCount || 0),
-    hateCount: Number(vector.hateCount || 0)
-  }
-
-  const genreWeight = reaction === 'love' ? 2 : -2
-  const languageWeight = reaction === 'love' ? 1 : -1
-  next.genres[genre] = Number(next.genres[genre] || 0) + genreWeight
-  next.languages[language] = Number(next.languages[language] || 0) + languageWeight
-  if (reaction === 'love') next.loveCount += 1
-  if (reaction === 'hate') next.hateCount += 1
-  next.updatedAt = new Date().toISOString()
-
-  await supabase.from('users').update({ taste_vector: next }).eq('id', userId)
 }
 
 // Scoring lives in lib/tasteMatch.js (shared likes + shared dislikes on films both people rated).
@@ -375,6 +356,12 @@ async function getOrCreateConversation(matchId) {
   if (existing) return existing
 
   const { data, error } = await supabase.from('conversations').insert({ match_id: matchId }).select('*').single()
+  // Both people opening (or messaging) a new match at once race to create it; the loser reads the winner's row.
+  if (error?.code === '23505') {
+    const { data: winner, error: rereadError } = await supabase.from('conversations').select('*').eq('match_id', matchId).single()
+    if (rereadError) throw rereadError
+    return winner
+  }
   if (error) throw error
   return data
 }
@@ -509,18 +496,20 @@ export async function sendMessage(userId, peerId, text) {
 
   if (error) throw error
 
-  if (!match.chat_unlocked) {
-    const nextA = isUserA ? true : match.user_a_intro_sent
-    const nextB = !isUserA ? true : match.user_b_intro_sent
-    await supabase
-      .from('matches')
-      .update({
-        updated_at: new Date().toISOString(),
-        user_a_intro_sent: nextA,
-        user_b_intro_sent: nextB,
-        chat_unlocked: Boolean(nextA && nextB)
-      })
-      .eq('id', match.id)
+  // Set only this person's hello flag (two hellos sent at the same moment must not overwrite each other),
+  // and bump updated_at on every message so active chats sort first.
+  const touched = { updated_at: new Date().toISOString() }
+  if (!match.chat_unlocked) touched[isUserA ? 'user_a_intro_sent' : 'user_b_intro_sent'] = true
+  const { data: flags, error: flagError } = await supabase
+    .from('matches')
+    .update(touched)
+    .eq('id', match.id)
+    .select('user_a_intro_sent, user_b_intro_sent, chat_unlocked')
+    .single()
+  if (flagError) throw flagError
+  if (!flags.chat_unlocked && flags.user_a_intro_sent && flags.user_b_intro_sent) {
+    const { error: unlockError } = await supabase.from('matches').update({ chat_unlocked: true }).eq('id', match.id)
+    if (unlockError) throw unlockError
   }
 
   // Push and realtime are best-effort and must not slow down or fail the send itself.
@@ -589,39 +578,50 @@ export async function getConversationsForUser(userId) {
   )
   const conversationByMatch = new Map(conversations.map((row) => [row.match_id, row.id]))
 
-  // One small indexed query per conversation, a few at a time.
-  const lastMessages = await mapLimit(visible, 8, async (match) => {
+  // Two small indexed queries per conversation (latest message, unread count), a few conversations at a time.
+  const details = await mapLimit(visible, 8, async (match) => {
     const conversationId = conversationByMatch.get(match.id)
-    if (!conversationId) return null
-    const { data, error } = await supabase
-      .from('messages')
-      .select('body, created_at, sender_id')
-      .eq('conversation_id', conversationId)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle()
-    if (error) throw error
-    return data
+    if (!conversationId) return { last: null, unread: 0 }
+    const [latest, unread] = await Promise.all([
+      supabase
+        .from('messages')
+        .select('body, created_at, sender_id')
+        .eq('conversation_id', conversationId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from('messages')
+        .select('id', { count: 'exact', head: true })
+        .eq('conversation_id', conversationId)
+        .neq('sender_id', userId)
+        .is('read_at', null)
+    ])
+    if (latest.error) throw latest.error
+    if (unread.error) throw unread.error
+    return { last: latest.data, unread: unread.count || 0 }
   })
 
-  return visible.map((match, index) => {
-    const peer = byId.get(peerOf(match))
-    const lastMessage = lastMessages[index]
-    return {
-      matchId: match.id,
-      peer: {
-        id: peer.id,
-        name: peer.display_name,
-        age: peer.age,
-        avatar_url: peer.photo_url
-      },
-      compatibility: match.compatibility,
-      chatUnlocked: match.chat_unlocked,
-      lastMessage: lastMessage
-        ? { text: lastMessage.body, at: lastMessage.created_at, fromSelf: lastMessage.sender_id === userId }
-        : null
-    }
-  })
+  return visible
+    .map((match, index) => {
+      const peer = byId.get(peerOf(match))
+      const { last, unread } = details[index]
+      return {
+        matchId: match.id,
+        peer: {
+          id: peer.id,
+          name: peer.display_name,
+          age: peer.age,
+          avatar_url: peer.photo_url
+        },
+        compatibility: match.compatibility,
+        chatUnlocked: match.chat_unlocked,
+        unread,
+        lastActivity: last?.created_at || match.updated_at,
+        lastMessage: last ? { text: last.body, at: last.created_at, fromSelf: last.sender_id === userId } : null
+      }
+    })
+    .sort((a, b) => String(b.lastActivity).localeCompare(String(a.lastActivity)))
 }
 
 export async function seedMoviesIfEmpty() {

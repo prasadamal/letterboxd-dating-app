@@ -41,7 +41,8 @@ export function validateQuery(schema) {
   }
 }
 
-export const signupSchema = z.object({
+export const signupSchema = z
+  .object({
   email: z.string().trim().toLowerCase().email().max(254),
   password: z.string().min(8).max(128),
   name: z.string().min(2).max(80),
@@ -49,12 +50,19 @@ export const signupSchema = z.object({
   country: countryField,
   city: z.string().max(80).optional(),
   bio: z.string().max(280).optional(),
-  gender: z.enum(['male', 'female', 'nonbinary']),
+  // Only needed for dating: people here for films & friends can skip it.
+  gender: z.enum(['male', 'female', 'nonbinary']).optional(),
   // Who they want to see in the deck; defaults from gender when left out (see lib/datingEligibility.js).
   interestedIn: z.array(z.enum(['male', 'female', 'nonbinary'])).min(1).max(3).optional(),
+  // "Here for": films & friends only (false) or dating too (true, the default for older clients).
+  datingEnabled: z.boolean().optional(),
   termsAccepted: z.literal(true),
   referralCode: z.string().max(32).optional()
-})
+  })
+  .refine((body) => body.datingEnabled === false || Boolean(body.gender), {
+    message: 'Choose how you identify to use dating',
+    path: ['gender']
+  })
 
 export const loginSchema = z.object({
   email: z.string().trim().toLowerCase().email(),

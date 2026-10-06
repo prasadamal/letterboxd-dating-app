@@ -1,9 +1,11 @@
+import { Ionicons } from '@expo/vector-icons'
 import { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { apiFetch } from '../lib/api'
-import { colors } from '../lib/theme'
+import { colors, radii, type } from '../lib/theme'
 import type { Collection, FilmItem, Reaction } from '../lib/types'
 import { FilmRow } from './FilmRow'
+import { Chip } from './ui'
 
 // Explore: search any film, or browse the people's chart (all films or one collection), and rate inline.
 export function FilmExplorer() {
@@ -25,13 +27,11 @@ export function FilmExplorer() {
     setError('')
     try {
       const q = query.trim()
-      if (q.length >= 2) {
-        const data = await apiFetch<{ films: FilmItem[] }>(`/movies/search?q=${encodeURIComponent(q)}`)
-        setFilms(data.films || [])
-      } else {
-        const data = await apiFetch<{ films: FilmItem[] }>(`/movies/top${collection ? `?collection=${collection}` : ''}`)
-        setFilms(data.films || [])
-      }
+      const data =
+        q.length >= 2
+          ? await apiFetch<{ films: FilmItem[] }>(`/movies/search?q=${encodeURIComponent(q)}`)
+          : await apiFetch<{ films: FilmItem[] }>(`/movies/top${collection ? `?collection=${collection}` : ''}`)
+      setFilms(data.films || [])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not load films')
     } finally {
@@ -56,42 +56,43 @@ export function FilmExplorer() {
   }
 
   const searching = query.trim().length >= 2
-  const heading = searching
-    ? 'Search results'
-    : collection
-      ? collections.find((c) => c.key === collection)?.name || 'Collection'
-      : "People's chart"
+  const heading = searching ? 'Results' : collection ? collections.find((c) => c.key === collection)?.name || 'Collection' : "The People's Chart"
 
   return (
     <View style={styles.wrap}>
-      <TextInput
-        style={styles.search}
-        value={query}
-        onChangeText={setQuery}
-        placeholder="Search any film"
-        placeholderTextColor={colors.muted}
-        returnKeyType="search"
-        autoCorrect={false}
-      />
-      {!searching && (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
-          <Pressable style={[styles.chip, !collection && styles.chipOn]} onPress={() => setCollection(null)}>
-            <Text style={[styles.chipText, !collection && styles.chipTextOn]}>All films</Text>
+      <View style={styles.searchBox}>
+        <Ionicons name="search" size={18} color={colors.muted} />
+        <TextInput
+          style={styles.search}
+          value={query}
+          onChangeText={setQuery}
+          placeholder="Search any film"
+          placeholderTextColor={colors.faint}
+          returnKeyType="search"
+          autoCorrect={false}
+          accessibilityLabel="Search films"
+        />
+        {!!query && (
+          <Pressable onPress={() => setQuery('')} hitSlop={8} accessibilityRole="button" accessibilityLabel="Clear search">
+            <Ionicons name="close-circle" size={18} color={colors.muted} />
           </Pressable>
+        )}
+      </View>
+      {!searching && (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips} style={styles.chipsScroll}>
+          <Chip label="All films" selected={!collection} onPress={() => setCollection(null)} accessibilityRole="tab" />
           {collections.map((c) => (
-            <Pressable key={c.key} style={[styles.chip, collection === c.key && styles.chipOn]} onPress={() => setCollection(c.key)}>
-              <Text style={[styles.chipText, collection === c.key && styles.chipTextOn]}>{c.name}</Text>
-            </Pressable>
+            <Chip key={c.key} label={c.name} selected={collection === c.key} onPress={() => setCollection(c.key)} accessibilityRole="tab" />
           ))}
         </ScrollView>
       )}
-      <Text style={styles.heading}>{heading}</Text>
-      {!searching && (
-        <Text style={styles.sub}>Ranked by how many ReelMates people liked each film. Every rating counts.</Text>
-      )}
+      <View style={{ gap: 2 }}>
+        <Text style={type.h2}>{heading}</Text>
+        {!searching && <Text style={type.small}>Ranked by how many ReelMates members liked each film. Every rating counts.</Text>}
+      </View>
       {!!error && <Text style={styles.error}>{error}</Text>}
-      {loading && !films.length ? <ActivityIndicator color={colors.pink} style={{ marginTop: 24 }} /> : null}
-      {!loading && searching && !films.length ? <Text style={styles.sub}>No films found for “{query.trim()}”.</Text> : null}
+      {loading && !films.length ? <ActivityIndicator color={colors.lime} style={{ marginTop: 24 }} /> : null}
+      {!loading && searching && !films.length ? <Text style={type.small}>Nothing found for “{query.trim()}”. Tell us in Settings → Send feedback.</Text> : null}
       <View style={{ gap: 10 }}>
         {films.map((film) => (
           <FilmRow key={film.id} film={film} onRate={rate} />
@@ -102,14 +103,10 @@ export function FilmExplorer() {
 }
 
 const styles = StyleSheet.create({
-  wrap: { gap: 10 },
-  search: { borderWidth: 1, borderColor: colors.border, backgroundColor: colors.card, color: colors.text, borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12 },
-  chips: { gap: 8, paddingVertical: 2 },
-  chip: { borderRadius: 999, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 12, paddingVertical: 7 },
-  chipOn: { backgroundColor: colors.pink, borderColor: colors.pink },
-  chipText: { color: colors.muted, fontWeight: '600', fontSize: 13 },
-  chipTextOn: { color: '#fff' },
-  heading: { color: colors.text, fontSize: 20, fontWeight: '800', marginTop: 6 },
-  sub: { color: colors.muted, lineHeight: 20 },
-  error: { color: colors.error }
+  wrap: { gap: 14 },
+  searchBox: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: colors.card, borderRadius: radii.pill, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 16 },
+  search: { flex: 1, color: colors.text, fontSize: 16, paddingVertical: 13 },
+  chipsScroll: { marginHorizontal: -20 },
+  chips: { gap: 8, paddingHorizontal: 20 },
+  error: { color: colors.red }
 })

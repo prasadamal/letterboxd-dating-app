@@ -1,35 +1,36 @@
 import { Redirect } from 'expo-router'
-import { ActivityIndicator, Pressable, Text, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
+import { Button } from '../components/ui'
 import { useAuth } from '../lib/auth'
-import { colors } from '../lib/theme'
+import { colors, type } from '../lib/theme'
 
 export default function Index() {
   const { user, ready, offline, retryRestore } = useAuth()
 
   if (!ready) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator color={colors.accent} size="large" />
+      <View style={styles.center}>
+        <ActivityIndicator color={colors.lime} size="large" />
       </View>
     )
   }
 
   if (!user && offline) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center', padding: 24, gap: 12 }}>
-        <Text style={{ color: colors.text, fontSize: 18, fontWeight: '700' }}>Can't reach ReelMates</Text>
-        <Text style={{ color: colors.muted, textAlign: 'center' }}>Check your connection. You're still signed in.</Text>
-        <Pressable
-          onPress={retryRestore}
-          style={{ backgroundColor: colors.pink, borderRadius: 999, paddingVertical: 12, paddingHorizontal: 28 }}
-        >
-          <Text style={{ color: '#fff', fontWeight: '700' }}>Try again</Text>
-        </Pressable>
+      <View style={styles.center}>
+        <Text style={styles.emoji}>📡</Text>
+        <Text style={type.h2}>Can't reach ReelMates</Text>
+        <Text style={[type.body, { textAlign: 'center', color: colors.muted }]}>Check your connection. You're still signed in.</Text>
+        <Button title="Try again" onPress={retryRestore} style={{ alignSelf: 'stretch', marginTop: 8 }} />
       </View>
     )
   }
 
-  if (!user) return <Redirect href="/login" />
-
+  if (!user) return <Redirect href="/welcome" />
   return <Redirect href="/(tabs)/home" />
 }
+
+const styles = StyleSheet.create({
+  center: { flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center', padding: 24, gap: 10 },
+  emoji: { fontSize: 44 }
+})

@@ -13,6 +13,8 @@ export type PlatformStatus = {
   globalLaunched?: boolean
   regionOnly?: boolean
   country?: CountryProgress | null
+  // People who paused dating keep Chats while they still have matches.
+  hasMatches?: boolean
 }
 
 export type CountryProgress = {
@@ -48,6 +50,7 @@ export type User = {
   email_verified?: boolean
   discovery_prefs?: { minAge?: number; maxAge?: number; countries?: string[]; minScore?: number }
   interested_in?: Gender[]
+  dating_enabled?: boolean
   prompts?: ProfilePrompt[]
   streak?: Streak
   plus?: { active: boolean; until: string | null }
@@ -57,7 +60,7 @@ export type User = {
   verified_at?: string | null
   loved: string[]
   hated: string[]
-  favorite?: { id: number; title: string | null } | null
+  favorite?: { id: number; title: string | null; name?: string | null; year?: number | null; genres?: string[] } | null
 }
 
 export type Reaction = 'love' | 'hate' | 'skip'
@@ -71,6 +74,8 @@ export type Movie = {
   genres?: string[]
   origin_language?: string
   popularity?: number
+  // Daily films only: how everyone has rated it so far (revealed after you swipe).
+  community?: { likedPercent: number | null; votes: number }
 }
 
 export type DatingProfile = User & {
@@ -81,6 +86,7 @@ export type DatingProfile = User & {
   sharedHated?: string[]
   favorite?: FavoriteRelation | null
   prompts?: ProfilePrompt[]
+  personality?: PersonalityBadgeData | null
   tasteSummary?: string
   likedLine?: string | null
   dislikedLine?: string | null
@@ -97,6 +103,8 @@ export type ConversationPreview = {
   peer: { id: string; name: string; age?: number; avatar_url?: string | null }
   compatibility: number
   chatUnlocked: boolean
+  unread?: number
+  lastActivity?: string
   lastMessage: { text: string; at: string; fromSelf: boolean } | null
 }
 
@@ -129,6 +137,7 @@ export type Friend = DatingProfile
 
 export type TasteComparison = {
   person: DatingProfile
+  myPersonality?: PersonalityBadgeData | null
   score: number
   sharedCount: number
   conflicts: number
@@ -148,6 +157,44 @@ export type TasteStats = {
   topLanguages: { name: string; count: number }[]
   topDecades: { name: string; count: number }[]
   leastLikedGenres: { name: string; count: number }[]
+  personality?: Personality
+}
+
+export type PersonalityBadgeData = { key: string; name: string; emoji: string; colors: string[] }
+
+export type Personality = PersonalityBadgeData & {
+  tagline: string
+  traits: string[]
+  ready: boolean
+  progress?: { rated: number; needed: number }
+}
+
+export type DailyFilmResult = {
+  id: number
+  title: string
+  year: number
+  genres: string[]
+  origin_language?: string
+  myRating: Reaction | null
+  likes: number
+  dislikes: number
+  notSeen: number
+  likedPercent: number | null
+}
+
+export type DailyResults = {
+  day: string
+  number: number
+  played: number
+  total: number
+  complete: boolean
+  agreed: number
+  comparable: number
+  mostDivisive: { id: number; title: string; likedPercent: number } | null
+  crowdFavourite: { id: number; title: string; likedPercent: number } | null
+  shareText: string
+  streak: Streak
+  films: DailyFilmResult[]
 }
 
 export type LikesYou = { count: number; plus: boolean; profiles: DatingProfile[] }

@@ -1,140 +1,275 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { useRouter } from 'expo-router'
+import { Ionicons } from '@expo/vector-icons'
+import { useFocusEffect, useRouter } from 'expo-router'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { ActivityIndicator, Pressable, RefreshControl, ScrollView, Share, StyleSheet, Text, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { DailyResultsCard } from '../../components/DailyResultsCard'
+import { FilmSwipeDeck } from '../../components/FilmSwipeDeck'
+import { Avatar, Button, Card, MatchPill, ProgressBar, SectionTitle } from '../../components/ui'
+import { apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
+import { haptic } from '../../lib/haptics'
 import { usePlatform } from '../../lib/platform'
-import { colors } from '../../lib/theme'
+import { WEB_URL } from '../../lib/profileOptions'
+import { colors, fonts, radii, type } from '../../lib/theme'
+import type { DailyResults, Friend, Movie, Reaction, Streak } from '../../lib/types'
 
-function CounterCard({ label, count, target }: { label: string; count: number; target: number }) {
-  const pct = Math.min(100, Math.round((count / target) * 100))
-  return (
-    <View style={styles.card}>
-      <Text style={styles.cardLabel}>{label}</Text>
-      <Text style={styles.cardCount}>
-        {count} <Text style={styles.cardTarget}>/ {target}</Text>
-      </Text>
-      <View style={styles.track}>
-        <View style={[styles.fill, { width: `${pct}%` }]} />
-      </View>
+const DEFAULT_DAILY_COUNT = 10
+
+export default function TodayScreen() {
+  const router = useRouter()
+  const insets = useSafeAreaInsets()
+  const { user, refreshUser } = useAuth()
+  const { platform, refreshPlatform } = usePlatform()
+  const [movies, setMovies] = useState<Movie[] | null>(null)
+  const [number, setNumber] = useState<number | null>(null)
+  const [results, setResults] = useState<DailyResults | null>(null)
+  const [friends, setFriends] = useState<Friend[]>([])
+  const [myCode, setMyCode] = useState('')
+  const [streak, setStreak] = useState<Streak | null>(null)
+  const [later, setLater] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
+  const [error, setError] = useState('')
+  const loadedDay = useRef('')
+
+  const loadResults = useCallback(async () => {
+    const data = await apiFetch<{ results: DailyResults }>('/movies/daily/results')
+    setResults(data.results)
+    setStreak(data.results.streak)
+  }, [])
+
+  const load = useCallback(async () => {
+    setError('')
+    try {
+      const [daily, people] = await Promise.all([
+        apiFetch<{ movies: Movie[]; number: number }>('/movies/daily'),
+        apiFetch<{ friends: Friend[]; myCode: string }>('/friends').catch(() => ({ friends: [] as Friend[], myCode: '' }))
+      ])
+      setMovies(daily.movies)
+      setNumber(daily.number)
+      setFriends(people.friends)
+      setMyCode(people.myCode)
+      loadedDay.current = new Date().toISOString().slice(0, 10)
+      // Rated films are no longer in `movies`; the results carry the full count and everyone's verdicts.
+      await loadResults().catch(() => null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not load today's films")
+    }
+  }, [loadResults])
+
+  // Reload when the tab comes back into focus on a new UTC day (new films) or for the first time.
+  useFocusEffect(
+    useCallback(() => {
+      if (loadedDay.current !== new Date().toISOString().slice(0, 10)) load()
+    }, [load])
+  )
+
+  const remaining = movies?.length ?? 0
+  const deckTotal = Math.max(results?.total ?? 0, remaining, DEFAULT_DAILY_COUNT)
+
+  async function rate(movie: Movie, reaction: Reaction) {
+    const data = await apiFetch<{ streak?: Streak | null }>(`/movies/${movie.id}/rate`, { method: 'POST', body: JSON.stringify({ reaction }) })
+    if (data.streak) setStreak(data.streak)
+    setMovies((list) => (list || []).filter((m) => m.id !== movie.id))
+  }
+
+  // Finishing the day: celebrate, then load everyone's verdicts and the updated profile (streak, personality).
+  const previousRemaining = useRef<number | null>(null)
+  useEffect(() => {
+    const before = previousRemaining.current
+    previousRemaining.current = movies === null ? null : remaining
+    if (before && remaining === 0) {
+      haptic.success()
+      loadResults().catch(() => null)
+      refreshUser().catch(() => null)
+    }
+  }, [movies, remaining, loadResults, refreshUser])
+
+  const playing = remaining > 0 && !later
+  const currentStreak = streak?.current ?? user?.streak?.current ?? 0
+  const datingOn = user?.dating_enabled !== false
+  const country = platform?.country
+
+  const streakPill = (
+    <View style={[styles.streakPill, !currentStreak && { opacity: 0.6 }]} accessibilityLabel={`${currentStreak} day streak`}>
+      <Text style={styles.streakText}>🔥 {currentStreak}</Text>
     </View>
   )
-}
 
-export default function HomeScreen() {
-  const { platform } = usePlatform()
-  const { user } = useAuth()
-  const router = useRouter()
-  const needsPhoto = user && !user.matchmaking_enabled && !user.photo_url
-
-  if (!platform) {
+  if (movies === null) {
     return (
-      <View style={[styles.scroll, styles.screen]}>
-        <Text style={styles.muted}>Loading community progress…</Text>
+      <View style={[styles.center, { paddingTop: insets.top }]}>
+        {error ? (
+          <>
+            <Text style={type.h3}>{error}</Text>
+            <Button title="Try again" variant="secondary" onPress={load} />
+          </>
+        ) : (
+          <ActivityIndicator color={colors.lime} size="large" />
+        )}
       </View>
     )
   }
 
-  const country = platform.country
-  const streak = user?.streak
+  if (playing) {
+    return (
+      <View style={[styles.screen, { paddingTop: insets.top + 8 }]}>
+        <View style={[styles.playHeader, { paddingHorizontal: 20 }]}>
+          <View style={{ flex: 1 }}>
+            <Text style={type.label}>Daily #{number} · same films for everyone</Text>
+            <Text style={type.h1}>Today</Text>
+          </View>
+          {streakPill}
+        </View>
+        <FilmSwipeDeck movies={movies} total={Math.max(deckTotal, 1)} onRate={rate} />
+        <Pressable onPress={() => setLater(true)} style={styles.laterBtn} accessibilityRole="button" hitSlop={8}>
+          <Text style={styles.laterText}>Finish later</Text>
+        </Pressable>
+      </View>
+    )
+  }
 
   return (
-    <ScrollView style={styles.scroll} contentContainerStyle={styles.screen}>
-      <Text style={styles.eyebrow}>REELMATES LAUNCH</Text>
-      <Text style={styles.heading}>Movie taste first. Dating when we're balanced.</Text>
-      <Text style={styles.body}>
-        Play the daily 10-film game and bring your friends. Dating opens in a country as soon as it has{' '}
-        {platform.countryTarget ?? 150} men and {platform.countryTarget ?? 150} women, and everywhere at{' '}
-        {platform.maleTarget} + {platform.femaleTarget}.
-      </Text>
-
-      {streak && (
-        <Pressable style={styles.streakCard} onPress={() => router.push('/(tabs)/taste')}>
-          <Text style={styles.streakFlame}>🔥</Text>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.statusTitle}>
-              {streak.current ? `${streak.current}-day streak` : 'Start a streak today'}
-            </Text>
-            <Text style={styles.featureBody}>
-              {streak.playedToday
-                ? `Played today. Best: ${streak.best} days.`
-                : streak.current
-                  ? "Play today's films to keep it going."
-                  : 'Rate at least one film a day to build it.'}
-            </Text>
-          </View>
-        </Pressable>
-      )}
-
-      <View style={styles.featureRow}>
-        <Pressable style={styles.feature} onPress={() => router.push('/friends')}>
-          <Text style={styles.featureTitle}>Film friends</Text>
-          <Text style={styles.featureBody}>Compare taste with anyone and find films to watch together.</Text>
-        </Pressable>
-        <Pressable style={styles.feature} onPress={() => router.push('/(tabs)/taste')}>
-          <Text style={styles.featureTitle}>People's chart</Text>
-          <Text style={styles.featureBody}>The best films, ranked by everyone's likes. Films → Explore.</Text>
-        </Pressable>
+    <ScrollView
+      style={styles.screen}
+      contentContainerStyle={[styles.content, { paddingTop: insets.top + 8 }]}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          tintColor={colors.lime}
+          onRefresh={async () => {
+            setRefreshing(true)
+            await Promise.all([load(), refreshPlatform().catch(() => null)])
+            setRefreshing(false)
+          }}
+        />
+      }
+    >
+      <View style={styles.playHeader}>
+        <View style={{ flex: 1 }}>
+          <Text style={type.label}>Daily #{number}</Text>
+          <Text style={type.h1}>Today</Text>
+        </View>
+        {streakPill}
       </View>
 
-      {country && !platform.globalLaunched && (
+      {remaining > 0 && (
+        <Card style={styles.leftCard}>
+          <Text style={type.h3}>{remaining} {remaining === 1 ? 'film' : 'films'} left today</Text>
+          <Text style={type.small}>Finish them to keep your streak and see how everyone voted.</Text>
+          <Button title="Keep swiping" icon="play" size="md" onPress={() => setLater(false)} />
+        </Card>
+      )}
+
+      {results && results.played > 0 && <DailyResultsCard results={results} />}
+
+      <SectionTitle title="Your film people" action={friends.length ? 'See all' : undefined} onAction={() => router.push('/friends')} />
+      {friends.length ? (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.peopleRow}>
+          {friends.slice(0, 8).map((friend) => (
+            <Pressable
+              key={friend.id}
+              style={styles.person}
+              onPress={() => router.push({ pathname: '/compare/[userId]', params: { userId: friend.id } })}
+              accessibilityRole="button"
+              accessibilityLabel={`${friend.name}, ${friend.score}% match`}
+            >
+              <View>
+                <Avatar uri={friend.photo_url} name={friend.name} size={64} ring />
+                {/* Their film personality as a sticker on the avatar. */}
+                {friend.personality && (
+                  <View style={styles.sticker} accessibilityLabel={friend.personality.name}>
+                    <Text style={styles.stickerText}>{friend.personality.emoji}</Text>
+                  </View>
+                )}
+              </View>
+              <Text style={styles.personName} numberOfLines={1}>{friend.name}</Text>
+              <MatchPill score={friend.score} size="sm" />
+            </Pressable>
+          ))}
+          <Pressable style={[styles.person, styles.addPerson]} onPress={() => router.push('/friends')} accessibilityRole="button" accessibilityLabel="Add a friend">
+            <View style={styles.addCircle}>
+              <Ionicons name="add" size={28} color={colors.lime} />
+            </View>
+            <Text style={styles.personName}>Add</Text>
+          </Pressable>
+        </ScrollView>
+      ) : (
+        <Card>
+          <Text style={type.h3}>Who has your taste?</Text>
+          <Text style={type.small}>Add friends with their code and see your taste match, shared favourites and films to watch together.</Text>
+          <View style={styles.inviteRow}>
+            <Button
+              title="Invite friends"
+              icon="share-social"
+              size="md"
+              style={{ flex: 1 }}
+              disabled={!myCode}
+              onPress={() =>
+                Share.share({
+                  message: `Swipe today's films with me on ReelMates and see how our taste matches 🎬 My code: ${myCode} ${WEB_URL}`
+                }).catch(() => null)
+              }
+            />
+            <Button title="Add by code" variant="secondary" size="md" onPress={() => router.push('/friends')} />
+          </View>
+        </Card>
+      )}
+
+      {datingOn && (
         <>
-          <Text style={styles.section}>
-            {country.name.toUpperCase()} {country.open ? '· DATING OPEN' : `· ${country.progressPercent}%`}
-          </Text>
-          <CounterCard label={`Men in ${country.name}`} count={country.maleCount} target={country.target} />
-          <CounterCard label={`Women in ${country.name}`} count={country.femaleCount} target={country.target} />
+          <SectionTitle title="Dating" />
+          {platform?.datingLaunched ? (
+            <Card onPress={() => router.push('/(tabs)/dating')} style={styles.datingLive}>
+              <Text style={styles.datingEmoji}>💘</Text>
+              <View style={{ flex: 1, gap: 2 }}>
+                <Text style={type.h3}>Your deck is live{platform.regionOnly && country ? ` in ${country.name}` : ''}</Text>
+                <Text style={type.small}>Ranked by taste match, not looks.</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={22} color={colors.muted} />
+            </Card>
+          ) : (
+            <Card>
+              <Text style={type.h3}>{country ? `Dating opens in ${country.name} soon` : 'Dating opens soon'}</Text>
+              <ProgressBar value={country?.progressPercent ?? platform?.progressPercent ?? 0} />
+              <Text style={type.small}>
+                {country?.progressPercent ?? platform?.progressPercent ?? 0}% of the way there. We open a country once enough people of each gender join, so every deck is full from day one.
+              </Text>
+              <Button
+                title="Invite friends to open it sooner"
+                variant="secondary"
+                size="md"
+                icon="paper-plane-outline"
+                disabled={!myCode}
+                onPress={() => Share.share({ message: `Join me on ReelMates, the app that matches people by film taste 🎬 Code: ${myCode} ${WEB_URL}` }).catch(() => null)}
+              />
+            </Card>
+          )}
         </>
       )}
-
-      {!platform.globalLaunched && <Text style={styles.section}>EVERYWHERE</Text>}
-      <CounterCard label="Men registered" count={platform.maleCount} target={platform.maleTarget} />
-      <CounterCard label="Women registered" count={platform.femaleCount} target={platform.femaleTarget} />
-      {platform.otherCount > 0 && <Text style={styles.muted}>Plus {platform.otherCount} non-binary members.</Text>}
-
-      {needsPhoto && (
-        <Pressable style={styles.photoCard} onPress={() => router.push('/(tabs)/profile')}>
-          <Text style={styles.statusTitle}>Add a photo to unlock dating</Text>
-          <Text style={styles.statusBody}>
-            You can play the daily game now. Matchmaking opens once your profile is at least 80% complete (a photo is the missing piece).
-          </Text>
-        </Pressable>
-      )}
-
-      <View style={styles.statusCard}>
-        <Text style={styles.statusTitle}>{platform.datingLaunched ? 'Dating is LIVE' : 'Dating locked'}</Text>
-        <Text style={styles.statusBody}>
-          {platform.regionOnly
-            ? `Dating is open in ${country?.name}. You'll meet people from ${country?.name} until the global launch.`
-            : platform.datingLaunched
-              ? 'Head to the Dating tab to like profiles and match on shared films.'
-              : 'Invite friends from Profile to open dating sooner. Every referral counts towards your country.'}
-        </Text>
-      </View>
+      <View style={{ height: 24 }} />
     </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
-  featureRow: { flexDirection: 'row', gap: 10, marginBottom: 12 },
-  feature: { flex: 1, backgroundColor: colors.card, borderRadius: 18, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 6 },
-  featureTitle: { color: colors.text, fontSize: 16, fontWeight: '800' },
-  featureBody: { color: colors.muted, fontSize: 13, lineHeight: 18 },
-  scroll: { flex: 1, backgroundColor: colors.bg },
-  screen: { padding: 16, gap: 12 },
-  section: { color: colors.peach, fontSize: 11, letterSpacing: 1.1, marginTop: 4 },
-  streakCard: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: 'rgba(255,170,90,0.10)', borderRadius: 16, padding: 14, borderWidth: 1, borderColor: colors.border },
-  streakFlame: { fontSize: 30 },
-  eyebrow: { color: colors.peach, fontSize: 11, letterSpacing: 1.1 },
-  heading: { color: colors.text, fontSize: 24, fontWeight: '800' },
-  body: { color: colors.muted, lineHeight: 22 },
-  muted: { color: colors.muted, padding: 16 },
-  card: { backgroundColor: colors.card, borderRadius: 16, padding: 14, borderWidth: 1, borderColor: colors.border },
-  cardLabel: { color: colors.muted, marginBottom: 4 },
-  cardCount: { color: colors.text, fontSize: 28, fontWeight: '800' },
-  cardTarget: { color: colors.muted, fontSize: 16, fontWeight: '600' },
-  track: { marginTop: 10, height: 8, borderRadius: 999, backgroundColor: 'rgba(255,255,255,0.08)' },
-  fill: { height: 8, borderRadius: 999, backgroundColor: colors.pink },
-  photoCard: { backgroundColor: 'rgba(255,105,147,0.12)', borderRadius: 16, padding: 14, borderWidth: 1, borderColor: colors.border },
-  statusCard: { backgroundColor: 'rgba(173,124,255,0.12)', borderRadius: 16, padding: 14, borderWidth: 1, borderColor: colors.border },
-  statusTitle: { color: colors.text, fontWeight: '800', fontSize: 18 },
-  statusBody: { color: colors.soft, marginTop: 6, lineHeight: 20 }
+  screen: { flex: 1, backgroundColor: colors.bg },
+  center: { flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 24 },
+  content: { paddingHorizontal: 20, gap: 14 },
+  playHeader: { flexDirection: 'row', alignItems: 'flex-end', paddingBottom: 6 },
+  streakPill: { backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: radii.pill, paddingHorizontal: 14, paddingVertical: 8, marginBottom: 4 },
+  streakText: { fontFamily: fonts.bold, color: colors.orange, fontSize: 16 },
+  laterBtn: { alignSelf: 'center', marginTop: 10, padding: 6 },
+  laterText: { color: colors.muted, fontSize: 13, textDecorationLine: 'underline' },
+  leftCard: { borderColor: 'rgba(212,255,63,0.35)' },
+  peopleRow: { gap: 12, paddingRight: 20 },
+  person: { width: 96, alignItems: 'center', gap: 6, backgroundColor: colors.card, borderRadius: radii.lg, borderWidth: 1, borderColor: colors.border, paddingVertical: 14, paddingHorizontal: 6 },
+  personName: { fontFamily: fonts.bold, color: colors.text, fontSize: 14, maxWidth: 84 },
+  sticker: { position: 'absolute', right: -4, bottom: -2, width: 28, height: 28, borderRadius: 14, backgroundColor: colors.cardHigh, borderWidth: 2, borderColor: colors.card, alignItems: 'center', justifyContent: 'center' },
+  stickerText: { fontSize: 14 },
+  addPerson: { justifyContent: 'center', borderStyle: 'dashed' },
+  addCircle: { width: 64, height: 64, borderRadius: 32, borderWidth: 1.5, borderColor: colors.lime, alignItems: 'center', justifyContent: 'center', borderStyle: 'dashed' },
+  inviteRow: { flexDirection: 'row', gap: 8 },
+  datingLive: { flexDirection: 'row', alignItems: 'center', gap: 14, borderColor: 'rgba(255,79,154,0.4)' },
+  datingEmoji: { fontSize: 32 }
 })

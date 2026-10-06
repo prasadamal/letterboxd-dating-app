@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { apiFetch } from '../lib/api'
-import { colors } from '../lib/theme'
+import { colors, fonts } from '../lib/theme'
 
 // Must match the reasons the API (and the reports table) accept.
 const REASONS = [
@@ -84,7 +84,7 @@ export function ReportSheet({ visible, userId, userName, onClose, onReported }: 
           </Pressable>
           {!!error && <Text style={styles.error}>{error}</Text>}
           <Pressable style={[styles.primary, (!reason || sending) && { opacity: 0.5 }]} disabled={!reason || sending} onPress={submit}>
-            {sending ? <ActivityIndicator color="#fff" /> : <Text style={styles.primaryText}>Send report</Text>}
+            {sending ? <ActivityIndicator color={colors.onLime} /> : <Text style={styles.primaryText}>Send report</Text>}
           </Pressable>
           <Pressable
             style={styles.cancel}
@@ -103,19 +103,19 @@ export function ReportSheet({ visible, userId, userName, onClose, onReported }: 
 
 const styles = StyleSheet.create({
   backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'flex-end' },
-  sheet: { backgroundColor: colors.card, borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 20, gap: 8, borderWidth: 1, borderColor: colors.border },
-  title: { color: colors.text, fontSize: 20, fontWeight: '800' },
+  sheet: { backgroundColor: colors.card, borderTopLeftRadius: 32, borderTopRightRadius: 32, padding: 20, gap: 8, borderWidth: 1, borderColor: colors.border },
+  title: { fontFamily: fonts.display, color: colors.text, fontSize: 24, letterSpacing: -0.5 },
   sub: { color: colors.muted, marginBottom: 6 },
-  option: { borderWidth: 1, borderColor: colors.border, borderRadius: 12, padding: 12 },
-  optionOn: { borderColor: colors.pink, backgroundColor: 'rgba(255,105,147,0.12)' },
+  option: { borderWidth: 1, borderColor: colors.border, borderRadius: 16, padding: 14 },
+  optionOn: { borderColor: colors.lime, backgroundColor: 'rgba(212,255,63,0.08)' },
   optionText: { color: colors.text, flexShrink: 1 },
   input: { borderWidth: 1, borderColor: colors.border, borderRadius: 12, padding: 12, color: colors.text, minHeight: 64, textAlignVertical: 'top' },
   blockRow: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 6 },
   checkbox: { width: 18, height: 18, borderRadius: 4, borderWidth: 1, borderColor: colors.border },
-  checkboxOn: { backgroundColor: colors.pink, borderColor: colors.pink },
+  checkboxOn: { backgroundColor: colors.lime, borderColor: colors.lime },
   error: { color: colors.error },
-  primary: { backgroundColor: colors.pink, borderRadius: 999, paddingVertical: 14, alignItems: 'center', marginTop: 4 },
-  primaryText: { color: '#fff', fontWeight: '700' },
+  primary: { backgroundColor: colors.lime, borderRadius: 999, paddingVertical: 16, alignItems: 'center', marginTop: 4 },
+  primaryText: { fontFamily: fonts.bold, color: colors.onLime, fontSize: 16 },
   cancel: { alignItems: 'center', paddingVertical: 10 },
   cancelText: { color: colors.muted }
 })

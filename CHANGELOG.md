@@ -1,6 +1,34 @@
 # Changelog
 
-## [Unreleased] — inclusive dating, regional launch, growth, Plus
+## [Unreleased]
+
+### Film people: redesign, film personality, daily results, dating opt-in
+
+- **New positioning:** "Find your film people". A social film app first; dating is an opt-in mode.
+- **Here for:** *Films & friends* or *Dating too*, at signup and in Settings (`users.dating_enabled`). Films-only
+  members need no gender, never appear in decks and don't count towards the launch gate (SQL function and trigger
+  updated). Deck, swipe and likes-you return `DATING_OFF` (403) when dating is off.
+- **Film personality:** 14 archetypes plus trait chips, scored as share² / catalog baseline with minimum share and
+  lift, revealed after 8 ratings. On You, friend and match cards, compare, starters and the public taste card.
+- **Daily drop:** a numbered daily set with crowd votes on every film, a reveal after each swipe, **Daily results**
+  (`GET /movies/daily/results`) with agreement, crowd favourite, most divisive and a Wordle-style share text. Streak
+  copy in the reminder push.
+- **Mobile redesign:** new design system (marquee lime on near-black, Bricolage Grotesque, typographic genre posters,
+  haptics), animated welcome, a step-by-step signup, a swipeable film deck (right / left / up), new Today, Explore,
+  Match, Chats and You screens, a match overlay, likes-you and unread badges, settings and edit profile. Six tabs became
+  five; Messages and Matches merged into Chats; push notifications open the right screen.
+- **Web refresh:** same palette and type, a landing page with sign-up (no pre-filled demo login; *Here for* and
+  optional identity), and a redesigned public taste card with the personality and posters.
+- **Profile:** dating needs a name, photo and country; bio, prompts and a verified email are extras. Signup no longer
+  writes a generic bio.
+- **Fixes:** two people saying hello at the same time no longer fails (conversation insert race, per-person intro
+  flags); referral codes also add a film friend; conversations sort by last activity with unread counts; "my comfort
+  rewatch"-style starters read correctly; *Science Fiction* is one genre (*Sci-Fi*).
+- **Removed:** gender counters from Home (the gate still balances the pool, per country), the old onboarding screens,
+  the drag-to-bucket game, `taste_vector` writes and the filler bio.
+- Migration `20261006120000_dating_optin.sql` (**not yet applied to moviematch**; apply after the one below).
+
+### Inclusive dating, regional launch, growth, Plus
 
 - **Inclusive dating:** gender *woman / man / non-binary* and a *Show me* choice; matching needs interest both ways.
   Existing members are backfilled to their current behaviour.
