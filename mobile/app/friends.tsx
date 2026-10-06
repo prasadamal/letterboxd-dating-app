@@ -1,14 +1,17 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Alert, Image, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native'
-import { useRouter } from 'expo-router'
+import { useFocusEffect, useRouter } from 'expo-router'
+import { useCallback, useState } from 'react'
+import { Alert, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Avatar, Button, Card, EmptyState, MatchPill, PersonalityBadge, SectionTitle } from '../components/ui'
 import { apiFetch } from '../lib/api'
-import { colors } from '../lib/theme'
+import { haptic } from '../lib/haptics'
+import { WEB_URL } from '../lib/profileOptions'
+import { colors, fonts, radii, type } from '../lib/theme'
 import type { Friend } from '../lib/types'
 
-// Film friends: compare taste with anyone — works before dating opens and for people you'd never date.
+// Film friends: compare taste with anyone (friends, family, people you'd never date). Works before dating opens.
 export default function FriendsScreen() {
   const router = useRouter()
-  const [friends, setFriends] = useState<Friend[]>([])
+  const [friends, setFriends] = useState<Friend[] | null>(null)
   const [myCode, setMyCode] = useState('')
   const [code, setCode] = useState('')
   const [error, setError] = useState('')
@@ -24,9 +27,11 @@ export default function FriendsScreen() {
     }
   }, [])
 
-  useEffect(() => {
-    load()
-  }, [load])
+  useFocusEffect(
+    useCallback(() => {
+      load()
+    }, [load])
+  )
 
   async function add() {
     if (!code.trim()) return
@@ -35,8 +40,10 @@ export default function FriendsScreen() {
     try {
       await apiFetch('/friends', { method: 'POST', body: JSON.stringify({ code: code.trim() }) })
       setCode('')
+      haptic.success()
       await load()
     } catch (err) {
+      haptic.warning()
       setError(err instanceof Error ? err.message : 'Could not add friend')
     } finally {
       setAdding(false)
@@ -58,89 +65,77 @@ export default function FriendsScreen() {
   }
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={{ padding: 16, gap: 14, paddingBottom: 40 }}>
-      <Text style={styles.heading}>Film friends</Text>
-      <Text style={styles.sub}>
-        See how your taste matches with friends, family or anyone — and get ideas for what to watch together.
-      </Text>
-
-      <View style={styles.card}>
-        <Text style={styles.label}>YOUR FRIEND CODE</Text>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+      <Card style={styles.codeCard}>
+        <Text style={type.label}>Your friend code</Text>
         <Text style={styles.code} selectable>
-          {myCode || '…'}
+          {myCode || '········'}
         </Text>
-        <Pressable
-          style={styles.primary}
+        <Text style={type.small}>Friends add you with it and instantly see your taste match.</Text>
+        <Button
+          title="Share my code"
+          icon="share-social"
           disabled={!myCode}
-          onPress={() => Share.share({ message: `Compare our film taste on ReelMates — add me with code ${myCode}` })}
-        >
-          <Text style={styles.primaryText}>Share my code</Text>
-        </Pressable>
-      </View>
+          onPress={() => Share.share({ message: `Add me on ReelMates with code ${myCode} and see how our film taste matches 🎬 ${WEB_URL}` }).catch(() => null)}
+        />
+      </Card>
 
-      <View style={styles.card}>
-        <Text style={styles.label}>ADD A FRIEND</Text>
-        <View style={styles.addRow}>
-          <TextInput
-            style={styles.input}
-            value={code}
-            onChangeText={setCode}
-            placeholder="Their code, e.g. REEL1A2B3C"
-            placeholderTextColor={colors.muted}
-            autoCapitalize="characters"
-            autoCorrect={false}
-          />
-          <Pressable style={[styles.primary, styles.addBtn, (!code.trim() || adding) && { opacity: 0.5 }]} disabled={!code.trim() || adding} onPress={add}>
-            <Text style={styles.primaryText}>Add</Text>
-          </Pressable>
-        </View>
-        {!!error && <Text style={styles.error}>{error}</Text>}
+      <SectionTitle title="Add a friend" />
+      <View style={styles.addRow}>
+        <TextInput
+          style={styles.input}
+          value={code}
+          onChangeText={setCode}
+          placeholder="Their code, e.g. REEL1A2B3C"
+          placeholderTextColor={colors.faint}
+          autoCapitalize="characters"
+          autoCorrect={false}
+          returnKeyType="done"
+          onSubmitEditing={add}
+        />
+        <Button title="Add" size="md" loading={adding} disabled={!code.trim()} onPress={add} />
       </View>
+      {!!error && <Text style={styles.error}>{error}</Text>}
 
-      {friends.length === 0 ? (
-        <Text style={styles.sub}>No film friends yet. Share your code to get started.</Text>
-      ) : (
-        friends.map((friend) => (
-          <Pressable
-            key={friend.id}
-            style={styles.friend}
-            onPress={() => router.push({ pathname: '/compare/[userId]', params: { userId: friend.id, name: friend.name } })}
-            onLongPress={() => remove(friend)}
-          >
-            <Image source={{ uri: friend.photo_url || friend.avatar_url }} style={styles.avatar} />
-            <View style={{ flex: 1 }}>
-              <Text style={styles.name}>{friend.name}</Text>
-              <Text style={styles.meta}>
-                {friend.sharedCount ? `${friend.sharedCount} films in common` : 'No films in common yet'}
-                {friend.favorite ? ` · ❤ ${friend.favorite.title}` : ''}
-              </Text>
-            </View>
-            <Text style={styles.score}>{friend.score}%</Text>
-          </Pressable>
-        ))
+      <SectionTitle title={friends?.length ? `Your film people · ${friends.length}` : 'Your film people'} />
+      {friends && friends.length === 0 && (
+        <EmptyState emoji="👯" title="No film friends yet" body="Share your code, or add someone's. You'll see your match %, both favourites and films to watch together." />
       )}
-      {friends.length > 0 && <Text style={styles.hint}>Tap a friend to compare. Long-press to remove.</Text>}
+      {(friends || []).map((friend) => (
+        <Pressable
+          key={friend.id}
+          style={({ pressed }) => [styles.friend, pressed && { opacity: 0.85 }]}
+          onPress={() => router.push({ pathname: '/compare/[userId]', params: { userId: friend.id, name: friend.name } })}
+          onLongPress={() => remove(friend)}
+          accessibilityRole="button"
+          accessibilityLabel={`${friend.name}, ${friend.score}% match. Long press to remove.`}
+        >
+          <Avatar uri={friend.photo_url} name={friend.name} size={54} />
+          <View style={{ flex: 1, gap: 4 }}>
+            <Text style={styles.name}>{friend.name}</Text>
+            <PersonalityBadge personality={friend.personality} size="sm" />
+            <Text style={type.small}>
+              {friend.sharedCount ? `${friend.sharedCount} films in common` : 'No films in common yet'}
+              {friend.favorite ? ` · ❤ ${friend.favorite.title}` : ''}
+            </Text>
+          </View>
+          <MatchPill score={friend.score} size="sm" />
+        </Pressable>
+      ))}
+      {!!friends?.length && <Text style={styles.hint}>Tap to compare · long-press to remove</Text>}
     </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  heading: { color: colors.text, fontSize: 26, fontWeight: '800' },
-  sub: { color: colors.muted, lineHeight: 20 },
-  hint: { color: colors.muted, fontSize: 12, textAlign: 'center' },
-  card: { backgroundColor: colors.card, borderRadius: 18, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 10 },
-  label: { color: colors.peach, fontSize: 11, fontWeight: '800', letterSpacing: 1.2 },
-  code: { color: colors.text, fontSize: 26, fontWeight: '800', letterSpacing: 2 },
-  primary: { backgroundColor: colors.pink, borderRadius: 999, paddingVertical: 12, paddingHorizontal: 18, alignItems: 'center' },
-  primaryText: { color: '#fff', fontWeight: '700' },
-  addRow: { flexDirection: 'row', gap: 8 },
-  addBtn: { paddingHorizontal: 22 },
-  input: { flex: 1, borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: 12, color: colors.text },
-  error: { color: colors.error },
-  friend: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.card, borderRadius: 16, borderWidth: 1, borderColor: colors.border, padding: 12 },
-  avatar: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.bgElevated },
-  name: { color: colors.text, fontSize: 16, fontWeight: '700' },
-  meta: { color: colors.muted, fontSize: 12, marginTop: 2 },
-  score: { color: colors.peach, fontSize: 20, fontWeight: '800' }
+  content: { padding: 20, gap: 12, paddingBottom: 48 },
+  codeCard: { padding: 20, gap: 10, borderColor: 'rgba(212,255,63,0.35)' },
+  code: { fontFamily: fonts.display, color: colors.lime, fontSize: 38, letterSpacing: 3 },
+  addRow: { flexDirection: 'row', gap: 8, alignItems: 'center' },
+  input: { flex: 1, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: radii.pill, color: colors.text, paddingHorizontal: 18, paddingVertical: 13, fontSize: 16 },
+  error: { color: colors.red },
+  friend: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.card, borderRadius: radii.lg, borderWidth: 1, borderColor: colors.border, padding: 12 },
+  name: { fontFamily: fonts.bold, color: colors.text, fontSize: 16 },
+  hint: { color: colors.faint, fontSize: 12, textAlign: 'center' }
 })

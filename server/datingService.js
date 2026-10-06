@@ -20,8 +20,15 @@ import { genderQueryValues, isMutualInterest } from './lib/datingEligibility.js'
 import { sameCountry } from './lib/regionLaunch.js'
 import { isPlusActive } from './lib/plus.js'
 import { publicPrompts } from './lib/profilePrompts.js'
+import { withPersonalities } from './services/personalityService.js'
 
 const CARD_COLUMNS = 'id, display_name, bio, hobbies, city, age, country, gender, photo_url, verification_status, prompts'
+
+function datingOff() {
+  const error = new Error('Dating is switched off. Turn it on in Settings to meet people.')
+  error.code = 'DATING_OFF'
+  return error
+}
 
 // Before the global launch, a country that opened on its own only dates within itself.
 function inDatingArea(status, self, other) {
@@ -73,12 +80,14 @@ export async function recordSwipe(userId, targetId, action) {
   const target = await findUserById(targetId)
   if (!self || !target || target.deleted_at) throw new Error('User not found')
 
+  if (!self.dating_enabled) throw datingOff()
   const status = await assertDatingLaunched(self)
   await assertMatchmakingReady(userId)
 
   const blocked = await getBlockedUserIds(userId)
   if (blocked.has(targetId)) throw new Error('User unavailable')
 
+  if (!target.dating_enabled) throw new Error('This person is not dating right now.')
   if (!isMutualInterest(self, target)) throw new Error('This profile is not in your dating preferences.')
   if (!inDatingArea(status, self, target)) throw new Error('Dating is open in your country only for now.')
 
@@ -170,6 +179,7 @@ const DECK_SCORING_POOL = 300
 export async function getDatingDeckWithMeta(userId, limit = 1) {
   const self = await findUserById(userId)
   if (!self) throw new Error('User not found')
+  if (!self.dating_enabled) throw datingOff()
   const status = await assertDatingLaunched(self)
   await assertMatchmakingReady(userId)
 
@@ -188,6 +198,7 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
       .is('deleted_at', null)
       // Only complete, active profiles (photo, bio, country) that the inactivity job has not paused.
       .eq('matchmaking_enabled', true)
+      .eq('dating_enabled', true)
       .eq('is_active', true)
       .in('gender', genderQueryValues(self))
       .order('id')
@@ -216,7 +227,7 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
   const ratings = await getRatingsForUsers([userId, ...shortlistIds])
   const selfMap = ratings.get(userId)
 
-  const deck = profiles
+  const ranked = profiles
     .map((candidate) => {
       const stats = computeCompatibilityFromMaps(selfMap, ratings.get(candidate.id))
       return { ...tasteCardFields(candidate, stats), _lastActive: activeAt.get(candidate.id) || '' }
@@ -226,6 +237,7 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
     .sort((a, b) => rankByTaste(a, b) || b._lastActive.localeCompare(a._lastActive))
     .slice(0, limit)
     .map(({ _lastActive, ...card }) => card)
+  const deck = await withPersonalities(ranked)
 
   const { data: statsRow } = await supabase
     .from('user_deck_stats')
@@ -280,7 +292,7 @@ export async function getMutualMatches(userId) {
   const selfMap = ratings.get(userId)
   const byId = new Map((users || []).map((row) => [row.id, row]))
 
-  return rows
+  const matches = rows
     .map((row) => {
       const peerId = row.user_a === userId ? row.user_b : row.user_a
       const candidate = byId.get(peerId)
@@ -295,6 +307,7 @@ export async function getMutualMatches(userId) {
       }
     })
     .filter(Boolean)
+  return withPersonalities(matches)
 }
 
 // People who liked you and are waiting for your answer. Everyone sees the count; Plus sees who they are.
@@ -302,6 +315,7 @@ export async function getLikesYou(userId) {
   const self = await findUserById(userId)
   if (!self) throw new Error('User not found')
   const status = await assertDatingLaunched(self)
+  if (!self.dating_enabled) return { count: 0, plus: isPlusActive(self), profiles: [] }
 
   const [blocked, swipes] = await Promise.all([getBlockedUserIds(userId), getSwipeMap(userId)])
   const incoming = await selectAll(() =>
@@ -317,6 +331,7 @@ export async function getLikesYou(userId) {
       .in('id', ids)
       .is('deleted_at', null)
       .eq('is_active', true)
+      .eq('dating_enabled', true)
       .order('id')
   )
   const visible = people.filter((p) => isMutualInterest(self, p) && inDatingArea(status, self, p))
@@ -325,9 +340,9 @@ export async function getLikesYou(userId) {
 
   const ratings = await getRatingsForUsers([userId, ...visible.map((p) => p.id)])
   const selfMap = ratings.get(userId)
-  const profiles = visible
-    .map((p) => tasteCardFields(p, computeCompatibilityFromMaps(selfMap, ratings.get(p.id))))
-    .sort(rankByTaste)
+  const profiles = await withPersonalities(
+    visible.map((p) => tasteCardFields(p, computeCompatibilityFromMaps(selfMap, ratings.get(p.id)))).sort(rankByTaste)
+  )
   return { count: profiles.length, plus, profiles }
 }
 

@@ -7,6 +7,7 @@ import { buildIcebreakers } from '../lib/icebreakers.js'
 import { publicPrompts } from '../lib/profilePrompts.js'
 import { getTasteStats } from './filmService.js'
 import { logger } from '../lib/logger.js'
+import { getPersonalities } from './personalityService.js'
 
 // Called after every rating; writes only on the first rating of a UTC day.
 export async function recordDailyActivity(userId, today = utcDay()) {
@@ -69,7 +70,8 @@ export async function getPublicTasteCard(code) {
     liked: stats.liked,
     disliked: stats.disliked,
     bestStreak: user.streak_best || 0,
-    prompts: publicPrompts(user.prompts).slice(0, 1)
+    prompts: publicPrompts(user.prompts).slice(0, 1),
+    personality: stats.personality?.ready ? stats.personality : null
   }
 }
 
@@ -78,17 +80,23 @@ export async function getIcebreakers(userId, peerId) {
   const meta = await getChatMeta(userId, peerId)
   if (!meta) throw new AppError('No conversation', 404, 'NOT_FOUND')
 
-  const peer = await findUserById(peerId)
-  const ratings = await getRatingsForUsers([userId, peerId])
+  const [peer, ratings, personalities] = await Promise.all([
+    findUserById(peerId),
+    getRatingsForUsers([userId, peerId]),
+    getPersonalities([userId, peerId])
+  ])
   const mine = ratings.get(userId)
   const theirs = ratings.get(peerId)
   const stats = compareTaste(mine, theirs)
+  const myType = personalities.get(userId)
+  const theirType = personalities.get(peerId)
 
   return buildIcebreakers({
     sharedLoved: stats.sharedLovedTitles,
     sharedHated: stats.sharedHatedTitles,
     favorite: stats.favorite,
     myFavorite: mine?.favorite != null ? mine.titles.get(mine.favorite) : null,
-    prompts: publicPrompts(peer?.prompts)
+    prompts: publicPrompts(peer?.prompts),
+    sharedPersonality: myType?.ready && theirType?.ready && myType.key === theirType.key ? myType.name : null
   })
 }

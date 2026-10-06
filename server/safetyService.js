@@ -125,6 +125,14 @@ export async function deleteUserAccount(userId) {
       gender: null,
       language: null,
       verification_notes: null,
+      prompts: [],
+      interested_in: [],
+      taste_card_public: false,
+      streak_current: 0,
+      streak_best: 0,
+      streak_last_day: null,
+      plus_until: null,
+      dating_enabled: false,
       matchmaking_enabled: false,
       is_active: false
     })

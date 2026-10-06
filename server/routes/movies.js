@@ -1,22 +1,33 @@
 import express from 'express'
-import { getDailyMovies, getMovieById, rateMovie, getUserProfile, ensureUserProfile } from '../db.js'
+import { getMovieById, rateMovie, ensureUserProfile } from '../db.js'
 import { authMiddleware } from '../middleware/auth.js'
 import { asyncHandler } from '../middleware/errors.js'
 import { getCollections, getTopFilms, searchFilms } from '../services/filmService.js'
 import { COLLECTIONS } from '../data/curatedFilmsMeta.js'
 import { recordDailyActivity } from '../services/growthService.js'
+import { dailyNumber, getDailyMoviesWithCommunity, getDailyResults } from '../services/dailyService.js'
 
 const router = express.Router()
 
+// Today's films still to rate, each with the crowd's verdict so far (shown after you swipe).
 router.get('/daily', authMiddleware, async (req, res) => {
   try {
-    const movies = await getDailyMovies(req.user.id)
-    return res.json({ movies })
+    const movies = await getDailyMoviesWithCommunity(req.user.id)
+    return res.json({ movies, number: dailyNumber() })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ message: 'Could not load daily movies' })
   }
 })
+
+// How you and everyone voted on today's films, plus a Wordle-style share line.
+router.get(
+  '/daily/results',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    return res.json({ results: await getDailyResults(req.user.id) })
+  })
+)
 
 router.get(
   '/search',

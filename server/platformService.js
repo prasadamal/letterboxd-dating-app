@@ -28,11 +28,13 @@ export async function ensurePlatformSettings() {
   if (error) throw error
 }
 
+// Launch counts are about the dating pool, so only people who switched dating on count.
 async function countUsers(gender, country) {
   let query = supabase
     .from('users')
     .select('id', { count: 'exact', head: true })
     .eq('gender', gender)
+    .eq('dating_enabled', true)
     .is('deleted_at', null)
   if (country !== undefined) query = query.ilike('country', ilikeExact(country))
   const { count, error } = await query
@@ -45,6 +47,7 @@ async function countOthers() {
     .from('users')
     .select('id', { count: 'exact', head: true })
     .in('gender', ['nonbinary', 'other'])
+    .eq('dating_enabled', true)
     .is('deleted_at', null)
   if (error) throw error
   return count || 0
@@ -119,9 +122,19 @@ export async function getCountryProgress(country) {
   return value
 }
 
+async function hasAnyMatch(userId) {
+  const { count, error } = await supabase
+    .from('matches')
+    .select('id', { count: 'exact', head: true })
+    .or(`user_a.eq.${userId},user_b.eq.${userId}`)
+  if (error) throw error
+  return (count || 0) > 0
+}
+
 // Status as one member sees it: dating is open for them when it is open everywhere or in their country.
-// `regionOnly` means the deck is limited to people in the same country.
-export async function getPlatformStatusForUser(user) {
+// `regionOnly` means the deck is limited to people in the same country. `includeMatches` adds hasMatches,
+// which the app uses to keep Chats visible for people who paused dating.
+export async function getPlatformStatusForUser(user, { includeMatches = false } = {}) {
   const status = await getPlatformStatus()
   const country = user?.country ? await getCountryProgress(user.country) : null
   const regionOpen = Boolean(country?.open)
@@ -130,7 +143,8 @@ export async function getPlatformStatusForUser(user) {
     globalLaunched: status.datingLaunched,
     datingLaunched: status.datingLaunched || regionOpen,
     regionOnly: !status.datingLaunched && regionOpen,
-    country
+    country,
+    ...(includeMatches && user?.id ? { hasMatches: await hasAnyMatch(user.id) } : {})
   }
 }
 

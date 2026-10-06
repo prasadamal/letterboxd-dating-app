@@ -16,6 +16,16 @@ test('icebreakers lead with the strongest shared signal and strip years', () => 
   assert.ok(ideas.some((i) => i.includes('Cats') && !i.includes('2019')))
 })
 
+test('icebreakers speak to the other person about their prompt and a shared personality', () => {
+  const ideas = buildIcebreakers({
+    prompts: [{ key: 'comfort', answer: 'Paddington 2', question: 'My comfort rewatch' }],
+    sharedPersonality: 'Hopeless Romantic'
+  })
+  assert.equal(ideas[0], "Apparently we're both Hopeless Romantics. Which film made you one?")
+  assert.equal(ideas[1], 'Paddington 2 as a comfort rewatch is elite. How many times so far?')
+  assert.ok(!ideas.some((i) => /\bmy comfort\b/i.test(i)))
+})
+
 test('icebreakers always have generic fallbacks', () => {
   const ideas = buildIcebreakers({})
   assert.equal(ideas.length, 2)

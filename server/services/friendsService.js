@@ -4,6 +4,8 @@ import { getBlockedUserIds } from '../safetyService.js'
 import { AppError } from '../middleware/errors.js'
 import { selectAll, selectAllIn } from '../lib/paging.js'
 import { compareTaste, rarityWeight, rankByTaste } from '../lib/tasteMatch.js'
+import { personalityBadge } from '../lib/filmPersonality.js'
+import { getPersonalities, withPersonalities } from './personalityService.js'
 
 // Film friends: compare taste with anyone, not just dating matches. Works before dating opens.
 // Your friend code is your referral code; adding someone by code makes you friends both ways.
@@ -59,7 +61,7 @@ export async function listFriends(userId) {
   const people = await selectAllIn(ids, (part) => supabase.from('users').select(PERSON_COLUMNS).in('id', part).order('id'))
   const ratings = await getRatingsForUsers([userId, ...ids])
   const mine = ratings.get(userId)
-  return people
+  const friends = people
     .filter((p) => !p.deleted_at && p.is_active !== false)
     .map((p) => {
       const stats = compareTaste(mine, ratings.get(p.id))
@@ -71,6 +73,7 @@ export async function listFriends(userId) {
       }
     })
     .sort(rankByTaste)
+  return withPersonalities(friends)
 }
 
 async function canCompare(userId, otherId) {
@@ -106,14 +109,15 @@ export async function compareWith(userId, otherId) {
   const other = await canCompare(userId, otherId)
   if (!other) throw new AppError('You can compare taste with your film friends and matches', 404, 'NOT_FOUND')
 
-  const ratings = await getRatingsForUsers([userId, otherId])
+  const [ratings, personalities] = await Promise.all([getRatingsForUsers([userId, otherId]), getPersonalities([userId, otherId])])
   const mine = ratings.get(userId)
   const theirs = ratings.get(otherId)
   const stats = compareTaste(mine, theirs)
   const myFavorite = mine?.favorite != null ? mine.titles?.get(mine.favorite) || null : null
 
   return {
-    person: mapPublicUser(other),
+    person: { ...mapPublicUser(other), personality: personalityBadge(personalities.get(otherId)) },
+    myPersonality: personalityBadge(personalities.get(userId)),
     score: stats.score,
     sharedCount: stats.sharedCount,
     conflicts: stats.conflicts,

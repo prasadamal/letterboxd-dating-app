@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ActivityIndicator, Modal, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import Constants from 'expo-constants'
 import { apiFetch } from '../lib/api'
-import { colors } from '../lib/theme'
+import { colors, fonts } from '../lib/theme'
 
 const CATEGORIES = [
   { value: 'idea', label: 'Idea' },
@@ -87,7 +87,7 @@ export function FeedbackSheet({ visible, onClose }: Props) {
                 disabled={sending || message.trim().length < 3}
                 onPress={send}
               >
-                {sending ? <ActivityIndicator color="#fff" /> : <Text style={styles.primaryText}>Send</Text>}
+                {sending ? <ActivityIndicator color={colors.onLime} /> : <Text style={styles.primaryText}>Send</Text>}
               </Pressable>
               <Pressable style={styles.cancel} onPress={close}>
                 <Text style={styles.cancelText}>Cancel</Text>
@@ -102,18 +102,18 @@ export function FeedbackSheet({ visible, onClose }: Props) {
 
 const styles = StyleSheet.create({
   backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'flex-end' },
-  sheet: { backgroundColor: colors.card, borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 20, gap: 10, borderWidth: 1, borderColor: colors.border },
-  title: { color: colors.text, fontSize: 20, fontWeight: '800' },
+  sheet: { backgroundColor: colors.card, borderTopLeftRadius: 32, borderTopRightRadius: 32, padding: 20, gap: 10, borderWidth: 1, borderColor: colors.border },
+  title: { fontFamily: fonts.display, color: colors.text, fontSize: 24, letterSpacing: -0.5 },
   sub: { color: colors.muted, lineHeight: 20 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: { borderRadius: 999, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 12, paddingVertical: 7 },
-  chipOn: { backgroundColor: colors.pink, borderColor: colors.pink },
+  chipOn: { backgroundColor: colors.lime, borderColor: colors.lime },
   chipText: { color: colors.muted, fontWeight: '600' },
-  chipTextOn: { color: '#fff' },
+  chipTextOn: { color: colors.onLime },
   input: { borderWidth: 1, borderColor: colors.border, borderRadius: 12, padding: 12, color: colors.text, minHeight: 110, textAlignVertical: 'top' },
   error: { color: colors.error },
-  primary: { backgroundColor: colors.pink, borderRadius: 999, paddingVertical: 14, alignItems: 'center' },
-  primaryText: { color: '#fff', fontWeight: '700' },
+  primary: { backgroundColor: colors.lime, borderRadius: 999, paddingVertical: 16, alignItems: 'center' },
+  primaryText: { fontFamily: fonts.bold, color: colors.onLime, fontSize: 16 },
   cancel: { alignItems: 'center', paddingVertical: 8 },
   cancelText: { color: colors.muted }
 })
