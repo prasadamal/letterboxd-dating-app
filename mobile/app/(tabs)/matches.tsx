@@ -7,25 +7,43 @@ import { usePlatform } from '../../lib/platform'
 import { TasteProfileCard } from '../../components/TasteProfileCard'
 import { EmptyState } from '../../components/EmptyState'
 import { colors } from '../../lib/theme'
-import type { Match } from '../../lib/types'
+import type { LikesYou, Match } from '../../lib/types'
 
 export default function MatchesScreen() {
   const { token } = useAuth()
   const { platform } = usePlatform()
   const router = useRouter()
   const [matches, setMatches] = useState<Match[]>([])
+  const [likes, setLikes] = useState<LikesYou | null>(null)
 
   useEffect(() => {
     if (!token || !platform?.datingLaunched) return
     apiFetch<{ matches: Match[] }>('/dating/matches', {}, token)
       .then((data) => setMatches(data.matches || []))
       .catch(() => null)
+    apiFetch<LikesYou>('/dating/likes-you', {}, token)
+      .then(setLikes)
+      .catch(() => null)
   }, [token, platform?.datingLaunched])
+
+  async function likeBack(profile: Match) {
+    try {
+      const result = await apiFetch<{ matched: boolean }>(
+        '/dating/swipe',
+        { method: 'POST', body: JSON.stringify({ targetId: profile.id, action: 'like' }) },
+        token
+      )
+      setLikes((current) => current && { ...current, count: current.count - 1, profiles: current.profiles.filter((p) => p.id !== profile.id) })
+      if (result.matched) setMatches((current) => [{ ...profile, introPending: true, chatUnlocked: false }, ...current])
+    } catch (err) {
+      Alert.alert('Could not like back', err instanceof Error ? err.message : 'Try again')
+    }
+  }
 
   if (!platform?.datingLaunched) {
     return (
       <View style={styles.screen}>
-        <Text style={styles.locked}>Matches appear after the 500/500 launch.</Text>
+        <Text style={styles.locked}>Matches appear once dating opens in your country.</Text>
       </View>
     )
   }
@@ -38,6 +56,28 @@ export default function MatchesScreen() {
         contentContainerStyle={{ padding: 16, gap: 12 }}
         ListHeaderComponent={
           <>
+            {!!likes?.count && (
+              <View style={styles.likesCard}>
+                <Text style={styles.eyebrow}>LIKES YOU</Text>
+                <Text style={styles.likesTitle}>
+                  {likes.count} {likes.count === 1 ? 'person likes' : 'people like'} you
+                </Text>
+                {likes.plus ? (
+                  likes.profiles.map((profile) => (
+                    <View key={profile.id} style={styles.likeRow}>
+                      <TasteProfileCard profile={profile} compact />
+                      <Pressable style={styles.primaryBtn} onPress={() => likeBack(profile)}>
+                        <Text style={styles.primaryText}>Like back</Text>
+                      </Pressable>
+                    </View>
+                  ))
+                ) : (
+                  <Text style={styles.sub}>
+                    Keep swiping in Dating and they'll show up, or get ReelMates Plus to see them all now.
+                  </Text>
+                )}
+              </View>
+            )}
             <Text style={styles.eyebrow}>MUTUAL MATCHES</Text>
             <Text style={styles.heading}>You both liked each other</Text>
           </>
@@ -92,6 +132,9 @@ const styles = StyleSheet.create({
   ghostPill: { borderRadius: 999, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 14, paddingVertical: 10 },
   ghostPillText: { color: colors.text, fontWeight: '600' },
   screen: { flex: 1, backgroundColor: colors.bg },
+  likesCard: { backgroundColor: 'rgba(255,105,147,0.10)', borderRadius: 18, padding: 16, borderWidth: 1, borderColor: colors.border, gap: 8, marginBottom: 16 },
+  likesTitle: { color: colors.text, fontSize: 18, fontWeight: '800' },
+  likeRow: { gap: 6, paddingTop: 8, borderTopWidth: 1, borderTopColor: colors.border },
   locked: { color: colors.muted, padding: 16, lineHeight: 20 },
   eyebrow: { color: colors.peach, fontSize: 11, letterSpacing: 1.1, marginBottom: 6 },
   heading: { color: colors.text, fontSize: 22, fontWeight: '700', marginBottom: 12 },

@@ -4,6 +4,7 @@ import { authMiddleware } from '../middleware/auth.js'
 import { asyncHandler } from '../middleware/errors.js'
 import { getCollections, getTopFilms, searchFilms } from '../services/filmService.js'
 import { COLLECTIONS } from '../data/curatedFilmsMeta.js'
+import { recordDailyActivity } from '../services/growthService.js'
 
 const router = express.Router()
 
@@ -61,7 +62,9 @@ router.post('/:id/rate', authMiddleware, async (req, res) => {
     }
 
     const user = await rateMovie(req.user.id, movie.id, reaction)
-    return res.json({ ok: true, user: ensureUserProfile(user) })
+    // A failed streak update must never lose the rating.
+    const streak = await recordDailyActivity(req.user.id).catch(() => null)
+    return res.json({ ok: true, user: ensureUserProfile(streak ? { ...user, streak } : user), streak })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ message: 'Could not save rating' })

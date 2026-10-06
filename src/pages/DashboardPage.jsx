@@ -31,7 +31,7 @@ export default function DashboardPage({ user, setUser }) {
           apiFetch('/matches', {}, token),
           apiFetch('/users/profile', {}, token),
           apiFetch('/messages/conversations', {}, token).catch(() => ({ conversations: [] })),
-          apiFetch('/platform/status', {}, null)
+          apiFetch('/platform/status/me', {}, token)
         ])
 
         setMovies(moviesData.movies || [])

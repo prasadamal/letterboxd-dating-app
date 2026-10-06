@@ -126,7 +126,8 @@ export default function DatingScreen() {
         </Pressable>
       </View>
       <Text style={styles.meta}>
-        {meta?.remainingInPool ?? 0} left in pool · swipe card or use buttons
+        {meta?.remainingInPool ?? 0} left in pool
+        {platform?.regionOnly && platform.country ? ` in ${platform.country.name}` : ''} · swipe card or use buttons
       </Text>
       <Pressable onPress={() => setReporting(true)} accessibilityRole="button">
         <Text style={styles.reportText}>Report or block {profile.name}</Text>

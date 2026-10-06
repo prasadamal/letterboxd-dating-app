@@ -19,6 +19,7 @@ export default function ChatScreen() {
   const [realtimeChannel, setRealtimeChannel] = useState<string | null>(null)
   const [closed, setClosed] = useState(false)
   const [reporting, setReporting] = useState(false)
+  const [starters, setStarters] = useState<string[]>([])
   const lastSyncRef = useRef<string | null>(null)
   const router = useRouter()
 
@@ -99,6 +100,15 @@ export default function ChatScreen() {
     return subscribeChatChannel(realtimeChannel, { onMessage: refresh, onRead: () => loadMessages().catch(() => null) })
   }, [realtimeChannel, loadMessages])
 
+  useEffect(() => {
+    if (!token || !userId) return
+    apiFetch<{ starters: string[] }>(`/messages/${userId}/starters`, {}, token)
+      .then((data) => setStarters(data.starters || []))
+      .catch(() => null)
+  }, [token, userId])
+
+  const sentAny = messages.some((m) => m.from_user_id === user?.id)
+
   async function send() {
     if (!token || !userId || !text.trim()) return
     try {
@@ -157,6 +167,16 @@ export default function ChatScreen() {
           )
         }}
       />
+      {!closed && !sentAny && starters.length > 0 && (
+        <View style={styles.starters}>
+          <Text style={styles.startersLabel}>Need a hello? Tap one to edit it.</Text>
+          {starters.map((idea) => (
+            <Pressable key={idea} style={styles.starter} onPress={() => setText(idea)}>
+              <Text style={styles.starterText}>{idea}</Text>
+            </Pressable>
+          ))}
+        </View>
+      )}
       {closed ? (
         <Text style={[styles.banner, { paddingBottom: 12 }]}>This conversation is no longer available.</Text>
       ) : (
@@ -206,6 +226,10 @@ const styles = StyleSheet.create({
   mine: { alignSelf: 'flex-end', backgroundColor: 'rgba(173,124,255,0.15)' },
   bubbleText: { color: colors.text },
   readReceipt: { color: colors.muted, fontSize: 10, marginTop: 4, alignSelf: 'flex-end' },
+  starters: { paddingHorizontal: 12, paddingBottom: 8, gap: 6 },
+  startersLabel: { color: colors.muted, fontSize: 12 },
+  starter: { borderWidth: 1, borderColor: colors.border, borderRadius: 14, paddingHorizontal: 12, paddingVertical: 8, backgroundColor: colors.card },
+  starterText: { color: colors.text, fontSize: 14 },
   composer: { flexDirection: 'row', gap: 8, padding: 12, borderTopWidth: 1, borderTopColor: colors.border },
   input: { flex: 1, borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: 12, paddingVertical: 10, color: colors.text, backgroundColor: colors.card },
   sendBtn: { backgroundColor: colors.pink, borderRadius: 12, paddingHorizontal: 16, justifyContent: 'center' },

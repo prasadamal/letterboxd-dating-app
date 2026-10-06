@@ -18,6 +18,7 @@ type Props = {
     | 'sharedLoved'
     | 'sharedHated'
     | 'favorite'
+    | 'prompts'
   >
   compact?: boolean
 }
@@ -143,6 +144,12 @@ export function TasteProfileCard({ profile, compact = false }: Props) {
           “{profile.bio}”
         </Text>
       )}
+      {(profile.prompts || []).map((prompt) => (
+        <View key={prompt.key} style={styles.prompt}>
+          <Text style={styles.promptQuestion}>{prompt.question}</Text>
+          <Text style={styles.promptAnswer}>{prompt.answer}</Text>
+        </View>
+      ))}
     </View>
   )
 }
@@ -174,6 +181,9 @@ const styles = StyleSheet.create({
   more: { color: colors.muted, fontSize: 12 },
   hint: { color: colors.muted, fontSize: 13 },
   bio: { color: colors.muted, paddingHorizontal: 16, paddingBottom: 14, fontStyle: 'italic', lineHeight: 20 },
+  prompt: { marginHorizontal: 16, marginBottom: 12, padding: 12, borderRadius: 14, backgroundColor: colors.bgElevated, gap: 4 },
+  promptQuestion: { color: colors.peach, fontSize: 12, fontWeight: '700' },
+  promptAnswer: { color: colors.text, fontSize: 17, fontWeight: '700' },
   compactCard: { backgroundColor: 'transparent', borderWidth: 0, borderRadius: 0 },
   compactHead: { flexDirection: 'row', gap: 12, alignItems: 'center' },
   thumb: { width: 56, height: 56, borderRadius: 28, backgroundColor: colors.bgElevated },

@@ -16,11 +16,16 @@ import { notifyUser } from './services/notificationService.js'
 import { logger } from './lib/logger.js'
 import { rankByTaste } from './lib/tasteMatch.js'
 import { selectAll, selectAllIn } from './lib/paging.js'
+import { genderQueryValues, isMutualInterest } from './lib/datingEligibility.js'
+import { sameCountry } from './lib/regionLaunch.js'
+import { isPlusActive } from './lib/plus.js'
+import { publicPrompts } from './lib/profilePrompts.js'
 
-function oppositeGender(gender) {
-  if (gender === 'male') return 'female'
-  if (gender === 'female') return 'male'
-  return null
+const CARD_COLUMNS = 'id, display_name, bio, hobbies, city, age, country, gender, photo_url, verification_status, prompts'
+
+// Before the global launch, a country that opened on its own only dates within itself.
+function inDatingArea(status, self, other) {
+  return !status.regionOnly || sameCountry(self.country, other.country)
 }
 
 async function getSwipeMap(userId) {
@@ -61,9 +66,6 @@ async function createMutualMatch(userId, peerId) {
 }
 
 export async function recordSwipe(userId, targetId, action) {
-  await assertDatingLaunched()
-  await assertMatchmakingReady(userId)
-
   if (userId === targetId) throw new Error('Invalid swipe target')
   if (!['like', 'pass'].includes(action)) throw new Error('Invalid swipe action')
 
@@ -71,13 +73,14 @@ export async function recordSwipe(userId, targetId, action) {
   const target = await findUserById(targetId)
   if (!self || !target || target.deleted_at) throw new Error('User not found')
 
+  const status = await assertDatingLaunched(self)
+  await assertMatchmakingReady(userId)
+
   const blocked = await getBlockedUserIds(userId)
   if (blocked.has(targetId)) throw new Error('User unavailable')
 
-  const expected = oppositeGender(self.gender)
-  if (expected && target.gender !== expected) {
-    throw new Error('Profiles are matched across complementary registration groups.')
-  }
+  if (!isMutualInterest(self, target)) throw new Error('This profile is not in your dating preferences.')
+  if (!inDatingArea(status, self, target)) throw new Error('Dating is open in your country only for now.')
 
   const { error } = await supabase.from('user_swipes').upsert(
     {
@@ -154,6 +157,7 @@ function tasteCardFields(candidate, stats) {
     conflicts: stats.conflicts,
     // Their all-time favourite and how it relates to you ('same' | 'you_liked' | 'you_disliked' | 'not_rated').
     favorite: stats.favorite,
+    prompts: publicPrompts(candidate.prompts),
     tasteSummary: stats.summary,
     likedLine: lines.likedLine,
     dislikedLine: lines.dislikedLine
@@ -164,33 +168,39 @@ function tasteCardFields(candidate, stats) {
 const DECK_SCORING_POOL = 300
 
 export async function getDatingDeckWithMeta(userId, limit = 1) {
-  await assertDatingLaunched()
-  await assertMatchmakingReady(userId)
-
   const self = await findUserById(userId)
   if (!self) throw new Error('User not found')
+  const status = await assertDatingLaunched(self)
+  await assertMatchmakingReady(userId)
 
   const [blocked, swipes] = await Promise.all([getBlockedUserIds(userId), getSwipeMap(userId)])
-  const targetGender = oppositeGender(self.gender)
   const prefs = self.discovery_prefs || {}
+  const plus = isPlusActive(self)
+  // Plus: hide people below a chosen taste match (score is only known after scoring, so it filters the shortlist).
+  const minScore = plus ? Number(prefs.minScore) || 0 : 0
 
   // Light columns for the whole pool; full profiles only for the people we actually score.
   const candidates = await selectAll(() => {
     let query = supabase
       .from('users')
-      .select('id, age, country, gender, last_active_at')
+      .select('id, age, country, gender, interested_in, last_active_at')
       .neq('id', userId)
       .is('deleted_at', null)
       // Only complete, active profiles (photo, bio, country) that the inactivity job has not paused.
       .eq('matchmaking_enabled', true)
       .eq('is_active', true)
+      .in('gender', genderQueryValues(self))
       .order('id')
-    if (targetGender) query = query.eq('gender', targetGender)
     return query
   })
 
   const eligible = candidates.filter(
-    (candidate) => !blocked.has(candidate.id) && !swipes.has(candidate.id) && passesDiscoveryFilters(candidate, prefs)
+    (candidate) =>
+      !blocked.has(candidate.id) &&
+      !swipes.has(candidate.id) &&
+      isMutualInterest(self, candidate) &&
+      inDatingArea(status, self, candidate) &&
+      passesDiscoveryFilters(candidate, prefs)
   )
 
   const activeAt = new Map(eligible.map((candidate) => [candidate.id, String(candidate.last_active_at || '')]))
@@ -200,11 +210,7 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
     .map((candidate) => candidate.id)
 
   const profiles = await selectAllIn(shortlistIds, (ids) =>
-    supabase
-      .from('users')
-      .select('id, display_name, bio, hobbies, city, age, country, gender, photo_url, verification_status')
-      .in('id', ids)
-      .order('id')
+    supabase.from('users').select(CARD_COLUMNS).in('id', ids).order('id')
   )
 
   const ratings = await getRatingsForUsers([userId, ...shortlistIds])
@@ -215,6 +221,7 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
       const stats = computeCompatibilityFromMaps(selfMap, ratings.get(candidate.id))
       return { ...tasteCardFields(candidate, stats), _lastActive: activeAt.get(candidate.id) || '' }
     })
+    .filter((card) => card.score >= minScore)
     // Taste first (match %, then films in common); recent activity only breaks exact ties.
     .sort((a, b) => rankByTaste(a, b) || b._lastActive.localeCompare(a._lastActive))
     .slice(0, limit)
@@ -232,13 +239,15 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
       swipedCount: swipes.size,
       remainingInPool: eligible.length,
       discoveryPrefs: prefs,
+      regionOnly: status.regionOnly,
+      plus,
       stats: statsRow || { swipes_total: swipes.size, likes_total: 0, passes_total: 0 }
     }
   }
 }
 
 export async function getMutualMatches(userId) {
-  await assertDatingLaunched()
+  await assertDatingLaunched(await findUserById(userId))
 
   const blocked = await getBlockedUserIds(userId)
 
@@ -260,7 +269,7 @@ export async function getMutualMatches(userId) {
   const users = await selectAllIn(peerIds, (ids) =>
     supabase
       .from('users')
-      .select('id, display_name, bio, hobbies, city, age, country, gender, photo_url, verification_status')
+      .select(CARD_COLUMNS)
       .in('id', ids)
       .is('deleted_at', null)
       .eq('is_active', true)
@@ -288,8 +297,42 @@ export async function getMutualMatches(userId) {
     .filter(Boolean)
 }
 
+// People who liked you and are waiting for your answer. Everyone sees the count; Plus sees who they are.
+export async function getLikesYou(userId) {
+  const self = await findUserById(userId)
+  if (!self) throw new Error('User not found')
+  const status = await assertDatingLaunched(self)
+
+  const [blocked, swipes] = await Promise.all([getBlockedUserIds(userId), getSwipeMap(userId)])
+  const incoming = await selectAll(() =>
+    supabase.from('user_swipes').select('swiper_id, created_at').eq('target_id', userId).eq('action', 'like').order('id')
+  )
+  const pendingIds = incoming.map((row) => row.swiper_id).filter((id) => !blocked.has(id) && !swipes.has(id))
+  if (!pendingIds.length) return { count: 0, plus: isPlusActive(self), profiles: [] }
+
+  const people = await selectAllIn(pendingIds, (ids) =>
+    supabase
+      .from('users')
+      .select(`${CARD_COLUMNS}, interested_in`)
+      .in('id', ids)
+      .is('deleted_at', null)
+      .eq('is_active', true)
+      .order('id')
+  )
+  const visible = people.filter((p) => isMutualInterest(self, p) && inDatingArea(status, self, p))
+  const plus = isPlusActive(self)
+  if (!plus) return { count: visible.length, plus, profiles: [] }
+
+  const ratings = await getRatingsForUsers([userId, ...visible.map((p) => p.id)])
+  const selfMap = ratings.get(userId)
+  const profiles = visible
+    .map((p) => tasteCardFields(p, computeCompatibilityFromMaps(selfMap, ratings.get(p.id))))
+    .sort(rankByTaste)
+  return { count: profiles.length, plus, profiles }
+}
+
 export async function undoLastSwipe(userId) {
-  await assertDatingLaunched()
+  await assertDatingLaunched(await findUserById(userId))
   await assertMatchmakingReady(userId)
 
   const { data: swipe, error } = await supabase

@@ -6,6 +6,7 @@ import DashboardPage from './pages/DashboardPage.jsx'
 import AdminPage from './pages/AdminPage.jsx'
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx'
 import VerifyEmailPage from './pages/VerifyEmailPage.jsx'
+import TasteCardPage from './pages/TasteCardPage.jsx'
 
 export default function App() {
   const [user, setUser] = useState(null)
@@ -39,6 +40,7 @@ export default function App() {
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/verify-email" element={<VerifyEmailPage />} />
+      <Route path="/taste/:code" element={<TasteCardPage signedIn={Boolean(user)} />} />
       <Route path="/*" element={user ? <DashboardPage user={user} setUser={setUser} /> : <AuthPage onAuth={setUser} />} />
     </Routes>
   )

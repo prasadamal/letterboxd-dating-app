@@ -24,6 +24,8 @@ import adminRoutes from './routes/admin.js'
 import internalRoutes from './routes/internal.js'
 import friendsRoutes from './routes/friends.js'
 import feedbackRoutes from './routes/feedback.js'
+import publicRoutes from './routes/public.js'
+import billingRoutes from './routes/billing.js'
 import { openApiDocument } from './openapi/spec.js'
 import swaggerUi from 'swagger-ui-express'
 
@@ -112,6 +114,8 @@ export function createApp() {
     app.use(`${prefix}/internal`, internalRoutes)
     app.use(`${prefix}/friends`, friendsRoutes)
     app.use(`${prefix}/feedback`, feedbackRoutes)
+    app.use(`${prefix}/public`, publicRoutes)
+    app.use(`${prefix}/billing`, billingRoutes)
   }
 
   mount('/api/v1')

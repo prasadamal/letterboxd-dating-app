@@ -5,6 +5,10 @@ import { movieCatalog } from './movieCatalog.js'
 import { pendingDailyMovies, sharedDailySet, utcDayNumber } from './lib/dailyMovies.js'
 import { mapLimit, selectAll, selectAllIn } from './lib/paging.js'
 import { compareTaste } from './lib/tasteMatch.js'
+import { normalizeInterestedIn } from './lib/datingEligibility.js'
+import { publicPrompts } from './lib/profilePrompts.js'
+import { displayStreak } from './lib/streaks.js'
+import { plusSummary } from './lib/plus.js'
 
 function formatMovieLabel(movie) {
   return `${movie.title} (${movie.year})`
@@ -115,6 +119,11 @@ export function mapUserRow(row, taste = { loved: [], hated: [] }) {
     profile_completion: row.profile_completion ?? 0,
     matchmaking_enabled: Boolean(row.matchmaking_enabled),
     discovery_prefs: row.discovery_prefs || {},
+    interested_in: normalizeInterestedIn(row.interested_in, row.gender),
+    prompts: publicPrompts(row.prompts),
+    streak: displayStreak({ current: row.streak_current, best: row.streak_best, lastDay: row.streak_last_day }),
+    plus: plusSummary(row),
+    taste_card_public: Boolean(row.taste_card_public),
     verification_status: row.verification_status || 'unverified',
     verified_at: row.verified_at || null,
     loved: taste.loved,

@@ -4,6 +4,7 @@ import { authMiddleware } from '../middleware/auth.js'
 import { asyncHandler, AppError } from '../middleware/errors.js'
 import { validateBody, messageSchema } from '../middleware/validate.js'
 import { containsBlockedContent } from '../lib/contentFilter.js'
+import { getIcebreakers } from '../services/growthService.js'
 
 const router = express.Router()
 
@@ -46,6 +47,15 @@ router.get('/:userId', authMiddleware, async (req, res) => {
     return res.status(500).json({ message: 'Could not load messages' })
   }
 })
+
+// Hello ideas built from what the two of you share.
+router.get(
+  '/:userId/starters',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    return res.json({ starters: await getIcebreakers(req.user.id, req.params.userId) })
+  })
+)
 
 router.post('/:userId/read', authMiddleware, async (req, res) => {
   try {

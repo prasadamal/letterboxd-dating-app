@@ -3,29 +3,40 @@ import { z } from 'zod'
 import { getUserProfile, updateUserProfile, ensureUserProfile, findUserById } from '../db.js'
 import { authMiddleware } from '../middleware/auth.js'
 import { asyncHandler, AppError } from '../middleware/errors.js'
-import { validateBody } from '../middleware/validate.js'
+import { countryField, validateBody } from '../middleware/validate.js'
 import { containsBlockedContent } from '../lib/contentFilter.js'
 import { detectImageType, uploadAvatar } from '../services/storageService.js'
 import { writeAuditLog } from '../services/auditService.js'
 import { saveProfilePhotoRecord, syncProfileCompletion } from '../services/profileService.js'
 import { setUserVerification } from '../services/verificationService.js'
 import { getTasteStats } from '../services/filmService.js'
+import { setTasteCardPublic } from '../services/growthService.js'
 import { supabase } from '../supabaseClient.js'
+import { normalizeInterestedIn } from '../lib/datingEligibility.js'
+import { MAX_PROMPT_ANSWER, MAX_PROMPTS, PROFILE_PROMPTS, normalizePrompts } from '../lib/profilePrompts.js'
 
 const router = express.Router()
 
 const profileUpdateSchema = z.object({
   name: z.string().min(2).max(80).optional(),
   city: z.string().max(80).optional(),
-  country: z.string().min(2).max(80).optional(),
+  country: countryField.optional(),
   bio: z.string().max(280).optional(),
   age: z.coerce.number().int().min(18).max(100).optional(),
   hobbies: z.array(z.string()).optional(),
+  gender: z.enum(['male', 'female', 'nonbinary']).optional(),
+  interestedIn: z.array(z.enum(['male', 'female', 'nonbinary'])).min(1).max(3).optional(),
+  prompts: z
+    .array(z.object({ key: z.enum(Object.keys(PROFILE_PROMPTS)), answer: z.string().max(MAX_PROMPT_ANSWER) }))
+    .max(MAX_PROMPTS)
+    .optional(),
   discoveryPrefs: z
     .object({
       minAge: z.number().int().min(18).max(100).optional(),
       maxAge: z.number().int().min(18).max(100).optional(),
-      countries: z.array(z.string()).optional()
+      countries: z.array(z.string()).optional(),
+      // ReelMates Plus: only show people at or above this taste match (ignored without Plus).
+      minScore: z.number().int().min(0).max(95).optional()
     })
     .optional()
 })
@@ -50,8 +61,9 @@ router.put(
   authMiddleware,
   validateBody(profileUpdateSchema),
   asyncHandler(async (req, res) => {
-    const { name, city, country, bio, hobbies, age, discoveryPrefs } = req.body
-    if ([name, bio, city, country].some(containsBlockedContent)) {
+    const { name, city, country, bio, hobbies, age, discoveryPrefs, gender, interestedIn, prompts } = req.body
+    const promptAnswers = (prompts || []).map((p) => p.answer)
+    if ([name, bio, city, country, ...promptAnswers].some(containsBlockedContent)) {
       throw new AppError('Your profile text breaks our community rules.', 422, 'CONTENT_BLOCKED')
     }
     const updates = {}
@@ -63,6 +75,12 @@ router.put(
     if (age !== undefined) updates.age = age
     if (hobbies) updates.hobbies = hobbies
     if (discoveryPrefs) updates.discovery_prefs = discoveryPrefs
+    if (gender) updates.gender = gender
+    if (interestedIn || gender) {
+      const current = interestedIn ? null : await findUserById(req.user.id)
+      updates.interested_in = normalizeInterestedIn(interestedIn || current?.interested_in, gender || current?.gender)
+    }
+    if (prompts) updates.prompts = normalizePrompts(prompts)
     updates.last_active_at = new Date().toISOString()
 
     const row = await updateUserProfile(req.user.id, updates)
@@ -156,6 +174,16 @@ router.get(
   authMiddleware,
   asyncHandler(async (req, res) => {
     return res.json({ stats: await getTasteStats(req.user.id) })
+  })
+)
+
+// Turns the public taste card (/taste/<friend code>) on or off.
+router.put(
+  '/taste-card',
+  authMiddleware,
+  validateBody(z.object({ public: z.boolean() })),
+  asyncHandler(async (req, res) => {
+    return res.json(await setTasteCardPublic(req.user.id, req.body.public))
   })
 )
 

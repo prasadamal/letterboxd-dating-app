@@ -721,3 +721,31 @@ h1 { letter-spacing: -0.06em; }
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
 }
+
+/* Public taste card (/taste/:code) and signup "Show me" */
+.taste-card h1 { margin: 0.25rem 0 1rem; }
+.taste-favorite {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 105, 147, 0.3);
+  background: rgba(255, 105, 147, 0.08);
+}
+.taste-favorite span { color: var(--pink); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.taste-favorite strong { color: var(--text); font-size: 1.1rem; }
+.taste-chips { list-style: none; padding: 0; margin: 0.5rem 0 1rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.taste-chips li {
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(115, 224, 167, 0.35);
+  background: rgba(115, 224, 167, 0.1);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.taste-cta { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border); display: grid; gap: 0.75rem; }
+.taste-cta p { color: var(--soft); margin: 0; line-height: 1.5; }
+.taste-cta .primary-button { text-decoration: none; text-align: center; }
+.show-me { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.5rem 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; color: var(--soft); }
+.show-me legend { color: var(--muted); font-size: 0.8rem; padding: 0 0.25rem; }

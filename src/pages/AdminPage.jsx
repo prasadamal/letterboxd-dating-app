@@ -9,6 +9,8 @@ export default function AdminPage() {
   const [notice, setNotice] = useState('')
   const [platform, setPlatform] = useState(null)
   const [targets, setTargets] = useState({ male: '', female: '' })
+  const [region, setRegion] = useState({ target: '', open: '', lookup: '', result: null })
+  const [plusGrant, setPlusGrant] = useState({ userId: '', days: '30' })
   const [feedback, setFeedback] = useState([])
   const [feedbackStatus, setFeedbackStatus] = useState('new')
 
@@ -26,6 +28,28 @@ export default function AdminPage() {
     const data = await adminRequest('/platform', {}, key)
     setPlatform(data.platform)
     setTargets({ male: String(data.platform.maleTarget), female: String(data.platform.femaleTarget) })
+    setRegion((r) => ({ ...r, target: String(data.platform.countryTarget ?? 150), open: (data.platform.openCountries || []).join(', ') }))
+  }
+
+  async function lookupCountry() {
+    setError('')
+    try {
+      const data = await adminRequest(`/platform/country?name=${encodeURIComponent(region.lookup)}`)
+      setRegion((r) => ({ ...r, result: data.country }))
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
+  async function grantPlus(days) {
+    setError('')
+    setNotice('')
+    try {
+      await adminRequest(`/users/${plusGrant.userId.trim()}/plus`, { method: 'PATCH', body: JSON.stringify({ days }) })
+      setNotice(days ? `Plus given for ${days} days.` : 'Plus removed.')
+    } catch (err) {
+      setError(err.message)
+    }
   }
 
   async function loadFeedback(key = adminKey, status = feedbackStatus) {
@@ -179,6 +203,69 @@ export default function AdminPage() {
                 Open dating now
               </button>
             )}
+          </div>
+
+          <h2>Regional launch</h2>
+          <p className="hero-text">
+            A country opens by itself when it has this many men and women. Countries listed below are open now regardless.
+            Before the global launch, people only meet others in their own country.
+          </p>
+          <div className="action-row">
+            <input
+              value={region.target}
+              onChange={(e) => setRegion({ ...region, target: e.target.value })}
+              placeholder="Per-country target"
+              inputMode="numeric"
+            />
+            <input
+              value={region.open}
+              onChange={(e) => setRegion({ ...region, open: e.target.value })}
+              placeholder="Open countries, comma separated"
+            />
+            <button
+              className="ghost-button"
+              type="button"
+              onClick={() =>
+                updatePlatform(
+                  {
+                    countryTarget: Number(region.target),
+                    openCountries: region.open.split(',').map((c) => c.trim()).filter(Boolean)
+                  },
+                  'Regional launch saved.'
+                )
+              }
+            >
+              Save regions
+            </button>
+          </div>
+          <div className="action-row">
+            <input value={region.lookup} onChange={(e) => setRegion({ ...region, lookup: e.target.value })} placeholder="Check a country" />
+            <button className="ghost-button" type="button" onClick={lookupCountry} disabled={!region.lookup.trim()}>
+              Check
+            </button>
+            {region.result && (
+              <span className="hero-text">
+                {region.result.name}: {region.result.maleCount}/{region.result.target} men · {region.result.femaleCount}/
+                {region.result.target} women · {region.result.open ? 'open' : 'closed'}
+              </span>
+            )}
+          </div>
+
+          <h2>ReelMates Plus</h2>
+          <div className="action-row">
+            <input value={plusGrant.userId} onChange={(e) => setPlusGrant({ ...plusGrant, userId: e.target.value })} placeholder="User id" />
+            <input
+              value={plusGrant.days}
+              onChange={(e) => setPlusGrant({ ...plusGrant, days: e.target.value })}
+              placeholder="Days"
+              inputMode="numeric"
+            />
+            <button className="ghost-button" type="button" disabled={!plusGrant.userId.trim()} onClick={() => grantPlus(Number(plusGrant.days))}>
+              Give Plus
+            </button>
+            <button className="ghost-button" type="button" disabled={!plusGrant.userId.trim()} onClick={() => grantPlus(null)}>
+              Remove Plus
+            </button>
           </div>
         </section>
       )}
