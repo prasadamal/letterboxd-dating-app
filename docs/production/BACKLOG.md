@@ -16,8 +16,8 @@
 
 - [ ] Third-party ID verification (Persona/Onfido)
 - [ ] Plus purchase screen (RevenueCat `react-native-purchases`, products in App Store Connect / Play Console); backend is ready
-- [ ] Apply migrations `20261005120000_inclusive_regions_plus.sql` and `20261006120000_dating_optin.sql` to moviematch
-  before deploying this API
+- [x] Apply migrations `20261005120000_inclusive_regions_plus.sql` and `20261006120000_dating_optin.sql` to moviematch
+  (done 6 October 2026)
 - [ ] Postgres Realtime RLS policies for direct client reads (broadcast used today)
 - [ ] Detox suite in CI with emulator farm
 

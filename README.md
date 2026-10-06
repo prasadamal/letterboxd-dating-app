@@ -187,11 +187,7 @@ All in `supabase/migrations/`, applied in order:
 
 - `20261002120000_reelmates_dating_launch_v1.sql` … `20261003220000_launch_readiness_v1.sql` (launch build)
 - `20261004120000_favorite_film_and_friends.sql`, `20261004130000_collections_feedback_stats.sql` (v1.3)
-- `20261005120000_inclusive_regions_plus.sql` — **not yet applied to moviematch**
-- `20261006120000_dating_optin.sql` — **not yet applied to moviematch** (apply after the one above)
-
-Apply the last two before deploying this API: it reads `users.dating_enabled`, `interested_in`, the streak columns and
-`plus_until`.
+- `20261005120000_inclusive_regions_plus.sql`, `20261006120000_dating_optin.sql` (applied to moviematch on 6 October 2026)
 
 RLS is enabled on every `public` table with no policies, so client keys get no table access. The API must use
 `SUPABASE_SERVICE_ROLE_KEY`.

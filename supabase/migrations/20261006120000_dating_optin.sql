@@ -1,5 +1,5 @@
 -- "Here for": films & friends only, or dating too. Apply after 20261005120000_inclusive_regions_plus.sql.
--- Not yet applied to moviematch.
+-- Applied to moviematch on 2026-10-06 (migration "dating_optin").
 
 -- Existing members signed up for dating, so they stay in. New members choose at signup.
 ALTER TABLE public.users ADD COLUMN IF NOT EXISTS dating_enabled boolean NOT NULL DEFAULT true;
@@ -29,8 +29,8 @@ BEGIN
 END;
 $function$;
 
-DROP TRIGGER IF EXISTS users_refresh_launch ON public.users;
-CREATE TRIGGER users_refresh_launch
+-- Re-run the launch check when someone turns dating on or off.
+CREATE OR REPLACE TRIGGER users_refresh_launch
   AFTER INSERT OR UPDATE OF gender, deleted_at, dating_enabled ON public.users
   FOR EACH ROW EXECUTE FUNCTION public.users_after_change_launch();
 
