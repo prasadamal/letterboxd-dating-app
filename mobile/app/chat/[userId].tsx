@@ -232,7 +232,7 @@ export default function ChatScreen() {
       )}
 
       {!closed && !sentAny && starters.length > 0 && (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.starters} keyboardShouldPersistTaps="handled">
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.startersScroll} contentContainerStyle={styles.starters} keyboardShouldPersistTaps="handled">
           {starters.map((idea) => (
             <Pressable key={idea} style={styles.starter} onPress={() => setText(idea)} accessibilityRole="button" accessibilityLabel={`Use: ${idea}`}>
               <Text style={styles.starterText}>{idea}</Text>
@@ -251,6 +251,8 @@ export default function ChatScreen() {
             placeholderTextColor={colors.faint}
             maxLength={2000}
             multiline
+            // Web renders a two-row textarea by default; native grows from one line on its own.
+            {...(Platform.OS === 'web' ? { numberOfLines: 1 } : {})}
           />
           <Pressable
             onPress={send}
@@ -296,7 +298,9 @@ const styles = StyleSheet.create({
   read: { color: colors.faint, fontSize: 11, marginTop: 3, marginRight: 4 },
   notice: { marginHorizontal: 16, marginBottom: 8, backgroundColor: 'rgba(212,255,63,0.08)', borderColor: 'rgba(212,255,63,0.3)', borderWidth: 1, borderRadius: radii.md, padding: 10 },
   noticeText: { color: colors.soft, fontSize: 13, textAlign: 'center' },
-  starters: { gap: 8, paddingHorizontal: 16, paddingBottom: 10 },
+  // A ScrollView grows to fill free space by default; the starters row should only be as tall as its chips.
+  startersScroll: { flexGrow: 0, flexShrink: 0 },
+  starters: { gap: 8, paddingHorizontal: 16, paddingBottom: 10, alignItems: 'flex-start' },
   starter: { maxWidth: 260, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.borderStrong, borderRadius: radii.lg, paddingHorizontal: 14, paddingVertical: 10 },
   starterText: { color: colors.text, fontSize: 14, lineHeight: 19 },
   composer: { flexDirection: 'row', alignItems: 'flex-end', gap: 10, paddingHorizontal: 12, paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.border },

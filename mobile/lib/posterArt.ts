@@ -35,9 +35,13 @@ export function posterArt(film: { id: number; genres?: string[] }) {
   return { colors, ...direction }
 }
 
-// Title size that fits a poster of the given width.
-export function posterTitleSize(title: string, width: number) {
+// Title size for a poster of the given width: shrinks for long titles, and never so big that the longest
+// word has to break mid-word (display glyphs average ~0.62em wide).
+export function posterTitleSize(title: string, width: number, padding = 20) {
+  const inner = Math.max(40, width - padding * 2)
+  const longestWord = Math.max(1, ...title.split(/\s+/).map((word) => word.length))
+  const byWord = inner / (longestWord * 0.62)
   const base = width / 6.2
   const factor = title.length > 34 ? 0.55 : title.length > 22 ? 0.68 : title.length > 12 ? 0.82 : 1
-  return Math.round(Math.max(18, base * factor))
+  return Math.round(Math.max(11, Math.min(base * factor, byWord)))
 }

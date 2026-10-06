@@ -79,12 +79,13 @@ export async function sendEmail({ to, subject, html }) {
   return { queued: true }
 }
 
+// Dating needs 80: a name, a photo and a country get you there; a bio or prompt and a verified email are extras.
 export function computeProfileCompletion(user) {
   let score = 0
   if (user?.display_name) score += 20
-  if (user?.bio) score += 20
-  if (user?.country) score += 15
-  if (user?.photo_url) score += 25
-  if (user?.email_verified_at) score += 20
+  if (user?.photo_url) score += 40
+  if (user?.country) score += 20
+  if (user?.bio || (Array.isArray(user?.prompts) && user.prompts.length)) score += 10
+  if (user?.email_verified_at) score += 10
   return Math.min(100, score)
 }

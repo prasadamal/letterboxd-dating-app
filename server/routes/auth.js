@@ -62,7 +62,7 @@ router.post(
       age,
       country,
       city: city || country,
-      bio: bio || 'Connecting through the world of movies.',
+      bio: bio?.trim() || '',
       hobbies: ['Cinema'],
       gender,
       interested_in: normalizeInterestedIn(interestedIn, gender),

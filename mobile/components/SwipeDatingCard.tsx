@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, type ReactNode } from 'react'
 import { Animated, PanResponder, StyleSheet, Text, useWindowDimensions } from 'react-native'
 import { haptic } from '../lib/haptics'
 import { colors, fonts } from '../lib/theme'
@@ -10,11 +10,12 @@ type Props = {
   onSwipe: (action: 'like' | 'pass') => void
   // The page scrolls vertically; it is locked while a horizontal drag is in progress.
   onDragChange?: (dragging: boolean) => void
+  actions?: ReactNode
 }
 
 const SWIPE_THRESHOLD = 110
 
-export function SwipeDatingCard({ profile, onSwipe, onDragChange }: Props) {
+export function SwipeDatingCard({ profile, onSwipe, onDragChange, actions }: Props) {
   const { width } = useWindowDimensions()
   const position = useRef(new Animated.ValueXY()).current
   const latest = useRef({ onSwipe, onDragChange, width })
@@ -55,7 +56,7 @@ export function SwipeDatingCard({ profile, onSwipe, onDragChange }: Props) {
 
   return (
     <Animated.View style={{ transform: [...position.getTranslateTransform(), { rotate }] }} {...responder.panHandlers}>
-      <TasteProfileCard profile={profile} />
+      <TasteProfileCard profile={profile} actions={actions} />
       <Animated.View pointerEvents="none" style={[styles.stamp, styles.like, { opacity: likeOpacity }]}>
         <Text style={[styles.stampText, { color: colors.lime }]}>LIKE</Text>
       </Animated.View>

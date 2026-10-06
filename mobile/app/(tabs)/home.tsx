@@ -5,7 +5,7 @@ import { ActivityIndicator, Pressable, RefreshControl, ScrollView, Share, StyleS
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { DailyResultsCard } from '../../components/DailyResultsCard'
 import { FilmSwipeDeck } from '../../components/FilmSwipeDeck'
-import { Avatar, Button, Card, MatchPill, PersonalityBadge, ProgressBar, SectionTitle } from '../../components/ui'
+import { Avatar, Button, Card, MatchPill, ProgressBar, SectionTitle } from '../../components/ui'
 import { apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
 import { haptic } from '../../lib/haptics'
@@ -174,10 +174,17 @@ export default function TodayScreen() {
               accessibilityRole="button"
               accessibilityLabel={`${friend.name}, ${friend.score}% match`}
             >
-              <Avatar uri={friend.photo_url} name={friend.name} size={64} ring />
+              <View>
+                <Avatar uri={friend.photo_url} name={friend.name} size={64} ring />
+                {/* Their film personality as a sticker on the avatar. */}
+                {friend.personality && (
+                  <View style={styles.sticker} accessibilityLabel={friend.personality.name}>
+                    <Text style={styles.stickerText}>{friend.personality.emoji}</Text>
+                  </View>
+                )}
+              </View>
               <Text style={styles.personName} numberOfLines={1}>{friend.name}</Text>
               <MatchPill score={friend.score} size="sm" />
-              <PersonalityBadge personality={friend.personality} size="sm" />
             </Pressable>
           ))}
           <Pressable style={[styles.person, styles.addPerson]} onPress={() => router.push('/friends')} accessibilityRole="button" accessibilityLabel="Add a friend">
@@ -258,6 +265,8 @@ const styles = StyleSheet.create({
   peopleRow: { gap: 12, paddingRight: 20 },
   person: { width: 96, alignItems: 'center', gap: 6, backgroundColor: colors.card, borderRadius: radii.lg, borderWidth: 1, borderColor: colors.border, paddingVertical: 14, paddingHorizontal: 6 },
   personName: { fontFamily: fonts.bold, color: colors.text, fontSize: 14, maxWidth: 84 },
+  sticker: { position: 'absolute', right: -4, bottom: -2, width: 28, height: 28, borderRadius: 14, backgroundColor: colors.cardHigh, borderWidth: 2, borderColor: colors.card, alignItems: 'center', justifyContent: 'center' },
+  stickerText: { fontSize: 14 },
   addPerson: { justifyContent: 'center', borderStyle: 'dashed' },
   addCircle: { width: 64, height: 64, borderRadius: 32, borderWidth: 1.5, borderColor: colors.lime, alignItems: 'center', justifyContent: 'center', borderStyle: 'dashed' },
   inviteRow: { flexDirection: 'row', gap: 8 },

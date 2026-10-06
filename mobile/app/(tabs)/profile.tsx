@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react'
 import { Alert, Pressable, RefreshControl, ScrollView, Share, StyleSheet, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { TasteStatsCard } from '../../components/TasteStatsCard'
-import { Avatar, Button, Card, IconButton, PersonalityBadge, PersonalityCard, Poster, SectionTitle, StatTile } from '../../components/ui'
+import { Avatar, Button, Card, IconButton, PersonalityCard, Poster, SectionTitle, StatTile } from '../../components/ui'
 import { apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
 import { WEB_URL, genderLabel } from '../../lib/profileOptions'
@@ -85,7 +85,6 @@ export default function YouScreen() {
         </Pressable>
         <Text style={[type.h1, { textAlign: 'center' }]}>{user.name}</Text>
         {!!place && <Text style={type.small}>{place}</Text>}
-        {personality?.ready && <PersonalityBadge personality={personality} />}
       </View>
 
       {personality && <PersonalityCard personality={personality} />}

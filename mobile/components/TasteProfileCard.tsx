@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { colors, fonts, radii, type } from '../lib/theme'
 import type { DatingProfile } from '../lib/types'
@@ -26,6 +26,8 @@ type Props = {
     | 'verification_status'
   >
   compact?: boolean
+  // Deck buttons, drawn on the photo's bottom edge so they never cover the details.
+  actions?: ReactNode
 }
 
 const FAVORITE_NOTE = {
@@ -53,14 +55,14 @@ function FilmTags({ titles, tone, max }: { titles: string[]; tone: 'pink' | 'red
 }
 
 // Why you two match: films in common first, then the favourite, then their own words.
-function TasteDetails({ profile, compact }: Props) {
+function TasteDetails({ profile, compact, actions }: Props) {
   const loved = profile.sharedLoved || []
   const hated = profile.sharedHated || []
   const common = profile.sharedCount ?? loved.length + hated.length
   const note = profile.favorite ? FAVORITE_NOTE[profile.favorite.relation] : null
   const max = compact ? 2 : 6
   return (
-    <View style={[styles.details, compact && styles.detailsCompact]}>
+    <View style={[styles.details, compact && styles.detailsCompact, Boolean(actions) && { paddingTop: 52 }]}>
       <Text style={type.label}>{common ? `${common} films in common` : 'No films in common yet'}</Text>
       {loved.length > 0 && <FilmTags titles={loved} tone="pink" max={max} />}
       {hated.length > 0 && <FilmTags titles={hated} tone="red" max={compact ? 1 : 4} />}
@@ -88,7 +90,7 @@ function TasteDetails({ profile, compact }: Props) {
   )
 }
 
-export function TasteProfileCard({ profile, compact = false }: Props) {
+export function TasteProfileCard({ profile, compact = false, actions }: Props) {
   const { height } = useWindowDimensions()
   const place = placeOf(profile)
 
@@ -115,7 +117,7 @@ export function TasteProfileCard({ profile, compact = false }: Props) {
   const photoHeight = Math.round(Math.max(340, height * 0.56))
   return (
     <View style={styles.card}>
-      <View style={{ height: photoHeight }}>
+      <View style={{ height: photoHeight, zIndex: 2 }}>
         <PhotoFill uri={profile.photo_url} name={profile.name} />
         <LinearGradient colors={['rgba(8,8,11,0)', 'rgba(8,8,11,0.25)', 'rgba(8,8,11,0.92)']} locations={[0.35, 0.6, 1]} style={StyleSheet.absoluteFill} />
         <View style={styles.topRow}>
@@ -127,7 +129,7 @@ export function TasteProfileCard({ profile, compact = false }: Props) {
             </View>
           )}
         </View>
-        <View style={styles.photoText}>
+        <View style={[styles.photoText, Boolean(actions) && { bottom: 50 }]}>
           <PersonalityBadge personality={profile.personality} />
           <Text style={styles.name} numberOfLines={1}>
             {profile.name}
@@ -140,8 +142,9 @@ export function TasteProfileCard({ profile, compact = false }: Props) {
             </View>
           )}
         </View>
+        {actions && <View style={styles.actions}>{actions}</View>}
       </View>
-      <TasteDetails profile={profile} />
+      <TasteDetails profile={profile} actions={actions} />
     </View>
   )
 }
@@ -170,6 +173,7 @@ const styles = StyleSheet.create({
   placeRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: -4 },
   place: { color: 'rgba(255,255,255,0.88)', fontSize: 15 },
   monogram: { alignItems: 'center', justifyContent: 'center' },
+  actions: { position: 'absolute', left: 0, right: 0, bottom: -34, flexDirection: 'row', justifyContent: 'center', gap: 36, zIndex: 10, elevation: 10 },
   monogramText: { fontFamily: fonts.display, color: 'rgba(255,255,255,0.9)', fontSize: 140 },
   details: { padding: 18, gap: 12 },
   detailsCompact: { padding: 0, gap: 8 },

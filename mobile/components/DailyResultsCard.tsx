@@ -6,10 +6,10 @@ import { colors, fonts, radii, type } from '../lib/theme'
 import type { DailyResults } from '../lib/types'
 import { Button, Poster } from './ui'
 
-const VOTE_ICON = {
-  love: { name: 'heart' as const, color: colors.pink },
-  hate: { name: 'close' as const, color: colors.red },
-  skip: { name: 'eye-off' as const, color: colors.cyan }
+const VOTE = {
+  love: { icon: 'heart' as const, color: colors.pink, label: 'You loved it' },
+  hate: { icon: 'close' as const, color: colors.red, label: "You didn't like it" },
+  skip: { icon: 'eye-off' as const, color: colors.cyan, label: "You haven't seen it" }
 }
 
 // Time until the next UTC midnight, when everyone's new films arrive.
@@ -21,6 +21,7 @@ function untilNextDrop(now = new Date()) {
   return h ? `${h}h ${m}m` : `${m}m`
 }
 
+// Today's films as a receipt: your verdict, the film, and how many people liked it.
 export function DailyResultsCard({ results }: { results: DailyResults }) {
   const [countdown, setCountdown] = useState(untilNextDrop())
   useEffect(() => {
@@ -32,17 +33,7 @@ export function DailyResultsCard({ results }: { results: DailyResults }) {
 
   return (
     <View style={styles.card}>
-      <View style={styles.headRow}>
-        <View>
-          <Text style={type.label}>Daily #{results.number}</Text>
-          <Text style={[type.h2, { marginTop: 2 }]}>{results.complete ? "Today's verdicts are in" : 'Your verdicts so far'}</Text>
-        </View>
-        {results.streak.current > 0 && (
-          <View style={styles.streak}>
-            <Text style={styles.streakText}>🔥 {results.streak.current}</Text>
-          </View>
-        )}
-      </View>
+      <Text style={type.h2}>{results.complete ? "Today's verdicts are in" : 'Your verdicts so far'}</Text>
 
       {agreement !== null && (
         <View style={styles.agreeRow}>
@@ -54,23 +45,30 @@ export function DailyResultsCard({ results }: { results: DailyResults }) {
         </View>
       )}
 
-      <View style={styles.grid}>
+      <View style={styles.list}>
         {results.films.map((film) => {
-          const vote = film.myRating ? VOTE_ICON[film.myRating] : null
+          const vote = film.myRating ? VOTE[film.myRating] : null
+          const pct = film.likedPercent
           return (
-            <View key={film.id} style={styles.tile} accessible accessibilityLabel={`${film.title}: ${film.likedPercent ?? 0}% liked it`}>
-              <Poster film={film} width={56} height={78} variant="thumb" />
-              {vote && (
-                <View style={[styles.vote, { backgroundColor: vote.color }]}>
-                  <Ionicons name={vote.name} size={11} color="#fff" />
+            <View key={film.id} style={styles.row} accessible accessibilityLabel={`${film.title}. ${vote?.label ?? 'Not rated'}. ${pct ?? 0}% liked it.`}>
+              <Poster film={film} width={30} height={40} variant="thumb" />
+              <View style={{ flex: 1, gap: 4 }}>
+                <Text style={styles.title} numberOfLines={1}>
+                  {film.title}
+                </Text>
+                <View style={styles.barTrack}>
+                  <View style={[styles.barFill, { width: `${pct ?? 0}%` }]} />
                 </View>
-              )}
-              <Text style={styles.tilePct}>{film.likedPercent == null ? '–' : `${film.likedPercent}%`}</Text>
+              </View>
+              <Text style={styles.pct}>{pct == null ? '–' : `${pct}%`}</Text>
+              <View style={[styles.vote, { backgroundColor: vote ? vote.color : colors.cardHigh }]}>
+                {vote && <Ionicons name={vote.icon} size={13} color="#fff" />}
+              </View>
             </View>
           )
         })}
       </View>
-      <Text style={styles.gridHint}>% of everyone who liked each film</Text>
+      <Text style={styles.hint}>Bars show how many people liked each film</Text>
 
       {(results.mostDivisive || results.crowdFavourite) && (
         <View style={styles.facts}>
@@ -102,16 +100,16 @@ export function DailyResultsCard({ results }: { results: DailyResults }) {
 
 const styles = StyleSheet.create({
   card: { backgroundColor: colors.card, borderRadius: radii.xl, borderWidth: 1, borderColor: colors.border, padding: 18, gap: 14 },
-  headRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 },
-  streak: { backgroundColor: 'rgba(255,138,61,0.16)', borderRadius: radii.pill, paddingHorizontal: 12, paddingVertical: 6 },
-  streakText: { fontFamily: fonts.bold, color: colors.orange, fontSize: 15 },
   agreeRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   agreeValue: { fontFamily: fonts.display, fontSize: 40, color: colors.lime, letterSpacing: -1.5 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, justifyContent: 'space-between' },
-  tile: { width: '18%', alignItems: 'center', gap: 4 },
-  vote: { position: 'absolute', top: -4, right: -2, width: 20, height: 20, borderRadius: 10, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.card },
-  tilePct: { fontFamily: fonts.semi, color: colors.soft, fontSize: 12 },
-  gridHint: { color: colors.faint, fontSize: 11, textAlign: 'center', marginTop: -6 },
+  list: { gap: 10 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  title: { fontFamily: fonts.semi, color: colors.text, fontSize: 14 },
+  barTrack: { height: 4, borderRadius: 2, backgroundColor: 'rgba(255,255,255,0.08)', overflow: 'hidden' },
+  barFill: { height: 4, borderRadius: 2, backgroundColor: colors.lime },
+  pct: { fontFamily: fonts.bold, color: colors.soft, fontSize: 13, width: 40, textAlign: 'right' },
+  vote: { width: 24, height: 24, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  hint: { color: colors.faint, fontSize: 11, textAlign: 'center', marginTop: -4 },
   facts: { gap: 6 },
   fact: { color: colors.muted, fontSize: 14, lineHeight: 20 },
   factStrong: { color: colors.text, fontWeight: '700' },

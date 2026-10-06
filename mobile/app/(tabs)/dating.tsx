@@ -105,7 +105,7 @@ export default function MatchScreen() {
       title="Match"
       subtitle={
         open && datingOn && meta
-          ? `${meta.remainingInPool ?? 0} people in your deck${platform?.regionOnly && platform.country ? ` · ${platform.country.name}` : ''}`
+          ? `${meta.remainingInPool ?? 0} ${meta.remainingInPool === 1 ? 'person' : 'people'} in your deck${platform?.regionOnly && platform.country ? ` · ${platform.country.name}` : ''}`
           : 'Dates ranked by film taste'
       }
       right={
@@ -190,12 +190,23 @@ export default function MatchScreen() {
 
   return (
     <View style={styles.screen}>
-      <ScrollView scrollEnabled={!dragging} contentContainerStyle={{ paddingBottom: 140 }}>
+      <ScrollView scrollEnabled={!dragging} contentContainerStyle={{ paddingBottom: 40 }}>
         {header}
         <View style={styles.body}>
           {profile ? (
             <>
-              <SwipeDatingCard key={profile.id} profile={profile} onSwipe={swipe} onDragChange={setDragging} />
+              <SwipeDatingCard
+                key={profile.id}
+                profile={profile}
+                onSwipe={swipe}
+                onDragChange={setDragging}
+                actions={
+                  <>
+                    <IconButton icon="close" size={68} color={colors.red} background={colors.card} accessibilityLabel={`Pass on ${profile.name}`} onPress={() => swipe('pass')} />
+                    <IconButton icon="heart" size={68} color="#fff" background={colors.pink} border={colors.pink} accessibilityLabel={`Like ${profile.name}`} onPress={() => swipe('like')} />
+                  </>
+                }
+              />
               <Pressable onPress={() => setReporting(true)} accessibilityRole="button" style={styles.reportBtn}>
                 <Text style={styles.reportText}>Report or block {profile.name}</Text>
               </Pressable>
@@ -209,13 +220,6 @@ export default function MatchScreen() {
           {!!message && profile && <Text style={styles.error}>{message}</Text>}
         </View>
       </ScrollView>
-
-      {profile && (
-        <View style={[styles.actionBar, { bottom: 16 }]}>
-          <IconButton icon="close" size={68} color={colors.red} background={colors.card} accessibilityLabel={`Pass on ${profile.name}`} onPress={() => swipe('pass')} />
-          <IconButton icon="heart" size={68} color="#fff" background={colors.pink} border={colors.pink} accessibilityLabel={`Like ${profile.name}`} onPress={() => swipe('like')} />
-        </View>
-      )}
 
       {profile && (
         <ReportSheet
@@ -256,6 +260,5 @@ const styles = StyleSheet.create({
   pct: { fontFamily: fonts.bold, color: colors.lime, fontSize: 15, marginTop: -4 },
   reportBtn: { alignSelf: 'center', padding: 8 },
   reportText: { color: colors.muted, fontSize: 13, textDecorationLine: 'underline' },
-  actionBar: { position: 'absolute', left: 0, right: 0, flexDirection: 'row', justifyContent: 'center', gap: 40 },
   error: { color: colors.red, textAlign: 'center' }
 })

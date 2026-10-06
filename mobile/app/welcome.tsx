@@ -57,14 +57,18 @@ export default function Welcome() {
   const router = useRouter()
   const insets = useSafeAreaInsets()
   const { height } = useWindowDimensions()
+  const wallHeight = Math.round(Math.min(height * 0.5, 3 * (POSTER_H + GAP) + 60))
 
   return (
     <View style={styles.screen}>
-      <View style={[styles.wall, { height: Math.min(height * 0.58, 3 * (POSTER_H + GAP) + 40) }]} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-        {ROWS.map((films, i) => (
-          <PosterRow key={i} films={films} reverse={i % 2 === 1} duration={38000 + i * 7000} />
-        ))}
-        <LinearGradient colors={['rgba(8,8,11,0)', colors.bg]} style={styles.fade} />
+      {/* The clip keeps a straight bottom edge under the tilted wall; the fade sits on top, untilted. */}
+      <View style={[styles.wallClip, { height: wallHeight }]} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+        <View style={styles.wall}>
+          {ROWS.map((films, i) => (
+            <PosterRow key={i} films={films} reverse={i % 2 === 1} duration={38000 + i * 7000} />
+          ))}
+        </View>
+        <LinearGradient colors={['rgba(8,8,11,0)', 'rgba(8,8,11,0.85)', colors.bg]} locations={[0, 0.65, 1]} style={[styles.fade, { height: wallHeight * 0.55 }]} />
       </View>
 
       <View style={[styles.content, { paddingBottom: insets.bottom + 24 }]}>
@@ -87,10 +91,11 @@ export default function Welcome() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  wall: { overflow: 'hidden', paddingTop: 54, gap: GAP, transform: [{ rotate: '-6deg' }, { scale: 1.12 }] },
+  wallClip: { overflow: 'hidden' },
+  wall: { paddingTop: 54, gap: GAP, transform: [{ rotate: '-6deg' }, { scale: 1.12 }] },
   row: { flexDirection: 'row', gap: GAP },
   wallPoster: { borderRadius: 18, padding: 12 },
-  fade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: '55%' },
+  fade: { position: 'absolute', left: 0, right: 0, bottom: 0 },
   content: { flex: 1, justifyContent: 'flex-end', paddingHorizontal: 24, gap: 14 },
   logoRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 4 },
   logoMark: { width: 34, height: 34, borderRadius: 10, backgroundColor: colors.lime, alignItems: 'center', justifyContent: 'center' },

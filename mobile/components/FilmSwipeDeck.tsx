@@ -14,20 +14,22 @@ type Props = {
 const SWIPE_X = 110
 const SWIPE_Y = 120
 
-// What the crowd thought, shown right after you vote (everyone gets the same films each day).
+// What the crowd thought, shown right after you vote (everyone gets the same films each day). It names the
+// film because it appears over the next card.
 export function revealText(movie: Movie, reaction: Reaction) {
-  if (reaction === 'skip') return "👀 Haven't seen it. No problem, it doesn't count."
+  const title = movie.title.length > 28 ? `${movie.title.slice(0, 26)}…` : movie.title
+  if (reaction === 'skip') return `👀 Haven't seen ${title}? It won't count.`
   const pct = movie.community?.likedPercent
-  if (pct == null || !movie.community?.votes) return '🥇 First vote on this one today'
+  if (pct == null || !movie.community?.votes) return `🥇 First vote on ${title} today`
   if (reaction === 'love') {
-    if (pct >= 50) return `💚 ${pct}% loved it too`
-    if (pct < 35) return `🌶️ Hot take! Only ${pct}% liked it`
-    return `🤏 ${pct}% liked it. Split crowd`
+    if (pct >= 50) return `💚 ${pct}% loved ${title} too`
+    if (pct < 35) return `🌶️ Hot take! Only ${pct}% liked ${title}`
+    return `🤏 ${pct}% liked ${title}. Split crowd`
   }
   const passed = 100 - pct
-  if (passed >= 50) return `🤝 ${passed}% weren't feeling it either`
-  if (passed < 35) return `🌶️ Hot take! ${pct}% loved it`
-  return `🤏 ${passed}% passed too. Split crowd`
+  if (passed >= 50) return `🤝 ${passed}% weren't feeling ${title} either`
+  if (passed < 35) return `🌶️ Hot take! ${pct}% loved ${title}`
+  return `🤏 ${passed}% passed on ${title} too`
 }
 
 export function FilmSwipeDeck({ movies, total, onRate }: Props) {

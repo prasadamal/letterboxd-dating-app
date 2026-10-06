@@ -36,3 +36,6 @@ CREATE TRIGGER users_refresh_launch
 
 -- One spelling for science fiction (the catalog now says Sci-Fi everywhere).
 UPDATE public.movies SET genres = array_replace(genres, 'Science Fiction', 'Sci-Fi') WHERE 'Science Fiction' = ANY (genres);
+
+-- Signup used to fill in a generic bio; profiles no longer need one (see computeProfileCompletion).
+UPDATE public.users SET bio = '' WHERE bio = 'Connecting through the world of movies.';

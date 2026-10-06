@@ -60,7 +60,7 @@ export function PersonalityCard({ personality }: { personality: Personality }) {
 }
 
 const styles = StyleSheet.create({
-  badge: { borderRadius: radii.pill, paddingHorizontal: 12, paddingVertical: 6, alignSelf: 'flex-start' },
+  badge: { borderRadius: radii.pill, paddingHorizontal: 12, paddingVertical: 6, alignSelf: 'flex-start', maxWidth: '100%' },
   badgeSm: { paddingHorizontal: 9, paddingVertical: 4 },
   badgeText: { fontFamily: fonts.bold, color: '#fff', fontSize: 13 },
   badgeTextSm: { fontSize: 11 },
