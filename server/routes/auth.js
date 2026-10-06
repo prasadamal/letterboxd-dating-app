@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 import { createUser, ensureUserProfile, findUserByEmail, findUserById, getUserProfile, updateUserProfile } from '../db.js'
 import { signToken, authMiddleware } from '../middleware/auth.js'
-import { getPlatformStatus } from '../platformService.js'
+import { getPlatformStatusForUser } from '../platformService.js'
 import { applyReferralCode } from '../datingService.js'
 import { asyncHandler, AppError } from '../middleware/errors.js'
 import {
@@ -28,6 +28,7 @@ import { syncProfileCompletion } from '../services/profileService.js'
 import { authRateLimiter } from '../middleware/security.js'
 import { unregisterPushToken } from '../services/notificationService.js'
 import { containsBlockedContent } from '../lib/contentFilter.js'
+import { normalizeInterestedIn } from '../lib/datingEligibility.js'
 
 const router = express.Router()
 
@@ -43,7 +44,7 @@ router.post(
   credentialLimiter,
   validateBody(signupSchema),
   asyncHandler(async (req, res) => {
-    const { email, password, name, age, country, city, bio, gender, referralCode } = req.body
+    const { email, password, name, age, country, city, bio, gender, interestedIn, referralCode } = req.body
     if ([name, bio, city, country].some(containsBlockedContent)) {
       throw new AppError('Your profile text breaks our community rules.', 422, 'CONTENT_BLOCKED')
     }
@@ -63,6 +64,7 @@ router.post(
       bio: bio || 'Connecting through the world of movies.',
       hobbies: ['Cinema'],
       gender,
+      interested_in: normalizeInterestedIn(interestedIn, gender),
       terms_accepted_at: new Date().toISOString(),
       referral_code: referralCodeFromEmail(email),
       last_active_at: new Date().toISOString()
@@ -91,7 +93,7 @@ router.post(
     const { refreshToken, expiresAt } = await issueRefreshToken(row.id)
     await syncProfileCompletion(row.id)
     const user = await getUserProfile(row.id)
-    const platform = await getPlatformStatus()
+    const platform = await getPlatformStatusForUser(row)
     return res.status(201).json({ token, refreshToken, refreshExpiresAt: expiresAt, user: ensureUserProfile(user), platform })
   })
 )
@@ -117,7 +119,7 @@ router.post(
     const { refreshToken, expiresAt } = await issueRefreshToken(user.id)
     await syncProfileCompletion(user.id)
     const profile = await getUserProfile(user.id)
-    const platform = await getPlatformStatus()
+    const platform = await getPlatformStatusForUser(user)
     return res.json({ token, refreshToken, refreshExpiresAt: expiresAt, user: ensureUserProfile(profile), platform })
   })
 )
@@ -191,7 +193,7 @@ router.get('/me', asyncHandler(async (req, res) => {
     const decoded = jwt.verify(token, env.JWT_SECRET)
     const user = await getUserProfile(decoded.id)
     if (!user) throw new AppError('User not found', 404, 'NOT_FOUND')
-    const platform = await getPlatformStatus()
+    const platform = await getPlatformStatusForUser(user)
     return res.json({ user: ensureUserProfile(user), platform })
   } catch (error) {
     if (error instanceof AppError) throw error

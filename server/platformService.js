@@ -1,12 +1,16 @@
 import { supabase } from './supabaseClient.js'
 import { env } from './config/env.js'
+import { countryProgress, ilikeExact, normalizeCountry } from './lib/regionLaunch.js'
 
 // Every open app polls the launch status, so serve it from memory for a short while.
 const STATUS_TTL_MS = 15_000
 let cached = null
 
+const countryCache = new Map()
+
 export function invalidatePlatformStatus() {
   cached = null
+  countryCache.clear()
 }
 
 // Creates the settings row on an empty database. Never overwrites it: targets are changed from /admin,
@@ -24,11 +28,23 @@ export async function ensurePlatformSettings() {
   if (error) throw error
 }
 
-async function countUsers(gender) {
-  const { count, error } = await supabase
+async function countUsers(gender, country) {
+  let query = supabase
     .from('users')
     .select('id', { count: 'exact', head: true })
     .eq('gender', gender)
+    .is('deleted_at', null)
+  if (country !== undefined) query = query.ilike('country', ilikeExact(country))
+  const { count, error } = await query
+  if (error) throw error
+  return count || 0
+}
+
+async function countOthers() {
+  const { count, error } = await supabase
+    .from('users')
+    .select('id', { count: 'exact', head: true })
+    .in('gender', ['nonbinary', 'other'])
     .is('deleted_at', null)
   if (error) throw error
   return count || 0
@@ -49,7 +65,7 @@ async function loadPlatformStatus() {
     settings = await readSettings()
   }
 
-  const [maleCount, femaleCount] = await Promise.all([countUsers('male'), countUsers('female')])
+  const [maleCount, femaleCount, otherCount] = await Promise.all([countUsers('male'), countUsers('female'), countOthers()])
   const maleTarget = settings?.male_target ?? env.LAUNCH_MALE_TARGET
   const femaleTarget = settings?.female_target ?? env.LAUNCH_FEMALE_TARGET
   const forced = env.FORCE_DATING_OPEN
@@ -58,10 +74,12 @@ async function loadPlatformStatus() {
   return {
     maleCount,
     femaleCount,
-    otherCount: 0,
+    otherCount,
     maleTarget,
     femaleTarget,
-    totalRegistered: maleCount + femaleCount,
+    totalRegistered: maleCount + femaleCount + otherCount,
+    countryTarget: settings?.country_target ?? 150,
+    openCountries: settings?.open_countries || [],
     datingLaunched,
     datingLaunchedAt: settings?.dating_launched_at || null,
     forcedOpenLocally: forced,
@@ -79,8 +97,45 @@ export async function getPlatformStatus({ fresh = false } = {}) {
   return value
 }
 
-export async function assertDatingLaunched() {
+async function loadCountryProgress(country, status) {
+  const [maleCount, femaleCount] = await Promise.all([countUsers('male', country), countUsers('female', country)])
+  return countryProgress({
+    country,
+    maleCount,
+    femaleCount,
+    countryTarget: status.countryTarget,
+    openCountries: status.openCountries
+  })
+}
+
+export async function getCountryProgress(country) {
+  const key = normalizeCountry(country)
+  if (!key) return null
   const status = await getPlatformStatus()
+  const hit = countryCache.get(key)
+  if (hit && hit.expires > Date.now()) return hit.value
+  const value = await loadCountryProgress(country, status)
+  countryCache.set(key, { value, expires: Date.now() + STATUS_TTL_MS })
+  return value
+}
+
+// Status as one member sees it: dating is open for them when it is open everywhere or in their country.
+// `regionOnly` means the deck is limited to people in the same country.
+export async function getPlatformStatusForUser(user) {
+  const status = await getPlatformStatus()
+  const country = user?.country ? await getCountryProgress(user.country) : null
+  const regionOpen = Boolean(country?.open)
+  return {
+    ...status,
+    globalLaunched: status.datingLaunched,
+    datingLaunched: status.datingLaunched || regionOpen,
+    regionOnly: !status.datingLaunched && regionOpen,
+    country
+  }
+}
+
+export async function assertDatingLaunched(user) {
+  const status = user ? await getPlatformStatusForUser(user) : await getPlatformStatus()
   if (!status.datingLaunched) {
     const error = new Error('Dating unlocks when we reach balanced registration targets.')
     error.code = 'DATING_LOCKED'
@@ -90,10 +145,14 @@ export async function assertDatingLaunched() {
 }
 
 // Admin control: change targets and/or open or close dating by hand (e.g. for app-store reviewers).
-export async function updatePlatformSettings({ maleTarget, femaleTarget, datingOpen }) {
+export async function updatePlatformSettings({ maleTarget, femaleTarget, datingOpen, countryTarget, openCountries }) {
   const updates = { updated_at: new Date().toISOString() }
   if (maleTarget !== undefined) updates.male_target = maleTarget
   if (femaleTarget !== undefined) updates.female_target = femaleTarget
+  if (countryTarget !== undefined) updates.country_target = countryTarget
+  if (openCountries !== undefined) {
+    updates.open_countries = [...new Set(openCountries.map((c) => c.trim().replace(/\s+/g, ' ')).filter(Boolean))]
+  }
   if (datingOpen === true) updates.dating_launched_at = new Date().toISOString()
   if (datingOpen === false) updates.dating_launched_at = null
 

@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import { env } from '../config/env.js'
 
-function sameSecret(given, expected) {
+export function sameSecret(given, expected) {
   const a = Buffer.from(String(given || ''))
   const b = Buffer.from(expected)
   return a.length === b.length && crypto.timingSafeEqual(a, b)

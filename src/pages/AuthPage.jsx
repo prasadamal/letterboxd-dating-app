@@ -2,6 +2,19 @@ import { useState } from 'react'
 import { apiFetch, setSession } from '../lib/api.js'
 import { BrandMark } from '../components/BrandMark.jsx'
 
+const SHOW_ME = [
+  ['female', 'Women'],
+  ['male', 'Men'],
+  ['nonbinary', 'Non-binary people']
+]
+
+// Mirrors server/lib/datingEligibility.js defaultInterestedIn.
+function defaultInterestedIn(gender) {
+  if (gender === 'male') return ['female']
+  if (gender === 'female') return ['male']
+  return ['male', 'female', 'nonbinary']
+}
+
 export default function AuthPage({ onAuth }) {
   const [mode, setMode] = useState('login')
   const [notice, setNotice] = useState('')
@@ -14,6 +27,7 @@ export default function AuthPage({ onAuth }) {
     city: 'Brooklyn',
     country: 'United States',
     gender: 'female',
+    interestedIn: ['male'],
     bio: 'I like thoughtful cinema, slow-burn romance, and good conversations.',
     termsAccepted: false
   })
@@ -35,6 +49,7 @@ export default function AuthPage({ onAuth }) {
               country: form.country,
               city: form.city,
               gender: form.gender,
+              interestedIn: form.interestedIn,
               bio: form.bio,
               termsAccepted: form.termsAccepted === true
             }
@@ -106,10 +121,35 @@ export default function AuthPage({ onAuth }) {
               <input value={form.age} onChange={(e) => setForm({ ...form, age: e.target.value })} placeholder="Age" type="number" />
               <input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="City" />
               <input value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} placeholder="Country" required />
-              <select value={form.gender} onChange={(e) => setForm({ ...form, gender: e.target.value })}>
-                <option value="female">Female</option>
-                <option value="male">Male</option>
+              <select
+                value={form.gender}
+                onChange={(e) => setForm({ ...form, gender: e.target.value, interestedIn: defaultInterestedIn(e.target.value) })}
+                aria-label="I am a"
+              >
+                <option value="female">Woman</option>
+                <option value="male">Man</option>
+                <option value="nonbinary">Non-binary</option>
               </select>
+              <fieldset className="show-me">
+                <legend>Show me</legend>
+                {SHOW_ME.map(([value, label]) => (
+                  <label key={value}>
+                    <input
+                      type="checkbox"
+                      checked={form.interestedIn.includes(value)}
+                      onChange={() =>
+                        setForm({
+                          ...form,
+                          interestedIn: form.interestedIn.includes(value)
+                            ? form.interestedIn.filter((v) => v !== value)
+                            : [...form.interestedIn, value]
+                        })
+                      }
+                    />{' '}
+                    {label}
+                  </label>
+                ))}
+              </fieldset>
               <textarea value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} placeholder="A few words about your movie vibe" rows="3" />
               <label className="terms-row">
                 <input

@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useAuth } from '../../lib/auth'
 import { usePlatform } from '../../lib/platform'
@@ -27,20 +27,42 @@ export default function HomeScreen() {
 
   if (!platform) {
     return (
-      <View style={styles.screen}>
+      <View style={[styles.scroll, styles.screen]}>
         <Text style={styles.muted}>Loading community progress…</Text>
       </View>
     )
   }
 
+  const country = platform.country
+  const streak = user?.streak
+
   return (
-    <View style={styles.screen}>
+    <ScrollView style={styles.scroll} contentContainerStyle={styles.screen}>
       <Text style={styles.eyebrow}>REELMATES LAUNCH</Text>
       <Text style={styles.heading}>Movie taste first. Dating when we're balanced.</Text>
       <Text style={styles.body}>
-        Register, play the daily 10-film game, and help us reach {platform.maleTarget} men and {platform.femaleTarget} women.
-        Then the dating deck opens with taste-based matches and chat.
+        Play the daily 10-film game and bring your friends. Dating opens in a country as soon as it has{' '}
+        {platform.countryTarget ?? 150} men and {platform.countryTarget ?? 150} women, and everywhere at{' '}
+        {platform.maleTarget} + {platform.femaleTarget}.
       </Text>
+
+      {streak && (
+        <Pressable style={styles.streakCard} onPress={() => router.push('/(tabs)/taste')}>
+          <Text style={styles.streakFlame}>🔥</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.statusTitle}>
+              {streak.current ? `${streak.current}-day streak` : 'Start a streak today'}
+            </Text>
+            <Text style={styles.featureBody}>
+              {streak.playedToday
+                ? `Played today. Best: ${streak.best} days.`
+                : streak.current
+                  ? "Play today's films to keep it going."
+                  : 'Rate at least one film a day to build it.'}
+            </Text>
+          </View>
+        </Pressable>
+      )}
 
       <View style={styles.featureRow}>
         <Pressable style={styles.feature} onPress={() => router.push('/friends')}>
@@ -53,8 +75,20 @@ export default function HomeScreen() {
         </Pressable>
       </View>
 
+      {country && !platform.globalLaunched && (
+        <>
+          <Text style={styles.section}>
+            {country.name.toUpperCase()} {country.open ? '· DATING OPEN' : `· ${country.progressPercent}%`}
+          </Text>
+          <CounterCard label={`Men in ${country.name}`} count={country.maleCount} target={country.target} />
+          <CounterCard label={`Women in ${country.name}`} count={country.femaleCount} target={country.target} />
+        </>
+      )}
+
+      {!platform.globalLaunched && <Text style={styles.section}>EVERYWHERE</Text>}
       <CounterCard label="Men registered" count={platform.maleCount} target={platform.maleTarget} />
       <CounterCard label="Women registered" count={platform.femaleCount} target={platform.femaleTarget} />
+      {platform.otherCount > 0 && <Text style={styles.muted}>Plus {platform.otherCount} non-binary members.</Text>}
 
       {needsPhoto && (
         <Pressable style={styles.photoCard} onPress={() => router.push('/(tabs)/profile')}>
@@ -68,12 +102,14 @@ export default function HomeScreen() {
       <View style={styles.statusCard}>
         <Text style={styles.statusTitle}>{platform.datingLaunched ? 'Dating is LIVE' : 'Dating locked'}</Text>
         <Text style={styles.statusBody}>
-          {platform.datingLaunched
-            ? 'Head to the Dating tab to like profiles and match on shared films.'
-            : `Overall launch progress: ${platform.progressPercent}%`}
+          {platform.regionOnly
+            ? `Dating is open in ${country?.name}. You'll meet people from ${country?.name} until the global launch.`
+            : platform.datingLaunched
+              ? 'Head to the Dating tab to like profiles and match on shared films.'
+              : 'Invite friends from Profile to open dating sooner. Every referral counts towards your country.'}
         </Text>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -82,7 +118,11 @@ const styles = StyleSheet.create({
   feature: { flex: 1, backgroundColor: colors.card, borderRadius: 18, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 6 },
   featureTitle: { color: colors.text, fontSize: 16, fontWeight: '800' },
   featureBody: { color: colors.muted, fontSize: 13, lineHeight: 18 },
-  screen: { flex: 1, backgroundColor: colors.bg, padding: 16, gap: 12 },
+  scroll: { flex: 1, backgroundColor: colors.bg },
+  screen: { padding: 16, gap: 12 },
+  section: { color: colors.peach, fontSize: 11, letterSpacing: 1.1, marginTop: 4 },
+  streakCard: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: 'rgba(255,170,90,0.10)', borderRadius: 16, padding: 14, borderWidth: 1, borderColor: colors.border },
+  streakFlame: { fontSize: 30 },
   eyebrow: { color: colors.peach, fontSize: 11, letterSpacing: 1.1 },
   heading: { color: colors.text, fontSize: 24, fontWeight: '800' },
   body: { color: colors.muted, lineHeight: 22 },

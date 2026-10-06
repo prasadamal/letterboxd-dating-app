@@ -24,7 +24,7 @@ export default function MessagesScreen() {
   if (!platform?.datingLaunched) {
     return (
       <View style={styles.screen}>
-        <EmptyState title="Inbox locked" body="Messaging opens when dating launches after the 500/500 gate." emoji="💬" />
+        <EmptyState title="Inbox locked" body="Messaging opens when dating opens in your country." emoji="💬" />
       </View>
     )
   }

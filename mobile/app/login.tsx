@@ -15,6 +15,8 @@ import Constants from 'expo-constants'
 import { login, signup, useAuth } from '../lib/auth'
 import { apiFetch } from '../lib/api'
 import { colors } from '../lib/theme'
+import { GENDER_OPTIONS, defaultInterestedIn, toggleInList } from '../lib/profileOptions'
+import type { Gender } from '../lib/types'
 
 export default function LoginScreen() {
   const router = useRouter()
@@ -31,7 +33,8 @@ export default function LoginScreen() {
     age: '',
     country: '',
     bio: '',
-    gender: 'female' as 'male' | 'female',
+    gender: 'female' as Gender,
+    interestedIn: ['male'] as Gender[],
     referralCode: ''
   })
 
@@ -59,6 +62,7 @@ export default function LoginScreen() {
       if (!Number.isInteger(age) || age < 18) return setError('You must be 18 or older to use ReelMates.')
       if (!termsAccepted) return setError('Please accept the Terms and Privacy Policy.')
       if (form.password.length < 8) return setError('Password must be at least 8 characters.')
+      if (!form.interestedIn.length) return setError('Choose who you would like to meet.')
     }
     setError('')
     setNotice('')
@@ -87,7 +91,7 @@ export default function LoginScreen() {
         <View style={styles.card}>
           <Text style={styles.eyebrow}>REELMATES</Text>
           <Text style={styles.title}>Movie taste → real matches</Text>
-          <Text style={styles.sub}>Register with your movie line. Play 10 films daily. Dating unlocks at 500 men + 500 women.</Text>
+          <Text style={styles.sub}>Register with your movie line. Play 10 films daily. Dating opens country by country as people join.</Text>
 
           <View style={styles.toggleRow}>
             {(['signup', 'login', 'forgot'] as const).map((item) => (
@@ -103,10 +107,33 @@ export default function LoginScreen() {
               <TextInput style={styles.input} placeholder="Age (18+)" placeholderTextColor={colors.muted} keyboardType="number-pad" value={form.age} onChangeText={(age) => setForm({ ...form, age })} />
               <TextInput style={styles.input} placeholder="Country" placeholderTextColor={colors.muted} value={form.country} onChangeText={(country) => setForm({ ...form, country })} />
               <TextInput style={[styles.input, styles.multiline]} placeholder="One line about you & the world of movies" placeholderTextColor={colors.muted} multiline value={form.bio} onChangeText={(bio) => setForm({ ...form, bio })} />
+              <Text style={styles.fieldLabel}>I am a</Text>
               <View style={styles.genderRow}>
-                {(['female', 'male'] as const).map((gender) => (
-                  <Pressable key={gender} style={[styles.genderBtn, form.gender === gender && styles.genderActive]} onPress={() => setForm({ ...form, gender })}>
-                    <Text style={styles.genderText}>{gender === 'female' ? 'Woman' : 'Man'}</Text>
+                {GENDER_OPTIONS.map(({ value, label }) => (
+                  <Pressable
+                    key={value}
+                    style={[styles.genderBtn, form.gender === value && styles.genderActive]}
+                    onPress={() => setForm({ ...form, gender: value, interestedIn: defaultInterestedIn(value) })}
+                    accessibilityRole="radio"
+                    accessibilityState={{ selected: form.gender === value }}
+                  >
+                    <Text style={styles.genderText}>{label}</Text>
+                  </Pressable>
+                ))}
+              </View>
+              <Text style={styles.fieldLabel}>Show me</Text>
+              <View style={styles.genderRow}>
+                {GENDER_OPTIONS.map(({ value, plural }) => (
+                  <Pressable
+                    key={value}
+                    style={[styles.genderBtn, form.interestedIn.includes(value) && styles.genderActive]}
+                    onPress={() => setForm({ ...form, interestedIn: toggleInList(form.interestedIn, value) })}
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: form.interestedIn.includes(value) }}
+                  >
+                    <Text style={styles.genderText} numberOfLines={1} adjustsFontSizeToFit>
+                      {plural === 'Non-binary people' ? 'Non-binary' : plural}
+                    </Text>
                   </Pressable>
                 ))}
               </View>
@@ -166,6 +193,7 @@ const styles = StyleSheet.create({
   toggleActive: { backgroundColor: 'rgba(255,255,255,0.06)' },
   toggleText: { color: colors.text, fontWeight: '600' },
   genderRow: { flexDirection: 'row', gap: 8, marginBottom: 10 },
+  fieldLabel: { color: colors.muted, fontSize: 12, marginBottom: 6 },
   genderBtn: { flex: 1, borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingVertical: 10, alignItems: 'center' },
   genderActive: { borderColor: colors.pink, backgroundColor: 'rgba(255,105,147,0.12)' },
   genderText: { color: colors.text, fontWeight: '600' },

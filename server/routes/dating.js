@@ -2,6 +2,7 @@ import express from 'express'
 import {
   applyReferralCode,
   getDatingDeckWithMeta,
+  getLikesYou,
   getMutualMatches,
   getReferralInfo,
   recordSwipe,
@@ -73,6 +74,17 @@ router.get('/matches', authMiddleware, async (req, res) => {
     }
     console.error(error)
     return res.status(500).json({ message: 'Could not load matches' })
+  }
+})
+
+// Count for everyone; full profiles with ReelMates Plus.
+router.get('/likes-you', authMiddleware, async (req, res) => {
+  try {
+    return res.json(await getLikesYou(req.user.id))
+  } catch (error) {
+    if (error.code === 'DATING_LOCKED') return res.status(403).json({ message: error.message, code: error.code })
+    console.error(error)
+    return res.status(500).json({ message: 'Could not load likes' })
   }
 })
 

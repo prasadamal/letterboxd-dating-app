@@ -1,5 +1,8 @@
 import { z } from 'zod'
 
+// Country names are compared for the regional launch, so store them trimmed with single spaces.
+export const countryField = z.string().transform((value) => value.trim().replace(/\s+/g, ' ')).pipe(z.string().min(2).max(80))
+
 function firstFieldMessage(fieldErrors) {
   const first = Object.entries(fieldErrors || {}).find(([, messages]) => Array.isArray(messages) && messages.length)
   return first ? `${first[0]}: ${first[1][0]}` : 'Validation failed'
@@ -43,10 +46,12 @@ export const signupSchema = z.object({
   password: z.string().min(8).max(128),
   name: z.string().min(2).max(80),
   age: z.coerce.number().int().min(18).max(100),
-  country: z.string().min(2).max(80),
+  country: countryField,
   city: z.string().max(80).optional(),
   bio: z.string().max(280).optional(),
-  gender: z.enum(['male', 'female']),
+  gender: z.enum(['male', 'female', 'nonbinary']),
+  // Who they want to see in the deck; defaults from gender when left out (see lib/datingEligibility.js).
+  interestedIn: z.array(z.enum(['male', 'female', 'nonbinary'])).min(1).max(3).optional(),
   termsAccepted: z.literal(true),
   referralCode: z.string().max(32).optional()
 })

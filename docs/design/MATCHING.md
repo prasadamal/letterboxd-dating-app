@@ -15,6 +15,9 @@
 - **Evidence, not luck:** the match starts at 50% and moves as shared films add up:
   `match = (agree + 1.5) / (agree + clash + 3)` (agree/clash are rarity-weighted). One shared like ≈ 67%;
   three shared likes ≈ 80%; three likes + two dislikes ≈ 86%; five agreements but three clashes ≈ 60%.
+- **Who can appear:** interest has to go both ways (my *Show me* includes your gender and yours includes mine). Before
+  the global launch, a country that opened on its own only shows people from that country. Code:
+  `server/lib/datingEligibility.js`, `server/lib/regionLaunch.js`.
 - **Deck order:** match %, then number of films in common. Age range, country, gender, photo and profile
   completeness decide *who* can appear; they never change the score.
 

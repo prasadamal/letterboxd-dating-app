@@ -1,13 +1,14 @@
 import express from 'express'
 import { getMutualMatches } from '../datingService.js'
-import { getPlatformStatus } from '../platformService.js'
+import { getPlatformStatusForUser } from '../platformService.js'
+import { findUserById } from '../db.js'
 import { authMiddleware } from '../middleware/auth.js'
 
 const router = express.Router()
 
 router.get('/', authMiddleware, async (req, res) => {
   try {
-    const platform = await getPlatformStatus()
+    const platform = await getPlatformStatusForUser(await findUserById(req.user.id))
     if (!platform.datingLaunched) {
       return res.json({ matches: [], datingLaunched: false, platform })
     }

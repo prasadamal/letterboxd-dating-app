@@ -1,5 +1,18 @@
 # Changelog
 
+## [Unreleased] — inclusive dating, regional launch, growth, Plus
+
+- **Inclusive dating:** gender *woman / man / non-binary* and a *Show me* choice; matching needs interest both ways.
+  Existing members are backfilled to their current behaviour.
+- **Regional launch:** countries open on their own at `country_target` men + women (default 150) or by hand in `/admin`;
+  people in an early country meet only each other until the global launch. Country progress on Home.
+- **Growth:** daily streaks, a shareable public taste card at `/taste/<code>`, conversation starters in new chats,
+  and up to three film prompts on the dating card.
+- **ReelMates Plus (backend + UI hooks):** *Likes you* (count for all, profiles with Plus), a minimum taste-match filter,
+  a RevenueCat webhook and an admin grant. Purchase screen still to build.
+- Country names are stored trimmed so regional counts add up.
+- Migration `20261005120000_inclusive_regions_plus.sql` (**not yet applied to moviematch**).
+
 ## [1.3.0] — standalone film app
 
 - Like / Dislike / **Haven't seen** in the daily game and everywhere else; unseen never affects matching.

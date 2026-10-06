@@ -32,7 +32,10 @@ Collect:
 ### 3. Launch gate
 
 - When **male count ≥ target** AND **female count ≥ target** (default **500 / 500**), `dating_launched_at` is set automatically.
-- **Dating** and **Matches** tabs appear.
+- **Regional launch:** a country opens on its own once it has `country_target` men AND women (default **150**), or when
+  an admin adds it to *open countries* in `/admin`. Until the global launch, people in an open country only meet others
+  from the same country. Home shows the member's country progress next to the global counters.
+- **Dating** and **Matches** tabs appear for everyone the gate is open for.
 
 Env overrides (for dev/staging):
 
@@ -45,6 +48,11 @@ DAILY_MOVIE_COUNT=10
 To test dating locally, set `FORCE_DATING_OPEN=true` in `.env`: it opens dating for that API instance only and never touches the shared database. In production, change targets or open dating from `/admin`.
 
 ### 4. Dating (Tinder v1 basics)
+
+- **Who you see:** members pick *I am a* (woman / man / non-binary) and *Show me* (any mix). A profile appears only when
+  interest goes both ways. Existing members keep men ↔ women until they change it.
+- **Film prompts:** up to three ("A film I will defend forever", "My comfort rewatch"…) on the card.
+- **Likes you:** everyone sees how many people liked them; **ReelMates Plus** shows who, plus a minimum taste-match filter.
 
 - One profile card at a time: **photo**, **name**, **age**, **country**, **bio line**.
 - Taste copy examples:
@@ -59,7 +67,20 @@ To test dating locally, set `FORCE_DATING_OPEN=true` in `.env`: it opens dating 
 - **Intro rule:** each person sends **one hello**; after **both** have sent, **full chat unlocks**.
 - **Block**, **report**, and **delete account** are available (store safety baseline).
 
-### 6. Referrals
+### 6. Growth
+
+- **Daily streak:** days in a row with at least one rating, shown on Home.
+- **Taste card:** Profile → *Share my taste card* makes `/taste/<friend code>` public (first name, favourite, rarest likes,
+  top genres; no photo, age or place) and opens the share sheet. It can be hidden again.
+- **Conversation starters:** a new chat suggests hellos from shared likes and dislikes, favourites and prompts.
+
+### 7. ReelMates Plus
+
+`users.plus_until` decides access. It is set by the RevenueCat webhook (`POST /api/v1/billing/revenuecat`, header must
+equal `REVENUECAT_WEBHOOK_AUTH`; the app must call `Purchases.logIn(user.id)`) or by hand in `/admin`. The in-app
+purchase screen is not built yet.
+
+### 8. Referrals
 
 - Each user gets a **referral code**; friends can apply it at signup or in Profile.
 

@@ -8,7 +8,28 @@ export type PlatformStatus = {
   datingLaunched: boolean
   datingLaunchedAt: string | null
   progressPercent: number
+  countryTarget?: number
+  // Signed-in only (/platform/status/me): regional launch for the member's country.
+  globalLaunched?: boolean
+  regionOnly?: boolean
+  country?: CountryProgress | null
 }
+
+export type CountryProgress = {
+  name: string
+  maleCount: number
+  femaleCount: number
+  target: number
+  open: boolean
+  openedByAdmin: boolean
+  progressPercent: number
+}
+
+export type Gender = 'male' | 'female' | 'nonbinary'
+
+export type ProfilePrompt = { key: string; answer: string; question?: string }
+
+export type Streak = { current: number; best: number; playedToday: boolean }
 
 export type User = {
   id: string
@@ -17,7 +38,7 @@ export type User = {
   age: number
   city: string
   country: string
-  gender: 'male' | 'female' | 'other' | null
+  gender: Gender | 'other' | null
   bio: string
   hobbies: string[]
   avatar_url: string
@@ -25,7 +46,13 @@ export type User = {
   profile_completion?: number
   matchmaking_enabled?: boolean
   email_verified?: boolean
-  discovery_prefs?: { minAge?: number; maxAge?: number; countries?: string[] }
+  discovery_prefs?: { minAge?: number; maxAge?: number; countries?: string[]; minScore?: number }
+  interested_in?: Gender[]
+  prompts?: ProfilePrompt[]
+  streak?: Streak
+  plus?: { active: boolean; until: string | null }
+  taste_card_public?: boolean
+  referral_code?: string | null
   verification_status?: 'unverified' | 'pending' | 'verified' | 'rejected'
   verified_at?: string | null
   loved: string[]
@@ -53,6 +80,7 @@ export type DatingProfile = User & {
   sharedLoved?: string[]
   sharedHated?: string[]
   favorite?: FavoriteRelation | null
+  prompts?: ProfilePrompt[]
   tasteSummary?: string
   likedLine?: string | null
   dislikedLine?: string | null
@@ -121,3 +149,5 @@ export type TasteStats = {
   topDecades: { name: string; count: number }[]
   leastLikedGenres: { name: string; count: number }[]
 }
+
+export type LikesYou = { count: number; plus: boolean; profiles: DatingProfile[] }

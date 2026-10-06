@@ -37,6 +37,8 @@ const envSchema = z.object({
   SENTRY_DSN: optional(z.string().url()),
   POSTHOG_API_KEY: optional(z.string()),
   POSTHOG_HOST: optional(z.string().url()),
+  // RevenueCat → Project settings → Integrations → Webhooks → Authorization header value (sent verbatim).
+  REVENUECAT_WEBHOOK_AUTH: optional(z.string().min(16)),
   INACTIVE_USER_DAYS: optional(z.coerce.number().int().min(30).max(730)).default(180)
 })
 
