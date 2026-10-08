@@ -54,3 +54,8 @@ export const WEB_URL = String(process.env.EXPO_PUBLIC_WEB_URL || Constants.expoC
 // Legal pages live on the website (web app /privacy, /terms, /support, /delete-account).
 export const PRIVACY_URL = `${WEB_URL}/privacy`
 export const TERMS_URL = `${WEB_URL}/terms`
+
+// "150 women and 150 men" (or "1 woman and 1 man").
+export function launchTarget(n: number) {
+  return `${n} ${n === 1 ? 'woman' : 'women'} and ${n} ${n === 1 ? 'man' : 'men'}`
+}

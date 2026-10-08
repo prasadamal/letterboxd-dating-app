@@ -2,6 +2,26 @@
 
 ## [Unreleased]
 
+### Portfolio review: city launch, sharing, website, bigger catalog
+
+- **Dating opens city by city:** 150 women + 150 men in a city (changeable in `/admin`), or opened by hand. The
+  automatic global 500/500 launch is gone; *Open everywhere* stays for app-store review. Decks stay in your city unless
+  both people choose every open city in their country. City at signup (daters) and in Settings, city names normalised
+  (Cochin → Kochi), city progress on Today and Match, a "closest to opening" board, and `/cities` on the website.
+- **Share images:** Story-sized cards for daily results and film personality. **Link previews** for `/taste/<code>`:
+  Open Graph tags and a rendered 1200×630 image; default preview image for the site.
+- **Website:** `/privacy`, `/terms`, `/support`, `/delete-account` (Google Play's web deletion page) and `/cities`; the
+  app and sign-up link there instead of GitHub. Policies rewritten for the data we hold today, every processor, and
+  India's DPDP rights and grievance contact.
+- **Removed:** the old web dashboard (signed-in visitors get a short account page) and member requests for manual
+  verification.
+- **Catalog:** 436 → 1,044 films with 608 Indian films in Malayalam, Tamil, Telugu, Hindi, Bengali, Kannada, Marathi,
+  Punjabi, Gujarati and Assamese; collections per language. Film personality now prefers a clear genre taste over
+  language or fame, and caps catalog baselines at 50% so Desi Cinephile stays reachable.
+- Docker build includes `public/` (favicon, preview image) and the legal pages; `VITE_SUPPORT_EMAIL`,
+  `VITE_PLAY_URL`, `VITE_APP_STORE_URL` configure the website.
+- Migration `20261007120000_city_launch.sql` (**not yet applied to moviematch**).
+
 ### Film people: redesign, film personality, daily results, dating opt-in
 
 - **New positioning:** "Find your film people". A social film app first; dating is an opt-in mode.

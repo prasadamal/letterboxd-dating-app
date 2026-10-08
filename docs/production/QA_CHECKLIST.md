@@ -22,7 +22,11 @@ Run in **staging** before merging to production and before EAS store builds.
 - [ ] Photo step at the end of signup; profile ≥ 80% with name, photo and country
 - [ ] Today: swipe right / left / up saves ratings; crowd reveal after each swipe; Daily results + share text
 - [ ] Film personality appears after 8 ratings (You, friend cards, taste card)
-- [ ] Launch gate (use `LAUNCH_*=2` or `country_target` in staging); films-only members don't count
+- [ ] City launch (set the city target to 1 in staging): a city opens, others stay closed; films-only members don't count
+- [ ] Settings: city and "Show people from" (my city / every open city); both people must widen
+- [ ] Share images: daily results and film personality open the share sheet with a picture
+- [ ] Website: `/cities`, `/privacy`, `/terms`, `/support`, `/delete-account` (deletes, then sign-in fails)
+- [ ] Taste-card link pasted into WhatsApp shows the preview image
 - [ ] Match deck respects Show me, age range and min match (Plus); undo works
 - [ ] Mutual match → match overlay → intro chat unlock; conversation starters
 - [ ] Read receipts + Supabase Realtime “Live chat connected” banner
@@ -30,7 +34,6 @@ Run in **staging** before merging to production and before EAS store builds.
 - [ ] Settings: switch *Here for* → Match tab hides / shows
 - [ ] Taste card link opens on the web (`/taste/<code>`)
 - [ ] Block / report → `/admin` queue resolve
-- [ ] Verification request → admin PATCH verification
 - [ ] Push token register (physical device); tapping a push opens the right screen
 - [ ] Cron: daily reminders (streak copy) + inactivity cleanup (staging)
 

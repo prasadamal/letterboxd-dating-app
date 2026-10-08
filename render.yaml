@@ -33,3 +33,10 @@ services:
         sync: false
       - key: SENTRY_DSN
         sync: false
+      # Website: support inbox shown on /support and in the privacy policy, and store links for signed-in visitors.
+      - key: VITE_SUPPORT_EMAIL
+        sync: false
+      - key: VITE_PLAY_URL
+        sync: false
+      - key: VITE_APP_STORE_URL
+        sync: false

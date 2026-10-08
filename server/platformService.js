@@ -99,16 +99,10 @@ export async function getCityProgress(city, country) {
   )
 }
 
+// Cities open by numbers. Cities opened by hand are checked against the admin list directly (lib/cityLaunch.js).
 export async function getOpenCityKeys() {
-  const [status, board] = await Promise.all([getPlatformStatus(), getCityBoard()])
-  const keys = new Set(board.filter((c) => c.open).map((c) => c.key))
-  // Admin-opened cities with no members yet are open too; "City, Country" entries can be keyed directly.
-  for (const entry of status.openCities) {
-    const [entryCity, ...rest] = String(entry).split(',')
-    const key = cityKey(entryCity, rest.join(','))
-    if (key) keys.add(key)
-  }
-  return keys
+  const board = await getCityBoard()
+  return new Set(board.filter((c) => c.open).map((c) => c.key))
 }
 
 // The public "unlock your city" board: percentages only, and only cities with a few members so nobody is singled out.

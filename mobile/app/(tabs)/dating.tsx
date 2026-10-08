@@ -10,7 +10,7 @@ import { ApiError, apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
 import { haptic } from '../../lib/haptics'
 import { usePlatform } from '../../lib/platform'
-import { WEB_URL } from '../../lib/profileOptions'
+import { WEB_URL, launchTarget } from '../../lib/profileOptions'
 import { colors, fonts, radii, type } from '../../lib/theme'
 import type { CityProgress, DatingProfile } from '../../lib/types'
 
@@ -146,7 +146,7 @@ export default function MatchScreen() {
               <Text style={styles.bigEmoji}>🎟️</Text>
               <Text style={type.h2}>Unlock dating in {city.name}</Text>
               <Text style={type.body}>
-                {city.name} opens once {city.target} women and {city.target} men want to date, so your first deck is full of people nearby with your taste.
+                {city.name} opens once {launchTarget(city.target)} want to date, so your first deck is full of people nearby with your taste.
               </Text>
               <ProgressBar value={city.progressPercent} height={10} />
               <Text style={styles.pct}>{city.progressPercent}% there</Text>

@@ -7,7 +7,7 @@ Use these when filling the Data safety form. Re-check them whenever the app star
 | Collects or shares user data? | Collects: yes. Shares with third parties: **no** (processors acting for us don't count as sharing) |
 | Data encrypted in transit | Yes (HTTPS) |
 | Users can request deletion | Yes — **in the app** (Profile → Delete account) and by emailing support |
-| Account deletion URL (required by Play) | Link to the "Retention" section of `docs/legal/PRIVACY_POLICY.md`, or a page on your domain explaining in-app deletion |
+| Account deletion URL (required by Play) | `https://<your site>/delete-account` (sign in and delete; also in the app under You → Settings) |
 
 ### Data types
 

@@ -12,7 +12,7 @@ Copy `.env.example` to `.env.staging` on the host:
 | `JWT_SECRET` / `JWT_REFRESH_SECRET` | Unique 32+ char secrets (not dev placeholders) |
 | `SUPABASE_URL` | Staging project URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | Staging service role |
-| `LAUNCH_MALE_TARGET` / `LAUNCH_FEMALE_TARGET` | `2` for QA dating flow |
+| City target | Set to `1` in `/admin` (or open the QA city by hand) for the dating flow |
 | `CLIENT_URL` | Staging web origin |
 | `APP_PUBLIC_URL` | Staging public URL (email links) |
 | `ADMIN_API_KEY` | Random key for `/api/v1/admin/*` |

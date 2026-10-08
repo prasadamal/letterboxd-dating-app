@@ -15,9 +15,9 @@
 - **Evidence, not luck:** the match starts at 50% and moves as shared films add up:
   `match = (agree + 1.5) / (agree + clash + 3)` (agree/clash are rarity-weighted). One shared like ≈ 67%;
   three shared likes ≈ 80%; three likes + two dislikes ≈ 86%; five agreements but three clashes ≈ 60%.
-- **Who can appear:** interest has to go both ways (my *Show me* includes your gender and yours includes mine). Before
-  the global launch, a country that opened on its own only shows people from that country. Code:
-  `server/lib/datingEligibility.js`, `server/lib/regionLaunch.js`.
+- **Who can appear:** interest has to go both ways (my *Show me* includes your gender and yours includes mine), and the
+  other person is in my city — or in another open city of my country when we both chose that. Code:
+  `server/lib/datingEligibility.js`, `server/lib/cityLaunch.js`.
 - **Deck order:** match %, then number of films in common. Age range, country, gender, photo and profile
   completeness decide *who* can appear; they never change the score.
 
@@ -52,7 +52,7 @@ blocked users. Code: `server/services/friendsService.js`.
 
 Every player gets the **same films each day** (UTC), so anyone active builds up films in common with everyone else —
 up to 10 more per day. The catalog is shuffled once per cycle and handed out 10 films a day, so nothing repeats until
-every film has been shown (≈44 days with the current 436 films); the next cycle reshuffles, and re-rating a film
+every film has been shown (≈104 days with the current 1,044 films); the next cycle reshuffles, and re-rating a film
 updates the earlier answer. Code: `sharedDailySet` in `server/lib/dailyMovies.js`.
 
 To keep it fresh for long-term players, grow the catalog (`npm run db:seed` loads `server/movieCatalog.js`).
@@ -67,9 +67,13 @@ A shareable identity from what someone liked, compared with the catalog as a who
   cinema, other non-English cinema, the canon, underseen gems) gets `share² / baseline`: *share* is the fraction of
   your liked films that match it, *baseline* the fraction of the catalog that does (floor 3%). That rewards both how
   much of your taste it is and how unusual that is: lots of romance (7% of the catalog) says more than lots of drama.
-- The best signal with **≥ 30%** of your likes and **≥ 1.5×** its catalog share wins. Nothing qualifies → **Genre
-  Hopper**. Without the lift rule, a mixed taste in a catalog that is 36% non-English always came out *World Cinema
-  Nomad*.
+- A signal qualifies with **≥ 30%** of your likes and **≥ 1.5×** its catalog share. A qualifying **genre** signal wins
+  first; language and fame signals (Indian cinema, world cinema, the canon, hidden gems) come next, and the runner-up
+  shows as a trait (a Hopeless Romantic who loves Malayalam films gets "Desi cinema 🪔"). Nothing qualifies → **Genre
+  Hopper**.
+- Catalog shares are capped at **50%**: Indian films are two thirds of the catalog, and a 0.66 baseline would need 99%
+  of your likes to reach the lift. Simulated members who see random daily films (40 ratings): strongly Indian-leaning
+  taste → Desi Cinephile 83%; thriller lovers → Midnight Thrill-Seeker 60%; neutral taste → mostly Genre Hopper.
 - **Traits** (up to three): *Easy to please* (like rate ≥ 80%) or *Tough critic* (≤ 40%), the runner-up signal
   (≥ 25% share, ≥ 1.3× lift), and *Film buff* at 100 rated films.
 - Lists and cards get a compact badge (`personalityBadge`). Two matches with the same personality get a starter:

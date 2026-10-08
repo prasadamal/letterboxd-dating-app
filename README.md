@@ -37,36 +37,36 @@ Shown on You, on friend and match cards, in conversation starters and on the pub
 
 ### 4. Explore
 
-Search the whole catalog (436 films), rate anything you've seen, and browse the **People's chart** (films ranked by
-members) with collections: the canon, world cinema, Indian and Malayalam cinema, crowd favourites, underseen gems…
+Search the whole catalog (1,044 films, 608 of them Indian across ten languages), rate anything you've seen, and browse
+the **People's chart** (films ranked by members) with collections: the canon, world cinema, Indian cinema and each of
+Malayalam, Tamil, Telugu, Hindi, Bengali, Kannada and Marathi, crowd favourites, underseen gems…
 
 ### 5. Film friends & taste card
 
 - Add anyone by **friend code** (the same code works as a referral at signup). Compare taste, both personalities and
   favourites, and get **Watch together** ideas.
 - **Share my taste card** makes `/taste/<code>` public: personality, favourite, rarest loves, top genres and counts.
-  No photo, age or location. It can be hidden again.
+  No photo, age or location. It can be hidden again. Pasted into WhatsApp, Instagram or X, the link unfolds into a
+  preview with a rendered card (Open Graph image from `server/services/shareCardService.js`).
+- **Share images:** daily results and your film personality as Story-sized pictures (1080×1920) for WhatsApp status
+  and Instagram Stories.
 
 ### 6. Dating (opt-in)
 
 - **Here for** is changeable in Settings (`users.dating_enabled`). Films-only members never appear in decks, need no
-  gender, and don't count towards the launch gate. The *Match* tab shows only when dating is on; *Chats* shows once
+  gender, and don't count towards the launch. The *Match* tab shows only when dating is on; *Chats* shows once
   dating is live for you and you date (or still have matches).
-- **Who you see:** interest has to go both ways (*Show me*). To appear in decks you need a name, a photo and a country.
+- **Who you see:** interest has to go both ways (*Show me*), in your city (or every open city in your country, if both
+  people choose that). To appear in decks you need a name, a photo and a country; daters also give a city.
 - **Card:** photo, name, age, place, taste match %, personality, films in common, favourite, up to three prompts, bio.
 - **Likes you:** everyone sees how many; **ReelMates Plus** shows who, plus a minimum taste-match filter.
-- **Launch gate:** dating opens everywhere when dating-enabled men ≥ target AND women ≥ target (default 500 / 500), and
-  in a single country at `country_target` each (default 150) or by hand in `/admin`. Until the global launch, people
-  in an open country meet only each other. The app shows the member's country progress, not gender counters.
-
-```env
-LAUNCH_MALE_TARGET=500
-LAUNCH_FEMALE_TARGET=500
-DAILY_MOVIE_COUNT=10
-```
+- **City launch:** dating opens in a city once `city_target` women AND men there switch it on (default 150), or when
+  an admin opens it in `/admin`. An admin can also open dating everywhere (app-store review, testing). City names are
+  normalised (Cochin → Kochi, Bangalore → Bengaluru). The app shows the member's city progress as a percentage, never
+  gender counts, and `/cities` on the website is the public "unlock your city" board. Code: `server/lib/cityLaunch.js`.
 
 To test dating locally, set `FORCE_DATING_OPEN=true` in `.env`: it opens dating for that API instance only and never
-touches the shared database. In production, change targets or open dating from `/admin`.
+touches the shared database. In production, change the city target or open cities from `/admin`.
 
 ### 7. Chat
 
@@ -108,7 +108,7 @@ Tokens live in `mobile/lib/theme.ts`, mirrored for the web in `src/styles/tokens
 | **Mobile (primary)** | Expo 57, React Native, Expo Router — `mobile/` |
 | **API** | Express + JWT + bcrypt — `server/` |
 | **Database** | Supabase Postgres (project `moviematch`) |
-| **Web** | React + Vite — `src/`: landing and sign-up, public taste cards, password reset, `/admin`, an older dashboard |
+| **Web** | React + Vite — `src/`: landing and sign-up, public taste cards, `/cities`, `/privacy`, `/terms`, `/support`, `/delete-account`, password reset, `/admin` |
 
 ### Main API routes (`/api/v1`)
 
@@ -121,7 +121,8 @@ Tokens live in `mobile/lib/theme.ts`, mirrored for the web in `src/styles/tokens
 | `POST /movies/:id/rate` | `love` / `hate` / `skip` |
 | `GET /users/taste-stats` | Personality, genres, languages, decades |
 | `GET/POST /friends`, `GET /friends/compare/:id` | Film friends and taste compare |
-| `GET /public/taste/:code` | Public taste card (only when shared) |
+| `GET /public/taste/:code` | Public taste card (only when shared); `…/card.png` is its link-preview image |
+| `GET /platform/status`, `GET /platform/status/me` | City board (public); is dating open for me and how close is my city |
 | `GET /dating/deck`, `POST /dating/swipe` | Dating deck (dating on, after launch) |
 | `GET /dating/matches`, `GET /dating/likes-you` | Matches; who liked you (Plus) |
 | `GET/POST /messages/...` | Chat with intro gating |
@@ -188,6 +189,8 @@ All in `supabase/migrations/`, applied in order:
 - `20261002120000_reelmates_dating_launch_v1.sql` … `20261003220000_launch_readiness_v1.sql` (launch build)
 - `20261004120000_favorite_film_and_friends.sql`, `20261004130000_collections_feedback_stats.sql` (v1.3)
 - `20261005120000_inclusive_regions_plus.sql`, `20261006120000_dating_optin.sql` (applied to moviematch on 6 October 2026)
+- `20261007120000_city_launch.sql` — **not yet applied to moviematch**; apply it before deploying this API (it adds
+  `city_target`, `open_cities` and the `city_dating_counts()` function the API calls)
 
 RLS is enabled on every `public` table with no policies, so client keys get no table access. The API must use
 `SUPABASE_SERVICE_ROLE_KEY`.
@@ -198,7 +201,7 @@ RLS is enabled on every `public` table with no policies, so client keys get no t
 
 - Supabase Realtime chat broadcast (`chat:{conversationId}`), with polling as a fallback
 - OpenAPI spec and Swagger UI at `/api/v1/docs`
-- Manual age/location verification (user request + admin review)
+- Verified tag set by an admin (the member-side request queue was removed in October 2026 until someone can staff it)
 - Inactivity cleanup job (`POST /api/v1/internal/inactivity-cleanup`)
 - Integration tests (`npm run test:integration`) and a Maestro smoke flow (`mobile/.maestro/smoke.yaml`)
 
@@ -206,7 +209,7 @@ See `CHANGELOG.md` and `docs/production/BACKLOG.md`.
 
 ## What's intentionally out of scope (next passes)
 
-- Letterboxd import and real poster artwork (TMDB) — on hold
+- Letterboxd import — on hold; real poster artwork (TMDB) — not planned (its commercial licence costs $149/month)
 - Third-party ID verification vendor (Persona/Onfido), the Plus purchase screen
 - Postgres Realtime RLS policies for direct client reads (broadcast is used today)
 - Detox suite in CI

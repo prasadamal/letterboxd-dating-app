@@ -10,7 +10,7 @@ import { apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
 import { haptic } from '../../lib/haptics'
 import { usePlatform } from '../../lib/platform'
-import { WEB_URL } from '../../lib/profileOptions'
+import { WEB_URL, launchTarget } from '../../lib/profileOptions'
 import { colors, fonts, radii, type } from '../../lib/theme'
 import type { DailyResults, Friend, Movie, Reaction, Streak } from '../../lib/types'
 
@@ -242,7 +242,7 @@ export default function TodayScreen() {
               <Text style={type.h3}>Unlock dating in {city.name}</Text>
               <ProgressBar value={city.progressPercent} />
               <Text style={type.small}>
-                {city.progressPercent}% there. {city.name} opens once {city.target} women and {city.target} men join, so the first deck is full of people with your taste.
+                {city.progressPercent}% there. {city.name} opens once {launchTarget(city.target)} join, so the first deck is full of people with your taste.
               </Text>
               <Button
                 title={`Invite friends in ${city.name}`}

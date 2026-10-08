@@ -24,14 +24,16 @@
 ## Product decisions waiting on the owner
 
 - [ ] Letterboxd import (CSV upload) — on hold
-- [ ] Real poster artwork via TMDB — on hold; typographic posters are used meanwhile
-- [ ] Web dashboard (`src/pages/DashboardPage.jsx`) duplicates the app's dating flow: replace it with public pages
-  (landing, taste cards, the daily chart) and keep `/admin`?
+- [x] Real poster artwork via TMDB — not planned (commercial licence $149/month); typographic posters stay
+- [x] Web dashboard replaced by public pages (landing, taste cards, cities, legal) and a short account page
 
 ## Ideas (not started)
 
-- **Share images:** render the taste card and daily results as Story-sized images (server-side), and Open Graph tags
-  for `/taste/<code>` so links unfurl with the personality.
+- [x] **Share images and link previews** (October 2026)
+- **Match card share:** "We're 86% film-compatible" Story image after a match (opt-in, both people).
+- **Grow the catalog to 1,500–3,000** with the same hand-checked approach; keep Indian films around two thirds.
+- **Plus paywall** (RevenueCat, server ready) once a few hundred people play every week.
+- **Monthly "ReelMates Night" screenings** with film societies in launch cities (IFFK, December).
 - **Personality pages:** "Hopeless Romantics love…" lists per archetype; find friends with the same personality.
 - **Friend leaderboard for the daily drop:** who agreed most with you this week.
 

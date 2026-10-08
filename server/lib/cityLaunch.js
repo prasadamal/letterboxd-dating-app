@@ -117,12 +117,13 @@ export function publicCityProgress(progress) {
 }
 
 // Who to show: 'city' (default) = my city only; 'country' = every open city in my country. Both people's choices
-// must allow the other. `openCityKeys` holds the cities that are open; `openEverywhere` is the admin override.
+// must allow the other. `openCityKeys` holds cities open by numbers, `openCities` the admin's list, and
+// `openEverywhere` the admin override.
 export function datingArea(prefs) {
   return prefs?.area === 'country' ? 'country' : 'city'
 }
 
-export function inDatingArea({ openEverywhere = false, openCityKeys = new Set() }, self, other) {
+export function inDatingArea({ openEverywhere = false, openCityKeys = new Set(), openCities = [] }, self, other) {
   if (sameCity(self, other)) return true
   // When an admin opens dating everywhere, people who haven't set a city still meet within their country.
   if (openEverywhere && (!cityKey(self?.city, self?.country) || !cityKey(other?.city, other?.country))) {
@@ -130,5 +131,5 @@ export function inDatingArea({ openEverywhere = false, openCityKeys = new Set() 
   }
   if (datingArea(self?.discovery_prefs) !== 'country' || datingArea(other?.discovery_prefs) !== 'country') return false
   if (!sameCountry(self, other)) return false
-  return openEverywhere || openCityKeys.has(cityKey(other?.city, other?.country))
+  return openEverywhere || openCityKeys.has(cityKey(other?.city, other?.country)) || isOpenedByAdmin(other?.city, other?.country, openCities)
 }

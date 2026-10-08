@@ -27,13 +27,13 @@ ReelMates is for adults 18+. Be kind, be honest, be cinematic.
 movies,film,cinema,daily,game,personality,friends,taste,recommendations,dating,match,chat
 
 ## Support URL
-https://github.com/prasadamal/letterboxd-dating-app
+`https://<your site>/support`
 
 ## Marketing URL
 (optional)
 
 ## Privacy policy URL
-Host `docs/legal/PRIVACY_POLICY.md` on a public URL
+`https://<your site>/privacy` (support URL: `https://<your site>/support`)
 
 ## Age rating
 17+ — Mature / Frequent: Mature or suggestive themes; User-generated content

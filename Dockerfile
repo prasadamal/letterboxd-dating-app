@@ -3,6 +3,11 @@ FROM node:22-alpine AS web
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
+# Website contact and store links (Render passes environment variables as build arguments).
+ARG VITE_SUPPORT_EMAIL
+ARG VITE_PLAY_URL
+ARG VITE_APP_STORE_URL
+ENV VITE_SUPPORT_EMAIL=$VITE_SUPPORT_EMAIL VITE_PLAY_URL=$VITE_PLAY_URL VITE_APP_STORE_URL=$VITE_APP_STORE_URL
 COPY index.html vite.config.js ./
 COPY public ./public
 COPY src ./src

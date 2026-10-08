@@ -8,7 +8,7 @@ import {
   mapPublicUser,
   orderedMatchUsers
 } from './db.js'
-import { assertDatingLaunched, getOpenCityKeys } from './platformService.js'
+import { assertDatingLaunched, getOpenCityKeys, getPlatformStatus } from './platformService.js'
 import { getBlockedUserIds } from './safetyService.js'
 import { assertMatchmakingReady } from './services/profileService.js'
 import { passesDiscoveryFilters } from './services/discoveryPrefs.js'
@@ -32,7 +32,8 @@ function datingOff() {
 
 // Decks stay inside the member's city unless both people chose every open city in their country.
 async function datingAreaContext(status) {
-  return { openEverywhere: status.openEverywhere, openCityKeys: await getOpenCityKeys() }
+  const settings = await getPlatformStatus()
+  return { openEverywhere: status.openEverywhere, openCityKeys: await getOpenCityKeys(), openCities: settings.openCities }
 }
 
 async function getSwipeMap(userId) {

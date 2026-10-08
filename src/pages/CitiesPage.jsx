@@ -26,7 +26,7 @@ export default function CitiesPage() {
         <section className="cta-card">
           <h1 className="cities-title">Unlock dating in your city</h1>
           <p>
-            ReelMates is a film app first. Dating is optional and opens in a city once {target} women and {target} men there switch it on, so
+            ReelMates is a film app first. Dating is optional and opens in a city once {target} {target === 1 ? 'woman' : 'women'} and {target} {target === 1 ? 'man' : 'men'} there switch it on, so
             the first deck is full of people with your taste. Invite your film friends to get yours there sooner.
           </p>
           <Link className="dark-button" to="/">

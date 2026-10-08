@@ -84,12 +84,13 @@ Expected and harmless in Expo Go: a warning that remote push notifications need 
 
 ### 1.5 What to test (you need two accounts: one man, one woman)
 Use two phones, or one phone plus the web app at http://localhost:3000 (sign-up, taste cards and an older dashboard).
-1. **Sign up** on both. Age must be 18+; pick **Dating too** and how you identify; tick the Terms box. Add a photo at
+1. **Sign up** on both. Age must be 18+; pick **Dating too**, how you identify and the **same city**; tick the Terms box. Add a photo at
    the last step (or later in You → Edit profile). A third account with **Films & friends** should never appear in decks.
 2. **Today:** swipe the 10 films (right = loved it, left = nah, up = haven't seen). Each swipe shows how everyone else
    voted; after the last one you get **Daily results** with a *Share my results* button.
 3. **You:** after 8 ratings your **film personality** appears. Set an all-time favourite and prompts in Edit profile.
-4. **Match:** each account should see the other (dating needs a name, photo and country). Like each other → *It's a match*.
+4. **Match:** open your city in `/admin` (or set the city target to 1). Each account should see the other (dating needs a
+   name, photo and country). Like each other → *It's a match*.
 5. **Chats:** each sends one hello (try a conversation starter) → full chat unlocks → send a few messages, see *Read*.
 6. **Safety:** Report (pick a reason) and Block from the chat menu; the conversation should close.
 7. **Reset password:** Log in → *Forgot password?* → enter the email. Without email configured, the reset link appears
@@ -213,12 +214,16 @@ Once the Expo project exists and the GitHub repo is linked to it (expo.dev → p
    npm run db:prelaunch-cleanup -- --yes --emails you+a@x.com,you+b@x.com
    ```
    Run it from your computer with the secret key in `.env`. Set `FORCE_DATING_OPEN=false` (or remove it) afterwards.
-4. **Film catalog:** 436 films are loaded. The genre/language/popularity values for the 140 films added from your list
-   are my estimates (`server/data/curatedFilmsMeta.js`) — popularity drives the rarity bonus in matching, so skim and
-   correct any that look off, then run `npm run db:seed` to top up. To grow beyond this list (e.g. Empire's 500), add
-   films to `server/movieCatalog.js` (or send me the list) — the sites can't be fetched from my environment.
-5. **Decide the launch gate.** 500 men + 500 women means early users only see the daily game. Options in `/admin`:
-   keep 500/500, lower the targets, or open dating now.
+4. **Film catalog:** 1,044 films (608 of them Indian, in ten languages). The API adds missing films to the database
+   when it starts, so deploying is enough. Popularity values for the added films are my estimates
+   (`server/data/curatedFilmsMeta.js`, `server/data/indianFilms.js`) and drive the rarity bonus in matching; skim and
+   correct any that look off. New films go at the end of `indianFilms.js` (never reorder: ids follow the list).
+5. **Decide the city launch.** Dating opens in a city at 150 women + 150 men who switch it on. In `/admin` you can
+   change that number, open a launch city by hand (e.g. Kochi and Thiruvananthapuram for IFFK), and see every city's
+   progress. The public board at `/cities` is the "unlock your city" campaign page.
+6. **Legal and support pages** live on the website: `/privacy`, `/terms`, `/support`, `/delete-account`. Set
+   `VITE_SUPPORT_EMAIL` (and later `VITE_PLAY_URL`, `VITE_APP_STORE_URL`) on Render to an inbox you read; reviewers write
+   there. The privacy policy names that address as the grievance contact required by India's DPDP Rules.
 
 ### 4.2 Google Play
 1. **play.google.com/console** → create a developer account ($25 once; identity verification can take days).
@@ -228,14 +233,17 @@ Once the Expo project exists and the GitHub repo is linked to it (expo.dev → p
    `eas build -p android --profile production` → `eas submit -p android --latest` (track `internal`; see the service
    account note below) → promote to a closed test → invite testers by email.
 4. **App content** (left menu), using the files in this repo:
-   - Privacy policy URL: `https://github.com/prasadamal/letterboxd-dating-app/blob/main/docs/legal/PRIVACY_POLICY.md`
+   - Privacy policy URL: `https://<your site>/privacy`
    - Data safety: answers in `docs/store/google-play/data-safety.md`
-   - Account deletion URL: same privacy policy link (section *Retention*) — deletion is in-app under Profile
-   - Target audience: 18+ only · Content rating questionnaire: dating app with user-generated content and chat
-   - App access: give reviewers a test login and a note about the launch gate (or open dating in `/admin` during review)
+   - Account deletion URL: `https://<your site>/delete-account` (deletion is also in the app: You → Settings)
+   - Target audience: 18+ only, and switch on **Restrict minor access** (required for dating features) ·
+     Content rating questionnaire: social app with optional dating, user-generated content and chat
+   - App access: give reviewers a test login and a note that dating opens city by city (open everywhere in `/admin`
+     while they review, then close it)
    - Ads: none
 5. **Store listing:** copy from `docs/store/google-play/listing.md`; icon 512×512 from `mobile/assets/icon.png`;
-   feature graphic 1024×500 (template in `docs/store/assets/`); 2–8 phone screenshots.
+   feature graphic `docs/store/assets/feature-graphic.png`; 4–8 phone screenshots from a real build.
+   Recruit about 20 testers once (a Google Group works) and reuse them for every app you publish.
 6. Automated submit needs a Play service account: Play Console → Setup → API access → create the service account,
    save the JSON as `mobile/store/google-play-service-account.json` (git-ignored). Otherwise upload the `.aab` by hand.
 
@@ -244,13 +252,18 @@ Once the Expo project exists and the GitHub repo is linked to it (expo.dev → p
 2. Copy the numeric **Apple ID** of the app and your **Team ID**, and fill `submit.production.ios` in `mobile/eas.json`
    (`appleId` = your Apple account email, `ascAppId`, `appleTeamId`).
 3. **App Privacy:** declare email, name, photos, user content (messages), identifiers (push token), usage data; all linked
-   to the user, none used for tracking — matches `docs/legal/PRIVACY_POLICY.md`.
+   to the user, none used for tracking — matches `docs/legal/PRIVACY_POLICY.md`. Privacy policy URL:
+   `https://<your site>/privacy`; support URL: `https://<your site>/support`.
 4. **Age rating:** 17+ (frequent/intense mature themes not required; select user-generated content / unrestricted web is *No*).
-5. **App Review Information:** a working test login and this note: *"ReelMates is a film app; dating is optional and opens per
-   country once enough people join. The review account has dating opened so you can see matching and chat.
-   Report/block: dating card and chat menu; account deletion: You → Settings → Delete account."* — open dating in `/admin` before submitting.
+5. **App Review Information:** a working test login and this note: *"ReelMates is a film app; dating is optional and opens city
+   by city once enough people join. Dating is open for review so you can see matching and chat.
+   Report/block: dating card and chat menu; account deletion: You → Settings → Delete account."* — use *Open everywhere*
+   in `/admin` before submitting and close it after approval.
 6. Listing copy: `docs/store/app-store/listing.md`; screenshots for 6.7" and 6.5" iPhones.
-7. `eas build -p ios --profile production` → `eas submit -p ios --latest` → select the build in App Store Connect → **Submit for Review**.
+7. `eas build -p ios --profile production` → `eas submit -p ios --latest` → TestFlight with your testers → select the
+   build in App Store Connect → **Submit for Review**.
+8. **Release gradually:** a staged rollout on Play (10% → 50% → 100%) and the 7-day phased release on iOS, so a crash
+   reaches a few people first.
 
 Sign in with Apple is not required: the app only offers email/password sign-in.
 
@@ -269,8 +282,9 @@ Sign in with Apple is not required: the app only offers email/password sign-in.
 | `Invalid environment configuration` on start | A value in `.env` is malformed; the message names it. Empty values are fine. |
 | `npm run smoke` → `health` fails | Wrong/missing `SUPABASE_SERVICE_ROLE_KEY`, or the API isn't running. |
 | Phone: "No connection" | Same Wi‑Fi? Firewall allowed? Otherwise use the cloudflared tunnel (Stage 1.4). |
-| Dating tab missing | Locally: `FORCE_DATING_OPEN=true` and restart `npm run dev`. Online: open dating or lower targets in `/admin`. |
-| "Complete your profile before matchmaking" | Add photo, bio and country (80%). |
+| Dating tab missing | Locally: `FORCE_DATING_OPEN=true` and restart `npm run dev`. Online: open the member's city (or everywhere) in `/admin`, or lower the city target. |
+| "Add your city" on the Match tab | Dating opens city by city: set a city in Settings → Dating preferences. |
+| "Complete your profile before matchmaking" | Add a photo and country (80%). |
 | Build app says "no server configured" | Replace `YOUR_PRODUCTION_API_HOST` in `mobile/eas.json` and rebuild. |
 | Reset email never arrives | `/api/v1/health` must show `"email":"configured"`; `EMAIL_FROM` must use the Resend-verified domain. |
 | Render first request very slow | Free instance waking up; switch to Starter. |

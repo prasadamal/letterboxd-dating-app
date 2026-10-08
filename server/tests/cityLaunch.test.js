@@ -50,6 +50,8 @@ test('decks stay in the city unless both people widen to the country', () => {
   // Delhi isn't open yet, so it stays out even for people who widened.
   assert.equal(inDatingArea(ctx, kochiWide, delhiWide), false)
   assert.equal(inDatingArea({ ...ctx, openEverywhere: true }, kochiWide, delhiWide), true)
+  // Opened by hand without a country ("Delhi") counts straight away.
+  assert.equal(inDatingArea({ ...ctx, openCities: ['delhi'] }, kochiWide, delhiWide), true)
   // Opened everywhere by an admin: people without a city meet within their country.
   assert.equal(inDatingArea({ openEverywhere: true, openCityKeys: new Set() }, { country: 'India' }, kochi), true)
   assert.equal(inDatingArea({ openEverywhere: true, openCityKeys: new Set() }, { country: 'Kenya' }, kochi), false)

@@ -33,4 +33,4 @@ movies, film, cinema, friends, taste, personality, dating
 support@reelmates.app
 
 ## Privacy policy
-Link to hosted `PRIVACY_POLICY.md` (see SUBMISSION_CHECKLIST.md)
+`https://<your site>/privacy` (the website serves `docs/legal/PRIVACY_POLICY.md`)
