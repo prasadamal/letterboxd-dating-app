@@ -63,6 +63,11 @@ export const signupSchema = z
     message: 'Choose how you identify to use dating',
     path: ['gender']
   })
+  // Dating opens city by city.
+  .refine((body) => body.datingEnabled === false || Boolean(body.city?.trim()), {
+    message: 'Add your city to use dating',
+    path: ['city']
+  })
 
 export const loginSchema = z.object({
   email: z.string().trim().toLowerCase().email(),

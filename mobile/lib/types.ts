@@ -1,29 +1,21 @@
+// /platform/status/me: is dating open for this member, and how close is their city.
 export type PlatformStatus = {
-  maleCount: number
-  femaleCount: number
-  otherCount: number
-  maleTarget: number
-  femaleTarget: number
-  totalRegistered: number
   datingLaunched: boolean
-  datingLaunchedAt: string | null
-  progressPercent: number
-  countryTarget?: number
-  // Signed-in only (/platform/status/me): regional launch for the member's country.
-  globalLaunched?: boolean
-  regionOnly?: boolean
-  country?: CountryProgress | null
+  // An admin opened dating everywhere (reviewers, testing).
+  openEverywhere?: boolean
+  cityTarget?: number
+  city?: CityProgress | null
+  // Dating opens city by city, so daters without a city are asked for one.
+  needsCity?: boolean
   // People who paused dating keep Chats while they still have matches.
   hasMatches?: boolean
 }
 
-export type CountryProgress = {
+export type CityProgress = {
   name: string
-  maleCount: number
-  femaleCount: number
+  country: string
   target: number
   open: boolean
-  openedByAdmin: boolean
   progressPercent: number
 }
 
@@ -48,7 +40,7 @@ export type User = {
   profile_completion?: number
   matchmaking_enabled?: boolean
   email_verified?: boolean
-  discovery_prefs?: { minAge?: number; maxAge?: number; countries?: string[]; minScore?: number }
+  discovery_prefs?: { minAge?: number; maxAge?: number; countries?: string[]; minScore?: number; area?: 'city' | 'country' }
   interested_in?: Gender[]
   dating_enabled?: boolean
   prompts?: ProfilePrompt[]

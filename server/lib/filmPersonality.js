@@ -14,6 +14,9 @@ const MIN_SHARE = 0.3
 const MIN_LIFT = 1.5
 const SECONDARY_SHARE = 0.25
 const SECONDARY_LIFT = 1.3
+const BASELINE_CAP = 0.5
+// What you watch says more than where it's from or how famous it is: a qualifying genre signal wins over these.
+const BROAD_SIGNALS = new Set(['desi', 'world', 'canon', 'gems'])
 
 export const ARCHETYPES = {
   fresh: { name: 'Fresh Reel', emoji: '🎞️', tagline: 'Swipe a few more films to reveal your film personality.', colors: ['#3A3A48', '#6E6E86'] },
@@ -87,8 +90,10 @@ function shares(films) {
 let catalogBaselines = null
 export function baselinesFrom(films) {
   const raw = shares(films.map(prepare))
-  // A floor keeps a signal the catalog barely has (e.g. documentaries) from exploding the score.
-  return Object.fromEntries(Object.entries(raw).map(([key, value]) => [key, Math.max(value, 0.03)]))
+  // A floor keeps a signal the catalog barely has (e.g. documentaries) from exploding the score. A ceiling keeps a
+  // signal that is most of the catalog (Indian films are two thirds of it) reachable at all: with a 0.66 baseline
+  // the 1.5× lift would need 99% of your likes.
+  return Object.fromEntries(Object.entries(raw).map(([key, value]) => [key, Math.min(Math.max(value, 0.03), BASELINE_CAP)]))
 }
 
 function defaultBaselines() {
@@ -116,7 +121,8 @@ export function filmPersonality(rated, { baselines = defaultBaselines() } = {}) 
     .filter((s) => s.share >= SECONDARY_SHARE && s.lift >= SECONDARY_LIFT)
     .sort((a, b) => b.score - a.score)
 
-  const primary = ranked.find((s) => s.share >= MIN_SHARE && s.lift >= MIN_LIFT)
+  const qualifies = (s) => s.share >= MIN_SHARE && s.lift >= MIN_LIFT
+  const primary = ranked.find((s) => qualifies(s) && !BROAD_SIGNALS.has(s.key)) || ranked.find(qualifies)
   const key = primary ? primary.key : 'eclectic'
 
   const traits = []

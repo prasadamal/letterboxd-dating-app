@@ -5,6 +5,7 @@ import crypto from 'crypto'
 import { createUser, ensureUserProfile, findUserByEmail, findUserById, getUserProfile, updateUserProfile } from '../db.js'
 import { signToken, authMiddleware } from '../middleware/auth.js'
 import { getPlatformStatusForUser } from '../platformService.js'
+import { canonicalCity } from '../lib/cityLaunch.js'
 import { applyReferralCode } from '../datingService.js'
 import { addFriendByCode } from '../services/friendsService.js'
 import { asyncHandler, AppError } from '../middleware/errors.js'
@@ -61,7 +62,7 @@ router.post(
       display_name: name,
       age,
       country,
-      city: city || country,
+      city: canonicalCity(city),
       bio: bio?.trim() || '',
       hobbies: ['Cinema'],
       gender,

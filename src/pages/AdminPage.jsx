@@ -8,8 +8,7 @@ export default function AdminPage() {
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [platform, setPlatform] = useState(null)
-  const [targets, setTargets] = useState({ male: '', female: '' })
-  const [region, setRegion] = useState({ target: '', open: '', lookup: '', result: null })
+  const [launch, setLaunch] = useState({ target: '', open: '' })
   const [plusGrant, setPlusGrant] = useState({ userId: '', days: '30' })
   const [feedback, setFeedback] = useState([])
   const [feedbackStatus, setFeedbackStatus] = useState('new')
@@ -27,18 +26,7 @@ export default function AdminPage() {
   async function loadPlatform(key = adminKey) {
     const data = await adminRequest('/platform', {}, key)
     setPlatform(data.platform)
-    setTargets({ male: String(data.platform.maleTarget), female: String(data.platform.femaleTarget) })
-    setRegion((r) => ({ ...r, target: String(data.platform.countryTarget ?? 150), open: (data.platform.openCountries || []).join(', ') }))
-  }
-
-  async function lookupCountry() {
-    setError('')
-    try {
-      const data = await adminRequest(`/platform/country?name=${encodeURIComponent(region.lookup)}`)
-      setRegion((r) => ({ ...r, result: data.country }))
-    } catch (err) {
-      setError(err.message)
-    }
+    setLaunch({ target: String(data.platform.cityTarget ?? 150), open: (data.platform.openCities || []).join('; ') })
   }
 
   async function grantPlus(days) {
@@ -167,60 +155,23 @@ export default function AdminPage() {
 
       {platform && (
         <section className="admin-table card-panel">
-          <h2>Launch gate</h2>
+          <h2>City launch</h2>
           <p className="hero-text">
-            {platform.maleCount}/{platform.maleTarget} men · {platform.femaleCount}/{platform.femaleTarget} women ·{' '}
-            {platform.datingLaunched ? `Dating open since ${new Date(platform.datingLaunchedAt).toLocaleString()}` : 'Dating closed'}
+            A city opens by itself when it has this many women and this many men who want to date. Cities listed below open now
+            regardless (use “Kochi” or “Kochi, India”). People meet others in their own city, or in every open city of their
+            country if both chose that.
           </p>
           <div className="action-row">
             <input
-              value={targets.male}
-              onChange={(e) => setTargets({ ...targets, male: e.target.value })}
-              placeholder="Men target"
+              value={launch.target}
+              onChange={(e) => setLaunch({ ...launch, target: e.target.value })}
+              placeholder="Women and men per city"
               inputMode="numeric"
             />
             <input
-              value={targets.female}
-              onChange={(e) => setTargets({ ...targets, female: e.target.value })}
-              placeholder="Women target"
-              inputMode="numeric"
-            />
-            <button
-              className="ghost-button"
-              type="button"
-              onClick={() =>
-                updatePlatform({ maleTarget: Number(targets.male), femaleTarget: Number(targets.female) }, 'Targets saved.')
-              }
-            >
-              Save targets
-            </button>
-            {platform.datingLaunched ? (
-              <button className="ghost-button" type="button" onClick={() => updatePlatform({ datingOpen: false }, 'Dating closed.')}>
-                Close dating
-              </button>
-            ) : (
-              <button className="primary-button" type="button" onClick={() => updatePlatform({ datingOpen: true }, 'Dating opened.')}>
-                Open dating now
-              </button>
-            )}
-          </div>
-
-          <h2>Regional launch</h2>
-          <p className="hero-text">
-            A country opens by itself when it has this many men and women. Countries listed below are open now regardless.
-            Before the global launch, people only meet others in their own country.
-          </p>
-          <div className="action-row">
-            <input
-              value={region.target}
-              onChange={(e) => setRegion({ ...region, target: e.target.value })}
-              placeholder="Per-country target"
-              inputMode="numeric"
-            />
-            <input
-              value={region.open}
-              onChange={(e) => setRegion({ ...region, open: e.target.value })}
-              placeholder="Open countries, comma separated"
+              value={launch.open}
+              onChange={(e) => setLaunch({ ...launch, open: e.target.value })}
+              placeholder="Cities to open now, separated by ;"
             />
             <button
               className="ghost-button"
@@ -228,26 +179,64 @@ export default function AdminPage() {
               onClick={() =>
                 updatePlatform(
                   {
-                    countryTarget: Number(region.target),
-                    openCountries: region.open.split(',').map((c) => c.trim()).filter(Boolean)
+                    cityTarget: Number(launch.target),
+                    openCities: launch.open.split(';').map((c) => c.trim()).filter(Boolean)
                   },
-                  'Regional launch saved.'
+                  'City launch saved.'
                 )
               }
             >
-              Save regions
+              Save
             </button>
           </div>
+          {platform.cities?.length ? (
+            <table className="city-table">
+              <thead>
+                <tr>
+                  <th>City</th>
+                  <th>Women</th>
+                  <th>Men</th>
+                  <th>Progress</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {platform.cities.slice(0, 50).map((city) => (
+                  <tr key={city.key}>
+                    <td>
+                      {city.name}, {city.country}
+                    </td>
+                    <td>
+                      {city.femaleCount}/{city.target}
+                    </td>
+                    <td>
+                      {city.maleCount}/{city.target}
+                    </td>
+                    <td>{city.progressPercent}%</td>
+                    <td>{city.open ? (city.openedByAdmin ? 'Open (by hand)' : 'Open') : 'Closed'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="hero-text">No members with a city yet.</p>
+          )}
+
+          <h2>Open everywhere</h2>
+          <p className="hero-text">
+            {platform.openEverywhere
+              ? `Dating is open everywhere since ${new Date(platform.openedEverywhereAt).toLocaleString()}. Use this for app-store review, then close it.`
+              : 'Opens dating for every member at once, whatever their city. For app-store review and testing.'}
+          </p>
           <div className="action-row">
-            <input value={region.lookup} onChange={(e) => setRegion({ ...region, lookup: e.target.value })} placeholder="Check a country" />
-            <button className="ghost-button" type="button" onClick={lookupCountry} disabled={!region.lookup.trim()}>
-              Check
-            </button>
-            {region.result && (
-              <span className="hero-text">
-                {region.result.name}: {region.result.maleCount}/{region.result.target} men · {region.result.femaleCount}/
-                {region.result.target} women · {region.result.open ? 'open' : 'closed'}
-              </span>
+            {platform.openEverywhere ? (
+              <button className="ghost-button" type="button" onClick={() => updatePlatform({ datingOpen: false }, 'Closed everywhere.')}>
+                Close everywhere
+              </button>
+            ) : (
+              <button className="primary-button" type="button" onClick={() => updatePlatform({ datingOpen: true }, 'Opened everywhere.')}>
+                Open everywhere
+              </button>
             )}
           </div>
 

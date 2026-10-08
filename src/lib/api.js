@@ -86,20 +86,3 @@ export async function apiFetch(path, options = {}, token = getToken()) {
 
   return res.json()
 }
-
-export function buildTasteSummary(user, match) {
-  if (!user || !match) return 'Taste vibe is still being discovered.'
-
-  const sharedLoved = (match.loved || []).filter((movie) => (user.loved || []).includes(movie)).slice(0, 2)
-  const sharedHated = (match.hated || []).filter((movie) => (user.hated || []).includes(movie)).slice(0, 2)
-  const parts = []
-
-  if (sharedLoved.length) parts.push(`Loved: ${sharedLoved.join(' and ')} like you`)
-  if (sharedHated.length) parts.push(`Hated: ${sharedHated.join(' and ')} like you`)
-
-  return parts.join(' · ') || 'Different taste, but definitely interesting.'
-}
-
-export function movieLabel(movie) {
-  return `${movie.title} (${movie.year})`
-}

@@ -20,9 +20,6 @@ const envSchema = z.object({
   SUPABASE_URL: z.string().url(),
   SUPABASE_SERVICE_ROLE_KEY: optional(z.string().min(20)),
   SUPABASE_ANON_KEY: optional(z.string().min(20)),
-  // Only used to create the platform_settings row on an empty database. Change targets in /admin afterwards.
-  LAUNCH_MALE_TARGET: optional(z.coerce.number().int().positive()).default(500),
-  LAUNCH_FEMALE_TARGET: optional(z.coerce.number().int().positive()).default(500),
   // Local testing only: report dating as open from this API instance without touching the shared database.
   FORCE_DATING_OPEN: optional(z.enum(['true', 'false'])).transform((value) => value === 'true'),
   DAILY_MOVIE_COUNT: optional(z.coerce.number().int().min(5).max(20)).default(10),

@@ -26,6 +26,8 @@ import friendsRoutes from './routes/friends.js'
 import feedbackRoutes from './routes/feedback.js'
 import publicRoutes from './routes/public.js'
 import billingRoutes from './routes/billing.js'
+import { getPublicTasteCard } from './services/growthService.js'
+import { readIndexHtml, tastePreview, withPreviewTags } from './services/shareCardService.js'
 import { openApiDocument } from './openapi/spec.js'
 import swaggerUi from 'swagger-ui-express'
 
@@ -122,6 +124,18 @@ export function createApp() {
   mount('/api')
 
   if (isProduction && fs.existsSync(distPath)) {
+    // Shared taste-card links get a title, text and image when pasted into WhatsApp, Instagram or X.
+    const indexHtml = readIndexHtml(distPath)
+    app.get('/taste/:code', async (req, res, next) => {
+      try {
+        const card = await getPublicTasteCard(req.params.code)
+        const origin = env.APP_PUBLIC_URL ? env.APP_PUBLIC_URL.replace(/\/$/, '') : `${req.protocol}://${req.get('host')}`
+        res.set('Cache-Control', 'public, max-age=300')
+        return res.type('html').send(withPreviewTags(indexHtml, tastePreview(card, origin)))
+      } catch {
+        return next()
+      }
+    })
     app.use(express.static(distPath))
     app.get('*', (req, res, next) => {
       if (req.path.startsWith('/api')) return next()

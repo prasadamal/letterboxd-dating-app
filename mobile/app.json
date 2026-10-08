@@ -93,13 +93,11 @@
       "typedRoutes": true
     },
     "extra": {
-      "privacyPolicyUrl": "https://github.com/prasadamal/letterboxd-dating-app/blob/main/docs/legal/PRIVACY_POLICY.md",
       "supportEmail": "support@reelmates.app",
       "webUrl": "https://reelmates.app",
       "supabaseUrl": "",
       "supabaseAnonKey": "",
-      "router": {},
-      "termsUrl": "https://github.com/prasadamal/letterboxd-dating-app/blob/main/docs/legal/TERMS_OF_SERVICE.md"
+      "router": {}
     }
   }
 }

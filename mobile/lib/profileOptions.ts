@@ -39,5 +39,18 @@ export const PROFILE_PROMPTS: Record<string, string> = {
 
 export const MAX_PROMPTS = 3
 
+// One-tap city choices, launch cities first (server/lib/cityLaunch.js resolves other spellings like Cochin).
+export const SUGGESTED_CITIES: Record<string, string[]> = {
+  india: ['Kochi', 'Thiruvananthapuram', 'Kozhikode', 'Bengaluru', 'Chennai', 'Hyderabad', 'Mumbai', 'Delhi', 'Kolkata', 'Pune']
+}
+
+export function suggestedCities(country?: string | null) {
+  return SUGGESTED_CITIES[String(country || '').trim().toLowerCase()] || []
+}
+
 // Public web app that serves /taste/<code> (the API's Docker image serves it too).
 export const WEB_URL = String(process.env.EXPO_PUBLIC_WEB_URL || Constants.expoConfig?.extra?.webUrl || 'https://reelmates.app').replace(/\/$/, '')
+
+// Legal pages live on the website (web app /privacy, /terms, /support, /delete-account).
+export const PRIVACY_URL = `${WEB_URL}/privacy`
+export const TERMS_URL = `${WEB_URL}/terms`

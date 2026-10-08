@@ -12,9 +12,9 @@ import { haptic } from '../../lib/haptics'
 import { usePlatform } from '../../lib/platform'
 import { WEB_URL } from '../../lib/profileOptions'
 import { colors, fonts, radii, type } from '../../lib/theme'
-import type { DatingProfile } from '../../lib/types'
+import type { CityProgress, DatingProfile } from '../../lib/types'
 
-type DeckMeta = { remainingInPool?: number; swipedCount?: number; regionOnly?: boolean }
+type DeckMeta = { remainingInPool?: number; swipedCount?: number; area?: 'city' | 'country'; city?: string | null }
 
 export default function MatchScreen() {
   const router = useRouter()
@@ -29,6 +29,7 @@ export default function MatchScreen() {
   const [reporting, setReporting] = useState(false)
   const [dragging, setDragging] = useState(false)
   const [match, setMatch] = useState<DatingProfile | null>(null)
+  const [board, setBoard] = useState<CityProgress[]>([])
 
   const datingOn = user?.dating_enabled !== false
   const open = Boolean(platform?.datingLaunched)
@@ -36,6 +37,8 @@ export default function MatchScreen() {
   const load = useCallback(async () => {
     if (!datingOn || !open) {
       setLoading(false)
+      // While locked, show the cities closest to opening.
+      if (datingOn) apiFetch<{ cities?: CityProgress[] }>('/platform/status').then((d) => setBoard(d.cities || [])).catch(() => null)
       return
     }
     setLoading(true)
@@ -88,7 +91,7 @@ export default function MatchScreen() {
   }
 
   async function turnOnDating() {
-    if (!user?.gender) {
+    if (!user?.gender || !user?.city) {
       router.push('/settings')
       return
     }
@@ -105,7 +108,7 @@ export default function MatchScreen() {
       title="Match"
       subtitle={
         open && datingOn && meta
-          ? `${meta.remainingInPool ?? 0} ${meta.remainingInPool === 1 ? 'person' : 'people'} in your deck${platform?.regionOnly && platform.country ? ` · ${platform.country.name}` : ''}`
+          ? `${meta.remainingInPool ?? 0} ${meta.remainingInPool === 1 ? 'person' : 'people'} in your deck${meta.area === 'country' ? ` · every open city` : meta.city ? ` · ${meta.city}` : ''}`
           : 'Dates ranked by film taste'
       }
       right={
@@ -132,28 +135,53 @@ export default function MatchScreen() {
   }
 
   if (!open) {
-    const country = platform?.country
-    const pct = country?.progressPercent ?? platform?.progressPercent ?? 0
+    const city = platform?.city
+    const others = board.filter((c) => !city || c.name !== city.name || c.country !== city.country).slice(0, 5)
     return (
       <ScrollView style={styles.screen} contentContainerStyle={{ paddingBottom: 40 }}>
         {header}
         <View style={styles.body}>
-          <Card style={styles.lockedCard}>
-            <Text style={styles.bigEmoji}>🎟️</Text>
-            <Text style={type.h2}>{country ? `Dating opens in ${country.name} soon` : 'Dating opens soon'}</Text>
-            <Text style={type.body}>
-              We open each country once enough people of each gender have joined, so your first deck is full of people with your taste.
-            </Text>
-            <ProgressBar value={pct} height={10} />
-            <Text style={styles.pct}>{pct}% there</Text>
-            <Button
-              title="Invite friends to open it sooner"
-              icon="paper-plane"
-              onPress={() =>
-                Share.share({ message: `Join me on ReelMates, where people match by film taste 🎬 ${WEB_URL}` }).catch(() => null)
-              }
-            />
-          </Card>
+          {city ? (
+            <Card style={styles.lockedCard}>
+              <Text style={styles.bigEmoji}>🎟️</Text>
+              <Text style={type.h2}>Unlock dating in {city.name}</Text>
+              <Text style={type.body}>
+                {city.name} opens once {city.target} women and {city.target} men want to date, so your first deck is full of people nearby with your taste.
+              </Text>
+              <ProgressBar value={city.progressPercent} height={10} />
+              <Text style={styles.pct}>{city.progressPercent}% there</Text>
+              <Button
+                title={`Invite friends in ${city.name}`}
+                icon="paper-plane"
+                onPress={() =>
+                  Share.share({ message: `Help unlock ReelMates dating in ${city.name} 🎬 Swipe 10 films a day and find your film people. ${WEB_URL}` }).catch(() => null)
+                }
+              />
+            </Card>
+          ) : (
+            <Card style={styles.lockedCard}>
+              <Text style={styles.bigEmoji}>📍</Text>
+              <Text style={type.h2}>Which city are you in?</Text>
+              <Text style={type.body}>Dating opens city by city. Add yours to see how close it is.</Text>
+              <Button title="Add my city" icon="location" onPress={() => router.push('/settings')} />
+            </Card>
+          )}
+          {others.length > 0 && (
+            <>
+              <Text style={type.label}>Closest to opening</Text>
+              <Card style={{ gap: 12 }}>
+                {others.map((c) => (
+                  <View key={`${c.name}|${c.country}`} style={{ gap: 6 }}>
+                    <View style={styles.boardRow}>
+                      <Text style={styles.boardCity}>{c.name}</Text>
+                      <Text style={styles.boardPct}>{c.open ? 'Open' : `${c.progressPercent}%`}</Text>
+                    </View>
+                    <ProgressBar value={c.open ? 100 : c.progressPercent} />
+                  </View>
+                ))}
+              </Card>
+            </>
+          )}
           <Text style={type.label}>Meanwhile</Text>
           <Card onPress={() => router.push('/(tabs)/home')}>
             <Text style={type.h3}>🎬 Play today's films</Text>
@@ -251,6 +279,9 @@ export default function MatchScreen() {
 }
 
 const styles = StyleSheet.create({
+  boardRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
+  boardCity: { fontFamily: fonts.semi, color: colors.text, fontSize: 15 },
+  boardPct: { fontFamily: fonts.bold, color: colors.soft, fontSize: 13 },
   screen: { flex: 1, backgroundColor: colors.bg },
   body: { paddingHorizontal: 16, gap: 14 },
   headerActions: { flexDirection: 'row', gap: 8, marginBottom: 2 },

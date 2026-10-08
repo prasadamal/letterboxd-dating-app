@@ -6,7 +6,7 @@ import { setUserVerification } from '../services/verificationService.js'
 import { validateBody } from '../middleware/validate.js'
 import { z } from 'zod'
 import { writeAuditLog } from '../services/auditService.js'
-import { getCountryProgress, getPlatformStatus, updatePlatformSettings } from '../platformService.js'
+import { getAdminPlatform, updatePlatformSettings } from '../platformService.js'
 import { supabase } from '../supabaseClient.js'
 
 const router = express.Router()
@@ -69,18 +69,17 @@ router.patch(
 router.get(
   '/platform',
   asyncHandler(async (req, res) => {
-    return res.json({ platform: await getPlatformStatus({ fresh: true }) })
+    return res.json({ platform: await getAdminPlatform() })
   })
 )
 
 const platformSchema = z
   .object({
-    maleTarget: z.number().int().min(1).max(1_000_000).optional(),
-    femaleTarget: z.number().int().min(1).max(1_000_000).optional(),
+    // Open or close dating everywhere at once (app-store reviewers, testing).
     datingOpen: z.boolean().optional(),
-    // Regional launch: per-country men AND women needed to open a country on its own, and countries opened by hand.
-    countryTarget: z.number().int().min(1).max(1_000_000).optional(),
-    openCountries: z.array(z.string().min(2).max(80)).max(250).optional()
+    // City launch: women AND men needed to open a city on its own, and cities opened by hand ("Kochi" or "Kochi, India").
+    cityTarget: z.number().int().min(1).max(1_000_000).optional(),
+    openCities: z.array(z.string().min(2).max(120)).max(500).optional()
   })
   .refine((body) => Object.keys(body).length > 0, 'Send at least one setting')
 
@@ -97,16 +96,6 @@ router.patch(
       requestId: req.requestId
     })
     return res.json({ platform })
-  })
-)
-
-// Country progress for the regional launch (any country name, as members typed it).
-router.get(
-  '/platform/country',
-  asyncHandler(async (req, res) => {
-    const country = typeof req.query.name === 'string' ? req.query.name : ''
-    if (!country.trim()) throw new AppError('name required', 400, 'VALIDATION_ERROR')
-    return res.json({ country: await getCountryProgress(country) })
   })
 )
 

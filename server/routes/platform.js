@@ -1,5 +1,5 @@
 import express from 'express'
-import { getPlatformStatus, getPlatformStatusForUser } from '../platformService.js'
+import { getPlatformStatus, getPlatformStatusForUser, getPublicCityBoard } from '../platformService.js'
 import { findUserById } from '../db.js'
 import { authMiddleware } from '../middleware/auth.js'
 import { API_VERSION, MIN_MOBILE_VERSION, RECOMMENDED_MOBILE_VERSION } from '../lib/version.js'
@@ -14,17 +14,18 @@ router.get('/version', (req, res) => {
   })
 })
 
+// Public: whether dating is open everywhere, and the "unlock your city" board (percentages only).
 router.get('/status', async (req, res) => {
   try {
     const status = await getPlatformStatus()
-    return res.json(status)
+    return res.json({ openEverywhere: status.openEverywhere, cityTarget: status.cityTarget, cities: await getPublicCityBoard() })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ message: 'Could not load platform status' })
   }
 })
 
-// Includes the member's country progress; dating may be open in their country before the global launch.
+// The member's own view: is dating open for them, and how close is their city.
 router.get('/status/me', authMiddleware, async (req, res) => {
   try {
     const status = await getPlatformStatusForUser(await findUserById(req.user.id), { includeMatches: true })

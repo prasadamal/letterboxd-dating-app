@@ -88,7 +88,7 @@ export default function TodayScreen() {
   const playing = remaining > 0 && !later
   const currentStreak = streak?.current ?? user?.streak?.current ?? 0
   const datingOn = user?.dating_enabled !== false
-  const country = platform?.country
+  const city = platform?.city
 
   const streakPill = (
     <View style={[styles.streakPill, !currentStreak && { opacity: 0.6 }]} accessibilityLabel={`${currentStreak} day streak`}>
@@ -161,7 +161,7 @@ export default function TodayScreen() {
         </Card>
       )}
 
-      {results && results.played > 0 && <DailyResultsCard results={results} />}
+      {results && results.played > 0 && <DailyResultsCard results={results} streak={currentStreak} />}
 
       <SectionTitle title="Your film people" action={friends.length ? 'See all' : undefined} onAction={() => router.push('/friends')} />
       {friends.length ? (
@@ -223,25 +223,36 @@ export default function TodayScreen() {
             <Card onPress={() => router.push('/(tabs)/dating')} style={styles.datingLive}>
               <Text style={styles.datingEmoji}>💘</Text>
               <View style={{ flex: 1, gap: 2 }}>
-                <Text style={type.h3}>Your deck is live{platform.regionOnly && country ? ` in ${country.name}` : ''}</Text>
+                <Text style={type.h3}>Your deck is live{city?.open ? ` in ${city.name}` : ''}</Text>
                 <Text style={type.small}>Ranked by taste match, not looks.</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={22} color={colors.muted} />
+            </Card>
+          ) : !city ? (
+            <Card onPress={() => router.push('/settings')} style={styles.datingLive}>
+              <Text style={styles.datingEmoji}>📍</Text>
+              <View style={{ flex: 1, gap: 2 }}>
+                <Text style={type.h3}>Add your city</Text>
+                <Text style={type.small}>Dating opens city by city. Tell us yours to see how close it is.</Text>
               </View>
               <Ionicons name="chevron-forward" size={22} color={colors.muted} />
             </Card>
           ) : (
             <Card>
-              <Text style={type.h3}>{country ? `Dating opens in ${country.name} soon` : 'Dating opens soon'}</Text>
-              <ProgressBar value={country?.progressPercent ?? platform?.progressPercent ?? 0} />
+              <Text style={type.h3}>Unlock dating in {city.name}</Text>
+              <ProgressBar value={city.progressPercent} />
               <Text style={type.small}>
-                {country?.progressPercent ?? platform?.progressPercent ?? 0}% of the way there. We open a country once enough people of each gender join, so every deck is full from day one.
+                {city.progressPercent}% there. {city.name} opens once {city.target} women and {city.target} men join, so the first deck is full of people with your taste.
               </Text>
               <Button
-                title="Invite friends to open it sooner"
+                title={`Invite friends in ${city.name}`}
                 variant="secondary"
                 size="md"
                 icon="paper-plane-outline"
                 disabled={!myCode}
-                onPress={() => Share.share({ message: `Join me on ReelMates, the app that matches people by film taste 🎬 Code: ${myCode} ${WEB_URL}` }).catch(() => null)}
+                onPress={() =>
+                  Share.share({ message: `Help unlock ReelMates dating in ${city.name} 🎬 Swipe 10 films a day and find your film people. My code: ${myCode} ${WEB_URL}` }).catch(() => null)
+                }
               />
             </Card>
           )}

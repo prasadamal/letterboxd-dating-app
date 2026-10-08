@@ -29,5 +29,11 @@ const featureGraphic = `<?xml version="1.0" encoding="UTF-8"?>
 `
 
 fs.writeFileSync(path.join(outDir, 'feature-graphic-template.svg'), featureGraphic)
-console.log('Wrote docs/store/assets/feature-graphic-template.svg')
-console.log('Export to 1024x500 PNG for Play Console feature graphic.')
+
+// PNGs, rendered with the bundled display font: the Play feature graphic and the website's default link preview.
+const { renderSvg } = await import('../server/services/shareCardService.js')
+fs.writeFileSync(path.join(outDir, 'feature-graphic.png'), renderSvg(featureGraphic, 1024))
+const inner = featureGraphic.replace(/<\?xml[^>]*>\s*/, '').replace('<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="0 0 1024 500">', '<svg x="0" y="27" width="1200" height="586" viewBox="0 0 1024 500">')
+const ogImage = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630"><rect width="1200" height="630" fill="#08080B"/>${inner}</svg>`
+fs.writeFileSync(path.join(process.cwd(), 'public/og.png'), renderSvg(ogImage, 1200))
+console.log('Wrote docs/store/assets/feature-graphic-template.svg and feature-graphic.png (Play Console), and public/og.png')

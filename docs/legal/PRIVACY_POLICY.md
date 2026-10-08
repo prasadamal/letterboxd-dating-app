@@ -1,60 +1,71 @@
 # Privacy Policy — ReelMates
 
-**Effective date:** October 3, 2026  
-**Contact:** support@reelmates.app
+**Effective date:** 7 October 2026
+**Contact and grievances:** support@reelmates.app
 
-ReelMates (“we”) operates the ReelMates mobile app and related services. This policy explains what we collect, why, and your choices.
+ReelMates (“we”) runs the ReelMates app and website: a daily film game, film friends and, only if you switch it on, dating. This policy explains what we collect, why, who can see it, and how to delete it.
 
-## Information we collect
+## What we collect
 
-- **Account data:** email, password (stored only as a bcrypt hash), display name, age, gender, country, bio.
-- **Profile photo:** the photo you choose to upload.
-- **Taste data:** movie like/dislike ratings and derived compatibility scores.
-- **Dating activity:** likes, passes, matches, blocks and reports.
-- **Messages:** text you send to matches through in-app chat.
-- **Device data:** a push notification token, if you allow notifications.
-- **Technical data:** basic logs needed to operate the service (errors, timestamps, IP address for abuse prevention).
+- **Account:** email, password (stored only as a bcrypt hash), first name, age, country, and whether you are here for films and friends or dating too.
+- **If you date:** how you identify, who you want to see, your city, and your dating preferences (age range, area, minimum taste match).
+- **Profile (optional):** a photo, a short bio, up to three film prompts, and your all-time favourite film. A photo is needed to appear to people you might date.
+- **Taste:** your film ratings (loved it, not for me, haven't seen), and what we work out from them: your film personality, taste stats, streaks and taste matches.
+- **Social:** your friend code, film friends, and whether your taste card is public.
+- **Dating activity:** likes, passes, matches, messages, blocks and reports.
+- **Purchases:** whether you have ReelMates Plus and until when. Apple or Google handle payment; we never see card details.
+- **Device:** a push notification token if you allow notifications, and the app version.
+- **Feedback** you send us, and **technical logs** (errors, timestamps, IP address) used to keep the service running and to stop abuse.
 
-## What other members see
+## Who sees what
 
-Other members see your name, age, country, bio, photo, and the films you liked or disliked. They **never** see your email address.
+- **Film friends** see your first name, photo, film personality, favourite film, the films you both liked or disliked, and your taste match.
+- **People you might date** (only while dating is on) see your first name, age, city and country, photo, bio, prompts, film personality, favourite film and the films you have in common. Never your email.
+- **Your public taste card** is off until you share it. It shows your first name, film personality, favourite film, rarest liked films, top genres and counts. Never your photo, age or location. You can hide it again in Settings.
+- **Everyone** sees anonymous totals, such as the share of members who liked a film or how close a city is to opening dating.
+- Nobody else sees your full list of ratings.
 
-We do **not** sell personal data.
+We do **not** sell personal data or use it for advertising.
 
-## How we use information
+## Why we use it
 
-- Create and secure your account
-- Show daily film picks and match you with compatible users
-- Deliver messaging between matched users
-- Improve reliability and prevent abuse
+- To run your account and keep it secure
+- To show the daily films, your results, your film personality and your taste matches
+- To find film friends and, if you date, people in your city who match your taste
+- To deliver messages and notifications you asked for
+- To handle Plus subscriptions
+- To prevent abuse, review reports and fix problems
 
-## Storage & processors
+We rely on your consent, which you give when you sign up and can withdraw at any time (see “Your choices and rights”).
 
-We use these service providers to run ReelMates:
+## Where it is stored and who processes it
 
-- **Supabase** — database and photo storage
-- **Expo** — delivering push notifications
-- **Resend** — sending account emails (password reset, verification)
-- Our API hosting provider
+- **Supabase** — database and photo storage, in Mumbai, India
+- **Render** — hosting for our API and website
+- **Resend** — account emails (password reset, email verification)
+- **Expo**, with Apple and Google — push notifications
+- **RevenueCat**, with Apple and Google — Plus subscriptions
 
-Passwords are stored as **bcrypt** hashes, data is encrypted in transit (HTTPS), and the database denies direct client access.
+Data is encrypted in transit (HTTPS), passwords are hashed, and the database refuses direct access from apps or browsers: only our API can read it.
 
-## Retention
+## How long we keep it
 
-We keep your data while your account exists. **Delete your account in the app (Profile → Delete account)** to permanently erase your profile, photo, ratings, likes, matches, messages (including your conversations with others) and device tokens. We keep only an anonymous record of reports involving your account, for safety, and short-lived server logs.
+We keep your data while your account exists. When you delete your account we permanently erase your profile, photos, ratings, friends, likes, matches, messages (whole conversations you were part of) and device tokens. We keep only an anonymous record of reports involving your account, for safety, feedback you sent us, and short-lived server logs.
 
-## Your rights
+## Deleting your account
 
-You may request access, correction, or deletion by emailing **support@reelmates.app**.
+- **In the app:** You → Settings → Delete account.
+- **On the web:** go to the **Delete account** page on our website (/delete-account) and sign in.
+- **By email:** write to support@reelmates.app from your account email.
+
+## Your choices and rights
+
+You can switch dating off, hide your taste card, turn off notifications, or delete your account at any time. You can ask us to access, correct or erase your data, withdraw your consent, or (in India) nominate someone to exercise these rights for you. Email **support@reelmates.app**; we reply within 30 days. If you are in India and not satisfied with our answer, you can complain to the Data Protection Board of India.
 
 ## Children
 
-ReelMates is only for adults **18+**. We remove accounts we find belong to anyone under 18.
+ReelMates is only for adults **18 and over**. We delete accounts that we find belong to anyone younger.
 
 ## Changes
 
-We may update this policy; the effective date will change when we do.
-
-## International users
-
-If you use ReelMates outside your home country, your data may be processed where our servers are hosted.
+We will update the effective date when this policy changes, and tell you in the app about important changes.

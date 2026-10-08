@@ -38,14 +38,28 @@ test('a distinctive genre beats a common one', () => {
 })
 
 test('Indian languages make a Desi Cinephile; other subtitles across genres make a World Cinema Nomad', () => {
-  const desi = filmPersonality(many(10, (i) => film(i < 8 ? 'love' : 'hate', ['Drama'], { origin_language: i % 2 ? 'Malayalam' : 'Hindi' })), { baselines })
-  assert.equal(desi.key, 'desi')
   const genres = ['Drama', 'Comedy', 'Romance', 'Thriller']
+  const desi = filmPersonality(many(10, (i) => film(i < 8 ? 'love' : 'hate', [genres[i % 4]], { origin_language: i % 2 ? 'Malayalam' : 'Hindi' })), { baselines })
+  assert.equal(desi.key, 'desi')
   const world = filmPersonality(
     many(12, (i) => film(i < 11 ? 'love' : 'hate', [genres[i % 4]], { origin_language: ['Korean', 'Japanese', 'French'][i % 3] })),
     { baselines }
   )
   assert.equal(world.key, 'world')
+})
+
+test('a clear genre taste wins over language, which shows as a trait', () => {
+  // All thrillers, all Malayalam: the thrill signal names the personality and Indian cinema becomes a trait.
+  const rated = many(10, (i) => film(i < 9 ? 'love' : 'hate', ['Thriller'], { origin_language: 'Malayalam' }))
+  const p = filmPersonality(rated, { baselines })
+  assert.equal(p.key, 'thrill')
+  assert.ok(p.traits.includes('Desi cinema 🪔'))
+})
+
+test('a signal that is most of the catalog stays reachable', async () => {
+  const { baselinesFrom } = await import('../lib/filmPersonality.js')
+  const catalog = many(100, (i) => film('love', ['Drama'], { origin_language: i < 70 ? 'Tamil' : 'English' }))
+  assert.equal(baselinesFrom(catalog).desi, 0.5)
 })
 
 test('a common signal needs real lift: a casual mix is a Genre Hopper', () => {

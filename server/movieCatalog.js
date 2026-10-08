@@ -1,4 +1,7 @@
-export const movieCatalog = [
+import { FIRST_ID, INDIAN_FILMS } from './data/indianFilms.js'
+import { INDIAN_LANGUAGES } from './lib/genres.js'
+
+const baseCatalog = [
   {
     "id": 1,
     "title": "The Shawshank Redemption",
@@ -5703,3 +5706,27 @@ export const movieCatalog = [
     ]
   }
 ]
+
+// Indian films get the "indian" collection plus their language's collection, so Explore can filter by language.
+const LANGUAGE_COLLECTIONS = { Malayalam: 'malayalam', Tamil: 'tamil', Telugu: 'telugu', Hindi: 'hindi', Bengali: 'bengali', Kannada: 'kannada', Marathi: 'marathi' }
+
+function withLanguageTags(film) {
+  if (!INDIAN_LANGUAGES.has(film.origin_language)) return film
+  const tags = new Set(film.tags || [])
+  tags.add('indian')
+  if (LANGUAGE_COLLECTIONS[film.origin_language]) tags.add(LANGUAGE_COLLECTIONS[film.origin_language])
+  return { ...film, tags: [...tags] }
+}
+
+const indianAdditions = INDIAN_FILMS.map(([title, year, language, genre, popularity, extraTags], index) => ({
+  id: FIRST_ID + index,
+  title,
+  year,
+  genres: [genre],
+  origin_language: language,
+  popularity,
+  in_deck: true,
+  tags: extraTags ? extraTags.split(' ') : []
+}))
+
+export const movieCatalog = [...baseCatalog, ...indianAdditions].map(withLanguageTags)

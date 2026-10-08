@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { apiFetch, setSession } from '../lib/api.js'
 import { BrandMark } from '../components/BrandMark.jsx'
 import { Poster } from '../components/Poster.jsx'
+import { SiteFooter } from '../components/SiteFooter.jsx'
 
 const IDENTITIES = [
   ['female', 'Woman'],
@@ -41,6 +42,9 @@ function useNarrow(query = '(max-width: 600px)') {
   return narrow
 }
 
+// Launch cities first; the server resolves other spellings (Cochin → Kochi).
+const INDIA_CITIES = ['Kochi', 'Thiruvananthapuram', 'Kozhikode', 'Bengaluru', 'Chennai', 'Hyderabad', 'Mumbai', 'Delhi']
+
 const EMPTY_FORM = {
   email: '',
   password: '',
@@ -73,6 +77,10 @@ export default function AuthPage({ onAuth }) {
       setError('Choose how you identify to use dating, or pick Films & friends.')
       return
     }
+    if (mode === 'signup' && form.datingEnabled && form.city.trim().length < 2) {
+      setError('Add your city: dating opens city by city.')
+      return
+    }
 
     const payload =
       mode === 'login'
@@ -83,8 +91,8 @@ export default function AuthPage({ onAuth }) {
             name: form.name.trim(),
             age: Number(form.age),
             country: form.country.trim(),
-            ...(form.city.trim() ? { city: form.city.trim() } : {}),
             datingEnabled: form.datingEnabled,
+            ...(form.datingEnabled ? { city: form.city.trim() } : {}),
             ...(form.datingEnabled ? { gender: form.gender, interestedIn: form.interestedIn } : {}),
             ...(form.referralCode.trim() ? { referralCode: form.referralCode.trim().toUpperCase() } : {}),
             termsAccepted: form.termsAccepted === true
@@ -189,10 +197,7 @@ export default function AuthPage({ onAuth }) {
                   <input value={form.name} onChange={(e) => update({ name: e.target.value })} placeholder="First name" autoComplete="given-name" required minLength={2} />
                   <input value={form.age} onChange={(e) => update({ age: e.target.value })} placeholder="Age" type="number" min={18} max={100} required className="age-input" />
                 </div>
-                <div className="field-row">
-                  <input value={form.country} onChange={(e) => update({ country: e.target.value })} placeholder="Country" autoComplete="country-name" required />
-                  <input value={form.city} onChange={(e) => update({ city: e.target.value })} placeholder="City (optional)" autoComplete="address-level2" />
-                </div>
+                <input value={form.country} onChange={(e) => update({ country: e.target.value })} placeholder="Country" autoComplete="country-name" required />
 
                 <fieldset className="choice-group">
                   <legend>I'm here for</legend>
@@ -212,6 +217,20 @@ export default function AuthPage({ onAuth }) {
 
                 {form.datingEnabled && (
                   <>
+                    <fieldset className="choice-group">
+                      <legend>Your city</legend>
+                      <input value={form.city} onChange={(e) => update({ city: e.target.value })} placeholder="City" autoComplete="address-level2" />
+                      {form.country.trim().toLowerCase() === 'india' && (
+                        <div className="pill-options">
+                          {INDIA_CITIES.map((city) => (
+                            <button key={city} type="button" className={form.city.trim().toLowerCase() === city.toLowerCase() ? 'pill active' : 'pill'} onClick={() => update({ city })}>
+                              {city}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                      <p className="field-hint">Dating opens city by city, once enough people join.</p>
+                    </fieldset>
                     <fieldset className="choice-group">
                       <legend>I am</legend>
                       <div className="pill-options">
@@ -280,11 +299,11 @@ export default function AuthPage({ onAuth }) {
                   <input type="checkbox" checked={form.termsAccepted} onChange={(e) => update({ termsAccepted: e.target.checked })} required />
                   <span>
                     I'm 18+ and accept the{' '}
-                    <a href="https://github.com/prasadamal/letterboxd-dating-app/blob/main/docs/legal/TERMS_OF_SERVICE.md" target="_blank" rel="noreferrer">
+                    <a href="/terms" target="_blank" rel="noreferrer">
                       Terms
                     </a>{' '}
                     and{' '}
-                    <a href="https://github.com/prasadamal/letterboxd-dating-app/blob/main/docs/legal/PRIVACY_POLICY.md" target="_blank" rel="noreferrer">
+                    <a href="/privacy" target="_blank" rel="noreferrer">
                       Privacy Policy
                     </a>
                   </span>
@@ -303,7 +322,10 @@ export default function AuthPage({ onAuth }) {
             )}
           </form>
         )}
-      </section>
+            </section>
+      <div className="landing-footer">
+        <SiteFooter />
+      </div>
     </div>
   )
 }

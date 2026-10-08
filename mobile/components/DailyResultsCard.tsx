@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useEffect, useState } from 'react'
-import { Share, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+import { apiFetch } from '../lib/api'
 import { haptic } from '../lib/haptics'
 import { colors, fonts, radii, type } from '../lib/theme'
-import type { DailyResults } from '../lib/types'
+import type { DailyResults, Personality } from '../lib/types'
+import { DailyStory, ShareImageSheet } from './ShareImageSheet'
 import { Button, Poster } from './ui'
 
 const VOTE = {
@@ -22,8 +24,10 @@ function untilNextDrop(now = new Date()) {
 }
 
 // Today's films as a receipt: your verdict, the film, and how many people liked it.
-export function DailyResultsCard({ results }: { results: DailyResults }) {
+export function DailyResultsCard({ results, streak }: { results: DailyResults; streak?: number }) {
   const [countdown, setCountdown] = useState(untilNextDrop())
+  const [sharing, setSharing] = useState(false)
+  const [personality, setPersonality] = useState<Personality | null>(null)
   useEffect(() => {
     const timer = setInterval(() => setCountdown(untilNextDrop()), 30000)
     return () => clearInterval(timer)
@@ -90,9 +94,16 @@ export function DailyResultsCard({ results }: { results: DailyResults }) {
         icon="share-social"
         onPress={() => {
           haptic.tap()
-          Share.share({ message: results.shareText }).catch(() => null)
+          setSharing(true)
+          // The story shows your film personality too, when you have one.
+          apiFetch<{ stats: { personality?: Personality } }>('/users/taste-stats')
+            .then((d) => setPersonality(d.stats.personality?.ready ? d.stats.personality : null))
+            .catch(() => null)
         }}
       />
+      <ShareImageSheet visible={sharing} onClose={() => setSharing(false)} title="Share today’s results" fallbackText={results.shareText}>
+        <DailyStory results={results} personality={personality} streak={streak} />
+      </ShareImageSheet>
       <Text style={styles.next}>New films in {countdown}</Text>
     </View>
   )

@@ -1,6 +1,5 @@
 import { Ionicons } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
-import Constants from 'expo-constants'
 import { useRouter } from 'expo-router'
 import { useMemo, useState } from 'react'
 import { KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
@@ -9,11 +8,11 @@ import { Avatar, Button, Chip, ProgressBar } from '../components/ui'
 import { apiFetch } from '../lib/api'
 import { signup, useAuth } from '../lib/auth'
 import { haptic } from '../lib/haptics'
-import { GENDER_OPTIONS, defaultInterestedIn, toggleInList } from '../lib/profileOptions'
+import { GENDER_OPTIONS, PRIVACY_URL, TERMS_URL, defaultInterestedIn, suggestedCities, toggleInList } from '../lib/profileOptions'
 import { colors, fonts, radii, type } from '../lib/theme'
 import type { Gender } from '../lib/types'
 
-type Step = 'name' | 'age' | 'country' | 'here' | 'identity' | 'account' | 'photo'
+type Step = 'name' | 'age' | 'country' | 'here' | 'identity' | 'city' | 'account' | 'photo'
 const QUICK_COUNTRIES = ['India', 'United States', 'United Kingdom', 'Canada', 'Australia', 'Germany']
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -32,6 +31,7 @@ export default function SignupScreen() {
     name: '',
     age: '',
     country: '',
+    city: '',
     dating: null as boolean | null,
     gender: null as Gender | null,
     interestedIn: [] as Gender[],
@@ -42,7 +42,7 @@ export default function SignupScreen() {
   })
 
   const steps = useMemo<Step[]>(
-    () => ['name', 'age', 'country', 'here', ...(form.dating ? (['identity'] as Step[]) : []), 'account', 'photo'],
+    () => ['name', 'age', 'country', 'here', ...(form.dating ? (['identity', 'city'] as Step[]) : []), 'account', 'photo'],
     [form.dating]
   )
   const step = steps[index]
@@ -62,6 +62,8 @@ export default function SignupScreen() {
       case 'identity':
         if (!form.gender) return 'Choose how you identify.'
         return form.interestedIn.length ? '' : 'Choose who you would like to meet.'
+      case 'city':
+        return form.city.trim().length >= 2 ? '' : 'Which city are you in?'
       case 'account':
         if (!EMAIL_RE.test(form.email.trim())) return 'Enter a valid email.'
         if (form.password.length < 8) return 'Use at least 8 characters for your password.'
@@ -79,7 +81,7 @@ export default function SignupScreen() {
         age: Number(form.age),
         country: form.country.trim(),
         datingEnabled: Boolean(form.dating),
-        ...(form.dating ? { gender: form.gender, interestedIn: form.interestedIn } : {}),
+        ...(form.dating ? { gender: form.gender, interestedIn: form.interestedIn, city: form.city.trim() } : {}),
         email: form.email.trim(),
         password: form.password,
         termsAccepted: true,
@@ -177,7 +179,7 @@ export default function SignupScreen() {
                 <Chip key={country} label={country} selected={form.country.trim().toLowerCase() === country.toLowerCase()} onPress={() => set({ country })} accessibilityRole="radio" />
               ))}
             </View>
-            <Text style={type.small}>Dating opens country by country, so this decides when yours goes live.</Text>
+            <Text style={type.small}>Where you watch from. It helps us bring you the right films and people.</Text>
           </>
         )}
 
@@ -221,6 +223,21 @@ export default function SignupScreen() {
           </>
         )}
 
+        {step === 'city' && (
+          <>
+            <Text style={type.h1}>Your city</Text>
+            <TextInput style={styles.bigInput} value={form.city} onChangeText={(city) => set({ city })} placeholder="City" placeholderTextColor={colors.faint} autoFocus autoCapitalize="words" returnKeyType="next" onSubmitEditing={next} maxLength={80} />
+            {suggestedCities(form.country).length > 0 && (
+              <View style={styles.chips}>
+                {suggestedCities(form.country).map((city) => (
+                  <Chip key={city} label={city} selected={form.city.trim().toLowerCase() === city.toLowerCase()} onPress={() => set({ city })} accessibilityRole="radio" />
+                ))}
+              </View>
+            )}
+            <Text style={type.small}>Dating opens city by city, once enough people join, so your first deck is full of people nearby.</Text>
+          </>
+        )}
+
         {step === 'account' && (
           <>
             <Text style={type.h1}>Save your taste</Text>
@@ -236,8 +253,8 @@ export default function SignupScreen() {
               <View style={[styles.checkbox, form.terms && styles.checkboxOn]}>{form.terms && <Ionicons name="checkmark" size={14} color={colors.onLime} />}</View>
               <Text style={styles.termsText}>
                 I'm 18+ and accept the{' '}
-                <Text style={styles.link} onPress={() => Linking.openURL(String(Constants.expoConfig?.extra?.termsUrl))}>Terms</Text> (zero tolerance for abuse) and the{' '}
-                <Text style={styles.link} onPress={() => Linking.openURL(String(Constants.expoConfig?.extra?.privacyPolicyUrl))}>Privacy Policy</Text>.
+                <Text style={styles.link} onPress={() => Linking.openURL(TERMS_URL)}>Terms</Text> (zero tolerance for abuse) and the{' '}
+                <Text style={styles.link} onPress={() => Linking.openURL(PRIVACY_URL)}>Privacy Policy</Text>.
               </Text>
             </Pressable>
           </>

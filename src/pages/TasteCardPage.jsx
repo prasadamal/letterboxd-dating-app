@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { BrandMark } from '../components/BrandMark.jsx'
 import { Poster } from '../components/Poster.jsx'
+import { SiteFooter } from '../components/SiteFooter.jsx'
 
 const NEUTRAL = ['#2A2A35', '#55556B']
 
@@ -153,6 +154,7 @@ export default function TasteCardPage({ signedIn }) {
             <p className="fine-print">Only what {card.name} chose to share. No photo, age or location.</p>
           </>
         )}
+        <SiteFooter />
       </main>
     </div>
   )

@@ -10,4 +10,4 @@ export function canonicalGenres(genres) {
 }
 
 // Languages counted as Indian cinema (film personality, collections).
-export const INDIAN_LANGUAGES = new Set(['Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Bengali', 'Marathi', 'Kannada', 'Punjabi', 'Gujarati'])
+export const INDIAN_LANGUAGES = new Set(['Hindi', 'Malayalam', 'Tamil', 'Telugu', 'Bengali', 'Marathi', 'Kannada', 'Punjabi', 'Gujarati', 'Assamese', 'Odia'])

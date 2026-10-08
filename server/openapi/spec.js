@@ -3,7 +3,7 @@ export const openApiDocument = {
   info: {
     title: 'ReelMates API',
     version: '1.2.0',
-    description: 'Movie-taste dating platform API (v1). Authenticate with Bearer JWT from /auth/login or /auth/signup.'
+    description: 'ReelMates API (v1): daily films, film personality, film friends and opt-in dating. Authenticate with Bearer JWT from /auth/login or /auth/signup.'
   },
   servers: [{ url: '/api/v1' }],
   components: {
@@ -17,7 +17,7 @@ export const openApiDocument = {
     '/health/db': { get: { summary: 'Database health', security: [] } },
     '/health/storage': { get: { summary: 'Storage health', security: [] } },
     '/platform/version': { get: { summary: 'API + mobile version policy', security: [] } },
-    '/platform/status': { get: { summary: 'Launch counters', security: [] } },
+    '/platform/status': { get: { summary: 'Whether dating is open everywhere, and the public city board (percentages only)', security: [] } },
     '/auth/signup': { post: { summary: 'Register', security: [] } },
     '/auth/login': { post: { summary: 'Login', security: [] } },
     '/auth/forgot-password': { post: { summary: 'Request password reset', security: [] } },
@@ -34,7 +34,7 @@ export const openApiDocument = {
     '/dating/matches': { get: { summary: 'Mutual matches' } },
     '/movies/daily/results': { get: { summary: "Today's films with your votes and everyone's, plus a shareable result line" } },
     '/dating/likes-you': { get: { summary: 'People who liked you: count for everyone, profiles with ReelMates Plus' } },
-    '/platform/status/me': { get: { summary: "Launch status for the signed-in member, including their country's regional launch" } },
+    '/platform/status/me': { get: { summary: "Is dating open for the signed-in member, and their city's progress" } },
     '/messages/{userId}/starters': { get: { summary: 'Conversation starters for a match, from shared films and prompts' } },
     '/users/taste-card': { put: { summary: 'Make your public taste card visible or hidden ({ public })' } },
     '/public/taste/{code}': { get: { summary: 'Public taste card by friend code (only when shared)', security: [] } },
@@ -47,7 +47,6 @@ export const openApiDocument = {
     '/users/profile': { get: { summary: 'Profile' }, put: { summary: 'Update profile + discovery prefs' } },
     '/users/profile/completeness': { get: { summary: 'Profile completion gate' } },
     '/users/avatar': { post: { summary: 'Upload avatar (base64)' } },
-    '/users/verification/request': { post: { summary: 'Request manual age/location verification' } },
     '/movies/search': { get: { summary: 'Search films by title (?q=), with your rating' } },
     '/movies/top': { get: { summary: "People's chart: films ranked by community likes (?collection=)" } },
     '/movies/collections': { get: { summary: 'Film collections with counts' } },
@@ -64,10 +63,10 @@ export const openApiDocument = {
     '/safety/account': { delete: { summary: 'Delete account' } },
     '/admin/moderation/queue': { get: { summary: 'Moderation queue (x-admin-key)' } },
     '/admin/moderation/{id}': { patch: { summary: 'Update moderation item' } },
-    '/admin/users/{userId}/verification': { patch: { summary: 'Set verification status' } },
+    '/admin/users/{userId}/verification': { patch: { summary: 'Mark a profile verified (shows a verified tag)' } },
     '/admin/platform': {
-      get: { summary: 'Launch gate status (x-admin-key)' },
-      patch: { summary: 'Set launch targets or open/close dating ({ maleTarget, femaleTarget, datingOpen })' }
+      get: { summary: 'City launch: settings and every city with counts (x-admin-key)' },
+      patch: { summary: 'Set the city target, open cities by hand, or open/close everywhere ({ cityTarget, openCities, datingOpen })' }
     },
     '/admin/users/{userId}/suspension': { patch: { summary: 'Suspend or restore an account ({ suspended, reason })' } },
     '/internal/daily-reminders': { post: { summary: 'Cron: daily game push (x-cron-secret)' } },

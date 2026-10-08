@@ -22,10 +22,17 @@ test('signup schema accepts valid payload', () => {
     name: 'Maya',
     age: 25,
     country: 'India',
+    city: 'Kochi',
     gender: 'female',
     termsAccepted: true
   })
   assert.equal(result.success, true)
+})
+
+test('dating signups need a city; films-only signups do not', () => {
+  const base = { email: 'maya@example.com', password: '12345678', name: 'Maya', age: 25, country: 'India', termsAccepted: true }
+  assert.equal(signupSchema.safeParse({ ...base, gender: 'female' }).success, false)
+  assert.equal(signupSchema.safeParse({ ...base, datingEnabled: false }).success, true)
 })
 
 test('login schema requires email', () => {

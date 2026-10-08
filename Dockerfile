@@ -4,7 +4,10 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY index.html vite.config.js ./
+COPY public ./public
 COPY src ./src
+# The /privacy and /terms pages are built from these.
+COPY docs/legal ./docs/legal
 RUN npm run build
 
 # Runtime: API plus the built web app, production dependencies only, non-root user.

@@ -8,7 +8,7 @@ import { Button, Card, Chip, SectionTitle, Tag } from '../components/ui'
 import { apiFetch } from '../lib/api'
 import { useAuth } from '../lib/auth'
 import { haptic } from '../lib/haptics'
-import { GENDER_OPTIONS, WEB_URL, defaultInterestedIn, toggleInList } from '../lib/profileOptions'
+import { GENDER_OPTIONS, PRIVACY_URL, TERMS_URL, WEB_URL, defaultInterestedIn, suggestedCities, toggleInList } from '../lib/profileOptions'
 import { colors, fonts, radii, type } from '../lib/theme'
 import type { Gender } from '../lib/types'
 
@@ -39,6 +39,8 @@ export default function SettingsScreen() {
   const [minAge, setMinAge] = useState(String(user?.discovery_prefs?.minAge || 18))
   const [maxAge, setMaxAge] = useState(String(user?.discovery_prefs?.maxAge || 99))
   const [minScore, setMinScore] = useState(user?.discovery_prefs?.minScore ? String(user.discovery_prefs.minScore) : '')
+  const [city, setCity] = useState(user?.city || '')
+  const [area, setArea] = useState<'city' | 'country'>(user?.discovery_prefs?.area === 'country' ? 'country' : 'city')
   const [needIdentity, setNeedIdentity] = useState(false)
   const [saving, setSaving] = useState(false)
   const [feedbackOpen, setFeedbackOpen] = useState(false)
@@ -72,7 +74,8 @@ export default function SettingsScreen() {
 
   function chooseDating() {
     if (datingOn) return
-    if (!user?.gender) {
+    // Dating needs how you identify and a city (it opens city by city).
+    if (!user?.gender || !user?.city) {
       setNeedIdentity(true)
       return
     }
@@ -82,15 +85,18 @@ export default function SettingsScreen() {
   async function savePreferences() {
     if (!gender) return Alert.alert('Choose how you identify')
     if (!interestedIn.length) return Alert.alert('Show me', 'Choose at least one group you would like to meet.')
+    if (city.trim().length < 2) return Alert.alert('Your city', 'Dating opens city by city, so add yours.')
     const ok = await update({
       gender,
       interestedIn,
+      city: city.trim(),
       ...(needIdentity ? { datingEnabled: true } : {}),
       discoveryPrefs: {
         minAge: Number(minAge) || 18,
         maxAge: Number(maxAge) || 99,
         countries: user?.discovery_prefs?.countries || [],
-        minScore: Math.min(95, Math.max(0, Number(minScore) || 0))
+        minScore: Math.min(95, Math.max(0, Number(minScore) || 0)),
+        area
       }
     }, needIdentity ? undefined : 'Preferences saved')
     if (ok) setNeedIdentity(false)
@@ -111,16 +117,6 @@ export default function SettingsScreen() {
       Alert.alert(data.alreadyVerified ? 'Already verified' : 'Check your email', data.devVerifyUrl ? `Mail isn't configured here. Open:\n${data.devVerifyUrl}` : data.alreadyVerified ? '' : 'We sent you a verification link.')
     } catch (err) {
       Alert.alert('Could not send email', err instanceof Error ? err.message : 'Try again')
-    }
-  }
-
-  async function requestVerification() {
-    try {
-      await apiFetch('/users/verification/request', { method: 'POST', body: JSON.stringify({ notes: 'Requested from Settings' }) })
-      await refreshUser()
-      Alert.alert('Request sent', 'Our team will review your profile.')
-    } catch (err) {
-      Alert.alert('Could not submit', err instanceof Error ? err.message : 'Try again')
     }
   }
 
@@ -145,8 +141,6 @@ export default function SettingsScreen() {
   }
 
   const showPrefs = datingOn || needIdentity
-  const verification =
-    user.verification_status === 'verified' ? 'Verified' : user.verification_status === 'pending' ? 'Under review' : 'Not verified'
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
@@ -181,6 +175,21 @@ export default function SettingsScreen() {
                 <Chip key={value} label={plural} selected={interestedIn.includes(value)} onPress={() => setInterestedIn((list) => toggleInList(list, value))} accessibilityRole="checkbox" />
               ))}
             </View>
+            <Text style={type.label}>Your city</Text>
+            <TextInput style={styles.cityInput} value={city} onChangeText={setCity} placeholder="City" placeholderTextColor={colors.faint} autoCapitalize="words" maxLength={80} accessibilityLabel="Your city" />
+            {suggestedCities(user.country).length > 0 && (
+              <View style={styles.chips}>
+                {suggestedCities(user.country).map((name) => (
+                  <Chip key={name} label={name} selected={city.trim().toLowerCase() === name.toLowerCase()} onPress={() => setCity(name)} accessibilityRole="radio" />
+                ))}
+              </View>
+            )}
+            <Text style={type.label}>Show people from</Text>
+            <View style={styles.chips}>
+              <Chip label="My city" selected={area === 'city'} onPress={() => setArea('city')} accessibilityRole="radio" />
+              <Chip label={`Every open city${user.country ? ` in ${user.country}` : ''}`} selected={area === 'country'} onPress={() => setArea('country')} accessibilityRole="radio" />
+            </View>
+            <Text style={[type.small, { marginTop: -4 }]}>Wider only shows people who chose wider too.</Text>
             <Text style={type.label}>Age range</Text>
             <View style={styles.ageRow}>
               <TextInput style={styles.ageInput} value={minAge} onChangeText={setMinAge} keyboardType="number-pad" maxLength={3} accessibilityLabel="Minimum age" />
@@ -227,19 +236,13 @@ export default function SettingsScreen() {
           subtitle={user.email}
           right={user.email_verified ? <Tag label="Verified" tone="green" icon="checkmark" /> : <Button title="Verify" size="sm" variant="secondary" onPress={requestEmailVerify} />}
         />
-        <Row
-          icon="shield-checkmark-outline"
-          title="Profile verification"
-          subtitle={verification}
-          right={user.verification_status === 'verified' || user.verification_status === 'pending' ? undefined : <Button title="Request" size="sm" variant="secondary" onPress={requestVerification} />}
-        />
       </Card>
 
       <SectionTitle title="Support" />
       <Card style={styles.group}>
         <Row icon="chatbox-ellipses-outline" title="Send feedback" onPress={() => setFeedbackOpen(true)} />
-        <Row icon="document-text-outline" title="Privacy Policy" onPress={() => Linking.openURL(String(Constants.expoConfig?.extra?.privacyPolicyUrl))} />
-        <Row icon="reader-outline" title="Terms of Service" onPress={() => Linking.openURL(String(Constants.expoConfig?.extra?.termsUrl))} />
+        <Row icon="document-text-outline" title="Privacy Policy" onPress={() => Linking.openURL(PRIVACY_URL)} />
+        <Row icon="reader-outline" title="Terms of Service" onPress={() => Linking.openURL(TERMS_URL)} />
         <Row icon="help-buoy-outline" title="Contact support" onPress={() => Linking.openURL(`mailto:${Constants.expoConfig?.extra?.supportEmail}`)} />
       </Card>
 
@@ -270,6 +273,7 @@ const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   ageRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   ageInput: { backgroundColor: colors.cardHigh, borderRadius: radii.sm, color: colors.text, paddingHorizontal: 14, paddingVertical: 10, fontSize: 16, minWidth: 72, textAlign: 'center' },
+  cityInput: { backgroundColor: colors.cardHigh, borderRadius: radii.sm, color: colors.text, paddingHorizontal: 14, paddingVertical: 12, fontSize: 16 },
   plusRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   group: { padding: 6, gap: 0 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 10, paddingVertical: 12 },

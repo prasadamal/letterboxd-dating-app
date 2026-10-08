@@ -20,6 +20,7 @@
     "db:prelaunch-cleanup": "node server/scripts/prelaunchCleanup.js"
   },
   "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@supabase/supabase-js": "^2.49.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",

@@ -8,11 +8,11 @@ import { containsBlockedContent } from '../lib/contentFilter.js'
 import { detectImageType, uploadAvatar } from '../services/storageService.js'
 import { writeAuditLog } from '../services/auditService.js'
 import { saveProfilePhotoRecord, syncProfileCompletion } from '../services/profileService.js'
-import { setUserVerification } from '../services/verificationService.js'
 import { getTasteStats } from '../services/filmService.js'
 import { setTasteCardPublic } from '../services/growthService.js'
 import { supabase } from '../supabaseClient.js'
 import { normalizeInterestedIn } from '../lib/datingEligibility.js'
+import { canonicalCity } from '../lib/cityLaunch.js'
 import { MAX_PROMPT_ANSWER, MAX_PROMPTS, PROFILE_PROMPTS, normalizePrompts } from '../lib/profilePrompts.js'
 
 const router = express.Router()
@@ -37,7 +37,9 @@ const profileUpdateSchema = z.object({
       maxAge: z.number().int().min(18).max(100).optional(),
       countries: z.array(z.string()).optional(),
       // ReelMates Plus: only show people at or above this taste match (ignored without Plus).
-      minScore: z.number().int().min(0).max(95).optional()
+      minScore: z.number().int().min(0).max(95).optional(),
+      // Who to meet: people in my city, or in every open city in my country (both people must agree).
+      area: z.enum(['city', 'country']).optional()
     })
     .optional()
 })
@@ -70,22 +72,26 @@ router.put(
     const updates = {}
 
     if (name) updates.display_name = name
-    if (city !== undefined) updates.city = city
+    if (city !== undefined) updates.city = canonicalCity(city)
     if (country !== undefined) updates.country = country
     if (bio !== undefined) updates.bio = bio
     if (age !== undefined) updates.age = age
     if (hobbies) updates.hobbies = hobbies
-    if (discoveryPrefs) updates.discovery_prefs = discoveryPrefs
+    const current = discoveryPrefs || datingEnabled === true || interestedIn || gender ? await findUserById(req.user.id) : null
+    // Merge so a partial update (e.g. only `area`) keeps the age range and the rest.
+    if (discoveryPrefs) updates.discovery_prefs = { ...(current?.discovery_prefs || {}), ...discoveryPrefs }
     if (gender) updates.gender = gender
     if (interestedIn || gender) {
-      const current = interestedIn ? null : await findUserById(req.user.id)
       updates.interested_in = normalizeInterestedIn(interestedIn || current?.interested_in, gender || current?.gender)
     }
     if (prompts) updates.prompts = normalizePrompts(prompts)
     if (datingEnabled !== undefined) updates.dating_enabled = datingEnabled
-    if (datingEnabled === true && !gender) {
-      const current = await findUserById(req.user.id)
-      if (!current?.gender) throw new AppError('Choose how you identify before turning on dating.', 400, 'GENDER_REQUIRED')
+    if (datingEnabled === true && !gender && !current?.gender) {
+      throw new AppError('Choose how you identify before turning on dating.', 400, 'GENDER_REQUIRED')
+    }
+    // Dating opens city by city, so daters need one.
+    if (datingEnabled === true && !canonicalCity(city ?? current?.city)) {
+      throw new AppError('Add your city before turning on dating.', 400, 'CITY_REQUIRED')
     }
     updates.last_active_at = new Date().toISOString()
 
@@ -138,20 +144,6 @@ router.get(
       if (!user.email_verified) missing.push('email_verification')
     }
     return res.json({ completion, complete: completion >= 80, missing })
-  })
-)
-
-const verificationRequestSchema = z.object({
-  notes: z.string().max(500).optional()
-})
-
-router.post(
-  '/verification/request',
-  authMiddleware,
-  validateBody(verificationRequestSchema),
-  asyncHandler(async (req, res) => {
-    const user = await setUserVerification(req.user.id, 'pending', req.body.notes || 'User requested verification')
-    return res.json({ user })
   })
 )
 

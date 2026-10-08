@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { apiFetch, clearToken, getToken } from './lib/api.js'
 import AuthPage from './pages/AuthPage.jsx'
-import DashboardPage from './pages/DashboardPage.jsx'
+import AccountPage from './pages/AccountPage.jsx'
+import CitiesPage from './pages/CitiesPage.jsx'
+import DeleteAccountPage from './pages/DeleteAccountPage.jsx'
+import LegalPage from './pages/LegalPage.jsx'
+import SupportPage from './pages/SupportPage.jsx'
 import AdminPage from './pages/AdminPage.jsx'
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx'
 import VerifyEmailPage from './pages/VerifyEmailPage.jsx'
@@ -41,7 +45,12 @@ export default function App() {
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/verify-email" element={<VerifyEmailPage />} />
       <Route path="/taste/:code" element={<TasteCardPage signedIn={Boolean(user)} />} />
-      <Route path="/*" element={user ? <DashboardPage user={user} setUser={setUser} /> : <AuthPage onAuth={setUser} />} />
+      <Route path="/privacy" element={<LegalPage doc="privacy" />} />
+      <Route path="/terms" element={<LegalPage doc="terms" />} />
+      <Route path="/support" element={<SupportPage />} />
+      <Route path="/cities" element={<CitiesPage />} />
+      <Route path="/delete-account" element={<DeleteAccountPage user={user} onDeleted={() => setUser(null)} />} />
+      <Route path="/*" element={user ? <AccountPage user={user} /> : <AuthPage onAuth={setUser} />} />
     </Routes>
   )
 }

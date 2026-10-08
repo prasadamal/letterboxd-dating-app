@@ -1,56 +1,24 @@
 import { supabase } from './supabaseClient.js'
 import { env } from './config/env.js'
-import { countryProgress, ilikeExact, normalizeCountry } from './lib/regionLaunch.js'
+import { canonicalCity, cityKey, cityProgress, publicCityProgress } from './lib/cityLaunch.js'
 
 // Every open app polls the launch status, so serve it from memory for a short while.
 const STATUS_TTL_MS = 15_000
 let cached = null
-
-const countryCache = new Map()
+let boardCache = null
 
 export function invalidatePlatformStatus() {
   cached = null
-  countryCache.clear()
+  boardCache = null
 }
 
-// Creates the settings row on an empty database. Never overwrites it: targets are changed from /admin,
-// so a local API pointed at the shared database can't move the production launch gate.
+// Creates the settings row on an empty database. Never overwrites it: the launch is changed from /admin,
+// so a local API pointed at the shared database can't move the production launch.
 export async function ensurePlatformSettings() {
-  const { error } = await supabase.from('platform_settings').upsert(
-    {
-      id: 1,
-      male_target: env.LAUNCH_MALE_TARGET,
-      female_target: env.LAUNCH_FEMALE_TARGET,
-      updated_at: new Date().toISOString()
-    },
-    { onConflict: 'id', ignoreDuplicates: true }
-  )
+  const { error } = await supabase
+    .from('platform_settings')
+    .upsert({ id: 1, updated_at: new Date().toISOString() }, { onConflict: 'id', ignoreDuplicates: true })
   if (error) throw error
-}
-
-// Launch counts are about the dating pool, so only people who switched dating on count.
-async function countUsers(gender, country) {
-  let query = supabase
-    .from('users')
-    .select('id', { count: 'exact', head: true })
-    .eq('gender', gender)
-    .eq('dating_enabled', true)
-    .is('deleted_at', null)
-  if (country !== undefined) query = query.ilike('country', ilikeExact(country))
-  const { count, error } = await query
-  if (error) throw error
-  return count || 0
-}
-
-async function countOthers() {
-  const { count, error } = await supabase
-    .from('users')
-    .select('id', { count: 'exact', head: true })
-    .in('gender', ['nonbinary', 'other'])
-    .eq('dating_enabled', true)
-    .is('deleted_at', null)
-  if (error) throw error
-  return count || 0
 }
 
 async function readSettings() {
@@ -59,37 +27,16 @@ async function readSettings() {
   return data
 }
 
+// Dating is opened everywhere only by an admin (or FORCE_DATING_OPEN on a local API); otherwise city by city.
 async function loadPlatformStatus() {
-  let settings = await readSettings()
-  if (settings && !settings.dating_launched_at) {
-    // Opens dating once both targets are met (the SQL function only ever sets the timestamp).
-    const { error } = await supabase.rpc('refresh_dating_launch')
-    if (error) throw error
-    settings = await readSettings()
-  }
-
-  const [maleCount, femaleCount, otherCount] = await Promise.all([countUsers('male'), countUsers('female'), countOthers()])
-  const maleTarget = settings?.male_target ?? env.LAUNCH_MALE_TARGET
-  const femaleTarget = settings?.female_target ?? env.LAUNCH_FEMALE_TARGET
+  const settings = await readSettings()
   const forced = env.FORCE_DATING_OPEN
-  const datingLaunched = forced || Boolean(settings?.dating_launched_at)
-
   return {
-    maleCount,
-    femaleCount,
-    otherCount,
-    maleTarget,
-    femaleTarget,
-    totalRegistered: maleCount + femaleCount + otherCount,
-    countryTarget: settings?.country_target ?? 150,
-    openCountries: settings?.open_countries || [],
-    datingLaunched,
-    datingLaunchedAt: settings?.dating_launched_at || null,
+    openEverywhere: forced || Boolean(settings?.dating_launched_at),
+    openedEverywhereAt: settings?.dating_launched_at || null,
     forcedOpenLocally: forced,
-    progressPercent: Math.min(
-      100,
-      Math.round(((Math.min(maleCount, maleTarget) / maleTarget + Math.min(femaleCount, femaleTarget) / femaleTarget) / 2) * 100)
-    )
+    cityTarget: settings?.city_target ?? 150,
+    openCities: settings?.open_cities || []
   }
 }
 
@@ -100,26 +47,77 @@ export async function getPlatformStatus({ fresh = false } = {}) {
   return value
 }
 
-async function loadCountryProgress(country, status) {
-  const [maleCount, femaleCount] = await Promise.all([countUsers('male', country), countUsers('female', country)])
-  return countryProgress({
-    country,
-    maleCount,
-    femaleCount,
-    countryTarget: status.countryTarget,
-    openCountries: status.openCountries
-  })
+// Women and men who want to date, per city (SQL function city_dating_counts), plus admin-opened cities.
+async function loadCityBoard(status) {
+  const { data, error } = await supabase.rpc('city_dating_counts')
+  if (error) throw error
+  const byKey = new Map()
+  for (const row of data || []) {
+    const progress = cityProgress({
+      city: row.city,
+      country: row.country,
+      femaleCount: Number(row.women) || 0,
+      maleCount: Number(row.men) || 0,
+      cityTarget: status.cityTarget,
+      openCities: status.openCities
+    })
+    if (!progress.key) continue
+    // Spellings that only differ in case were grouped by SQL; aliases ("Cochin") are merged here.
+    const prev = byKey.get(progress.key)
+    byKey.set(
+      progress.key,
+      prev
+        ? cityProgress({
+            city: progress.name,
+            country: progress.country,
+            femaleCount: prev.femaleCount + progress.femaleCount,
+            maleCount: prev.maleCount + progress.maleCount,
+            cityTarget: status.cityTarget,
+            openCities: status.openCities
+          })
+        : progress
+    )
+  }
+  return [...byKey.values()].sort((a, b) => b.progressPercent - a.progressPercent || a.name.localeCompare(b.name))
 }
 
-export async function getCountryProgress(country) {
-  const key = normalizeCountry(country)
-  if (!key) return null
-  const status = await getPlatformStatus()
-  const hit = countryCache.get(key)
-  if (hit && hit.expires > Date.now()) return hit.value
-  const value = await loadCountryProgress(country, status)
-  countryCache.set(key, { value, expires: Date.now() + STATUS_TTL_MS })
+export async function getCityBoard({ fresh = false } = {}) {
+  if (!fresh && boardCache && boardCache.expires > Date.now()) return boardCache.value
+  const status = await getPlatformStatus({ fresh })
+  const value = await loadCityBoard(status)
+  boardCache = { value, expires: Date.now() + STATUS_TTL_MS }
   return value
+}
+
+export async function getCityProgress(city, country) {
+  const key = cityKey(city, country)
+  if (!key) return null
+  const [status, board] = await Promise.all([getPlatformStatus(), getCityBoard()])
+  return (
+    board.find((c) => c.key === key) ||
+    cityProgress({ city, country, cityTarget: status.cityTarget, openCities: status.openCities })
+  )
+}
+
+export async function getOpenCityKeys() {
+  const [status, board] = await Promise.all([getPlatformStatus(), getCityBoard()])
+  const keys = new Set(board.filter((c) => c.open).map((c) => c.key))
+  // Admin-opened cities with no members yet are open too; "City, Country" entries can be keyed directly.
+  for (const entry of status.openCities) {
+    const [entryCity, ...rest] = String(entry).split(',')
+    const key = cityKey(entryCity, rest.join(','))
+    if (key) keys.add(key)
+  }
+  return keys
+}
+
+// The public "unlock your city" board: percentages only, and only cities with a few members so nobody is singled out.
+export async function getPublicCityBoard({ limit = 30 } = {}) {
+  const board = await getCityBoard()
+  return board
+    .filter((c) => c.open || c.femaleCount + c.maleCount >= 5)
+    .slice(0, limit)
+    .map(publicCityProgress)
 }
 
 async function hasAnyMatch(userId) {
@@ -131,52 +129,68 @@ async function hasAnyMatch(userId) {
   return (count || 0) > 0
 }
 
-// Status as one member sees it: dating is open for them when it is open everywhere or in their country.
-// `regionOnly` means the deck is limited to people in the same country. `includeMatches` adds hasMatches,
-// which the app uses to keep Chats visible for people who paused dating.
+// Status as one member sees it. `datingLaunched` is true when dating is open for them: everywhere (admin) or in
+// their city. `needsCity` asks the app to collect a city. `includeMatches` adds hasMatches, which keeps Chats
+// visible for people who paused dating.
 export async function getPlatformStatusForUser(user, { includeMatches = false } = {}) {
   const status = await getPlatformStatus()
-  const country = user?.country ? await getCountryProgress(user.country) : null
-  const regionOpen = Boolean(country?.open)
+  const city = user?.city && user?.country ? await getCityProgress(user.city, user.country) : null
   return {
-    ...status,
-    globalLaunched: status.datingLaunched,
-    datingLaunched: status.datingLaunched || regionOpen,
-    regionOnly: !status.datingLaunched && regionOpen,
-    country,
+    openEverywhere: status.openEverywhere,
+    cityTarget: status.cityTarget,
+    datingLaunched: status.openEverywhere || Boolean(city?.open),
+    city: publicCityProgress(city),
+    needsCity: !city,
     ...(includeMatches && user?.id ? { hasMatches: await hasAnyMatch(user.id) } : {})
   }
 }
 
 export async function assertDatingLaunched(user) {
-  const status = user ? await getPlatformStatusForUser(user) : await getPlatformStatus()
+  const status = await getPlatformStatusForUser(user)
   if (!status.datingLaunched) {
-    const error = new Error('Dating opens in your country once enough people join. Keep playing the daily films meanwhile.')
+    const error = new Error(
+      status.needsCity
+        ? 'Add your city in Settings: dating opens city by city.'
+        : `Dating opens in ${status.city.name} once enough people join. Keep playing the daily films meanwhile.`
+    )
     error.code = 'DATING_LOCKED'
     throw error
   }
   return status
 }
 
-// Admin control: change targets and/or open or close dating by hand (e.g. for app-store reviewers).
-export async function updatePlatformSettings({ maleTarget, femaleTarget, datingOpen, countryTarget, openCountries }) {
+// Admin: change the city target, open cities by hand, or open/close dating everywhere (e.g. for app-store reviewers).
+export async function updatePlatformSettings({ datingOpen, cityTarget, openCities }) {
   const updates = { updated_at: new Date().toISOString() }
-  if (maleTarget !== undefined) updates.male_target = maleTarget
-  if (femaleTarget !== undefined) updates.female_target = femaleTarget
-  if (countryTarget !== undefined) updates.country_target = countryTarget
-  if (openCountries !== undefined) {
-    updates.open_countries = [...new Set(openCountries.map((c) => c.trim().replace(/\s+/g, ' ')).filter(Boolean))]
+  if (cityTarget !== undefined) updates.city_target = cityTarget
+  if (openCities !== undefined) {
+    updates.open_cities = [
+      ...new Set(
+        openCities
+          .map((entry) => {
+            const [entryCity, ...rest] = String(entry).split(',')
+            const country = rest.join(',').trim().replace(/\s+/g, ' ')
+            const city = canonicalCity(entryCity)
+            return city ? (country ? `${city}, ${country}` : city) : ''
+          })
+          .filter(Boolean)
+      )
+    ]
   }
-  if (datingOpen === true) updates.dating_launched_at = new Date().toISOString()
   if (datingOpen === false) updates.dating_launched_at = null
-
   if (datingOpen === true) {
     const current = await readSettings()
-    if (current?.dating_launched_at) delete updates.dating_launched_at
+    if (!current?.dating_launched_at) updates.dating_launched_at = new Date().toISOString()
   }
 
   const { error } = await supabase.from('platform_settings').update(updates).eq('id', 1)
   if (error) throw error
   invalidatePlatformStatus()
-  return getPlatformStatus({ fresh: true })
+  return getAdminPlatform()
+}
+
+// Admin view: settings plus every city with its counts.
+export async function getAdminPlatform() {
+  const status = await getPlatformStatus({ fresh: true })
+  return { ...status, cities: await getCityBoard({ fresh: true }) }
 }

@@ -8,7 +8,7 @@ import {
   mapPublicUser,
   orderedMatchUsers
 } from './db.js'
-import { assertDatingLaunched } from './platformService.js'
+import { assertDatingLaunched, getOpenCityKeys } from './platformService.js'
 import { getBlockedUserIds } from './safetyService.js'
 import { assertMatchmakingReady } from './services/profileService.js'
 import { passesDiscoveryFilters } from './services/discoveryPrefs.js'
@@ -17,7 +17,7 @@ import { logger } from './lib/logger.js'
 import { rankByTaste } from './lib/tasteMatch.js'
 import { selectAll, selectAllIn } from './lib/paging.js'
 import { genderQueryValues, isMutualInterest } from './lib/datingEligibility.js'
-import { sameCountry } from './lib/regionLaunch.js'
+import { inDatingArea } from './lib/cityLaunch.js'
 import { isPlusActive } from './lib/plus.js'
 import { publicPrompts } from './lib/profilePrompts.js'
 import { withPersonalities } from './services/personalityService.js'
@@ -30,9 +30,9 @@ function datingOff() {
   return error
 }
 
-// Before the global launch, a country that opened on its own only dates within itself.
-function inDatingArea(status, self, other) {
-  return !status.regionOnly || sameCountry(self.country, other.country)
+// Decks stay inside the member's city unless both people chose every open city in their country.
+async function datingAreaContext(status) {
+  return { openEverywhere: status.openEverywhere, openCityKeys: await getOpenCityKeys() }
 }
 
 async function getSwipeMap(userId) {
@@ -89,7 +89,7 @@ export async function recordSwipe(userId, targetId, action) {
 
   if (!target.dating_enabled) throw new Error('This person is not dating right now.')
   if (!isMutualInterest(self, target)) throw new Error('This profile is not in your dating preferences.')
-  if (!inDatingArea(status, self, target)) throw new Error('Dating is open in your country only for now.')
+  if (!inDatingArea(await datingAreaContext(status), self, target)) throw new Error('This person is outside your dating area.')
 
   const { error } = await supabase.from('user_swipes').upsert(
     {
@@ -193,7 +193,7 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
   const candidates = await selectAll(() => {
     let query = supabase
       .from('users')
-      .select('id, age, country, gender, interested_in, last_active_at')
+      .select('id, age, city, country, gender, interested_in, discovery_prefs, last_active_at')
       .neq('id', userId)
       .is('deleted_at', null)
       // Only complete, active profiles (photo, bio, country) that the inactivity job has not paused.
@@ -205,12 +205,13 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
     return query
   })
 
+  const area = await datingAreaContext(status)
   const eligible = candidates.filter(
     (candidate) =>
       !blocked.has(candidate.id) &&
       !swipes.has(candidate.id) &&
       isMutualInterest(self, candidate) &&
-      inDatingArea(status, self, candidate) &&
+      inDatingArea(area, self, candidate) &&
       passesDiscoveryFilters(candidate, prefs)
   )
 
@@ -251,7 +252,8 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
       swipedCount: swipes.size,
       remainingInPool: eligible.length,
       discoveryPrefs: prefs,
-      regionOnly: status.regionOnly,
+      area: prefs.area === 'country' ? 'country' : 'city',
+      city: status.city?.name || null,
       plus,
       stats: statsRow || { swipes_total: swipes.size, likes_total: 0, passes_total: 0 }
     }
@@ -327,14 +329,15 @@ export async function getLikesYou(userId) {
   const people = await selectAllIn(pendingIds, (ids) =>
     supabase
       .from('users')
-      .select(`${CARD_COLUMNS}, interested_in`)
+      .select(`${CARD_COLUMNS}, interested_in, discovery_prefs`)
       .in('id', ids)
       .is('deleted_at', null)
       .eq('is_active', true)
       .eq('dating_enabled', true)
       .order('id')
   )
-  const visible = people.filter((p) => isMutualInterest(self, p) && inDatingArea(status, self, p))
+  const area = await datingAreaContext(status)
+  const visible = people.filter((p) => isMutualInterest(self, p) && inDatingArea(area, self, p))
   const plus = isPlusActive(self)
   if (!plus) return { count: visible.length, plus, profiles: [] }
 

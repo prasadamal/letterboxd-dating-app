@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react'
 import { Alert, Pressable, RefreshControl, ScrollView, Share, StyleSheet, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { TasteStatsCard } from '../../components/TasteStatsCard'
+import { PersonalityStory, ShareImageSheet } from '../../components/ShareImageSheet'
 import { Avatar, Button, Card, IconButton, PersonalityCard, Poster, SectionTitle, StatTile } from '../../components/ui'
 import { apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
@@ -17,6 +18,7 @@ export default function YouScreen() {
   const insets = useSafeAreaInsets()
   const { user, refreshUser } = useAuth()
   const [stats, setStats] = useState<TasteStats | null>(null)
+  const [sharingStory, setSharingStory] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
 
   const load = useCallback(async () => {
@@ -47,7 +49,7 @@ export default function YouScreen() {
     }
   }
 
-  const place = [user.country || user.city, user.age ? String(user.age) : '', genderLabel(user.gender)].filter(Boolean).join(' · ')
+  const place = [[user.city, user.country].filter(Boolean).join(', '), user.age ? String(user.age) : '', genderLabel(user.gender)].filter(Boolean).join(' · ')
   const personality = stats?.personality
 
   return (
@@ -91,7 +93,18 @@ export default function YouScreen() {
 
       <View style={styles.shareRow}>
         <Button title="Share my taste card" icon="share-social" onPress={shareTasteCard} style={{ flex: 1 }} disabled={!user.referral_code} />
+        {personality?.ready && <IconButton icon="image-outline" size={52} accessibilityLabel="Share my film personality as an image" onPress={() => setSharingStory(true)} />}
       </View>
+      {personality?.ready && (
+        <ShareImageSheet
+          visible={sharingStory}
+          onClose={() => setSharingStory(false)}
+          title="Share your film personality"
+          fallbackText={`I'm a ${personality.emoji} ${personality.name} on ReelMates. What's yours? ${WEB_URL}`}
+        >
+          <PersonalityStory personality={personality} code={user.referral_code} />
+        </ShareImageSheet>
+      )}
 
       <View style={styles.tiles}>
         <StatTile value={stats?.liked ?? '–'} label="Liked" color={colors.pink} />
