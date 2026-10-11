@@ -77,7 +77,8 @@ router.put(
     if (bio !== undefined) updates.bio = bio
     if (age !== undefined) updates.age = age
     if (hobbies) updates.hobbies = hobbies
-    const current = discoveryPrefs || datingEnabled === true || interestedIn || gender ? await findUserById(req.user.id) : null
+    const current =
+      discoveryPrefs || datingEnabled === true || interestedIn || gender || city !== undefined ? await findUserById(req.user.id) : null
     // Merge so a partial update (e.g. only `area`) keeps the age range and the rest.
     if (discoveryPrefs) updates.discovery_prefs = { ...(current?.discovery_prefs || {}), ...discoveryPrefs }
     if (gender) updates.gender = gender
@@ -89,8 +90,9 @@ router.put(
     if (datingEnabled === true && !gender && !current?.gender) {
       throw new AppError('Choose how you identify before turning on dating.', 400, 'GENDER_REQUIRED')
     }
-    // Dating opens city by city, so daters need one.
-    if (datingEnabled === true && !canonicalCity(city ?? current?.city)) {
+    // Dating opens city by city, so daters need one (also when a dater clears it).
+    const datingAfter = datingEnabled ?? current?.dating_enabled ?? false
+    if (datingAfter && (datingEnabled === true || city !== undefined) && !canonicalCity(city ?? current?.city)) {
       throw new AppError('Add your city before turning on dating.', 400, 'CITY_REQUIRED')
     }
     updates.last_active_at = new Date().toISOString()

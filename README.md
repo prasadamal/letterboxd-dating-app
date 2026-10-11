@@ -55,13 +55,13 @@ Malayalam, Tamil, Telugu, Hindi, Bengali, Kannada and Marathi, crowd favourites,
 
 - **Here for** is changeable in Settings (`users.dating_enabled`). Films-only members never appear in decks, need no
   gender, and don't count towards the launch. The *Match* tab shows only when dating is on; *Chats* shows once
-  dating is live for you and you date (or still have matches).
+  dating is live for you and you date, and whenever you have matches (paused dating or moved city included).
 - **Who you see:** interest has to go both ways (*Show me*), in your city (or every open city in your country, if both
   people choose that). To appear in decks you need a name, a photo and a country; daters also give a city.
 - **Card:** photo, name, age, place, taste match %, personality, films in common, favourite, up to three prompts, bio.
 - **Likes you:** everyone sees how many; **ReelMates Plus** shows who, plus a minimum taste-match filter.
 - **City launch:** dating opens in a city once `city_target` women AND men there switch it on (default 150), or when
-  an admin opens it in `/admin`. An admin can also open dating everywhere (app-store review, testing). City names are
+  an admin opens it in `/admin`. Once a city reaches the target it stays open (`platform_settings.launched_cities`). An admin can also open dating everywhere (app-store review, testing). City names are
   normalised (Cochin → Kochi, Bangalore → Bengaluru). The app shows the member's city progress as a percentage, never
   gender counts, and `/cities` on the website is the public "unlock your city" board. Code: `server/lib/cityLaunch.js`.
 
@@ -89,7 +89,7 @@ purchase screen is not built yet.
 | **Today** | Daily swipe deck, results, your film people, invite, dating status | Always |
 | **Explore** | Search, People's chart, collections | Always |
 | **Match** | Dating deck, undo, preferences | Dating on |
-| **Chats** | Likes you, new matches, threads with unread badges | Dating live for you, and dating on or matches exist |
+| **Chats** | Likes you, new matches, threads with unread badges | Dating live for you and on, or matches exist |
 | **You** | Personality, taste card, stats, favourite, prompts, film friends, Plus, settings | Always |
 
 ## Design system
@@ -135,8 +135,8 @@ Full list: Swagger UI at `/api/v1/docs`.
 1. Per-user love / hate sets from every rating; *haven't seen* is ignored.
 2. Match % from shared likes and dislikes (rarer films count more), clashes and favourites; it starts at 50% and moves
    as evidence adds up.
-3. Deck: dating-enabled people whose *Show me* fits both ways, same country while only that country is open, not yet
-   swiped or blocked; sorted by match, then films in common.
+3. Deck: dating-enabled people whose *Show me* fits both ways, in your city (or every open city in your country if
+   both chose that), not yet swiped or blocked; sorted by match, then films in common.
 
 Details and formulas: `docs/design/MATCHING.md`. For 10k+ users, precompute candidate pools or move deck generation
 to a background job.
@@ -190,7 +190,8 @@ All in `supabase/migrations/`, applied in order:
 - `20261004120000_favorite_film_and_friends.sql`, `20261004130000_collections_feedback_stats.sql` (v1.3)
 - `20261005120000_inclusive_regions_plus.sql`, `20261006120000_dating_optin.sql` (applied to moviematch on 6 October 2026)
 - `20261007120000_city_launch.sql` — **not yet applied to moviematch**; apply it before deploying this API (it adds
-  `city_target`, `open_cities` and the `city_dating_counts()` function the API calls)
+  `city_target`, `open_cities`, `launched_cities` and the `city_dating_counts()` / `record_city_launches()` functions
+  the API calls)
 
 RLS is enabled on every `public` table with no policies, so client keys get no table access. The API must use
 `SUPABASE_SERVICE_ROLE_KEY`.

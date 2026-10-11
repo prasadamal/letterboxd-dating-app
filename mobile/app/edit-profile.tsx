@@ -18,7 +18,7 @@ export default function EditProfileScreen() {
   const insets = useSafeAreaInsets()
   const { user, refreshUser } = useAuth()
   const [name, setName] = useState(user?.name || '')
-  const [country, setCountry] = useState(user?.country || user?.city || '')
+  const [country, setCountry] = useState(user?.country || '')
   const [bio, setBio] = useState(user?.bio || '')
   const [prompts, setPrompts] = useState<ProfilePrompt[]>((user?.prompts || []).map(({ key, answer }) => ({ key, answer })))
   const [saving, setSaving] = useState(false)

@@ -1,8 +1,9 @@
-// Run once before going public: removes demo and test accounts and closes the launch gate again.
+// Run once before going public: removes demo and test accounts and closes dating again (everywhere, and in every
+// city opened by hand or by test accounts).
 //
 //   npm run db:prelaunch-cleanup                               # dry run: shows what would change
 //   npm run db:prelaunch-cleanup -- --yes                      # delete demo users, reset the gate
-//   npm run db:prelaunch-cleanup -- --yes --emails a@x.com,b@y.com --male-target 500 --female-target 500
+//   npm run db:prelaunch-cleanup -- --yes --emails a@x.com,b@y.com --city-target 150
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -19,8 +20,11 @@ const extraEmails = (option('emails') || '')
   .split(',')
   .map((email) => email.trim().toLowerCase())
   .filter(Boolean)
-const maleTarget = option('male-target') ? Number(option('male-target')) : undefined
-const femaleTarget = option('female-target') ? Number(option('female-target')) : undefined
+const cityTarget = option('city-target') ? Number(option('city-target')) : undefined
+if (cityTarget !== undefined && !(Number.isInteger(cityTarget) && cityTarget > 0)) {
+  console.error('--city-target must be a whole number above 0')
+  process.exit(1)
+}
 
 const { supabase } = await import('../supabaseClient.js')
 const { deleteUserAccount } = await import('../safetyService.js')
@@ -43,10 +47,10 @@ const { data: settings } = await supabase.from('platform_settings').select('*').
 console.log(apply ? 'Applying pre-launch cleanup:' : 'Dry run (add --yes to apply):')
 console.log(`  accounts to delete: ${targets.length}`)
 for (const user of targets) console.log(`    - ${user.email}`)
-console.log(`  dating_launched_at: ${settings?.dating_launched_at || 'null'} -> null`)
-if (maleTarget || femaleTarget) {
-  console.log(`  targets: ${settings?.male_target}/${settings?.female_target} -> ${maleTarget ?? settings?.male_target}/${femaleTarget ?? settings?.female_target}`)
-}
+console.log(`  open everywhere (dating_launched_at): ${settings?.dating_launched_at || 'null'} -> null`)
+console.log(`  cities opened by hand: ${(settings?.open_cities || []).join('; ') || 'none'} -> none`)
+console.log(`  cities that reached the target: ${(settings?.launched_cities || []).join('; ') || 'none'} -> none`)
+if (cityTarget) console.log(`  city target: ${settings?.city_target} -> ${cityTarget}`)
 
 if (!apply) process.exit(0)
 
@@ -58,9 +62,8 @@ for (const user of targets) {
   console.log(`  deleted ${user.email}`)
 }
 
-const updates = { dating_launched_at: null, updated_at: new Date().toISOString() }
-if (maleTarget) updates.male_target = maleTarget
-if (femaleTarget) updates.female_target = femaleTarget
+const updates = { dating_launched_at: null, open_cities: [], launched_cities: [], updated_at: new Date().toISOString() }
+if (cityTarget) updates.city_target = cityTarget
 const { error: settingsError } = await supabase.from('platform_settings').update(updates).eq('id', 1)
 if (settingsError) throw settingsError
 

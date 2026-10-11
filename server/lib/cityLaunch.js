@@ -1,5 +1,6 @@
 // Dating opens city by city. A city opens when it has `cityTarget` women AND men who want to date, or when an
-// admin opens it by hand. An admin can also open dating everywhere (app-store reviewers, testing).
+// admin opens it by hand. Once open it stays open (`launchedCities`), even if a few people later leave.
+// An admin can also open dating everywhere (app-store reviewers, testing).
 // Decks stay inside the member's city unless both people chose "all open cities in my country".
 
 // Common alternative names, so "Cochin" and "Kochi" count as one city. Keys are lower case.
@@ -88,19 +89,24 @@ export function isOpenedByAdmin(city, country, openCities = []) {
   })
 }
 
-export function cityProgress({ city, country, femaleCount = 0, maleCount = 0, cityTarget, openCities = [] }) {
+// `launchedCities` holds the keys of cities that reached the target before: they stay open.
+export function cityProgress({ city, country, femaleCount = 0, maleCount = 0, cityTarget, openCities = [], launchedCities = [] }) {
   const target = Math.max(1, Number(cityTarget) || 1)
   const name = canonicalCity(city)
+  const key = cityKey(name, country)
   const manual = isOpenedByAdmin(name, country, openCities)
   const reached = femaleCount >= target && maleCount >= target
+  const launched = Boolean(key) && launchedCities.includes(key)
   return {
-    key: cityKey(name, country),
+    key,
     name,
     country: collapse(country),
     femaleCount,
     maleCount,
     target,
-    open: Boolean(name) && (reached || manual),
+    open: Boolean(name) && (reached || launched || manual),
+    reached,
+    launched,
     openedByAdmin: manual,
     progressPercent: Math.min(
       100,

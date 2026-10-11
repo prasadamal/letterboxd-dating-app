@@ -1,10 +1,12 @@
 -- Dating opens city by city: a city opens at city_target women AND men who want to date, or when an admin adds it
--- to open_cities. The automatic global 500/500 launch is retired; an admin can still open dating everywhere
--- (platform_settings.dating_launched_at). Apply after 20261006120000_dating_optin.sql.
+-- to open_cities. A city that reached the target is kept in launched_cities and stays open. The automatic global
+-- 500/500 launch is retired; an admin can still open dating everywhere (platform_settings.dating_launched_at).
+-- Apply after 20261006120000_dating_optin.sql.
 
 ALTER TABLE public.platform_settings
   ADD COLUMN IF NOT EXISTS city_target integer NOT NULL DEFAULT 150 CHECK (city_target > 0),
-  ADD COLUMN IF NOT EXISTS open_cities text[] NOT NULL DEFAULT '{}';
+  ADD COLUMN IF NOT EXISTS open_cities text[] NOT NULL DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS launched_cities text[] NOT NULL DEFAULT '{}';
 
 -- Signup used to copy the country into the city when none was given. A country is not a city pool.
 UPDATE public.users SET city = '' WHERE city IS NOT NULL AND lower(btrim(city)) = lower(btrim(coalesce(country, '')));
@@ -40,8 +42,22 @@ AS $function$
   GROUP BY lower(btrim(u.city)), lower(btrim(u.country))
 $function$;
 
--- Only the API (service role) may call it.
+-- Records cities ("kochi|india") that reached the target, so they stay open. Safe to call from several API instances.
+CREATE OR REPLACE FUNCTION public.record_city_launches(keys text[])
+ RETURNS void
+ LANGUAGE sql
+ SET search_path TO ''
+AS $function$
+  UPDATE public.platform_settings
+  SET launched_cities = ARRAY(SELECT DISTINCT unnest(launched_cities || keys) ORDER BY 1),
+      updated_at = now()
+  WHERE id = 1
+$function$;
+
+-- Only the API (service role) may call them.
 REVOKE ALL ON FUNCTION public.city_dating_counts() FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.city_dating_counts() TO service_role;
+REVOKE ALL ON FUNCTION public.record_city_launches(text[]) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.record_city_launches(text[]) TO service_role;
 
 CREATE INDEX IF NOT EXISTS users_city_lower_idx ON public.users (lower(btrim(city))) WHERE deleted_at IS NULL AND dating_enabled;

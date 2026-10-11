@@ -261,9 +261,9 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
   }
 }
 
+// Matches stay visible after a member moves to a city that isn't open yet, or an admin closes dating everywhere:
+// only new matches need dating to be open.
 export async function getMutualMatches(userId) {
-  await assertDatingLaunched(await findUserById(userId))
-
   const blocked = await getBlockedUserIds(userId)
 
   const rows = await selectAll(() =>

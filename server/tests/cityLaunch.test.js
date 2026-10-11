@@ -31,6 +31,19 @@ test('a city opens when both counts reach the target, or by hand', () => {
   assert.equal(cityProgress({ ...base, city: '', openCities: [''] }).open, false)
 })
 
+test('a city that reached the target stays open when people leave', () => {
+  const base = { city: 'Cochin', country: 'India', cityTarget: 150, femaleCount: 149, maleCount: 150 }
+  const reached = cityProgress({ ...base, femaleCount: 150 })
+  assert.equal(reached.reached, true)
+  assert.equal(reached.launched, false)
+  assert.equal(cityProgress(base).open, false)
+  const launched = cityProgress({ ...base, launchedCities: [reached.key] })
+  assert.equal(launched.key, 'kochi|india')
+  assert.equal(launched.open, true)
+  assert.equal(launched.reached, false)
+  assert.equal(cityProgress({ ...base, country: 'Japan', launchedCities: [reached.key] }).open, false)
+})
+
 test('members never see gender counts', () => {
   const view = publicCityProgress(cityProgress({ city: 'Kochi', country: 'India', femaleCount: 10, maleCount: 90, cityTarget: 100 }))
   assert.deepEqual(Object.keys(view).sort(), ['country', 'name', 'open', 'progressPercent', 'target'])

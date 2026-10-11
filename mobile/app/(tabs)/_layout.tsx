@@ -16,10 +16,10 @@ const icon =
 export default function TabsLayout() {
   const { platform } = usePlatform()
   const { user } = useAuth()
-  // Dating is opt-in ("Here for: films & friends / dating too"). People who paused dating keep Chats
-  // while they still have matches.
+  // Dating is opt-in ("Here for: films & friends / dating too"). People who paused dating, moved to a city that
+  // isn't open yet, or were in an app-store review window keep Chats while they still have matches.
   const datingOn = user?.dating_enabled !== false
-  const showChats = Boolean(platform?.datingLaunched) && (datingOn || Boolean(platform?.hasMatches))
+  const showChats = (Boolean(platform?.datingLaunched) && datingOn) || Boolean(platform?.hasMatches)
 
   return (
     <Tabs

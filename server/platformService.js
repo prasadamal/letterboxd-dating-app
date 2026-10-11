@@ -36,7 +36,8 @@ async function loadPlatformStatus() {
     openedEverywhereAt: settings?.dating_launched_at || null,
     forcedOpenLocally: forced,
     cityTarget: settings?.city_target ?? 150,
-    openCities: settings?.open_cities || []
+    openCities: settings?.open_cities || [],
+    launchedCities: settings?.launched_cities || []
   }
 }
 
@@ -45,6 +46,20 @@ export async function getPlatformStatus({ fresh = false } = {}) {
   const value = await loadPlatformStatus()
   cached = { value, expires: Date.now() + STATUS_TTL_MS }
   return value
+}
+
+// A city that reaches the target is recorded once (SQL function record_city_launches) and stays open after that.
+async function recordLaunches(status, board) {
+  const keys = board.filter((c) => c.reached && !c.launched).map((c) => c.key)
+  if (!keys.length) return board
+  const { error } = await supabase.rpc('record_city_launches', { keys })
+  if (error) {
+    console.error('Could not record city launch', error)
+    return board
+  }
+  cached = null
+  const launched = new Set([...status.launchedCities, ...keys])
+  return board.map((c) => (launched.has(c.key) ? { ...c, launched: true } : c))
 }
 
 // Women and men who want to date, per city (SQL function city_dating_counts), plus admin-opened cities.
@@ -59,7 +74,8 @@ async function loadCityBoard(status) {
       femaleCount: Number(row.women) || 0,
       maleCount: Number(row.men) || 0,
       cityTarget: status.cityTarget,
-      openCities: status.openCities
+      openCities: status.openCities,
+      launchedCities: status.launchedCities
     })
     if (!progress.key) continue
     // Spellings that only differ in case were grouped by SQL; aliases ("Cochin") are merged here.
@@ -73,12 +89,14 @@ async function loadCityBoard(status) {
             femaleCount: prev.femaleCount + progress.femaleCount,
             maleCount: prev.maleCount + progress.maleCount,
             cityTarget: status.cityTarget,
-            openCities: status.openCities
+            openCities: status.openCities,
+            launchedCities: status.launchedCities
           })
         : progress
     )
   }
-  return [...byKey.values()].sort((a, b) => b.progressPercent - a.progressPercent || a.name.localeCompare(b.name))
+  const board = await recordLaunches(status, [...byKey.values()])
+  return board.sort((a, b) => b.progressPercent - a.progressPercent || a.name.localeCompare(b.name))
 }
 
 export async function getCityBoard({ fresh = false } = {}) {
@@ -95,14 +113,15 @@ export async function getCityProgress(city, country) {
   const [status, board] = await Promise.all([getPlatformStatus(), getCityBoard()])
   return (
     board.find((c) => c.key === key) ||
-    cityProgress({ city, country, cityTarget: status.cityTarget, openCities: status.openCities })
+    cityProgress({ city, country, cityTarget: status.cityTarget, openCities: status.openCities, launchedCities: status.launchedCities })
   )
 }
 
-// Cities open by numbers. Cities opened by hand are checked against the admin list directly (lib/cityLaunch.js).
+// Cities open by numbers, now or before. Cities opened by hand are checked against the admin list directly
+// (lib/cityLaunch.js).
 export async function getOpenCityKeys() {
-  const board = await getCityBoard()
-  return new Set(board.filter((c) => c.open).map((c) => c.key))
+  const [status, board] = await Promise.all([getPlatformStatus(), getCityBoard()])
+  return new Set([...status.launchedCities, ...board.filter((c) => c.open).map((c) => c.key)])
 }
 
 // The public "unlock your city" board: percentages only, and only cities with a few members so nobody is singled out.

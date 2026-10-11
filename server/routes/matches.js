@@ -9,11 +9,8 @@ const router = express.Router()
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const platform = await getPlatformStatusForUser(await findUserById(req.user.id))
-    if (!platform.datingLaunched) {
-      return res.json({ matches: [], datingLaunched: false, platform })
-    }
     const matches = await getMutualMatches(req.user.id)
-    return res.json({ matches, datingLaunched: true, platform })
+    return res.json({ matches, datingLaunched: platform.datingLaunched, platform })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ message: 'Could not load matches' })

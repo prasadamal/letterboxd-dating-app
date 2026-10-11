@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Deep review fixes (11 October 2026)
+
+- **A city that opens stays open.** A city that reached the target used to close again as soon as one person left
+  or turned dating off (or when an admin raised the target), locking every deck there. Cities that reach the target
+  are now recorded in `platform_settings.launched_cities` (SQL function `record_city_launches`) and stay open.
+- **Matches and Chats survive a move.** Moving to a city that isn't open yet, or an admin closing *Open everywhere*
+  after app-store review, hid every match and the Chats tab. Matches and chats now stay; only new matches need dating
+  to be open.
+- A dater can no longer clear their city in a profile update (`CITY_REQUIRED`); films-only members still can.
+- Edit profile no longer pre-fills the country with the city when the country is empty.
+- `db:prelaunch-cleanup` resets cities opened by hand or by test accounts and takes `--city-target` instead of the
+  retired women/men targets.
+
 ### Portfolio review: city launch, sharing, website, bigger catalog
 
 - **Dating opens city by city:** 150 women + 150 men in a city (changeable in `/admin`), or opened by hand. The

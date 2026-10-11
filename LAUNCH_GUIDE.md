@@ -208,7 +208,8 @@ Once the Expo project exists and the GitHub repo is linked to it (expo.dev → p
 ### 4.1 Production data and hosting (before any real user)
 1. **Supabase → Billing → upgrade to Pro** ($25/month). Free projects pause after a week without traffic and have no daily backups.
 2. **Render → instance type Starter** ($7/month) so the API doesn't sleep.
-3. **Clean the database** (removes the demo accounts — their password used to be public — plus your test accounts, and closes the gate):
+3. **Clean the database** (removes the demo accounts — their password used to be public — plus your test accounts, and closes
+   dating again: everywhere, and in every city opened by hand or by test accounts):
    ```bash
    npm run db:prelaunch-cleanup                                        # dry run: shows what it will delete
    npm run db:prelaunch-cleanup -- --yes --emails you+a@x.com,you+b@x.com
@@ -220,7 +221,8 @@ Once the Expo project exists and the GitHub repo is linked to it (expo.dev → p
    correct any that look off. New films go at the end of `indianFilms.js` (never reorder: ids follow the list).
 5. **Decide the city launch.** Dating opens in a city at 150 women + 150 men who switch it on. In `/admin` you can
    change that number, open a launch city by hand (e.g. Kochi and Thiruvananthapuram for IFFK), and see every city's
-   progress. The public board at `/cities` is the "unlock your city" campaign page.
+   progress. A city that reaches the target stays open even if some people later leave. The public board at `/cities`
+   is the "unlock your city" campaign page.
 6. **Legal and support pages** live on the website: `/privacy`, `/terms`, `/support`, `/delete-account`. Set
    `VITE_SUPPORT_EMAIL` (and later `VITE_PLAY_URL`, `VITE_APP_STORE_URL`) on Render to an inbox you read; reviewers write
    there. The privacy policy names that address as the grievance contact required by India's DPDP Rules.
