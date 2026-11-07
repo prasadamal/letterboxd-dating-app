@@ -82,7 +82,7 @@ export default function ChatsScreen() {
                   {likes.count} {likes.count === 1 ? 'person likes' : 'people like'} you
                 </Text>
                 <Text style={type.small}>
-                  {likes.plus ? 'Like them back to match.' : 'Keep swiping in Match to find them, or see everyone now with Plus.'}
+                  {likes.plus ? 'Like them back to match.' : 'Keep swiping in Match to find your mutual matches.'}
                 </Text>
               </View>
             </View>

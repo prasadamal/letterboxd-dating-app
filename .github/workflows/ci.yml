@@ -22,3 +22,6 @@ jobs:
           cd mobile
           npm ci
           npm run typecheck
+          npm test
+          npm run lint
+          npx expo export --platform android --platform ios --output-dir "$RUNNER_TEMP/mobile-bundles"

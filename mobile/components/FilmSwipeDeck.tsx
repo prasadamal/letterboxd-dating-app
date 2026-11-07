@@ -168,7 +168,7 @@ export function FilmSwipeDeck({ movies, total, onRate }: Props) {
         <IconButton icon="eye-off-outline" size={50} color={colors.cyan} accessibilityLabel="Haven't seen it" onPress={() => commit('skip')} />
         <IconButton icon="heart" size={64} color="#fff" background={colors.pink} border={colors.pink} accessibilityLabel="Loved it" onPress={() => commit('love')} />
       </View>
-      <Text style={styles.hint}>Swipe right if you liked it · left if not · up if you haven't seen it</Text>
+      <Text style={styles.hint}>Swipe right if you liked it · left if not · up if you haven&apos;t seen it</Text>
     </View>
   )
 }

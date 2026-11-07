@@ -116,7 +116,7 @@ export default function CompareScreen() {
           <Card>
             {data.watchTogether.forYou.length > 0 && (
               <View style={{ gap: 8 }}>
-                <Text style={type.small}>{data.person.name} loved these. You haven't rated them yet:</Text>
+                <Text style={type.small}>{data.person.name} loved these. You haven&apos;t rated them yet:</Text>
                 <View style={styles.tags}>
                   {data.watchTogether.forYou.map((t) => (
                     <Tag key={t} label={t} tone="cyan" icon="film" />
@@ -126,7 +126,7 @@ export default function CompareScreen() {
             )}
             {data.watchTogether.forThem.length > 0 && (
               <View style={{ gap: 8 }}>
-                <Text style={type.small}>You loved these. {data.person.name} hasn't rated them yet:</Text>
+                <Text style={type.small}>You loved these. {data.person.name} hasn&apos;t rated them yet:</Text>
                 <View style={styles.tags}>
                   {data.watchTogether.forThem.map((t) => (
                     <Tag key={t} label={t} tone="violet" icon="film" />
