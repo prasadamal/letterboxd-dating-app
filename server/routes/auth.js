@@ -187,7 +187,7 @@ router.post('/logout', asyncHandler(async (req, res) => {
   return res.json({ ok: true })
 }))
 
-router.get('/me', asyncHandler(async (req, res) => {
+router.get('/me', authMiddleware, asyncHandler(async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1]
   if (!token) throw new AppError('Missing token', 401, 'UNAUTHORIZED')
 

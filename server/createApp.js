@@ -8,7 +8,7 @@ import { env, missingProductionConfig } from './config/env.js'
 import { logger } from './lib/logger.js'
 import { requestIdMiddleware } from './middleware/requestId.js'
 import { applySecurityMiddleware } from './middleware/security.js'
-import { errorHandler, notFoundHandler } from './middleware/errors.js'
+import { errorHandler, notFoundHandler, asyncHandler } from './middleware/errors.js'
 import { supabase } from './supabaseClient.js'
 
 import authRoutes from './routes/auth.js'
@@ -74,13 +74,15 @@ export function createApp() {
     }
   }
 
-  app.get('/api/health', async (req, res) => {
-    res.json(await healthPayload())
-  })
+  app.get('/api/health', asyncHandler(async (req, res) => {
+    const payload = await healthPayload()
+    res.status(payload.ok ? 200 : 503).json(payload)
+  }))
 
-  app.get('/api/v1/health', async (req, res) => {
-    res.json(await healthPayload())
-  })
+  app.get('/api/v1/health', asyncHandler(async (req, res) => {
+    const payload = await healthPayload()
+    res.status(payload.ok ? 200 : 503).json(payload)
+  }))
 
   app.get('/api/v1/health/db', async (req, res) => {
     const { error } = await supabase.from('users').select('id').limit(1)

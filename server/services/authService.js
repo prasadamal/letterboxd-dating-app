@@ -13,12 +13,13 @@ export async function issueRefreshToken(userId) {
   const raw = crypto.randomBytes(48).toString('hex')
   const expiresAt = new Date(Date.now() + REFRESH_TTL_DAYS * 86400000).toISOString()
 
-  await supabase.from('refresh_tokens').insert({
+  const { error } = await supabase.from('refresh_tokens').insert({
     user_id: userId,
     token_hash: hash(`${raw}:${secret}`),
     expires_at: expiresAt
   })
 
+  if (error) throw error
   return { refreshToken: raw, expiresAt }
 }
 
@@ -28,16 +29,16 @@ export async function rotateRefreshToken(rawToken) {
 
   const { data, error } = await supabase
     .from('refresh_tokens')
-    .select('*')
+    .update({ revoked_at: new Date().toISOString() })
     .eq('token_hash', tokenHash)
     .is('revoked_at', null)
     .gt('expires_at', new Date().toISOString())
+    .select('*')
     .maybeSingle()
 
   if (error) throw error
   if (!data) return null
 
-  await supabase.from('refresh_tokens').update({ revoked_at: new Date().toISOString() }).eq('id', data.id)
   const next = await issueRefreshToken(data.user_id)
   return { ...next, userId: data.user_id }
 }
@@ -45,13 +46,15 @@ export async function rotateRefreshToken(rawToken) {
 export async function revokeRefreshToken(rawToken) {
   const secret = env.JWT_REFRESH_SECRET || env.JWT_SECRET
   const tokenHash = hash(`${rawToken}:${secret}`)
-  await supabase.from('refresh_tokens').update({ revoked_at: new Date().toISOString() }).eq('token_hash', tokenHash)
+  const { error } = await supabase.from('refresh_tokens').update({ revoked_at: new Date().toISOString() }).eq('token_hash', tokenHash)
+  if (error) throw error
 }
 
 export async function revokeAllRefreshTokens(userId) {
-  await supabase
+  const { error } = await supabase
     .from('refresh_tokens')
     .update({ revoked_at: new Date().toISOString() })
     .eq('user_id', userId)
     .is('revoked_at', null)
+  if (error) throw error
 }

@@ -42,23 +42,23 @@ export async function consumeAuthToken(token, purpose) {
   const tokenHash = hashToken(token)
   const { data, error } = await supabase
     .from('auth_tokens')
-    .select('*')
+    .update({ consumed_at: new Date().toISOString() })
     .eq('token_hash', tokenHash)
     .eq('purpose', purpose)
     .is('consumed_at', null)
     .gt('expires_at', new Date().toISOString())
+    .select('*')
     .maybeSingle()
 
   if (error) throw error
   if (!data) return null
 
-  await supabase.from('auth_tokens').update({ consumed_at: new Date().toISOString() }).eq('id', data.id)
   return data
 }
 
 export async function sendEmail({ to, subject, html }) {
   if (!env.RESEND_API_KEY || !env.EMAIL_FROM) {
-    logger.info('Email skipped (provider not configured)', { to, subject, preview: html.slice(0, 120) })
+    logger.info('Email skipped (provider not configured)', { subject })
     return { queued: false, devMode: true }
   }
 
