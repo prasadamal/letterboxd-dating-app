@@ -5,58 +5,73 @@ process.env.SUPABASE_URL = 'https://example.supabase.co'
 process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-only-service-key-not-real'
 const { supabase } = await import('../supabaseClient.js')
 const { issueRefreshToken, rotateRefreshToken, revokeRefreshToken } = await import('../services/authService.js')
-const { consumeAuthToken } = await import('../services/auditService.js')
+const { unregisterPushToken } = await import('../services/notificationService.js')
+const { resetPassword } = await import('../services/authLifecycleService.js')
 
-test('token writes fail closed and token claims use conditional updates', async () => {
+test('session RPC failures propagate and invalid claims do not create sessions', async () => {
+  const original = supabase.rpc
+  try {
+    supabase.rpc = async () => ({ error: new Error('database unavailable') })
+    await assert.rejects(issueRefreshToken('user', 2), /database unavailable/)
+    await assert.rejects(rotateRefreshToken('token'), /database unavailable/)
+    await assert.rejects(resetPassword('reset-token', 'new-password'), /database unavailable/)
+    supabase.rpc = async () => ({ data: false })
+    await assert.rejects(issueRefreshToken('user', 2), err => err.status === 401)
+    await assert.rejects(resetPassword('reset-token', 'new-password'), err => err.code === 'INVALID_TOKEN')
+    supabase.rpc = async (name, args) => {
+      assert.equal(name, 'rotate_refresh_token')
+      assert.equal(args.p_next_hash.length, 64)
+      assert.notEqual(args.p_token_hash, 'token')
+      return { data: [{ user_id: 'user', auth_version: 3 }] }
+    }
+    const rotated = await rotateRefreshToken('token')
+    assert.equal(rotated.userId, 'user')
+    assert.equal(rotated.authVersion, 3)
+    assert.equal(rotated.refreshToken.length, 96)
+    supabase.rpc = async () => ({ data: [] })
+    assert.equal(await rotateRefreshToken('token'), null)
+  } finally { supabase.rpc = original }
+})
+
+test('logout scopes token mutations to the authenticated owner', async () => {
   const original = supabase.from
   try {
-    const failure = new Error('database unavailable')
-    supabase.from = () => ({ insert: async () => ({ error: failure }), update: () => ({ eq: async () => ({ error: failure }) }) })
-    await assert.rejects(issueRefreshToken('user'), /database unavailable/)
-    await assert.rejects(revokeRefreshToken('token'), /database unavailable/)
-    for (const [table, column, consume] of [
-      ['refresh_tokens', 'revoked_at', () => rotateRefreshToken('token')],
-      ['auth_tokens', 'consumed_at', () => consumeAuthToken('token', 'password_reset')]
+    for (const [table, mutate] of [
+      ['push_tokens', () => unregisterPushToken('ExpoPushToken[device]', 'owner')],
+      ['refresh_tokens', () => revokeRefreshToken('token', 'owner')]
     ]) {
-      let claimed = false
+      const filters = []
       supabase.from = name => {
         assert.equal(name, table)
-        const filters = []
-        const chain = {
-          update(values) { assert.ok(values[column]); return this },
-          eq(key, value) { filters.push([key, value]); return this },
-          is(key, value) { assert.equal(key, column); assert.equal(value, null); return this },
-          gt(key) { assert.equal(key, 'expires_at'); return this },
-          select() { return this },
-          async maybeSingle() {
-            assert.ok(filters.some(([key]) => key === 'token_hash'))
-            if (claimed) return { data: null, error: null }
-            claimed = true
-            // Returning no row exercises rejection without issuing another token.
-            return { data: null, error: null }
-          }
-        }
-        return chain
+        return { delete() { return this }, update() { return this }, eq(key, value) { filters.push([key, value]); return this }, then(resolve) { return Promise.resolve({ error: null }).then(resolve) } }
       }
-      assert.equal(await consume(), null)
+      await mutate()
+      assert.ok(filters.some(([key, value]) => key === 'user_id' && value === 'owner'))
     }
+    await assert.rejects(unregisterPushToken('token'), /owner required/)
+    await assert.rejects(revokeRefreshToken('token'), /owner required/)
   } finally { supabase.from = original }
 })
 
-test('suspended and deleted accounts cannot use an existing signed access token', async () => {
+test('suspended, deleted, missing and password-reset sessions are rejected', async () => {
   const { authMiddleware, signToken } = await import('../middleware/auth.js')
   const original = supabase.from
   try {
-    for (const account of [null, { id: 'u', is_active: false }, { id: 'u', deleted_at: '2026-01-01' }, { id: 'u', is_active: true }]) {
+    for (const [account, version, allowed] of [
+      [null, 0, false], [{ id: 'u', is_active: false }, 0, false],
+      [{ id: 'u', deleted_at: '2026-01-01' }, 0, false],
+      [{ id: 'u', is_active: true }, 0, true],
+      [{ id: 'u', auth_version: 1 }, 0, false],
+      [{ id: 'u', auth_version: 1 }, 1, true]
+    ]) {
       const chain = { select() { return this }, eq() { return this }, async maybeSingle() { return { data: account, error: null } } }
       supabase.from = () => chain
       let status, advanced = false
       const res = { status(value) { status = value; return this }, json() { return this } }
-      await authMiddleware({ headers: { authorization: `Bearer ${signToken({ id: 'u' })}` } }, res, error => {
-        assert.ifError(error)
-        advanced = true
+      await authMiddleware({ headers: { authorization: `Bearer ${signToken({ id: 'u', authVersion: version })}` } }, res, error => {
+        assert.ifError(error); advanced = true
       })
-      assert.equal(advanced, Boolean(account && account.is_active && !account.deleted_at))
+      assert.equal(advanced, allowed)
       if (!advanced) assert.equal(status, 401)
     }
   } finally { supabase.from = original }

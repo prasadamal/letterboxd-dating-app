@@ -57,7 +57,9 @@ export function createApp() {
   // Avatar uploads arrive base64-encoded (~4/3 of the 2.5MB image cap); everything else stays small.
   app.use(['/api/users/avatar', '/api/v1/users/avatar'], express.json({ limit: '4mb' }))
   app.use(express.json({ limit: '200kb' }))
-  app.use(express.urlencoded({ extended: true }))
+  app.use(express.urlencoded({ extended: false, limit: '200kb', parameterLimit: 100 }))
+  // User profiles, chat and session tokens must never be stored by shared caches.
+  app.use('/api', (_req, res, next) => { res.set('Cache-Control', 'no-store'); next() })
 
   async function healthPayload() {
     const { error } = await supabase.from('platform_settings').select('id').limit(1)
@@ -84,15 +86,15 @@ export function createApp() {
     res.status(payload.ok ? 200 : 503).json(payload)
   }))
 
-  app.get('/api/v1/health/db', async (req, res) => {
+  app.get('/api/v1/health/db', asyncHandler(async (req, res) => {
     const { error } = await supabase.from('users').select('id').limit(1)
     res.status(error ? 503 : 200).json({ ok: !error, db: error ? 'down' : 'up' })
-  })
+  }))
 
-  app.get('/api/v1/health/storage', async (req, res) => {
+  app.get('/api/v1/health/storage', asyncHandler(async (req, res) => {
     const { data, error } = await supabase.storage.from('avatars').list('', { limit: 1 })
     res.status(error ? 503 : 200).json({ ok: !error, storage: error ? 'down' : 'up', sample: (data || []).length })
-  })
+  }))
 
   app.get('/api/v1/openapi.json', (req, res) => {
     res.json(openApiDocument)

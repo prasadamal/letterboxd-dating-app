@@ -106,3 +106,11 @@ export const resetPasswordSchema = z.object({
 export const verifyEmailSchema = z.object({
   token: z.string().min(20)
 })
+
+const refreshTokenField = z.string().regex(/^[a-f0-9]{96}$/)
+export const expoPushTokenField = z.string().max(256).regex(/^Expo(nent)?PushToken\[[A-Za-z0-9_-]+\]$/)
+export const refreshSchema = z.object({ refreshToken: refreshTokenField })
+export const logoutSchema = z.object({
+  refreshToken: refreshTokenField.nullish(),
+  pushToken: expoPushTokenField.nullish()
+})

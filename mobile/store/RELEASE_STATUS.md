@@ -24,3 +24,5 @@ The new mobile tests cover offline refresh, server failures, rejected credential
 - No paid upgrade promises until store purchases and restore are implemented/tested.
 
 No signed build, store submission, production deployment or physical-device test is claimed by this branch.
+
+Logout calls now require bearer authentication. The mobile HTTP client retries expired sessions and revokes the latest rotated refresh token. A regression test covers this retry. Offline sign-out cannot guarantee remote revocation.

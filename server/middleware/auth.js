@@ -3,7 +3,7 @@ import { findUserById } from '../db.js'
 import { env } from '../config/env.js'
 
 export function signToken(payload) {
-  // Short-lived: clients renew through /auth/refresh, so revoking refresh tokens ends a session within the hour.
+  // authVersion invalidates already-issued access tokens immediately after a password reset.
   return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '1h' })
 }
 
@@ -22,7 +22,8 @@ export async function authMiddleware(req, res, next) {
   }
   try {
     const account = await findUserById(req.user.id)
-    if (!account || account.deleted_at || account.is_active === false) {
+    if (!account || account.deleted_at || account.is_active === false ||
+        (req.user.authVersion ?? 0) !== (account.auth_version ?? 0)) {
       return res.status(401).json({ message: 'Session ended', code: 'UNAUTHORIZED' })
     }
     return next()

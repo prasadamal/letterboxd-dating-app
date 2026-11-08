@@ -5,7 +5,8 @@ const fs = require('node:fs')
 const vm = require('node:vm')
 function client(fetch) {
   let clears = 0
-  const session = { getAccessToken: async () => 'old', getRefreshToken: async () => 'refresh', clearTokens: async () => { clears++ }, saveTokens: async () => {} }
+  let accessToken = 'old', refreshToken = 'refresh'
+  const session = { getAccessToken: async () => accessToken, getRefreshToken: async () => refreshToken, clearTokens: async () => { clears++ }, saveTokens: async (access, refresh) => { accessToken = access; refreshToken = refresh } }
   const exports = {}
   const code = ts.transpileModule(fs.readFileSync('lib/api.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText
   vm.runInNewContext(code, { exports, require: name => name === 'expo-constants' ? { default: {} } : session, process: { env: { EXPO_PUBLIC_API_URL: 'https://api.test/api' } }, __DEV__: false, fetch, AbortController, setTimeout, clearTimeout })
@@ -36,4 +37,16 @@ test('simultaneous expired requests share a single refresh', async () => {
   const results = await Promise.all([api.apiFetch('/users/profile'), api.apiFetch('/auth/me')])
   assert.ok(results.every(result => result.ok))
   assert.equal(refreshes, 1)
+})
+
+test('logout after access expiration revokes the freshly rotated refresh token', async () => {
+  let revoked
+  const api = client(async (url, options) => {
+    if (url.endsWith('/refresh')) return response(200, { token: 'new', refreshToken: 'next-refresh' })
+    if (options.headers.Authorization !== 'Bearer new') return response(401)
+    revoked = JSON.parse(options.body).refreshToken
+    return response(200, { ok: true })
+  })
+  await api.apiFetch('/auth/logout', { method: 'POST', body: JSON.stringify({ refreshToken: 'refresh', pushToken: 'ExpoPushToken[device]' }) })
+  assert.equal(revoked, 'next-refresh')
 })

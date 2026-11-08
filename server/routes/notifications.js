@@ -2,13 +2,13 @@ import express from 'express'
 import { z } from 'zod'
 import { authMiddleware } from '../middleware/auth.js'
 import { asyncHandler } from '../middleware/errors.js'
-import { validateBody } from '../middleware/validate.js'
+import { validateBody, expoPushTokenField } from '../middleware/validate.js'
 import { registerPushToken } from '../services/notificationService.js'
 
 const router = express.Router()
 
 const registerSchema = z.object({
-  token: z.string().min(10),
+  token: expoPushTokenField,
   platform: z.enum(['ios', 'android', 'web'])
 })
 

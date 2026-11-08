@@ -77,15 +77,22 @@ export async function apiFetch<T>(
   const skipRefresh =
     path.startsWith('/auth/refresh') || path.startsWith('/auth/login') || path.startsWith('/auth/signup')
 
-  const request = (accessToken: string | null | undefined) =>
-    timedFetch(`${API_BASE}${path}`, {
+  const request = async (accessToken: string | null | undefined) => {
+    // A 401 retry rotates refresh credentials. Logout must revoke that new token,
+    // rather than submitting the now-revoked token captured before the retry.
+    const body = path === '/auth/logout' && typeof options.body === 'string'
+      ? JSON.stringify({ ...JSON.parse(options.body), refreshToken: await getRefreshToken() })
+      : options.body
+    return timedFetch(`${API_BASE}${path}`, {
       ...options,
+      body,
       headers: {
         'Content-Type': 'application/json',
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
         ...(options.headers || {})
       }
     })
+  }
 
   if (!API_CONFIGURED) throw new ApiError('This build has no server configured. Please update the app.', 0, 'NO_API')
 
