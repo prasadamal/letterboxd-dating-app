@@ -1,5 +1,6 @@
 {
   "name": "reelmates-mobile",
+  "packageManager": "npm@11.9.0",
   "version": "1.2.0",
   "main": "expo-router/entry",
   "scripts": {

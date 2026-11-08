@@ -37,6 +37,7 @@ Decision: use small typed transitions for coupled state, preserve server authori
 
 ## Verification and future changes
 
+- Toolchain: CI pins npm 11.9.0, also declared in root/mobile packageManager. A fresh npm 11 install succeeds with the existing lockfile; the runner's default npm 10 rejects its optional peer graph. Native dependency versions and lockfiles are unchanged by this patch.
 - `node scripts/state-index.mjs --check` validates the reproducible source evidence index. Run without `--check` after code changes, then review new candidates.
 - `npm test && npm run build`; in `mobile`: `npm test && npm run typecheck && npm run lint`.
 - The chat contract test exercises `/api` and `/api/v1`, intro/waiting/open and blocked conversations. Mobile transition tests cover allowed actions and missing/contradictory flags.

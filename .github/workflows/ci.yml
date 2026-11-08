@@ -14,6 +14,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - name: Use the lockfile's tested npm version
+        run: npm install --global npm@11.9.0
       - run: npm ci
       - run: node scripts/state-index.mjs --check
       - run: npm test

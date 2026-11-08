@@ -2,6 +2,7 @@
   "name": "reelmates",
   "version": "1.2.0",
   "private": true,
+  "packageManager": "npm@11.9.0",
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
