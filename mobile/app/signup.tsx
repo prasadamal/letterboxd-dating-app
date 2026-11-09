@@ -156,7 +156,7 @@ export default function SignupScreen() {
           <>
             <Text style={type.h1}>What should we call you?</Text>
             <TextInput style={styles.bigInput} value={form.name} onChangeText={(name) => set({ name })} placeholder="Your first name" placeholderTextColor={colors.faint} autoFocus autoCapitalize="words" returnKeyType="next" onSubmitEditing={next} maxLength={80} />
-            <Text style={type.small}>This is how you'll appear to friends and matches.</Text>
+            <Text style={type.small}>This is how you&apos;ll appear to friends and matches.</Text>
           </>
         )}
 
@@ -217,7 +217,7 @@ export default function SignupScreen() {
                 <Chip key={value} label={plural} selected={form.interestedIn.includes(value)} onPress={() => set({ interestedIn: toggleInList(form.interestedIn, value) })} accessibilityRole="checkbox" />
               ))}
             </View>
-            <Text style={type.small}>You only see people who'd want to see you too.</Text>
+            <Text style={type.small}>You only see people who&apos;d want to see you too.</Text>
           </>
         )}
 
@@ -235,7 +235,7 @@ export default function SignupScreen() {
             <Pressable style={styles.termsRow} onPress={() => set({ terms: !form.terms })} accessibilityRole="checkbox" accessibilityState={{ checked: form.terms }}>
               <View style={[styles.checkbox, form.terms && styles.checkboxOn]}>{form.terms && <Ionicons name="checkmark" size={14} color={colors.onLime} />}</View>
               <Text style={styles.termsText}>
-                I'm 18+ and accept the{' '}
+                I&apos;m 18+ and accept the{' '}
                 <Text style={styles.link} onPress={() => Linking.openURL(String(Constants.expoConfig?.extra?.termsUrl))}>Terms</Text> (zero tolerance for abuse) and the{' '}
                 <Text style={styles.link} onPress={() => Linking.openURL(String(Constants.expoConfig?.extra?.privacyPolicyUrl))}>Privacy Policy</Text>.
               </Text>

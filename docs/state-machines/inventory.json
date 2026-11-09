@@ -1,0 +1,229 @@
+{
+  "description": "Curated workflow families. Conceptual states are not new wire enums; source-index.json provides broader candidate evidence.",
+  "workflows": [
+    {
+      "id": "R01",
+      "flow": "Session restore",
+      "sources": "`mobile/lib/auth.tsx`, `mobile/app/index.tsx`, `src/App.jsx`",
+      "transitions": "boot → restoring → authenticated / signed-out / offline-retry",
+      "decision": "Preserve saved credentials on temporary failure. Keep current session security; follow-up: generation-scoped restore/logout.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R02",
+      "flow": "Token rotation / persistence",
+      "sources": "`mobile/lib/api.ts`, `mobile/lib/session.ts`, `server/services/authService.js`, `supabase/migrations/20261108120000_atomic_auth_sessions.sql`",
+      "transitions": "access-valid → expired → refreshing → rotated / rejected / retryable; refresh row live → revoked / expired",
+      "decision": "Atomic server rotation, one stored pair; never add unbounded automatic mutation retries. Follow-up: scope in-flight refresh to session generation.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R03",
+      "flow": "Login / forgot-password",
+      "sources": "`mobile/app/login.tsx`, `src/pages/AuthPage.jsx`, `server/routes/auth.js`",
+      "transitions": "login ↔ forgot; editing → submitting → success / error",
+      "decision": "Keep mode separate from request state; disable repeated submissions synchronously when refactoring.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R04",
+      "flow": "Signup wizard",
+      "sources": "`mobile/app/signup.tsx`",
+      "transitions": "name → age → country → purpose → optional identity → account → photo → home",
+      "decision": "Account creation is an irreversible boundary within the wizard; back navigation must not create a second account. Keep current ordering; follow-up guards around post-create back/retry.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R05",
+      "flow": "Reset / email verification",
+      "sources": "`server/services/authLifecycleService.js`, `src/pages/ResetPasswordPage.jsx`, `src/pages/VerifyEmailPage.jsx`",
+      "transitions": "issued → expired / consumed; form ready → submitting → accepted / invalid",
+      "decision": "Server validates purpose, expiry and consumption; reset changes auth_version transactionally. Preserve migration and rollback requirements.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R06",
+      "flow": "Account lifecycle",
+      "sources": "`server/middleware/auth.js`, `server/services/profileService.js`, `server/jobs/inactivityCleanupJob.js`",
+      "transitions": "active → suspended / deleted; inactivity → cleanup",
+      "decision": "Server rejects suspended/deleted users; deletion is not a reversible UI toggle. Keep.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R07",
+      "flow": "Profile eligibility / discovery preferences",
+      "sources": "`mobile/app/edit-profile.tsx`, `mobile/app/settings.tsx`, `server/services/profileService.js`, `server/lib/datingEligibility.js`",
+      "transitions": "draft → saving → saved / error; incomplete → eligible; dating off ↔ on",
+      "decision": "Name/photo/country, adult eligibility and mutual interest remain backend rules. Keep computed eligibility separate from form state.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R08",
+      "flow": "Avatar upload",
+      "sources": "`mobile/app/signup.tsx`, `mobile/app/edit-profile.tsx`, `server/services/storageService.js`",
+      "transitions": "picking → cancelled / uploading → committed / failed",
+      "decision": "Do not advertise a photo as saved before server acknowledgement; preserve size/type checks. Keep.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R09",
+      "flow": "Platform / country launch",
+      "sources": "`mobile/lib/platform.tsx`, `server/platformService.js`, `server/lib/regionLaunch.js`, `server/routes/admin.js`",
+      "transitions": "prelaunch → region-open; admin override",
+      "decision": "Server controls launch and country thresholds; client projections must not unlock matching. Keep.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R10",
+      "flow": "Daily film batch",
+      "sources": "`mobile/app/(tabs)/home.tsx`, `server/lib/dailyMovies.js`, `server/services/dailyService.js`",
+      "transitions": "loading → pending votes → complete/results → next UTC drop",
+      "decision": "Same daily set for all; skip does not count as a rating. Keep.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R11",
+      "flow": "Film swipe transaction / reveal",
+      "sources": "`mobile/components/FilmSwipeDeck.tsx`",
+      "transitions": "idle → dragging → committing animation → local removal/reveal → persisted / rollback",
+      "decision": "Optimistic queue restores the film on failure. Follow-up: reconcile parent refresh with pending ratings; do not serialize gestures unnecessarily.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R12",
+      "flow": "Film exploration / search",
+      "sources": "`mobile/components/FilmExplorer.tsx`, `mobile/components/FavoriteFilmPicker.tsx`, `server/routes/movies.js`",
+      "transitions": "collection/query selected → loading → results / empty / error",
+      "decision": "Latest query should own results. Follow-up: request generation or abort to prevent old search replacement.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R13",
+      "flow": "Rating / favourite / taste personality",
+      "sources": "`server/db.js`, `server/lib/filmPersonality.js`, `server/lib/tasteMatch.js`",
+      "transitions": "unrated → love / hate / skip; favourite selected / cleared; fresh → derived personality",
+      "decision": "Server ratings are canonical; personality and compatibility remain derived, not writable lifecycle fields. Keep.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R14",
+      "flow": "Streak / reminder",
+      "sources": "`server/lib/streaks.js`, `server/jobs/dailyReminderJob.js`, `mobile/components/DailyResultsCard.tsx`",
+      "transitions": "not-played → played-today → consecutive / lapsed; countdown → next drop",
+      "decision": "Preserve UTC day rules and idempotent same-day play. Keep.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R15",
+      "flow": "Dating deck",
+      "sources": "`mobile/app/(tabs)/dating.tsx`, `server/datingService.js`",
+      "transitions": "loading → launch-gated / profile-incomplete / candidate / exhausted / daily-limit / error",
+      "decision": "API controls caps and eligibility. Follow-up: replace coupled deck flags with a union after acceptance tests.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R16",
+      "flow": "Dating swipe / mutual match",
+      "sources": "`server/datingService.js`, `mobile/components/SwipeDatingCard.tsx`, `mobile/components/MatchOverlay.tsx`",
+      "transitions": "candidate → like/pass → next candidate; reciprocal like → match → overlay dismissed/chat",
+      "decision": "Preserve mutual-interest, block and region filters; no speculative matching in UI. Keep.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R17",
+      "flow": "Chat access / hello handshake",
+      "sources": "`server/db.js:getChatMeta/sendMessage`, `server/routes/messages.js`, `mobile/lib/chatState.ts`, `mobile/app/chat/[userId].tsx`",
+      "transitions": "loading → intro → waiting → open; any → closed",
+      "decision": "**Changed:** one typed mobile access state, missing waitingOnPeer returned by both API aliases, send disabled while loading/waiting/closed, same-tick send lock, terminal close preserved. API still enforces permission.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R18",
+      "flow": "Chat transport / history / reads",
+      "sources": "`mobile/app/chat/[userId].tsx`, `mobile/lib/realtime.ts`, `server/services/realtimeService.js`, `src/pages/DashboardPage.jsx`",
+      "transitions": "disconnected → subscribed / fallback polling; fetching → merging; unread → read",
+      "decision": "**Changed:** conversation/account keyed screen, stale gate responses ignored, visible retry. Follow-up: full history/poll ordering, cursor ties, and backend first-hello concurrency need dedicated tests.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R19",
+      "flow": "Chat send",
+      "sources": "`mobile/app/chat/[userId].tsx`, `server/db.js:sendMessage`",
+      "transitions": "draft → submitting → acknowledged / error",
+      "decision": "**Changed:** consume intro permission on successful send before follow-up fetch; retain failed draft. Network ambiguity still needs backend idempotency before automatic retries.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R20",
+      "flow": "Friend / compare / referral",
+      "sources": "`mobile/app/friends.tsx`, `mobile/app/compare/[userId].tsx`, `server/services/friendsService.js`, `server/services/growthService.js`",
+      "transitions": "code editing → adding → friends / invalid; friend ↔ removed; comparison loading → result/error",
+      "decision": "Reciprocal rows and block eligibility are server-owned; follow-up: transactional reciprocal removal.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R21",
+      "flow": "Safety report / block / unmatch",
+      "sources": "`mobile/components/ReportSheet.tsx`, `src/components/ReportDialog.jsx`, `server/safetyService.js`",
+      "transitions": "sheet closed → draft → sending → reported; optional block → conversation closed",
+      "decision": "Preserve separate report/block outcomes; partial success must not silently repeat a report. Keep; audit transactional behavior separately.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R22",
+      "flow": "Moderation / identity verification",
+      "sources": "`server/services/moderationService.js`, `server/services/verificationService.js`, `src/pages/AdminPage.jsx`",
+      "transitions": "queue open → reviewing → resolved/dismissed; report open → reviewed/dismissed; identity unverified/pending/verified/rejected",
+      "decision": "Existing enum sets are allowed values, not necessarily enforced transition graphs. Follow-up: atomic queue/report mapping and explicit admin transition policy.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R23",
+      "flow": "Feedback",
+      "sources": "`mobile/components/FeedbackSheet.tsx`, `server/routes/feedback.js`, `server/routes/admin.js`",
+      "transitions": "editing → sending → sent/error; admin new → read → done",
+      "decision": "Keep form state independent of moderation status; duplicate-submit protection is a follow-up.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R24",
+      "flow": "Plus entitlement / webhook",
+      "sources": "`server/routes/billing.js`, `server/lib/plus.js`",
+      "transitions": "billing-disabled / configured; inactive → active → expired / revoked",
+      "decision": "Server entitlement and time are authoritative; purchase/restore remains a release gate. Keep; no payment behavior changed.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R25",
+      "flow": "Notifications / permission / routing",
+      "sources": "`mobile/lib/push.ts`, `server/services/notificationService.js`, `server/routes/notifications.js`",
+      "transitions": "permission unset/denied/granted → device token registered → removed; notification → deep link",
+      "decision": "Token belongs to account; sign-out revocation and foreground/background transitions need device testing. Keep.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R26",
+      "flow": "Public share / media fallback",
+      "sources": "`src/pages/TasteCardPage.jsx`, `mobile/components/TasteProfileCard.tsx`, `mobile/components/ui/Avatar.tsx`",
+      "transitions": "fetch → visible/error; copy → copied; image loading → loaded/fallback",
+      "decision": "Simple copy/image booleans stay local; no reducer needed.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R27",
+      "flow": "Generic resources and forms",
+      "sources": "Screens and components enumerated in `source-index.json`",
+      "transitions": "idle/loading → data/empty/error; edit → submit → success/error; sheet open ↔ closed",
+      "decision": "A lifecycle family instantiated independently per screen, not one global machine. Keep selection/text/toggle fields simple; scope async results to resource/account.",
+      "inventory": "README.md"
+    },
+    {
+      "id": "R28",
+      "flow": "Deployment / readiness",
+      "sources": "`server/createApp.js`, `mobile/scripts/release-config.cjs`, `docs/production/RELEASE_GATE.md`",
+      "transitions": "configured/unconfigured; live/ready/degraded; export → signed build → staging → release",
+      "decision": "Preserve release gates. Passing unit tests is not a production-readiness state.",
+      "inventory": "README.md"
+    }
+  ]
+}

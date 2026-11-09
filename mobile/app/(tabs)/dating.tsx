@@ -156,7 +156,7 @@ export default function MatchScreen() {
           </Card>
           <Text style={type.label}>Meanwhile</Text>
           <Card onPress={() => router.push('/(tabs)/home')}>
-            <Text style={type.h3}>🎬 Play today's films</Text>
+            <Text style={type.h3}>🎬 Play today&apos;s films</Text>
             <Text style={type.small}>Every swipe sharpens your matches for launch day.</Text>
           </Card>
           <Card onPress={() => router.push('/friends')}>

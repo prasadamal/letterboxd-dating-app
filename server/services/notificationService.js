@@ -67,8 +67,9 @@ async function pruneDeadTokens(tokens, tickets) {
   if (error) logger.warn('Pruning dead push tokens failed', { error: error.message })
 }
 
-export async function unregisterPushToken(token) {
-  const { error } = await supabase.from('push_tokens').delete().eq('token', token)
+export async function unregisterPushToken(token, userId) {
+  if (!userId) throw new Error('Push token owner required')
+  const { error } = await supabase.from('push_tokens').delete().eq('token', token).eq('user_id', userId)
   if (error) throw error
 }
 

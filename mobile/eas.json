@@ -10,7 +10,8 @@
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "https://kounpkxjjkuoabbofgay.supabase.co",
         "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mGGVjbDjEE9KET5IjaiUmw_nuk-I_gv"
-      }
+      },
+      "environment": "development"
     },
     "preview": {
       "distribution": "internal",
@@ -18,21 +19,21 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://YOUR_PRODUCTION_API_HOST/api",
         "EXPO_PUBLIC_SUPABASE_URL": "https://kounpkxjjkuoabbofgay.supabase.co",
         "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mGGVjbDjEE9KET5IjaiUmw_nuk-I_gv"
       },
       "ios": {
         "simulator": false
-      }
+      },
+      "environment": "preview"
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://YOUR_PRODUCTION_API_HOST/api",
         "EXPO_PUBLIC_SUPABASE_URL": "https://kounpkxjjkuoabbofgay.supabase.co",
         "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mGGVjbDjEE9KET5IjaiUmw_nuk-I_gv"
-      }
+      },
+      "environment": "production"
     },
     "simulator": {
       "extends": "preview",
@@ -50,11 +51,7 @@
         "serviceAccountKeyPath": "./store/google-play-service-account.json",
         "track": "internal"
       },
-      "ios": {
-        "appleId": "YOUR_APPLE_ID_EMAIL",
-        "ascAppId": "YOUR_APP_STORE_CONNECT_APP_ID",
-        "appleTeamId": "YOUR_APPLE_TEAM_ID"
-      }
+      "ios": {}
     }
   }
 }
