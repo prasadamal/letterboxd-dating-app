@@ -40,7 +40,8 @@ router.get('/:userId', authMiddleware, async (req, res) => {
       conversationId: meta.conversationId,
       realtimeChannel: meta.realtimeChannel,
       chatUnlocked: meta.chatUnlocked,
-      introPending: meta.introPending
+      introPending: meta.introPending,
+      waitingOnPeer: meta.waitingOnPeer
     })
   } catch (error) {
     console.error(error)

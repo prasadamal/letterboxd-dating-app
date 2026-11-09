@@ -7,6 +7,7 @@ import { ReportSheet } from '../../components/ReportSheet'
 import { Avatar } from '../../components/ui'
 import { ApiError, apiFetch } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
+import { canSendChat, chatAccess, type ChatAccess } from '../../lib/chatState'
 import { haptic } from '../../lib/haptics'
 import { subscribeChatChannel } from '../../lib/realtime'
 import { colors, fonts, radii, type } from '../../lib/theme'
@@ -23,21 +24,27 @@ type ChatPayload = {
 export default function ChatScreen() {
   const { userId, name } = useLocalSearchParams<{ userId: string; name?: string }>()
   const { user } = useAuth()
+  return <ChatConversation key={`${user?.id}:${userId}`} userId={userId} name={name} />
+}
+
+function ChatConversation({ userId, name }: { userId: string; name?: string }) {
+  const { user } = useAuth()
   const router = useRouter()
   const insets = useSafeAreaInsets()
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [text, setText] = useState('')
-  const [introPending, setIntroPending] = useState(false)
-  const [waitingOnPeer, setWaitingOnPeer] = useState(false)
-  const [chatUnlocked, setChatUnlocked] = useState(true)
+  const [access, setAccess] = useState<ChatAccess>('loading')
   const [realtimeChannel, setRealtimeChannel] = useState<string | null>(null)
-  const [closed, setClosed] = useState(false)
+  const closed = access === 'closed'
   const [reporting, setReporting] = useState(false)
   const [starters, setStarters] = useState<string[]>([])
   const [peer, setPeer] = useState<TasteComparison | null>(null)
   const [sending, setSending] = useState(false)
+  const [connectionError, setConnectionError] = useState<string | null>(null)
   const lastSyncRef = useRef<string | null>(null)
   const listRef = useRef<FlatList<ChatMessage>>(null)
+  const sendingRef = useRef(false)
+  const loadSequence = useRef(0)
 
   const mergeMessage = useCallback((msg: ChatMessage) => {
     setMessages((current) => {
@@ -52,6 +59,7 @@ export default function ChatScreen() {
   const loadMessages = useCallback(
     async (since?: string | null) => {
       if (!userId || closed) return
+      const request = ++loadSequence.current
       const query = since ? `?since=${encodeURIComponent(since)}` : ''
       let data: ChatPayload
       try {
@@ -59,12 +67,14 @@ export default function ChatScreen() {
       } catch (err) {
         // 404: the match ended (blocked, unmatched or account deleted). Stop polling.
         if (err instanceof ApiError && err.status === 404) {
-          setClosed(true)
+          setAccess('closed')
           return
         }
-        throw err
+        setConnectionError('Could not load this conversation. Check your connection and try again.')
+        return
       }
 
+      setConnectionError(null)
       if (data.realtimeChannel) setRealtimeChannel(data.realtimeChannel)
       if (since && data.messages?.length) {
         for (const msg of data.messages) mergeMessage(msg)
@@ -74,9 +84,7 @@ export default function ChatScreen() {
         if (latest) lastSyncRef.current = latest
       }
 
-      setIntroPending(Boolean(data.introPending))
-      setWaitingOnPeer(Boolean(data.waitingOnPeer))
-      setChatUnlocked(Boolean(data.chatUnlocked))
+      if (request === loadSequence.current) setAccess(current => current === 'closed' ? current : chatAccess(data))
       // Only mark read when something new arrived from the other person, not on every poll.
       const incoming = (data.messages || []).some((m) => m.from_user_id !== user?.id && !m.read_at)
       if (incoming) await apiFetch(`/messages/${userId}/read`, { method: 'POST' }).catch(() => null)
@@ -118,17 +126,21 @@ export default function ChatScreen() {
   const lastMine = [...messages].reverse().find((m) => m.from_user_id === user?.id)
 
   async function send() {
-    if (!userId || !text.trim() || sending) return
+    if (!userId || !text.trim() || sendingRef.current || !canSendChat(access)) return
+    sendingRef.current = true
     setSending(true)
     try {
       const data = await apiFetch<{ message: ChatMessage }>('/messages', { method: 'POST', body: JSON.stringify({ toUserId: userId, text }) })
       haptic.tap()
       mergeMessage(data.message)
+      // Sending the first hello consumes the intro slot immediately, even if the follow-up fetch fails.
+      if (access === 'intro') setAccess('waiting')
       setText('')
       await loadMessages()
     } catch (err) {
       Alert.alert('Message not sent', err instanceof Error ? err.message : 'Try again')
     } finally {
+      sendingRef.current = false
       setSending(false)
     }
   }
@@ -162,11 +174,11 @@ export default function ChatScreen() {
 
   const notice = closed
     ? 'This conversation is no longer available.'
-    : waitingOnPeer
+    : connectionError || (access === 'waiting'
       ? `Your hello is in. Chat opens when ${peerName} replies.`
-      : introPending && !chatUnlocked
+      : access === 'intro'
         ? 'Say hi! Chat opens once you’ve both sent a hello.'
-        : null
+        : access === 'loading' ? 'Connecting to this conversation…' : null)
 
   return (
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}>
@@ -228,6 +240,11 @@ export default function ChatScreen() {
       {!!notice && (
         <View style={styles.notice}>
           <Text style={styles.noticeText}>{notice}</Text>
+          {connectionError && !closed ? (
+            <Pressable onPress={() => { void loadMessages() }} accessibilityRole="button" accessibilityLabel="Retry loading conversation">
+              <Text style={[styles.noticeText, { color: colors.lime, marginTop: 8 }]}>Retry</Text>
+            </Pressable>
+          ) : null}
         </View>
       )}
 
@@ -256,8 +273,8 @@ export default function ChatScreen() {
           />
           <Pressable
             onPress={send}
-            disabled={!text.trim() || sending}
-            style={[styles.send, (!text.trim() || sending) && { opacity: 0.4 }]}
+            disabled={!text.trim() || sending || !canSendChat(access)}
+            style={[styles.send, (!text.trim() || sending || !canSendChat(access)) && { opacity: 0.4 }]}
             accessibilityRole="button"
             accessibilityLabel="Send"
           >
