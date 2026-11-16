@@ -5,6 +5,7 @@ COPY package*.json ./
 RUN npm ci
 COPY index.html vite.config.js ./
 COPY src ./src
+COPY public ./public
 RUN npm run build
 
 # Runtime: API plus the built web app, production dependencies only, non-root user.
