@@ -14,8 +14,8 @@
     "db:seed:demo": "node server/scripts/seedDemoUsers.js",
     "mobile": "cd mobile && npm start",
     "mobile:typecheck": "cd mobile && npm run typecheck",
-    "test": "node --test server/tests/*.test.js server/tests/integration/*.test.js",
-    "test:integration": "INTEGRATION_TEST=1 node --test server/tests/integration/*.test.js",
+    "test": "node scripts/run-tests.mjs",
+    "test:integration": "INTEGRATION_TEST=1 node scripts/run-tests.mjs --integration",
     "smoke": "node scripts/smoke-api.mjs",
     "db:prelaunch-cleanup": "node server/scripts/prelaunchCleanup.js"
   },
