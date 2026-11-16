@@ -1,4 +1,5 @@
 import express from 'express'
+import { createHealthHandler } from './health.js'
 import cors from 'cors'
 import path from 'path'
 import fs from 'fs'
@@ -59,28 +60,10 @@ export function createApp() {
   app.use(express.json({ limit: '200kb' }))
   app.use(express.urlencoded({ extended: true }))
 
-  async function healthPayload() {
-    const { error } = await supabase.from('platform_settings').select('id').limit(1)
-    // `setup` lists features that are switched off until their env vars are set (no secrets are shown).
-    return {
-      ok: !error,
-      status: error ? 'degraded' : 'healthy',
-      env: env.NODE_ENV,
-      version: 'v1',
-      db: error ? 'down' : 'up',
-      email: env.RESEND_API_KEY && env.EMAIL_FROM ? 'configured' : 'not_configured',
-      setup: missingProductionConfig(env).map((item) => item.split(':')[0]),
-      time: new Date().toISOString()
-    }
-  }
-
-  app.get('/api/health', async (req, res) => {
-    res.json(await healthPayload())
-  })
-
-  app.get('/api/v1/health', async (req, res) => {
-    res.json(await healthPayload())
-  })
+  const ready = createHealthHandler({ database: supabase, configuration: env, missingConfig: missingProductionConfig })
+  app.get('/api/health', ready)
+  app.get('/api/v1/health', ready)
+  app.get('/api/v1/health/live', (_req, res) => res.json({ ok: true }))
 
   app.get('/api/v1/health/db', async (req, res) => {
     const { error } = await supabase.from('users').select('id').limit(1)
