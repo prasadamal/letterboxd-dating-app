@@ -100,6 +100,11 @@ export async function deleteUserAccount(userId) {
   const { error: referralError } = await supabase.from('users').update({ referred_by: null }).eq('referred_by', userId)
   if (referralError) throw referralError
 
+  // Feedback stays useful without knowing who sent it. The account row is kept as a tombstone,
+  // so the column's ON DELETE SET NULL never runs by itself.
+  const { error: feedbackError } = await supabase.from('feedback').update({ user_id: null }).eq('user_id', userId)
+  if (feedbackError) throw feedbackError
+
   await removeUserAvatars(userId)
 
   // Keep an anonymous tombstone so reports filed about this account stay reviewable.
