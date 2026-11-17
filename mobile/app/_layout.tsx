@@ -13,6 +13,7 @@ import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import { Platform } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { wakeServer } from '../lib/api'
 import { AuthProvider } from '../lib/auth'
 import { PlatformProvider } from '../lib/platform'
 import { colors, fonts } from '../lib/theme'
@@ -56,6 +57,7 @@ const pushedHeader = {
 }
 
 export default function RootLayout() {
+  useEffect(() => { wakeServer() }, [])
   const [loaded, failed] = useFonts({
     ...Ionicons.font,
     BricolageGrotesque_500Medium,

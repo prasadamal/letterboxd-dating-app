@@ -622,15 +622,15 @@
           "text": "this.status = status"
         },
         {
-          "line": 29,
-          "text": "const timeout = setTimeout(abort, 20000)"
+          "line": 32,
+          "text": "const timeout = setTimeout(abort, timeoutMs)"
         },
         {
-          "line": 56,
+          "line": 68,
           "text": "if (res.status === 400 || res.status === 401) { await clearTokens(); return null }"
         },
         {
-          "line": 108,
+          "line": 120,
           "text": "if (res.status === 401 && !skipRefresh) {"
         }
       ]
