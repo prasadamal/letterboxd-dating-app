@@ -40,7 +40,7 @@ export function TasteStatsCard({ stats }: { stats: TasteStats | null }) {
     <View style={styles.card}>
       <View style={styles.rateRow}>
         <Text style={styles.rate}>{stats.likeRate}%</Text>
-        <Text style={[type.small, { flex: 1 }]}>of the films you've seen, you liked.</Text>
+        <Text style={[type.small, { flex: 1 }]}>of the films you&apos;ve seen, you liked.</Text>
       </View>
       <Bars title="Genres you love" items={stats.topGenres} />
       <Bars title="Languages" items={stats.topLanguages} />

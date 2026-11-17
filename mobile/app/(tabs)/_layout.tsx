@@ -9,9 +9,9 @@ import { colors, fonts } from '../../lib/theme'
 type IconName = ComponentProps<typeof Ionicons>['name']
 const icon =
   (outline: IconName, filled: IconName) =>
-  ({ color, size, focused }: { color: ColorValue; size: number; focused: boolean }) => (
+  function TabIcon({ color, size, focused }: { color: ColorValue; size: number; focused: boolean }) { return (
     <Ionicons name={focused ? filled : outline} size={size} color={color} />
-  )
+  ) }
 
 export default function TabsLayout() {
   const { platform } = usePlatform()

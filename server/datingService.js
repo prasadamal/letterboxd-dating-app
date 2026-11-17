@@ -21,6 +21,7 @@ import { sameCountry } from './lib/regionLaunch.js'
 import { isPlusActive } from './lib/plus.js'
 import { publicPrompts } from './lib/profilePrompts.js'
 import { withPersonalities } from './services/personalityService.js'
+import { withFreshFriendCode } from './lib/friendCode.js'
 
 const CARD_COLUMNS = 'id, display_name, bio, hobbies, city, age, country, gender, photo_url, verification_status, prompts'
 
@@ -78,7 +79,8 @@ export async function recordSwipe(userId, targetId, action) {
 
   const self = await findUserById(userId)
   const target = await findUserById(targetId)
-  if (!self || !target || target.deleted_at) throw new Error('User not found')
+  // Suspended and deleted members can't be liked into a match.
+  if (!self || !target || target.deleted_at || target.is_active === false) throw new Error('User not found')
 
   if (!self.dating_enabled) throw datingOff()
   const status = await assertDatingLaunched(self)
@@ -390,8 +392,12 @@ export async function getReferralInfo(userId) {
 
   let code = user.referral_code
   if (!code) {
-    code = `REEL${String(userId).slice(0, 6).toUpperCase()}`
-    await supabase.from('users').update({ referral_code: code }).eq('id', userId)
+    // Accounts created before friend codes existed get one the first time it is needed.
+    code = await withFreshFriendCode(async (fresh) => {
+      const { error } = await supabase.from('users').update({ referral_code: fresh }).eq('id', userId)
+      if (error) throw error
+      return fresh
+    })
   }
 
   const { count, error } = await supabase

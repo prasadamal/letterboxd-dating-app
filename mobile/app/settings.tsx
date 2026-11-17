@@ -187,15 +187,16 @@ export default function SettingsScreen() {
               <Text style={type.small}>to</Text>
               <TextInput style={styles.ageInput} value={maxAge} onChangeText={setMaxAge} keyboardType="number-pad" maxLength={3} accessibilityLabel="Maximum age" />
             </View>
-            <View style={styles.plusRow}>
-              <Text style={type.label}>Minimum taste match</Text>
-              {!user.plus?.active && <Tag label="Plus" tone="orange" icon="star" />}
-            </View>
+            {/* Shown only to Plus members. There is no purchase screen yet, and the stores reject
+                apps that advertise a paid feature people cannot buy. */}
             {user.plus?.active ? (
-              <TextInput style={styles.ageInput} value={minScore} onChangeText={setMinScore} keyboardType="number-pad" placeholder="e.g. 70" placeholderTextColor={colors.faint} maxLength={2} accessibilityLabel="Minimum taste match percent" />
-            ) : (
-              <Text style={type.small}>With Plus, only see people above a match % you choose, and see everyone who already liked you.</Text>
-            )}
+              <>
+                <View style={styles.plusRow}>
+                  <Text style={type.label}>Minimum taste match</Text>
+                </View>
+                <TextInput style={styles.ageInput} value={minScore} onChangeText={setMinScore} keyboardType="number-pad" placeholder="e.g. 70" placeholderTextColor={colors.faint} maxLength={2} accessibilityLabel="Minimum taste match percent" />
+              </>
+            ) : null}
             <Button title={needIdentity ? 'Turn on dating' : 'Save preferences'} size="md" loading={saving} onPress={savePreferences} />
           </Card>
         </>

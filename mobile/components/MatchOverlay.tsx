@@ -35,7 +35,7 @@ export function MatchOverlay({ match, me, onChat, onClose }: Props) {
       <LinearGradient colors={['#8B6CFF', '#FF4F9A', '#FF8A3D']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[styles.screen, { paddingTop: insets.top + 40, paddingBottom: insets.bottom + 24 }]}>
         {match && (
           <Animated.View style={[styles.content, { opacity, transform: [{ scale }] }]}>
-            <Text style={styles.kicker}>🎬 IT'S A</Text>
+            <Text style={styles.kicker}>🎬 IT&apos;S A</Text>
             <Text style={styles.title}>MATCH</Text>
             <View style={styles.faces}>
               <View style={[styles.face, { transform: [{ rotate: '-8deg' }] }]}>

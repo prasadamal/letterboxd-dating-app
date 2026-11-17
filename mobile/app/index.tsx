@@ -19,8 +19,8 @@ export default function Index() {
     return (
       <View style={styles.center}>
         <Text style={styles.emoji}>📡</Text>
-        <Text style={type.h2}>Can't reach ReelMates</Text>
-        <Text style={[type.body, { textAlign: 'center', color: colors.muted }]}>Check your connection. You're still signed in.</Text>
+        <Text style={type.h2}>Can&apos;t reach ReelMates</Text>
+        <Text style={[type.body, { textAlign: 'center', color: colors.muted }]}>Check your connection. You&apos;re still signed in.</Text>
         <Button title="Try again" onPress={retryRestore} style={{ alignSelf: 'stretch', marginTop: 8 }} />
       </View>
     )

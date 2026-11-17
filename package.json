@@ -2,6 +2,7 @@
   "name": "reelmates",
   "version": "1.2.0",
   "private": true,
+  "packageManager": "npm@11.9.0",
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
@@ -36,6 +37,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.15",
     "@vitejs/plugin-react": "^4.3.2",
     "concurrently": "^9.0.1",
     "vite": "^5.4.10"
