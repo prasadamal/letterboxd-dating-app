@@ -50,3 +50,19 @@ test('logout after access expiration revokes the freshly rotated refresh token',
   await api.apiFetch('/auth/logout', { method: 'POST', body: JSON.stringify({ refreshToken: 'refresh', pushToken: 'ExpoPushToken[device]' }) })
   assert.equal(revoked, 'next-refresh')
 })
+test('wakeServer pings the health endpoint once and swallows failures', async () => {
+  const urls = []
+  const api = client(async url => { urls.push(url); throw new Error('server asleep') })
+  assert.equal(api.wakeServer(), undefined)
+  await new Promise(resolve => setTimeout(resolve, 5))
+  assert.deepEqual(urls, ['https://api.test/api/health'])
+})
+test('a slow wake-up is not cut off after 20 seconds', async () => {
+  const timers = []
+  const exports = {}
+  const code = ts.transpileModule(fs.readFileSync('lib/api.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText
+  const session = { getAccessToken: async () => null, getRefreshToken: async () => null, clearTokens: async () => {}, saveTokens: async () => {} }
+  vm.runInNewContext(code, { exports, require: name => name === 'expo-constants' ? { default: {} } : session, process: { env: { EXPO_PUBLIC_API_URL: 'https://api.test/api' } }, __DEV__: false, fetch: async () => response(200, {}), AbortController, setTimeout: (fn, ms) => { timers.push(ms); return 0 }, clearTimeout })
+  await exports.apiFetch('/movies/daily')
+  assert.ok(timers[0] >= 60000, `timeout was ${timers[0]}`)
+})

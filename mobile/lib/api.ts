@@ -21,14 +21,26 @@ export class ApiError extends Error {
   }
 }
 
-async function timedFetch(url: string, options: RequestInit = {}): Promise<Response> {
+// A sleeping free-tier host can need about a minute to wake, so ordinary requests wait longer than usual.
+const REQUEST_TIMEOUT_MS = 70_000
+
+async function timedFetch(url: string, options: RequestInit = {}, timeoutMs = REQUEST_TIMEOUT_MS): Promise<Response> {
   const controller = new AbortController()
   const abort = () => controller.abort()
   if (options.signal?.aborted) controller.abort()
   options.signal?.addEventListener('abort', abort)
-  const timeout = setTimeout(abort, 20000)
+  const timeout = setTimeout(abort, timeoutMs)
   try { return await fetch(url, { ...options, signal: controller.signal }) }
   finally { clearTimeout(timeout); options.signal?.removeEventListener('abort', abort) }
+}
+
+/**
+ * Wakes the server in the background when the app opens, so a host that sleeps when idle is already
+ * starting while the person reads the first screen. Never throws and never blocks anything.
+ */
+export function wakeServer(): void {
+  if (!API_CONFIGURED) return
+  timedFetch(`${API_BASE}/health`, { method: 'GET' }, 90_000).catch(() => undefined)
 }
 
 let refreshInFlight: Promise<string | null> | null = null

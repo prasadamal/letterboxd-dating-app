@@ -6,12 +6,17 @@ services:
     dockerfilePath: ./Dockerfile
     # free: sleeps after ~15 min idle (first request then takes ~1 min). Switch to starter before launch.
     plan: free
+    # Singapore: closest Render region to India and to the Mumbai database.
+    region: singapore
     branch: main
     autoDeploy: true
     healthCheckPath: /api/v1/health
     envVars:
       - key: NODE_ENV
         value: production
+      # Render puts one proxy in front of the app; needed for per-client rate limits.
+      - key: TRUST_PROXY
+        value: '1'
       - key: SUPABASE_URL
         value: https://kounpkxjjkuoabbofgay.supabase.co
       # Supabase → Project Settings → API Keys → secret / service_role key. Render asks for it on first deploy.
