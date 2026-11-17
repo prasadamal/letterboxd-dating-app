@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+### Launch fixes (17 November 2026)
+
+- **Friend codes are random.** They were built from a hash of the member's email (or user id), so anyone who knew an
+  email could work out the code and become that person's film friend without being invited. New codes are
+  `REEL` + 8 random characters; existing members keep theirs. Adding a friend by code is rate-limited.
+- Two sign-ups with the same email at the same moment return "User already exists" instead of a server error.
+- Suspended members can no longer be liked into a match.
+- **Readiness reports `migration_pending`** until `20261108120000_atomic_auth_sessions.sql` is applied, so a deploy
+  without it never replaces a working version.
+- **Mobile installs with stock npm.** `react-native-reanimated` 4.5.1 and `react-native-worklets` 0.10.1 are pinned to
+  the versions Expo SDK 57 expects; the lockfile previously resolved an unsupported pair and only installed on npm 11.
+- The Plus teaser in Settings is hidden until a purchase screen exists (store rule: no unbuyable paid features).
+- Merged the release-hardening branch (atomic auth sessions, release config checks, session recovery tests).
+- `LAUNCH_GUIDE.md`: new Stage 2.0 (apply the migration) and Stage 3.2 (EAS environment variables).
+
 ### Film people: redesign, film personality, daily results, dating opt-in
 
 - **New positioning:** "Find your film people". A social film app first; dating is an opt-in mode.

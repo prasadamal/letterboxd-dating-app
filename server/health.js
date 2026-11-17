@@ -4,9 +4,17 @@ export function createHealthHandler({ database, configuration, missingConfig, ti
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), timeoutMs)
     let healthy = false
+    let schemaCurrent = true
     try {
       const { error } = await database.from('platform_settings').select('id').limit(1).abortSignal(controller.signal)
       healthy = !error
+      if (healthy) {
+        // Sign-in needs the newest auth migration. Until it is applied the service reports not ready,
+        // so the host keeps the previous version live instead of one where nobody can log in.
+        const schema = await database.from('users').select('auth_version').limit(1).abortSignal(controller.signal)
+        schemaCurrent = !schema.error
+        healthy = schemaCurrent
+      }
     } catch {
       healthy = false
     } finally {
@@ -17,7 +25,7 @@ export function createHealthHandler({ database, configuration, missingConfig, ti
       status: healthy ? 'healthy' : 'degraded',
       env: configuration.NODE_ENV,
       version: 'v1',
-      db: healthy ? 'up' : 'down',
+      db: healthy ? 'up' : schemaCurrent ? 'down' : 'migration_pending',
       email: configuration.RESEND_API_KEY && configuration.EMAIL_FROM ? 'configured' : 'not_configured',
       setup: missingConfig(configuration).map(item => item.split(':')[0]),
       time: new Date().toISOString()

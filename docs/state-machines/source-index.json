@@ -346,7 +346,7 @@
           "text": "user.verification_status === 'verified' ? 'Verified' : user.verification_status === 'pending' ? 'Under review' : 'Not verified'"
         },
         {
-          "line": 234,
+          "line": 235,
           "text": "right={user.verification_status === 'verified' || user.verification_status === 'pending' ? undefined : <Button title=\"Request\" size=\"sm\" variant=\"secondary\" onPress={requestVerification} />}"
         }
       ]
@@ -716,27 +716,22 @@
       ]
     },
     {
-      "path": "server/createApp.js",
-      "evidence": [
-        {
-          "line": 69,
-          "text": "status: error ? 'degraded' : 'healthy',"
-        }
-      ]
-    },
-    {
       "path": "server/datingService.js",
       "evidence": [
         {
-          "line": 84,
+          "line": 83,
+          "text": "if (!self || !target || target.deleted_at || target.is_active === false) throw new Error('User not found')"
+        },
+        {
+          "line": 86,
           "text": "const status = await assertDatingLaunched(self)"
         },
         {
-          "line": 183,
+          "line": 185,
           "text": "const status = await assertDatingLaunched(self)"
         },
         {
-          "line": 317,
+          "line": 319,
           "text": "const status = await assertDatingLaunched(self)"
         }
       ]
@@ -755,6 +750,19 @@
         {
           "line": 372,
           "text": "if (!peer || peer.deleted_at || peer.is_active === false) return true"
+        }
+      ]
+    },
+    {
+      "path": "server/health.js",
+      "evidence": [
+        {
+          "line": 5,
+          "text": "const timeout = setTimeout(() => controller.abort(), timeoutMs)"
+        },
+        {
+          "line": 25,
+          "text": "status: healthy ? 'healthy' : 'degraded',"
         }
       ]
     },
@@ -874,11 +882,11 @@
       "path": "server/routes/auth.js",
       "evidence": [
         {
-          "line": 115,
+          "line": 119,
           "text": "if (user.is_active === false) {"
         },
         {
-          "line": 170,
+          "line": 174,
           "text": "if (!account || account.deleted_at || account.is_active === false) {"
         }
       ]

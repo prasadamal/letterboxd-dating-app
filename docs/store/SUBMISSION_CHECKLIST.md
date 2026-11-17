@@ -5,9 +5,10 @@ Use this when you wake up to ship **Android (Google Play)** and **iOS (App Store
 ## Before you build
 
 1. Deploy the **API** publicly over HTTPS (Render, Railway, Fly.io, etc.).
-2. Set `EXPO_PUBLIC_API_URL=https://YOUR_HOST/api` in `mobile/eas.json` production profile (or EAS secrets).
+2. Set `EXPO_PUBLIC_API_URL`, `EXPO_PUBLIC_WEB_URL` and `EXPO_PUBLIC_EAS_PROJECT_ID` as EAS environment variables
+   for `preview` and `production` (`LAUNCH_GUIDE.md`, Stage 3.2).
 3. Create an [Expo](https://expo.dev) account and run `cd mobile && npx eas-cli login`.
-4. Link project: `npx eas init` → paste **project ID** into `mobile/app.json` → `extra.eas.projectId`.
+4. Link project: `npx eas init`. Its project ID is the `EXPO_PUBLIC_EAS_PROJECT_ID` value from step 2.
 5. Add Supabase **service role** + `JWT_SECRET` on the server host.
 
 ## Build commands

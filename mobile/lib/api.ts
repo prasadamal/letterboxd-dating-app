@@ -6,7 +6,7 @@ const fallbackDev =
     ? 'http://localhost:4000/api'
     : `http://${Constants.expoConfig?.hostUri?.split(':').shift() || '10.0.2.2'}:4000/api`
 
-// Release builds must be built with EXPO_PUBLIC_API_URL (set per profile in eas.json); the LAN fallback is dev-only.
+// Release builds must be built with EXPO_PUBLIC_API_URL (an EAS environment variable, see LAUNCH_GUIDE.md); the LAN fallback is dev-only.
 export const API_BASE = (process.env.EXPO_PUBLIC_API_URL || (__DEV__ ? fallbackDev : '')).replace(/\/$/, '')
 export const API_CONFIGURED = Boolean(API_BASE) && !API_BASE.includes('YOUR_PRODUCTION_API_HOST')
 

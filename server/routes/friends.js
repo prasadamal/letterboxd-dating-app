@@ -4,9 +4,12 @@ import { authMiddleware } from '../middleware/auth.js'
 import { asyncHandler, AppError } from '../middleware/errors.js'
 import { validateBody } from '../middleware/validate.js'
 import { getReferralInfo } from '../datingService.js'
+import { authRateLimiter } from '../middleware/security.js'
 import { addFriendByCode, compareWith, listFriends, removeFriend } from '../services/friendsService.js'
 
 const router = express.Router()
+// Adding by code needs no confirmation from the other person, so guessing codes must be slow.
+const codeLimiter = authRateLimiter()
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 router.param('userId', (req, res, next, value) => {
@@ -25,6 +28,7 @@ router.get(
 
 router.post(
   '/',
+  codeLimiter,
   authMiddleware,
   validateBody(z.object({ code: z.string().trim().min(4).max(32) })),
   asyncHandler(async (req, res) => {

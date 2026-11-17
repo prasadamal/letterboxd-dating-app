@@ -1,6 +1,5 @@
 import express from 'express'
 import bcrypt from 'bcryptjs'
-import crypto from 'crypto'
 import { createUser, ensureUserProfile, findUserByEmail, findUserById, getUserProfile, updateUserProfile } from '../db.js'
 import { signToken, authMiddleware } from '../middleware/auth.js'
 import { getPlatformStatusForUser } from '../platformService.js'
@@ -31,15 +30,12 @@ import { authRateLimiter } from '../middleware/security.js'
 import { unregisterPushToken } from '../services/notificationService.js'
 import { containsBlockedContent } from '../lib/contentFilter.js'
 import { normalizeInterestedIn } from '../lib/datingEligibility.js'
+import { isUniqueViolation, withFreshFriendCode } from '../lib/friendCode.js'
 
 const router = express.Router()
 
 // Strict limit on endpoints that take credentials or send email; session endpoints use the global limit.
 const credentialLimiter = authRateLimiter()
-
-function referralCodeFromEmail(email) {
-  return `REEL${crypto.createHash('sha1').update(String(email)).digest('hex').slice(0, 6).toUpperCase()}`
-}
 
 router.post(
   '/signup',
@@ -56,23 +52,31 @@ router.post(
     }
 
     const passwordHash = await bcrypt.hash(password, 10)
-    const row = await createUser({
-      email: email.trim().toLowerCase(),
-      password_hash: passwordHash,
-      display_name: name,
-      age,
-      country,
-      city: city || country,
-      bio: bio?.trim() || '',
-      hobbies: ['Cinema'],
-      gender,
-      interested_in: normalizeInterestedIn(interestedIn, gender),
-      // Older app versions don't send it; they were dating-only, so default to on.
-      dating_enabled: datingEnabled ?? true,
-      terms_accepted_at: new Date().toISOString(),
-      referral_code: referralCodeFromEmail(email),
-      last_active_at: new Date().toISOString()
-    })
+    const now = new Date().toISOString()
+    let row
+    try {
+      row = await withFreshFriendCode((friendCode) => createUser({
+        email: email.trim().toLowerCase(),
+        password_hash: passwordHash,
+        display_name: name,
+        age,
+        country,
+        city: city || country,
+        bio: bio?.trim() || '',
+        hobbies: ['Cinema'],
+        gender,
+        interested_in: normalizeInterestedIn(interestedIn, gender),
+        // Older app versions don't send it; they were dating-only, so default to on.
+        dating_enabled: datingEnabled ?? true,
+        terms_accepted_at: now,
+        referral_code: friendCode,
+        last_active_at: now
+      }))
+    } catch (error) {
+      // Two sign-ups with the same email at the same moment: the second one loses.
+      if (isUniqueViolation(error)) throw new AppError('User already exists', 409, 'USER_EXISTS')
+      throw error
+    }
 
     // The code of whoever invited you: credits the referral and makes you film friends straight away,
     // so a new member sees their match % with the friend who brought them.
