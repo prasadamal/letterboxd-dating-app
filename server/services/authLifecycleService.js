@@ -1,8 +1,9 @@
 import bcrypt from 'bcryptjs'
+import crypto from 'crypto'
+import { supabase } from '../supabaseClient.js'
 import { findUserByEmail, findUserById, updateUserProfile } from '../db.js'
 import { createAuthToken, consumeAuthToken, sendEmail } from './auditService.js'
 import { env } from '../config/env.js'
-import { revokeAllRefreshTokens } from './authService.js'
 
 export async function requestPasswordReset(email) {
   const user = await findUserByEmail(email)
@@ -23,13 +24,14 @@ export async function requestPasswordReset(email) {
 }
 
 export async function resetPassword(token, password) {
-  const row = await consumeAuthToken(token, 'password_reset')
-  if (!row) throw Object.assign(new Error('Invalid or expired reset token'), { status: 400, code: 'INVALID_TOKEN' })
-
   const hash = await bcrypt.hash(password, 10)
-  await updateUserProfile(row.user_id, { password_hash: hash })
-  // A reset usually means the old password leaked: sign out every existing session.
-  await revokeAllRefreshTokens(row.user_id)
+  // Consume the link, change the password and invalidate sessions in one database transaction.
+  const { data, error } = await supabase.rpc('reset_password_with_token', {
+    p_token_hash: crypto.createHash('sha256').update(token).digest('hex'),
+    p_password_hash: hash
+  })
+  if (error) throw error
+  if (!data) throw Object.assign(new Error('Invalid or expired reset token'), { status: 400, code: 'INVALID_TOKEN' })
   return { ok: true }
 }
 

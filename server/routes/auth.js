@@ -1,6 +1,5 @@
 import express from 'express'
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 import { createUser, ensureUserProfile, findUserByEmail, findUserById, getUserProfile, updateUserProfile } from '../db.js'
 import { signToken, authMiddleware } from '../middleware/auth.js'
@@ -14,7 +13,9 @@ import {
   loginSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
-  verifyEmailSchema
+  verifyEmailSchema,
+  refreshSchema,
+  logoutSchema
 } from '../middleware/validate.js'
 import { env } from '../config/env.js'
 import { writeAuditLog, computeProfileCompletion } from '../services/auditService.js'
@@ -91,8 +92,8 @@ router.post(
       requestId: req.requestId
     })
 
-    const token = signToken({ id: row.id, email: row.email })
-    const { refreshToken, expiresAt } = await issueRefreshToken(row.id)
+    const token = signToken({ id: row.id, email: row.email, authVersion: row.auth_version ?? 0 })
+    const { refreshToken, expiresAt } = await issueRefreshToken(row.id, row.auth_version ?? 0)
     await syncProfileCompletion(row.id)
     const user = await getUserProfile(row.id)
     const platform = await getPlatformStatusForUser(row)
@@ -117,8 +118,8 @@ router.post(
 
     await updateUserProfile(user.id, { last_active_at: new Date().toISOString() })
 
-    const token = signToken({ id: user.id, email: user.email })
-    const { refreshToken, expiresAt } = await issueRefreshToken(user.id)
+    const token = signToken({ id: user.id, email: user.email, authVersion: user.auth_version ?? 0 })
+    const { refreshToken, expiresAt } = await issueRefreshToken(user.id, user.auth_version ?? 0)
     await syncProfileCompletion(user.id)
     const profile = await getUserProfile(user.id)
     const platform = await getPlatformStatusForUser(user)
@@ -137,7 +138,7 @@ router.post('/reset-password', credentialLimiter, validateBody(resetPasswordSche
   try {
     await resetPassword(req.body.token, req.body.password)
   } catch (error) {
-    throw new AppError(error.message, error.status || 400, error.code || 'RESET_FAILED')
+    throw new AppError(error.message, error.status || 500, error.status ? error.code : 'RESET_UNAVAILABLE')
   }
   return res.json({ ok: true })
 }))
@@ -153,12 +154,12 @@ router.post('/verify-email/confirm', credentialLimiter, validateBody(verifyEmail
   try {
     await verifyEmail(req.body.token)
   } catch (error) {
-    throw new AppError(error.message, error.status || 400, error.code || 'VERIFY_FAILED')
+    throw new AppError(error.message, error.status || 500, error.status ? error.code : 'VERIFY_UNAVAILABLE')
   }
   return res.json({ ok: true })
 }))
 
-router.post('/refresh', asyncHandler(async (req, res) => {
+router.post('/refresh', validateBody(refreshSchema), asyncHandler(async (req, res) => {
   const { refreshToken } = req.body
   if (!refreshToken) throw new AppError('refreshToken required', 400, 'VALIDATION_ERROR')
 
@@ -170,7 +171,7 @@ router.post('/refresh', asyncHandler(async (req, res) => {
     throw new AppError('Session ended', 401, 'INVALID_REFRESH')
   }
   const profile = await getUserProfile(rotated.userId)
-  const token = signToken({ id: rotated.userId, email: profile.email })
+  const token = signToken({ id: rotated.userId, email: profile.email, authVersion: rotated.authVersion })
   return res.json({
     token,
     refreshToken: rotated.refreshToken,
@@ -179,28 +180,19 @@ router.post('/refresh', asyncHandler(async (req, res) => {
   })
 }))
 
-router.post('/logout', asyncHandler(async (req, res) => {
+router.post('/logout', validateBody(logoutSchema), authMiddleware, asyncHandler(async (req, res) => {
   const { refreshToken, pushToken } = req.body
-  if (refreshToken) await revokeRefreshToken(refreshToken)
+  if (refreshToken) await revokeRefreshToken(refreshToken, req.user.id)
   // The next person to sign in on this device must not get the previous user's notifications.
-  if (typeof pushToken === 'string' && /^Expo(nent)?PushToken\[/.test(pushToken)) await unregisterPushToken(pushToken)
+  if (pushToken) await unregisterPushToken(pushToken, req.user.id)
   return res.json({ ok: true })
 }))
 
-router.get('/me', asyncHandler(async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1]
-  if (!token) throw new AppError('Missing token', 401, 'UNAUTHORIZED')
-
-  try {
-    const decoded = jwt.verify(token, env.JWT_SECRET)
-    const user = await getUserProfile(decoded.id)
-    if (!user) throw new AppError('User not found', 404, 'NOT_FOUND')
-    const platform = await getPlatformStatusForUser(user, { includeMatches: true })
-    return res.json({ user: ensureUserProfile(user), platform })
-  } catch (error) {
-    if (error instanceof AppError) throw error
-    throw new AppError('Invalid token', 401, 'UNAUTHORIZED')
-  }
+router.get('/me', authMiddleware, asyncHandler(async (req, res) => {
+  const user = await getUserProfile(req.user.id)
+  if (!user) throw new AppError('User not found', 404, 'NOT_FOUND')
+  const platform = await getPlatformStatusForUser(user, { includeMatches: true })
+  return res.json({ user: ensureUserProfile(user), platform })
 }))
 
 export default router

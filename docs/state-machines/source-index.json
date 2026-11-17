@@ -1,0 +1,1476 @@
+{
+  "description": "Source candidates for state-machine review, not proof of semantic exhaustiveness. UI input fields and schema constraints can be simple state; review the curated inventory for meaning.",
+  "roots": [
+    "mobile/app",
+    "mobile/lib",
+    "mobile/components",
+    "src",
+    "server",
+    "supabase"
+  ],
+  "files": [
+    {
+      "path": "mobile/app/(tabs)/dating.tsx",
+      "evidence": [
+        {
+          "line": 2,
+          "text": "import { useCallback, useState } from 'react'"
+        },
+        {
+          "line": 24,
+          "text": "const [profile, setProfile] = useState<DatingProfile | null>(null)"
+        },
+        {
+          "line": 25,
+          "text": "const [meta, setMeta] = useState<DeckMeta | null>(null)"
+        },
+        {
+          "line": 26,
+          "text": "const [blocker, setBlocker] = useState<'incomplete' | null>(null)"
+        },
+        {
+          "line": 27,
+          "text": "const [loading, setLoading] = useState(true)"
+        },
+        {
+          "line": 28,
+          "text": "const [message, setMessage] = useState('')"
+        },
+        {
+          "line": 29,
+          "text": "const [reporting, setReporting] = useState(false)"
+        },
+        {
+          "line": 30,
+          "text": "const [dragging, setDragging] = useState(false)"
+        },
+        {
+          "line": 31,
+          "text": "const [match, setMatch] = useState<DatingProfile | null>(null)"
+        }
+      ]
+    },
+    {
+      "path": "mobile/app/(tabs)/home.tsx",
+      "evidence": [
+        {
+          "line": 3,
+          "text": "import { useCallback, useEffect, useRef, useState } from 'react'"
+        },
+        {
+          "line": 24,
+          "text": "const [movies, setMovies] = useState<Movie[] | null>(null)"
+        },
+        {
+          "line": 25,
+          "text": "const [number, setNumber] = useState<number | null>(null)"
+        },
+        {
+          "line": 26,
+          "text": "const [results, setResults] = useState<DailyResults | null>(null)"
+        },
+        {
+          "line": 27,
+          "text": "const [friends, setFriends] = useState<Friend[]>([])"
+        },
+        {
+          "line": 28,
+          "text": "const [myCode, setMyCode] = useState('')"
+        },
+        {
+          "line": 29,
+          "text": "const [streak, setStreak] = useState<Streak | null>(null)"
+        },
+        {
+          "line": 30,
+          "text": "const [later, setLater] = useState(false)"
+        },
+        {
+          "line": 31,
+          "text": "const [refreshing, setRefreshing] = useState(false)"
+        },
+        {
+          "line": 32,
+          "text": "const [error, setError] = useState('')"
+        }
+      ]
+    },
+    {
+      "path": "mobile/app/(tabs)/messages.tsx",
+      "evidence": [
+        {
+          "line": 3,
+          "text": "import { useCallback, useState } from 'react'"
+        },
+        {
+          "line": 16,
+          "text": "const [conversations, setConversations] = useState<ConversationPreview[] | null>(null)"
+        },
+        {
+          "line": 17,
+          "text": "const [likes, setLikes] = useState<LikesYou | null>(null)"
+        },
+        {
+          "line": 18,
+          "text": "const [refreshing, setRefreshing] = useState(false)"
+        }
+      ]
+    },
+    {
+      "path": "mobile/app/(tabs)/profile.tsx",
+      "evidence": [
+        {
+          "line": 3,
+          "text": "import { useCallback, useState } from 'react'"
+        },
+        {
+          "line": 19,
+          "text": "const [stats, setStats] = useState<TasteStats | null>(null)"
+        },
+        {
+          "line": 20,
+          "text": "const [refreshing, setRefreshing] = useState(false)"
+        }
+      ]
+    },
+    {
+      "path": "mobile/app/chat/[userId].tsx",
+      "evidence": [
+        {
+          "line": 3,
+          "text": "import { useCallback, useEffect, useRef, useState } from 'react'"
+        },
+        {
+          "line": 34,
+          "text": "const [messages, setMessages] = useState<ChatMessage[]>([])"
+        },
+        {
+          "line": 35,
+          "text": "const [text, setText] = useState('')"
+        },
+        {
+          "line": 36,
+          "text": "const [access, setAccess] = useState<ChatAccess>('loading')"
+        },
+        {
+          "line": 37,
+          "text": "const [realtimeChannel, setRealtimeChannel] = useState<string | null>(null)"
+        },
+        {
+          "line": 39,
+          "text": "const [reporting, setReporting] = useState(false)"
+        },
+        {
+          "line": 40,
+          "text": "const [starters, setStarters] = useState<string[]>([])"
+        },
+        {
+          "line": 41,
+          "text": "const [peer, setPeer] = useState<TasteComparison | null>(null)"
+        },
+        {
+          "line": 42,
+          "text": "const [sending, setSending] = useState(false)"
+        },
+        {
+          "line": 43,
+          "text": "const [connectionError, setConnectionError] = useState<string | null>(null)"
+        },
+        {
+          "line": 69,
+          "text": "if (err instanceof ApiError && err.status === 404) {"
+        },
+        {
+          "line": 99,
+          "text": "const timer = setInterval(() => {"
+        }
+      ]
+    },
+    {
+      "path": "mobile/app/compare/[userId].tsx",
+      "evidence": [
+        {
+          "line": 2,
+          "text": "import { useEffect, useState } from 'react'"
+        },
+        {
+          "line": 29,
+          "text": "const [data, setData] = useState<TasteComparison | null>(null)"
+        },
+        {
+          "line": 30,
+          "text": "const [error, setError] = useState('')"
+        }
+      ]
+    },
+    {
+      "path": "mobile/app/edit-profile.tsx",
+      "evidence": [
+        {
+          "line": 4,
+          "text": "import { useState } from 'react'"
+        },
+        {
+          "line": 20,
+          "text": "const [name, setName] = useState(user?.name || '')"
+        },
+        {
+          "line": 21,
+          "text": "const [country, setCountry] = useState(user?.country || user?.city || '')"
+        },
+        {
+          "line": 22,
+          "text": "const [bio, setBio] = useState(user?.bio || '')"
+        },
+        {
+          "line": 23,
+          "text": "const [prompts, setPrompts] = useState<ProfilePrompt[]>((user?.prompts || []).map(({ key, answer }) => ({ key, answer })))"
+        },
+        {
+          "line": 24,
+          "text": "const [saving, setSaving] = useState(false)"
+        },
+        {
+          "line": 25,
+          "text": "const [uploading, setUploading] = useState(false)"
+        }
+      ]
+    },
+    {
+      "path": "mobile/app/friends.tsx",
+      "evidence": [
+        {
+          "line": 2,
+          "text": "import { useCallback, useState } from 'react'"
+        },
+        {
+          "line": 14,
+          "text": "const [friends, setFriends] = useState<Friend[] | null>(null)"
+        },
+        {
+          "line": 15,
+          "text": "const [myCode, setMyCode] = useState('')"
+        },
+        {
+          "line": 16,
+          "text": "const [code, setCode] = useState('')"
+        },
+        {
+          "line": 17,
+          "text": "const [error, setError] = useState('')"
+        },
+        {
+          "line": 18,
+          "text": "const [adding, setAdding] = useState(false)"
+        }
+      ]
+    },
+    {
+      "path": "mobile/app/login.tsx",
+      "evidence": [
+        {
+          "line": 3,
+          "text": "import { useState } from 'react'"
+        },
+        {
+          "line": 16,
+          "text": "const [mode, setMode] = useState<'login' | 'forgot'>('login')"
+        },
+        {
+          "line": 17,
+          "text": "const [email, setEmail] = useState('')"
+        },
+        {
+          "line": 18,
+          "text": "const [password, setPassword] = useState('')"
+        },
+        {
+          "line": 19,
+          "text": "const [showPassword, setShowPassword] = useState(false)"
+        },
+        {
+          "line": 20,
+          "text": "const [error, setError] = useState('')"
+        },
+        {
+          "line": 21,
+          "text": "const [notice, setNotice] = useState('')"
+        },
+        {
+          "line": 22,
+          "text": "const [busy, setBusy] = useState(false)"
+        }
+      ]
+    },
+    {
+      "path": "mobile/app/settings.tsx",
+      "evidence": [
+        {
+          "line": 4,
+          "text": "import { useState, type ReactNode } from 'react'"
+        },
+        {
+          "line": 37,
+          "text": "const [gender, setGender] = useState<Gender | null>(user?.gender === 'other' ? 'nonbinary' : (user?.gender as Gender | null) ?? null)"
+        },
+        {
+          "line": 38,
+          "text": "const [interestedIn, setInterestedIn] = useState<Gender[]>(user?.interested_in || [])"
+        },
+        {
+          "line": 39,
+          "text": "const [minAge, setMinAge] = useState(String(user?.discovery_prefs?.minAge || 18))"
+        },
+        {
+          "line": 40,
+          "text": "const [maxAge, setMaxAge] = useState(String(user?.discovery_prefs?.maxAge || 99))"
+        },
+        {
+          "line": 41,
+          "text": "const [minScore, setMinScore] = useState(user?.discovery_prefs?.minScore ? String(user.discovery_prefs.minScore) : '')"
+        },
+        {
+          "line": 42,
+          "text": "const [needIdentity, setNeedIdentity] = useState(false)"
+        },
+        {
+          "line": 43,
+          "text": "const [saving, setSaving] = useState(false)"
+        },
+        {
+          "line": 44,
+          "text": "const [feedbackOpen, setFeedbackOpen] = useState(false)"
+        },
+        {
+          "line": 149,
+          "text": "user.verification_status === 'verified' ? 'Verified' : user.verification_status === 'pending' ? 'Under review' : 'Not verified'"
+        },
+        {
+          "line": 234,
+          "text": "right={user.verification_status === 'verified' || user.verification_status === 'pending' ? undefined : <Button title=\"Request\" size=\"sm\" variant=\"secondary\" onPress={requestVerification} />}"
+        }
+      ]
+    },
+    {
+      "path": "mobile/app/signup.tsx",
+      "evidence": [
+        {
+          "line": 5,
+          "text": "import { useMemo, useState } from 'react'"
+        },
+        {
+          "line": 25,
+          "text": "const [index, setIndex] = useState(0)"
+        },
+        {
+          "line": 26,
+          "text": "const [error, setError] = useState('')"
+        },
+        {
+          "line": 27,
+          "text": "const [busy, setBusy] = useState(false)"
+        },
+        {
+          "line": 28,
+          "text": "const [created, setCreated] = useState(false)"
+        },
+        {
+          "line": 29,
+          "text": "const [photoUri, setPhotoUri] = useState<string | null>(null)"
+        },
+        {
+          "line": 30,
+          "text": "const [showPassword, setShowPassword] = useState(false)"
+        },
+        {
+          "line": 31,
+          "text": "const [form, setForm] = useState({"
+        }
+      ]
+    },
+    {
+      "path": "mobile/components/DailyResultsCard.tsx",
+      "evidence": [
+        {
+          "line": 2,
+          "text": "import { useEffect, useState } from 'react'"
+        },
+        {
+          "line": 26,
+          "text": "const [countdown, setCountdown] = useState(untilNextDrop())"
+        },
+        {
+          "line": 28,
+          "text": "const timer = setInterval(() => setCountdown(untilNextDrop()), 30000)"
+        }
+      ]
+    },
+    {
+      "path": "mobile/components/FavoriteFilmPicker.tsx",
+      "evidence": [
+        {
+          "line": 2,
+          "text": "import { useEffect, useState } from 'react'"
+        },
+        {
+          "line": 16,
+          "text": "const [open, setOpen] = useState(false)"
+        },
+        {
+          "line": 17,
+          "text": "const [query, setQuery] = useState('')"
+        },
+        {
+          "line": 18,
+          "text": "const [results, setResults] = useState<FilmItem[]>([])"
+        },
+        {
+          "line": 19,
+          "text": "const [error, setError] = useState('')"
+        },
+        {
+          "line": 26,
+          "text": "const timer = setTimeout(() => {"
+        }
+      ]
+    },
+    {
+      "path": "mobile/components/FeedbackSheet.tsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { useState } from 'react'"
+        },
+        {
+          "line": 17,
+          "text": "const [category, setCategory] = useState<(typeof CATEGORIES)[number]['value']>('idea')"
+        },
+        {
+          "line": 18,
+          "text": "const [message, setMessage] = useState('')"
+        },
+        {
+          "line": 19,
+          "text": "const [sending, setSending] = useState(false)"
+        },
+        {
+          "line": 20,
+          "text": "const [status, setStatus] = useState<'idle' | 'sent' | 'error'>('idle')"
+        },
+        {
+          "line": 21,
+          "text": "const [error, setError] = useState('')"
+        },
+        {
+          "line": 58,
+          "text": "{status === 'sent' ? ("
+        }
+      ]
+    },
+    {
+      "path": "mobile/components/FilmExplorer.tsx",
+      "evidence": [
+        {
+          "line": 2,
+          "text": "import { useCallback, useEffect, useState } from 'react'"
+        },
+        {
+          "line": 12,
+          "text": "const [query, setQuery] = useState('')"
+        },
+        {
+          "line": 13,
+          "text": "const [collections, setCollections] = useState<Collection[]>([])"
+        },
+        {
+          "line": 14,
+          "text": "const [collection, setCollection] = useState<string | null>(null)"
+        },
+        {
+          "line": 15,
+          "text": "const [films, setFilms] = useState<FilmItem[]>([])"
+        },
+        {
+          "line": 16,
+          "text": "const [loading, setLoading] = useState(false)"
+        },
+        {
+          "line": 17,
+          "text": "const [error, setError] = useState('')"
+        },
+        {
+          "line": 43,
+          "text": "const timer = setTimeout(() => load(), query ? 300 : 0)"
+        }
+      ]
+    },
+    {
+      "path": "mobile/components/FilmRow.tsx",
+      "evidence": [
+        {
+          "line": 46,
+          "text": "const active = film.myRating === reaction"
+        }
+      ]
+    },
+    {
+      "path": "mobile/components/FilmSwipeDeck.tsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { useEffect, useMemo, useRef, useState } from 'react'"
+        },
+        {
+          "line": 40,
+          "text": "const [queue, setQueue] = useState<Movie[]>(movies)"
+        },
+        {
+          "line": 41,
+          "text": "const [reveal, setReveal] = useState<string | null>(null)"
+        },
+        {
+          "line": 42,
+          "text": "const [error, setError] = useState('')"
+        }
+      ]
+    },
+    {
+      "path": "mobile/components/PromptsEditor.tsx",
+      "evidence": [
+        {
+          "line": 2,
+          "text": "import { useState } from 'react'"
+        },
+        {
+          "line": 16,
+          "text": "const [picking, setPicking] = useState(false)"
+        }
+      ]
+    },
+    {
+      "path": "mobile/components/ReportSheet.tsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { useState } from 'react'"
+        },
+        {
+          "line": 24,
+          "text": "const [reason, setReason] = useState<(typeof REASONS)[number]['value'] | null>(null)"
+        },
+        {
+          "line": 25,
+          "text": "const [details, setDetails] = useState('')"
+        },
+        {
+          "line": 26,
+          "text": "const [block, setBlock] = useState(true)"
+        },
+        {
+          "line": 27,
+          "text": "const [sending, setSending] = useState(false)"
+        },
+        {
+          "line": 28,
+          "text": "const [error, setError] = useState('')"
+        }
+      ]
+    },
+    {
+      "path": "mobile/components/TasteProfileCard.tsx",
+      "evidence": [
+        {
+          "line": 3,
+          "text": "import { useState, type ReactNode } from 'react'"
+        },
+        {
+          "line": 125,
+          "text": "{profile.verification_status === 'verified' && ("
+        },
+        {
+          "line": 154,
+          "text": "const [failed, setFailed] = useState(false)"
+        }
+      ]
+    },
+    {
+      "path": "mobile/components/ui/Avatar.tsx",
+      "evidence": [
+        {
+          "line": 2,
+          "text": "import { useState } from 'react'"
+        },
+        {
+          "line": 28,
+          "text": "const [failed, setFailed] = useState(false)"
+        }
+      ]
+    },
+    {
+      "path": "mobile/lib/api.ts",
+      "evidence": [
+        {
+          "line": 14,
+          "text": "status: number"
+        },
+        {
+          "line": 17,
+          "text": "constructor(message: string, status: number, code?: string) {"
+        },
+        {
+          "line": 19,
+          "text": "this.status = status"
+        },
+        {
+          "line": 29,
+          "text": "const timeout = setTimeout(abort, 20000)"
+        },
+        {
+          "line": 56,
+          "text": "if (res.status === 400 || res.status === 401) { await clearTokens(); return null }"
+        },
+        {
+          "line": 108,
+          "text": "if (res.status === 401 && !skipRefresh) {"
+        }
+      ]
+    },
+    {
+      "path": "mobile/lib/auth.tsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'"
+        },
+        {
+          "line": 28,
+          "text": "const [user, setUser] = useState<User | null>(null)"
+        },
+        {
+          "line": 29,
+          "text": "const [token, setToken] = useState<string | null>(null)"
+        },
+        {
+          "line": 30,
+          "text": "const [platform, setPlatform] = useState<PlatformStatus | null>(null)"
+        },
+        {
+          "line": 31,
+          "text": "const [ready, setReady] = useState(false)"
+        },
+        {
+          "line": 32,
+          "text": "const [offline, setOffline] = useState(false)"
+        },
+        {
+          "line": 46,
+          "text": "if (err instanceof ApiError && (err.status === 401 || err.status === 404)) await clearTokens()"
+        }
+      ]
+    },
+    {
+      "path": "mobile/lib/platform.tsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'"
+        },
+        {
+          "line": 14,
+          "text": "const [platform, setPlatform] = useState<PlatformStatus | null>(null)"
+        },
+        {
+          "line": 29,
+          "text": "let timer: ReturnType<typeof setInterval> | null = setInterval(() => refreshPlatform().catch(() => null), 60000)"
+        },
+        {
+          "line": 31,
+          "text": "if (state === 'active') {"
+        },
+        {
+          "line": 33,
+          "text": "if (!timer) timer = setInterval(() => refreshPlatform().catch(() => null), 60000)"
+        }
+      ]
+    },
+    {
+      "path": "mobile/lib/push.ts",
+      "evidence": [
+        {
+          "line": 42,
+          "text": "const status ="
+        },
+        {
+          "line": 43,
+          "text": "permissions.status === 'granted' ? permissions.status : (await Notifications.requestPermissionsAsync()).status"
+        }
+      ]
+    },
+    {
+      "path": "mobile/lib/types.ts",
+      "evidence": [
+        {
+          "line": 56,
+          "text": "plus?: { active: boolean; until: string | null }"
+        }
+      ]
+    },
+    {
+      "path": "server/createApp.js",
+      "evidence": [
+        {
+          "line": 69,
+          "text": "status: error ? 'degraded' : 'healthy',"
+        }
+      ]
+    },
+    {
+      "path": "server/datingService.js",
+      "evidence": [
+        {
+          "line": 84,
+          "text": "const status = await assertDatingLaunched(self)"
+        },
+        {
+          "line": 183,
+          "text": "const status = await assertDatingLaunched(self)"
+        },
+        {
+          "line": 317,
+          "text": "const status = await assertDatingLaunched(self)"
+        }
+      ]
+    },
+    {
+      "path": "server/db.js",
+      "evidence": [
+        {
+          "line": 96,
+          "text": "verification_status: row.verification_status === 'verified' ? 'verified' : 'unverified',"
+        },
+        {
+          "line": 129,
+          "text": "verification_status: row.verification_status || 'unverified',"
+        },
+        {
+          "line": 372,
+          "text": "if (!peer || peer.deleted_at || peer.is_active === false) return true"
+        }
+      ]
+    },
+    {
+      "path": "server/index.js",
+      "evidence": [
+        {
+          "line": 31,
+          "text": "setTimeout(() => process.exit(1), 10_000).unref()"
+        }
+      ]
+    },
+    {
+      "path": "server/jobs/dailyReminderJob.js",
+      "evidence": [
+        {
+          "line": 32,
+          "text": "if (user.deleted_at || user.is_active === false || user.streak_last_day === day) {"
+        }
+      ]
+    },
+    {
+      "path": "server/lib/plus.js",
+      "evidence": [
+        {
+          "line": 9,
+          "text": "const active = isPlusActive(user, now)"
+        }
+      ]
+    },
+    {
+      "path": "server/middleware/auth.js",
+      "evidence": [
+        {
+          "line": 25,
+          "text": "if (!account || account.deleted_at || account.is_active === false ||"
+        }
+      ]
+    },
+    {
+      "path": "server/middleware/errors.js",
+      "evidence": [
+        {
+          "line": 2,
+          "text": "constructor(message, status = 500, code = 'INTERNAL_ERROR', details = null) {"
+        },
+        {
+          "line": 4,
+          "text": "this.status = status"
+        },
+        {
+          "line": 25,
+          "text": "const status = err.status || err.statusCode || 500"
+        }
+      ]
+    },
+    {
+      "path": "server/openapi/spec.js",
+      "evidence": [
+        {
+          "line": 60,
+          "text": "'/admin/feedback': { get: { summary: 'Feedback inbox (x-admin-key, ?status=new|read|done)' } },"
+        }
+      ]
+    },
+    {
+      "path": "server/platformService.js",
+      "evidence": [
+        {
+          "line": 7,
+          "text": "let cached = null"
+        },
+        {
+          "line": 117,
+          "text": "const status = await getPlatformStatus()"
+        },
+        {
+          "line": 138,
+          "text": "const status = await getPlatformStatus()"
+        },
+        {
+          "line": 152,
+          "text": "const status = user ? await getPlatformStatusForUser(user) : await getPlatformStatus()"
+        }
+      ]
+    },
+    {
+      "path": "server/routes/admin.js",
+      "evidence": [
+        {
+          "line": 19,
+          "text": "const status = typeof req.query.status === 'string' ? req.query.status : 'open'"
+        },
+        {
+          "line": 25,
+          "text": "const statusSchema = z.object({ status: z.enum(['open', 'reviewing', 'resolved', 'dismissed']) })"
+        },
+        {
+          "line": 37,
+          "text": "status: z.enum(['unverified', 'pending', 'verified', 'rejected']),"
+        },
+        {
+          "line": 142,
+          "text": "const status = ['new', 'read', 'done'].includes(req.query.status) ? req.query.status : 'new'"
+        },
+        {
+          "line": 156,
+          "text": "validateBody(z.object({ status: z.enum(['new', 'read', 'done']) })),"
+        },
+        {
+          "line": 158,
+          "text": "const { error } = await supabase.from('feedback').update({ status: req.body.status }).eq('id', Number(req.params.id))"
+        }
+      ]
+    },
+    {
+      "path": "server/routes/auth.js",
+      "evidence": [
+        {
+          "line": 115,
+          "text": "if (user.is_active === false) {"
+        },
+        {
+          "line": 170,
+          "text": "if (!account || account.deleted_at || account.is_active === false) {"
+        }
+      ]
+    },
+    {
+      "path": "server/routes/platform.js",
+      "evidence": [
+        {
+          "line": 19,
+          "text": "const status = await getPlatformStatus()"
+        },
+        {
+          "line": 30,
+          "text": "const status = await getPlatformStatusForUser(await findUserById(req.user.id), { includeMatches: true })"
+        }
+      ]
+    },
+    {
+      "path": "server/routes/users.js",
+      "evidence": [
+        {
+          "line": 93,
+          "text": "const state = await syncProfileCompletion(req.user.id)"
+        },
+        {
+          "line": 112,
+          "text": "const state = await saveProfilePhotoRecord(req.user.id, publicUrl, true)"
+        }
+      ]
+    },
+    {
+      "path": "server/safetyService.js",
+      "evidence": [
+        {
+          "line": 52,
+          "text": "status: 'open'"
+        },
+        {
+          "line": 61,
+          "text": "status: 'open'"
+        },
+        {
+          "line": 137,
+          "text": "is_active: false"
+        }
+      ]
+    },
+    {
+      "path": "server/services/auditService.js",
+      "evidence": [
+        {
+          "line": 34,
+          "text": "expires_at: expiresAt"
+        },
+        {
+          "line": 45,
+          "text": ".update({ consumed_at: new Date().toISOString() })"
+        },
+        {
+          "line": 76,
+          "text": "throw new Error(`Email send failed: ${body}`)"
+        }
+      ]
+    },
+    {
+      "path": "server/services/authLifecycleService.js",
+      "evidence": [
+        {
+          "line": 34,
+          "text": "if (!data) throw Object.assign(new Error('Invalid or expired reset token'), { status: 400, code: 'INVALID_TOKEN' })"
+        },
+        {
+          "line": 40,
+          "text": "if (!user || user.deleted_at) throw Object.assign(new Error('User not found'), { status: 404 })"
+        },
+        {
+          "line": 58,
+          "text": "if (!row) throw Object.assign(new Error('Invalid or expired verification token'), { status: 400, code: 'INVALID_TOKEN' })"
+        }
+      ]
+    },
+    {
+      "path": "server/services/authService.js",
+      "evidence": [
+        {
+          "line": 24,
+          "text": "p_token_hash: next.tokenHash, p_expires_at: next.expiresAt"
+        },
+        {
+          "line": 27,
+          "text": "if (!data) throw Object.assign(new Error('Session changed. Please sign in again.'), { status: 401, code: 'INVALID_REFRESH' })"
+        },
+        {
+          "line": 35,
+          "text": "p_next_hash: next.tokenHash, p_expires_at: next.expiresAt"
+        },
+        {
+          "line": 47,
+          "text": "const { error } = await supabase.from('refresh_tokens').update({ revoked_at: new Date().toISOString() }).eq('token_hash', tokenHash).eq('user_id', userId)"
+        },
+        {
+          "line": 54,
+          "text": ".update({ revoked_at: new Date().toISOString() })"
+        }
+      ]
+    },
+    {
+      "path": "server/services/friendsService.js",
+      "evidence": [
+        {
+          "line": 23,
+          "text": "if (!friend || friend.deleted_at || friend.is_active === false) throw new AppError('No one has that code', 404, 'NOT_FOUND')"
+        },
+        {
+          "line": 82,
+          "text": "if (!other || other.deleted_at || other.is_active === false) return false"
+        }
+      ]
+    },
+    {
+      "path": "server/services/growthService.js",
+      "evidence": [
+        {
+          "line": 61,
+          "text": "if (!user || !user.taste_card_public || user.deleted_at || user.is_active === false) {"
+        }
+      ]
+    },
+    {
+      "path": "server/services/moderationService.js",
+      "evidence": [
+        {
+          "line": 4,
+          "text": "export async function listModerationQueue(status = 'open') {"
+        },
+        {
+          "line": 45,
+          "text": "const reportStatus = status === 'dismissed' ? 'dismissed' : status === 'resolved' ? 'reviewed' : 'open'"
+        },
+        {
+          "line": 46,
+          "text": "const { error: reportError } = await supabase.from('reports').update({ status: reportStatus }).eq('id', data.report_id)"
+        },
+        {
+          "line": 56,
+          "text": ".update({ is_active: !suspended, ...(suspended ? { matchmaking_enabled: false } : {}) })"
+        }
+      ]
+    },
+    {
+      "path": "server/services/notificationService.js",
+      "evidence": [
+        {
+          "line": 50,
+          "text": "logger.warn('Expo push failed', { status: response.status, text })"
+        }
+      ]
+    },
+    {
+      "path": "server/services/profileService.js",
+      "evidence": [
+        {
+          "line": 33,
+          "text": "const state = await syncProfileCompletion(userId)"
+        },
+        {
+          "line": 36,
+          "text": "error.status = 403"
+        }
+      ]
+    },
+    {
+      "path": "server/services/realtimeService.js",
+      "evidence": [
+        {
+          "line": 19,
+          "text": "if (status === 'SUBSCRIBED') resolve(null)"
+        },
+        {
+          "line": 20,
+          "text": "if (status === 'CHANNEL_ERROR') reject(new Error('Realtime channel error'))"
+        }
+      ]
+    },
+    {
+      "path": "server/services/verificationService.js",
+      "evidence": [
+        {
+          "line": 12,
+          "text": "verification_status: status,"
+        },
+        {
+          "line": 14,
+          "text": "verified_at: status === 'verified' ? new Date().toISOString() : null"
+        }
+      ]
+    },
+    {
+      "path": "src/App.jsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { useEffect, useState } from 'react'"
+        },
+        {
+          "line": 12,
+          "text": "const [user, setUser] = useState(null)"
+        },
+        {
+          "line": 13,
+          "text": "const [ready, setReady] = useState(false)"
+        }
+      ]
+    },
+    {
+      "path": "src/components/ReportDialog.jsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { useState } from 'react'"
+        },
+        {
+          "line": 13,
+          "text": "const [reason, setReason] = useState('harassment')"
+        },
+        {
+          "line": 14,
+          "text": "const [details, setDetails] = useState('')"
+        },
+        {
+          "line": 15,
+          "text": "const [block, setBlock] = useState(true)"
+        },
+        {
+          "line": 16,
+          "text": "const [error, setError] = useState('')"
+        },
+        {
+          "line": 17,
+          "text": "const [sending, setSending] = useState(false)"
+        }
+      ]
+    },
+    {
+      "path": "src/lib/api.js",
+      "evidence": [
+        {
+          "line": 74,
+          "text": "if (res.status === 401 && !skipRefresh) {"
+        }
+      ]
+    },
+    {
+      "path": "src/pages/AdminPage.jsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { useEffect, useState } from 'react'"
+        },
+        {
+          "line": 6,
+          "text": "const [adminKey, setAdminKey] = useState(localStorage.getItem(ADMIN_KEY_STORAGE) || '')"
+        },
+        {
+          "line": 7,
+          "text": "const [items, setItems] = useState([])"
+        },
+        {
+          "line": 8,
+          "text": "const [error, setError] = useState('')"
+        },
+        {
+          "line": 9,
+          "text": "const [notice, setNotice] = useState('')"
+        },
+        {
+          "line": 10,
+          "text": "const [platform, setPlatform] = useState(null)"
+        },
+        {
+          "line": 11,
+          "text": "const [targets, setTargets] = useState({ male: '', female: '' })"
+        },
+        {
+          "line": 12,
+          "text": "const [region, setRegion] = useState({ target: '', open: '', lookup: '', result: null })"
+        },
+        {
+          "line": 13,
+          "text": "const [plusGrant, setPlusGrant] = useState({ userId: '', days: '30' })"
+        },
+        {
+          "line": 14,
+          "text": "const [feedback, setFeedback] = useState([])"
+        },
+        {
+          "line": 15,
+          "text": "const [feedbackStatus, setFeedbackStatus] = useState('new')"
+        },
+        {
+          "line": 55,
+          "text": "async function loadFeedback(key = adminKey, status = feedbackStatus) {"
+        },
+        {
+          "line": 56,
+          "text": "const data = await adminRequest(`/feedback?status=${status}`, {}, key)"
+        },
+        {
+          "line": 110,
+          "text": "const res = await fetch('/api/v1/admin/moderation/queue?status=open', {"
+        },
+        {
+          "line": 309,
+          "text": "className={status === feedbackStatus ? 'primary-button' : 'ghost-button'}"
+        },
+        {
+          "line": 313,
+          "text": "{status === 'new' ? 'New' : status === 'read' ? 'Read' : 'Done'}"
+        }
+      ]
+    },
+    {
+      "path": "src/pages/AuthPage.jsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { useEffect, useState } from 'react'"
+        },
+        {
+          "line": 34,
+          "text": "const [narrow, setNarrow] = useState(() => window.matchMedia(query).matches)"
+        },
+        {
+          "line": 59,
+          "text": "const [mode, setMode] = useState('signup')"
+        },
+        {
+          "line": 60,
+          "text": "const [notice, setNotice] = useState('')"
+        },
+        {
+          "line": 61,
+          "text": "const [devResetUrl, setDevResetUrl] = useState('')"
+        },
+        {
+          "line": 62,
+          "text": "const [form, setForm] = useState(EMPTY_FORM)"
+        },
+        {
+          "line": 63,
+          "text": "const [error, setError] = useState('')"
+        },
+        {
+          "line": 64,
+          "text": "const [busy, setBusy] = useState(false)"
+        }
+      ]
+    },
+    {
+      "path": "src/pages/DashboardPage.jsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { useEffect, useMemo, useState } from 'react'"
+        },
+        {
+          "line": 9,
+          "text": "const [tab, setTab] = useState('discover')"
+        },
+        {
+          "line": 10,
+          "text": "const [movies, setMovies] = useState([])"
+        },
+        {
+          "line": 11,
+          "text": "const [matches, setMatches] = useState([])"
+        },
+        {
+          "line": 12,
+          "text": "const [conversations, setConversations] = useState([])"
+        },
+        {
+          "line": 13,
+          "text": "const [profile, setProfile] = useState(user)"
+        },
+        {
+          "line": 14,
+          "text": "const [chatPeer, setChatPeer] = useState(null)"
+        },
+        {
+          "line": 15,
+          "text": "const [chatMessages, setChatMessages] = useState([])"
+        },
+        {
+          "line": 16,
+          "text": "const [chatText, setChatText] = useState('')"
+        },
+        {
+          "line": 17,
+          "text": "const [platform, setPlatform] = useState(null)"
+        },
+        {
+          "line": 18,
+          "text": "const [deck, setDeck] = useState(null)"
+        },
+        {
+          "line": 19,
+          "text": "const [deckMessage, setDeckMessage] = useState('')"
+        },
+        {
+          "line": 20,
+          "text": "const [loadError, setLoadError] = useState('')"
+        },
+        {
+          "line": 21,
+          "text": "const [chatNotice, setChatNotice] = useState('')"
+        },
+        {
+          "line": 22,
+          "text": "const [chatError, setChatError] = useState('')"
+        },
+        {
+          "line": 23,
+          "text": "const [reportTarget, setReportTarget] = useState(null)"
+        }
+      ]
+    },
+    {
+      "path": "src/pages/ResetPasswordPage.jsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { useState } from 'react'"
+        },
+        {
+          "line": 9,
+          "text": "const [password, setPassword] = useState('')"
+        },
+        {
+          "line": 10,
+          "text": "const [message, setMessage] = useState('')"
+        },
+        {
+          "line": 11,
+          "text": "const [error, setError] = useState('')"
+        }
+      ]
+    },
+    {
+      "path": "src/pages/TasteCardPage.jsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { useEffect, useState } from 'react'"
+        },
+        {
+          "line": 11,
+          "text": "const [card, setCard] = useState(null)"
+        },
+        {
+          "line": 12,
+          "text": "const [error, setError] = useState('')"
+        },
+        {
+          "line": 13,
+          "text": "const [copied, setCopied] = useState(false)"
+        },
+        {
+          "line": 30,
+          "text": "setTimeout(() => setCopied(false), 1800)"
+        }
+      ]
+    },
+    {
+      "path": "src/pages/VerifyEmailPage.jsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { useEffect, useState } from 'react'"
+        },
+        {
+          "line": 9,
+          "text": "const [message, setMessage] = useState(token ? 'Confirming your email…' : 'This link is missing a token.')"
+        },
+        {
+          "line": 10,
+          "text": "const [error, setError] = useState('')"
+        }
+      ]
+    },
+    {
+      "path": "supabase/migrations/20261002120000_reelmates_dating_launch_v1.sql",
+      "evidence": [
+        {
+          "line": 5,
+          "text": "ADD COLUMN IF NOT EXISTS gender text CHECK (gender IN ('male', 'female', 'other')),"
+        },
+        {
+          "line": 16,
+          "text": "id smallint PRIMARY KEY DEFAULT 1 CHECK (id = 1),"
+        },
+        {
+          "line": 29,
+          "text": "action text NOT NULL CHECK (action IN ('like', 'pass')),"
+        }
+      ]
+    },
+    {
+      "path": "supabase/migrations/20261002210000_production_phase2_v1.sql",
+      "evidence": [
+        {
+          "line": 40,
+          "text": "status text NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'reviewing', 'resolved', 'dismissed')),"
+        }
+      ]
+    },
+    {
+      "path": "supabase/migrations/20261003000000_production_complete_v1.sql",
+      "evidence": [
+        {
+          "line": 6,
+          "text": "CHECK (verification_status IN ('unverified', 'pending', 'verified', 'rejected')),"
+        }
+      ]
+    },
+    {
+      "path": "supabase/migrations/20261004120000_favorite_film_and_friends.sql",
+      "evidence": [
+        {
+          "line": 12,
+          "text": "CHECK (user_id <> friend_id)"
+        }
+      ]
+    },
+    {
+      "path": "supabase/migrations/20261004130000_collections_feedback_stats.sql",
+      "evidence": [
+        {
+          "line": 11,
+          "text": "category text NOT NULL CHECK (category IN ('bug', 'idea', 'film', 'other')),"
+        },
+        {
+          "line": 12,
+          "text": "message text NOT NULL CHECK (char_length(message) BETWEEN 3 AND 2000),"
+        },
+        {
+          "line": 15,
+          "text": "status text NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'read', 'done')),"
+        }
+      ]
+    },
+    {
+      "path": "supabase/migrations/20261005120000_inclusive_regions_plus.sql",
+      "evidence": [
+        {
+          "line": 7,
+          "text": "ADD CONSTRAINT users_gender_check CHECK (gender IN ('male', 'female', 'nonbinary', 'other'));"
+        },
+        {
+          "line": 13,
+          "text": "ADD CONSTRAINT users_interested_in_check CHECK (interested_in <@ ARRAY['male', 'female', 'nonbinary']::text[]);"
+        },
+        {
+          "line": 30,
+          "text": "ADD CONSTRAINT users_prompts_check CHECK (jsonb_typeof(prompts) = 'array' AND jsonb_array_length(prompts) <= 3);"
+        },
+        {
+          "line": 43,
+          "text": "ADD COLUMN IF NOT EXISTS country_target integer NOT NULL DEFAULT 150 CHECK (country_target > 0),"
+        }
+      ]
+    },
+    {
+      "path": "supabase/migrations/20261108120000_atomic_auth_sessions.sql",
+      "evidence": [
+        {
+          "line": 31,
+          "text": "UPDATE public.refresh_tokens t SET revoked_at = now()"
+        },
+        {
+          "line": 50,
+          "text": "UPDATE public.auth_tokens t SET consumed_at = now()"
+        },
+        {
+          "line": 55,
+          "text": "UPDATE public.refresh_tokens SET revoked_at = now() WHERE user_id = v_user AND revoked_at IS NULL;"
+        },
+        {
+          "line": 56,
+          "text": "UPDATE public.auth_tokens SET consumed_at = now()"
+        }
+      ]
+    }
+  ]
+}

@@ -80,7 +80,7 @@ export function ReportSheet({ visible, userId, userName, onClose, onReported }: 
           />
           <Pressable style={styles.blockRow} onPress={() => setBlock((value) => !value)} accessibilityRole="checkbox" accessibilityState={{ checked: block }}>
             <View style={[styles.checkbox, block && styles.checkboxOn]} />
-            <Text style={styles.optionText}>Also block — you won't see each other again</Text>
+            <Text style={styles.optionText}>Also block — you won&apos;t see each other again</Text>
           </Pressable>
           {!!error && <Text style={styles.error}>{error}</Text>}
           <Pressable style={[styles.primary, (!reason || sending) && { opacity: 0.5 }]} disabled={!reason || sending} onPress={submit}>

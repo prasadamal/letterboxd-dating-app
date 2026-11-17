@@ -210,3 +210,7 @@ See `CHANGELOG.md` and `docs/production/BACKLOG.md`.
 - Third-party ID verification vendor (Persona/Onfido), the Plus purchase screen
 - Postgres Realtime RLS policies for direct client reads (broadcast is used today)
 - Detox suite in CI
+
+## State transition contracts
+
+See [the state-machine inventory](docs/state-machines/README.md) for workflow states, ownership, guards, recovery, and verification. Regenerate searchable source evidence and the machine-readable catalog with `node scripts/state-index.mjs`; validate them with `node scripts/state-index.mjs --check`.

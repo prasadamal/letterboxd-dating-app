@@ -3,6 +3,12 @@ import { Platform } from 'react-native'
 
 const TOKEN_KEY = 'reelmates_token'
 const REFRESH_KEY = 'reelmates_refresh_token'
+const SESSION_KEY = 'reelmates_session_v2'
+
+async function readSession(): Promise<{ accessToken: string; refreshToken: string | null } | null> {
+  const raw = await secureStorage.getItem(SESSION_KEY)
+  return raw ? JSON.parse(raw) : null
+}
 
 // SecureStore (Keychain / Keystore) on iOS and Android; it has no web implementation, so the web
 // preview (`npx expo start --web`) falls back to localStorage.
@@ -16,19 +22,21 @@ export const secureStorage = {
 }
 
 export async function getAccessToken() {
-  return secureStorage.getItem(TOKEN_KEY)
+  return (await readSession())?.accessToken ?? secureStorage.getItem(TOKEN_KEY)
 }
 
 export async function getRefreshToken() {
-  return secureStorage.getItem(REFRESH_KEY)
+  return (await readSession())?.refreshToken ?? secureStorage.getItem(REFRESH_KEY)
 }
 
 export async function saveTokens(accessToken: string, refreshToken?: string | null) {
-  await secureStorage.setItem(TOKEN_KEY, accessToken)
-  if (refreshToken) await secureStorage.setItem(REFRESH_KEY, refreshToken)
+  await secureStorage.setItem(SESSION_KEY, JSON.stringify({ accessToken, refreshToken: refreshToken ?? null }))
+  await secureStorage.removeItem(TOKEN_KEY)
+  await secureStorage.removeItem(REFRESH_KEY)
 }
 
 export async function clearTokens() {
+  await secureStorage.removeItem(SESSION_KEY)
   await secureStorage.removeItem(TOKEN_KEY)
   await secureStorage.removeItem(REFRESH_KEY)
 }
