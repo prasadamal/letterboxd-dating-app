@@ -23,10 +23,14 @@ export function notFoundHandler(req, res) {
 
 export function errorHandler(err, req, res, _next) {
   const status = err.status || err.statusCode || 500
-  const code = err.code || 'INTERNAL_ERROR'
-  const message = status >= 500 ? 'Internal server error' : err.message || 'Request failed'
+  const serverError = status >= 500
+  // Server-side failures (including database errors, whose text can contain row data such as a
+  // failing row's values) show the caller nothing but a generic message and the request id.
+  // The details stay in the logs. Only errors we raised on purpose (AppError) keep their own code.
+  const code = serverError ? (err instanceof AppError ? err.code : 'INTERNAL_ERROR') : err.code || 'INTERNAL_ERROR'
+  const message = serverError ? 'Internal server error' : err.message || 'Request failed'
 
-  if (status >= 500) {
+  if (serverError) {
     req.log?.error?.('Unhandled error', { error: err.message, stack: err.stack, code: err.code })
     import('../lib/observability.js').then(({ captureException }) => captureException(err, { requestId: req.requestId }))
   }
@@ -35,6 +39,6 @@ export function errorHandler(err, req, res, _next) {
     message,
     code,
     requestId: req.requestId,
-    ...(err.details ? { details: err.details } : {})
+    ...(!serverError && err.details ? { details: err.details } : {})
   })
 }

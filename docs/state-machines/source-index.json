@@ -1479,6 +1479,15 @@
           "text": "UPDATE public.auth_tokens SET consumed_at = now()"
         }
       ]
+    },
+    {
+      "path": "supabase/migrations/20261118120000_refresh_token_family.sql",
+      "evidence": [
+        {
+          "line": 22,
+          "text": "UPDATE public.refresh_tokens t SET revoked_at = now()"
+        }
+      ]
     }
   ]
 }
