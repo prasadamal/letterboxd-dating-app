@@ -19,6 +19,11 @@ jobs:
       - run: npm ci
       - run: node scripts/state-index.mjs --check
       - run: npm test
+      - name: Session functions against both shapes of the refresh_tokens table (PostgreSQL)
+        run: |
+          sudo systemctl start postgresql.service
+          pg_isready --timeout=30
+          ./scripts/test-auth-functions.sh
       - run: npm run build
       - name: Mobile typecheck
         run: |

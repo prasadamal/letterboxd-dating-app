@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Live-server fixes (18 November 2026)
+
+- **Sign-up and login failed on the live database.** Production's `refresh_tokens` table (from the original 002 migration)
+  requires `family_id`; the session functions did not set it, and the repository's table definition lacked the column.
+  New migration `20261118120000_refresh_token_family.sql` adds a default and makes rotation keep the family. Covered by
+  `scripts/test-auth-functions.sh` (both table shapes, run in CI) and by `scripts/live-e2e.mjs` against a running server.
+- Server errors no longer echo database text to the caller. A failed insert used to return the failing row's values.
+
 ### Launch fixes (17 November 2026)
 
 - **Friend codes are random.** They were built from a hash of the member's email (or user id), so anyone who knew an

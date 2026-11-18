@@ -116,6 +116,9 @@ project, nobody can sign up or log in.
 1. Supabase → **moviematch** → **SQL Editor** → **New query**.
 2. Paste the whole file → **Run**. It is safe to run twice.
 
+Then run the second file the same way: `supabase/migrations/20261118120000_refresh_token_family.sql`. It fixes a mismatch between
+the repository and the live table that made every sign-up and login fail with a server error. Safe to run twice.
+
 **Check:** after deploying, `/api/v1/health` shows `"db":"up"`. If it shows `"db":"migration_pending"`, the file has
 not been run; Render keeps the previous version live until it has.
 
@@ -136,6 +139,13 @@ not been run; Render keeps the previous version live until it has.
 
 Free instances sleep after ~15 minutes idle; the first request then takes about a minute. Fine for testing —
 switch the plan to **Starter** (Render → Settings → Instance type) before real users arrive.
+
+### 2.2b Test the live server end to end
+```bash
+LIVE_API_URL=https://<your-service>.onrender.com node scripts/live-e2e.mjs
+```
+It creates two throwaway films-only accounts, runs sign-up, friend codes, token renewal, daily films, ratings, privacy,
+blocking and account deletion, and deletes both accounts. Every line must start with `OK`. Run it after every deploy.
 
 ### 2.3 Admin page
 Open `https://<your-service>.onrender.com/admin`, paste `ADMIN_API_KEY`, **Load queue**.
