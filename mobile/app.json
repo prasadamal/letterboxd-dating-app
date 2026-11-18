@@ -99,7 +99,11 @@
       "supabaseUrl": "",
       "supabaseAnonKey": "",
       "router": {},
-      "termsUrl": "https://github.com/prasadamal/letterboxd-dating-app/blob/main/docs/legal/TERMS_OF_SERVICE.md"
-    }
+      "termsUrl": "https://github.com/prasadamal/letterboxd-dating-app/blob/main/docs/legal/TERMS_OF_SERVICE.md",
+      "eas": {
+        "projectId": "a3bbbbc6-34c1-4388-b870-ef4c49eaad72"
+      }
+    },
+    "owner": "prasadaamals-team"
   }
 }
