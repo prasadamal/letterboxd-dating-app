@@ -111,6 +111,21 @@ async function main() {
   assert.equal(stats.status, 200)
   ok(`daily drop: ${rated} films rated, results and taste stats load`)
 
+  // Watchlist: save twice (one entry), private to you, leaves the list once you rate it as seen.
+  const [first, second] = daily.json.movies
+  assert.equal((await call('PUT', `/movies/${first.id}/watchlist`, { token: tokenA })).status, 200)
+  assert.equal((await call('PUT', `/movies/${first.id}/watchlist`, { token: tokenA })).status, 200)
+  assert.equal((await call('PUT', `/movies/${second.id}/watchlist`, { token: tokenA })).status, 200)
+  assert.equal((await call('PUT', '/movies/abc/watchlist', { token: tokenA })).status, 400)
+  const saved = (await call('GET', '/movies/watchlist', { token: tokenA })).json.films.map((f) => f.id)
+  assert.deepEqual(saved.slice().sort(), [first.id, second.id].sort())
+  assert.deepEqual((await call('GET', '/movies/watchlist', { token: b.token })).json.films, [])
+  await call('POST', `/movies/${first.id}/rate`, { token: tokenA, body: { reaction: 'love' } })
+  assert.deepEqual((await call('GET', '/movies/watchlist', { token: tokenA })).json.films.map((f) => f.id), [second.id])
+  assert.equal((await call('DELETE', `/movies/${second.id}/watchlist`, { token: tokenA })).status, 200)
+  assert.deepEqual((await call('GET', '/movies/watchlist', { token: tokenA })).json.films, [])
+  ok('watchlist: save, private per member, cleared by rating, removable')
+
   assert.equal((await call('GET', '/movies/search?q=parasite', { token: tokenA })).status, 200)
   assert.equal((await call('GET', '/movies/top', { token: tokenA })).status, 200)
   ok('search and the People’s chart load')

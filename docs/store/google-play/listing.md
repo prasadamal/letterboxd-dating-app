@@ -30,7 +30,7 @@ Social (dating is an optional mode; if you'd rather list under Dating, keep the 
 movies, film, cinema, friends, taste, personality, dating
 
 ## Contact
-support@reelmates.app
+amalprasadappu@gmail.com
 
 ## Privacy policy
 Link to hosted `PRIVACY_POLICY.md` (see SUBMISSION_CHECKLIST.md)

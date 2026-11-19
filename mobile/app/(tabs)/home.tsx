@@ -11,6 +11,7 @@ import { useAuth } from '../../lib/auth'
 import { haptic } from '../../lib/haptics'
 import { usePlatform } from '../../lib/platform'
 import { WEB_URL } from '../../lib/profileOptions'
+import { isSaved, refreshWatchlist } from '../../lib/watchlist'
 import { colors, fonts, radii, type } from '../../lib/theme'
 import type { DailyResults, Friend, Movie, Reaction, Streak } from '../../lib/types'
 
@@ -71,6 +72,8 @@ export default function TodayScreen() {
     const data = await apiFetch<{ streak?: Streak | null }>(`/movies/${movie.id}/rate`, { method: 'POST', body: JSON.stringify({ reaction }) })
     if (data.streak) setStreak(data.streak)
     setMovies((list) => (list || []).filter((m) => m.id !== movie.id))
+    // Loved or hated means seen: the server took it off the watchlist, so the bookmark follows.
+    if (reaction !== 'skip' && isSaved(movie.id)) refreshWatchlist().catch(() => null)
   }
 
   // Finishing the day: celebrate, then load everyone's verdicts and the updated profile (streak, personality).

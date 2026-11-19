@@ -4,6 +4,7 @@ import { haptic } from '../lib/haptics'
 import { colors, fonts, radii } from '../lib/theme'
 import type { FilmItem, Reaction } from '../lib/types'
 import { Button, Poster, type IconName } from './ui'
+import { WatchlistButton } from './WatchlistButton'
 
 type Props = {
   film: FilmItem
@@ -11,6 +12,8 @@ type Props = {
   // When set, the row is a picker (e.g. choosing your all-time favourite).
   onPick?: (film: FilmItem) => void
   pickLabel?: string
+  // Shows a bookmark to save the film for later.
+  showSave?: boolean
 }
 
 const CHOICES: { reaction: Reaction; icon: IconName; label: string; color: string }[] = [
@@ -19,7 +22,7 @@ const CHOICES: { reaction: Reaction; icon: IconName; label: string; color: strin
   { reaction: 'skip', icon: 'eye-off', label: "Haven't seen it", color: colors.cyan }
 ]
 
-export function FilmRow({ film, onRate, onPick, pickLabel = 'Pick' }: Props) {
+export function FilmRow({ film, onRate, onPick, pickLabel = 'Pick', showSave = false }: Props) {
   const meta = [film.genres?.[0], film.origin_language].filter(Boolean).join(' · ')
   return (
     <View style={styles.row}>
@@ -65,6 +68,7 @@ export function FilmRow({ film, onRate, onPick, pickLabel = 'Pick' }: Props) {
         )}
       </View>
       {onPick && <Button title={pickLabel} size="sm" onPress={() => onPick(film)} />}
+      {showSave && !onPick && <WatchlistButton filmId={film.id} title={film.title} />}
     </View>
   )
 }

@@ -9,7 +9,10 @@
       "distribution": "internal",
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "https://kounpkxjjkuoabbofgay.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mGGVjbDjEE9KET5IjaiUmw_nuk-I_gv"
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mGGVjbDjEE9KET5IjaiUmw_nuk-I_gv",
+        "EXPO_PUBLIC_API_URL": "https://reelmates-api-kshi.onrender.com/api/v1",
+        "EXPO_PUBLIC_WEB_URL": "https://reelmates-api-kshi.onrender.com",
+        "EXPO_PUBLIC_EAS_PROJECT_ID": "a3bbbbc6-34c1-4388-b870-ef4c49eaad72"
       },
       "environment": "development"
     },
@@ -20,7 +23,10 @@
       },
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "https://kounpkxjjkuoabbofgay.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mGGVjbDjEE9KET5IjaiUmw_nuk-I_gv"
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mGGVjbDjEE9KET5IjaiUmw_nuk-I_gv",
+        "EXPO_PUBLIC_API_URL": "https://reelmates-api-kshi.onrender.com/api/v1",
+        "EXPO_PUBLIC_WEB_URL": "https://reelmates-api-kshi.onrender.com",
+        "EXPO_PUBLIC_EAS_PROJECT_ID": "a3bbbbc6-34c1-4388-b870-ef4c49eaad72"
       },
       "ios": {
         "simulator": false
@@ -31,7 +37,10 @@
       "autoIncrement": true,
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "https://kounpkxjjkuoabbofgay.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mGGVjbDjEE9KET5IjaiUmw_nuk-I_gv"
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mGGVjbDjEE9KET5IjaiUmw_nuk-I_gv",
+        "EXPO_PUBLIC_API_URL": "https://reelmates-api-kshi.onrender.com/api/v1",
+        "EXPO_PUBLIC_WEB_URL": "https://reelmates-api-kshi.onrender.com",
+        "EXPO_PUBLIC_EAS_PROJECT_ID": "a3bbbbc6-34c1-4388-b870-ef4c49eaad72"
       },
       "environment": "production"
     },

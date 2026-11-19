@@ -35,7 +35,7 @@ npx eas build -p android --profile preview
 | Data safety form answers | `docs/store/google-play/data-safety.md` |
 | Content rating | Dating / Users interact — expect **Mature 17+** |
 | Category | Dating |
-| Contact email | support@reelmates.app |
+| Contact email | amalprasadappu@gmail.com (until a domain is bought) |
 | Icon 512 | Export from `mobile/assets/icon.png` |
 | Feature graphic 1024×500 | Create from brand (see `docs/store/assets/README.md`) |
 | Phone screenshots | 2–8 PNGs (1080×1920 min) — capture from device or emulator |
@@ -68,7 +68,7 @@ npx eas submit -p ios --latest
 
 - Final **production API URL**
 - **Apple Developer** + **Google Play Developer** accounts ($99 + $25 one-time)
-- **Real support email** (replace `support@reelmates.app` if needed)
+- **Support email**: amalprasadappu@gmail.com for now; switch to an address on your own domain once bought (search the repo for it)
 - **Marketing screenshots** (templates in `docs/store/assets/README.md`)
 
 ## Quick test locally

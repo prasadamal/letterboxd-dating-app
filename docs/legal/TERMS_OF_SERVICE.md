@@ -36,4 +36,4 @@ You may delete your account at any time from **Profile → Delete account**; thi
 
 ## Contact
 
-**support@reelmates.app**
+**amalprasadappu@gmail.com**

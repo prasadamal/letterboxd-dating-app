@@ -1,0 +1,37 @@
+name: Backend keep-alive
+
+# Supabase pauses a free project after 7 days without database activity; the Render free server
+# then answers every request with a database error until the project is restored by hand.
+# Every two days this calls the public health endpoint, which wakes the server and runs two small
+# reads against the database. It needs no secrets.
+#
+# A red run means the server or the database is down: check the Render service
+# "reelmates-api-kshi" and the Supabase project "moviematch" (Restore if it is paused).
+# GitHub emails the repository owner when a scheduled run fails, and turns off scheduled
+# workflows after 60 days without commits (re-enable it under Actions).
+on:
+  schedule:
+    - cron: '41 5 */2 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      HEALTH_URL: https://reelmates-api-kshi.onrender.com/api/v1/health
+    steps:
+      - name: Wake the server and touch the database
+        run: |
+          # A sleeping Render free service needs up to a minute to start.
+          for attempt in 1 2 3; do
+            status=$(curl -sS -o body.txt -w '%{http_code}' --max-time 90 "$HEALTH_URL" || echo 000)
+            echo "attempt $attempt: HTTP $status $(head -c 300 body.txt 2>/dev/null)"
+            if [ "$status" = 200 ] && grep -q '"db":"up"' body.txt; then exit 0; fi
+            sleep 20
+          done
+          echo "::error::ReelMates health check failed. Check Render (reelmates-api-kshi) and Supabase (moviematch)."
+          exit 1

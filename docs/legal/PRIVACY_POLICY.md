@@ -1,7 +1,7 @@
 # Privacy Policy — ReelMates
 
 **Effective date:** October 3, 2026  
-**Contact:** support@reelmates.app
+**Contact:** amalprasadappu@gmail.com
 
 ReelMates (“we”) operates the ReelMates mobile app and related services. This policy explains what we collect, why, and your choices.
 
@@ -45,7 +45,7 @@ We keep your data while your account exists. **Delete your account in the app (P
 
 ## Your rights
 
-You may request access, correction, or deletion by emailing **support@reelmates.app**.
+You may request access, correction, or deletion by emailing **amalprasadappu@gmail.com**.
 
 ## Children
 

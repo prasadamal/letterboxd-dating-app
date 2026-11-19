@@ -29,6 +29,9 @@ const envSchema = z.object({
   RATE_LIMIT_WINDOW_MS: optional(z.coerce.number().int().positive()).default(900000),
   RATE_LIMIT_MAX: optional(z.coerce.number().int().positive()).default(300),
   AUTH_RATE_LIMIT_MAX: optional(z.coerce.number().int().positive()).default(40),
+  // Per signed-in account (not per address) and per address for sign-in attempts; see middleware/security.js.
+  RATE_LIMIT_USER_MAX: optional(z.coerce.number().int().positive()).default(600),
+  AUTH_IP_RATE_LIMIT_MAX: optional(z.coerce.number().int().positive()).default(400),
   RESEND_API_KEY: optional(z.string()),
   EMAIL_FROM: optional(emailSender),
   APP_PUBLIC_URL: optional(z.string().url()),

@@ -86,6 +86,7 @@ export default function RootLayout() {
             <Stack.Screen name="login" />
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="friends" options={{ ...pushedHeader, title: 'Film friends' }} />
+            <Stack.Screen name="watchlist" options={{ ...pushedHeader, title: 'Watchlist' }} />
             <Stack.Screen name="compare/[userId]" options={{ ...pushedHeader, title: '' }} />
             <Stack.Screen name="settings" options={{ ...pushedHeader, title: 'Settings' }} />
             <Stack.Screen name="edit-profile" options={{ ...pushedHeader, title: 'Edit profile' }} />
