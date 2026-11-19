@@ -68,7 +68,7 @@ export default function FriendsScreen() {
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
       <Card style={styles.codeCard}>
         <Text style={type.label}>Your friend code</Text>
-        <Text style={styles.code} selectable>
+        <Text style={styles.code} selectable numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.6} accessibilityLabel={myCode ? `Your friend code: ${myCode.split('').join(' ')}` : 'Loading your friend code'}>
           {myCode || '········'}
         </Text>
         <Text style={type.small}>Friends add you with it and instantly see your taste match.</Text>
@@ -131,9 +131,9 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   content: { padding: 20, gap: 12, paddingBottom: 48 },
   codeCard: { padding: 20, gap: 10, borderColor: 'rgba(212,255,63,0.35)' },
-  code: { fontFamily: fonts.display, color: colors.lime, fontSize: 38, letterSpacing: 3 },
+  code: { fontFamily: fonts.display, color: colors.lime, fontSize: 30, letterSpacing: 1.5 },
   addRow: { flexDirection: 'row', gap: 8, alignItems: 'center' },
-  input: { flex: 1, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: radii.pill, color: colors.text, paddingHorizontal: 18, paddingVertical: 13, fontSize: 16 },
+  input: { flex: 1, minWidth: 0, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: radii.pill, color: colors.text, paddingHorizontal: 18, paddingVertical: 13, fontSize: 16 },
   error: { color: colors.red },
   friend: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.card, borderRadius: radii.lg, borderWidth: 1, borderColor: colors.border, padding: 12 },
   name: { fontFamily: fonts.bold, color: colors.text, fontSize: 16 },

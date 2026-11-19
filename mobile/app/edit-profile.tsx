@@ -13,7 +13,16 @@ import { haptic } from '../lib/haptics'
 import { colors, radii, type } from '../lib/theme'
 import type { ProfilePrompt } from '../lib/types'
 
+// The form copies the profile into its fields once, so it is only created after the profile has
+// loaded (after a restart or a deep link it arrives a moment later); otherwise every field would
+// start blank and Save would erase the member's name and country.
 export default function EditProfileScreen() {
+  const { user } = useAuth()
+  if (!user) return null
+  return <EditProfileForm key={user.id} />
+}
+
+function EditProfileForm() {
   const router = useRouter()
   const insets = useSafeAreaInsets()
   const { user, refreshUser } = useAuth()

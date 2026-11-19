@@ -211,27 +211,27 @@
           "text": "import { useState } from 'react'"
         },
         {
-          "line": 20,
+          "line": 29,
           "text": "const [name, setName] = useState(user?.name || '')"
         },
         {
-          "line": 21,
+          "line": 30,
           "text": "const [country, setCountry] = useState(user?.country || user?.city || '')"
         },
         {
-          "line": 22,
+          "line": 31,
           "text": "const [bio, setBio] = useState(user?.bio || '')"
         },
         {
-          "line": 23,
+          "line": 32,
           "text": "const [prompts, setPrompts] = useState<ProfilePrompt[]>((user?.prompts || []).map(({ key, answer }) => ({ key, answer })))"
         },
         {
-          "line": 24,
+          "line": 33,
           "text": "const [saving, setSaving] = useState(false)"
         },
         {
-          "line": 25,
+          "line": 34,
           "text": "const [uploading, setUploading] = useState(false)"
         }
       ]
