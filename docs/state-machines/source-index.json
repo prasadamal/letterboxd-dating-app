@@ -58,39 +58,39 @@
           "text": "import { useCallback, useEffect, useRef, useState } from 'react'"
         },
         {
-          "line": 24,
+          "line": 25,
           "text": "const [movies, setMovies] = useState<Movie[] | null>(null)"
         },
         {
-          "line": 25,
+          "line": 26,
           "text": "const [number, setNumber] = useState<number | null>(null)"
         },
         {
-          "line": 26,
+          "line": 27,
           "text": "const [results, setResults] = useState<DailyResults | null>(null)"
         },
         {
-          "line": 27,
+          "line": 28,
           "text": "const [friends, setFriends] = useState<Friend[]>([])"
         },
         {
-          "line": 28,
+          "line": 29,
           "text": "const [myCode, setMyCode] = useState('')"
         },
         {
-          "line": 29,
+          "line": 30,
           "text": "const [streak, setStreak] = useState<Streak | null>(null)"
         },
         {
-          "line": 30,
+          "line": 31,
           "text": "const [later, setLater] = useState(false)"
         },
         {
-          "line": 31,
+          "line": 32,
           "text": "const [refreshing, setRefreshing] = useState(false)"
         },
         {
-          "line": 32,
+          "line": 33,
           "text": "const [error, setError] = useState('')"
         }
       ]
@@ -389,18 +389,47 @@
       ]
     },
     {
-      "path": "mobile/components/DailyResultsCard.tsx",
+      "path": "mobile/app/watchlist.tsx",
       "evidence": [
         {
           "line": 2,
+          "text": "import { useCallback, useState } from 'react'"
+        },
+        {
+          "line": 12,
+          "text": "const [films, setFilms] = useState<WatchFilm[]>([])"
+        },
+        {
+          "line": 13,
+          "text": "const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')"
+        },
+        {
+          "line": 14,
+          "text": "const [refreshing, setRefreshing] = useState(false)"
+        },
+        {
+          "line": 51,
+          "text": "{status === 'loading' ? ("
+        },
+        {
+          "line": 53,
+          "text": ") : status === 'error' ? ("
+        }
+      ]
+    },
+    {
+      "path": "mobile/components/DailyResultsCard.tsx",
+      "evidence": [
+        {
+          "line": 3,
           "text": "import { useEffect, useState } from 'react'"
         },
         {
-          "line": 26,
+          "line": 27,
           "text": "const [countdown, setCountdown] = useState(untilNextDrop())"
         },
         {
-          "line": 28,
+          "line": 29,
           "text": "const timer = setInterval(() => setCountdown(untilNextDrop()), 30000)"
         }
       ]
@@ -475,31 +504,31 @@
           "text": "import { useCallback, useEffect, useState } from 'react'"
         },
         {
-          "line": 12,
+          "line": 13,
           "text": "const [query, setQuery] = useState('')"
         },
         {
-          "line": 13,
+          "line": 14,
           "text": "const [collections, setCollections] = useState<Collection[]>([])"
         },
         {
-          "line": 14,
+          "line": 15,
           "text": "const [collection, setCollection] = useState<string | null>(null)"
         },
         {
-          "line": 15,
+          "line": 16,
           "text": "const [films, setFilms] = useState<FilmItem[]>([])"
         },
         {
-          "line": 16,
+          "line": 17,
           "text": "const [loading, setLoading] = useState(false)"
         },
         {
-          "line": 17,
+          "line": 18,
           "text": "const [error, setError] = useState('')"
         },
         {
-          "line": 43,
+          "line": 44,
           "text": "const timer = setTimeout(() => load(), query ? 300 : 0)"
         }
       ]
@@ -508,7 +537,7 @@
       "path": "mobile/components/FilmRow.tsx",
       "evidence": [
         {
-          "line": 46,
+          "line": 49,
           "text": "const active = film.myRating === reaction"
         }
       ]
@@ -643,27 +672,27 @@
           "text": "import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'"
         },
         {
-          "line": 28,
+          "line": 29,
           "text": "const [user, setUser] = useState<User | null>(null)"
         },
         {
-          "line": 29,
+          "line": 30,
           "text": "const [token, setToken] = useState<string | null>(null)"
         },
         {
-          "line": 30,
+          "line": 31,
           "text": "const [platform, setPlatform] = useState<PlatformStatus | null>(null)"
         },
         {
-          "line": 31,
+          "line": 32,
           "text": "const [ready, setReady] = useState(false)"
         },
         {
-          "line": 32,
+          "line": 33,
           "text": "const [offline, setOffline] = useState(false)"
         },
         {
-          "line": 46,
+          "line": 47,
           "text": "if (err instanceof ApiError && (err.status === 401 || err.status === 404)) await clearTokens()"
         }
       ]
@@ -712,6 +741,56 @@
         {
           "line": 56,
           "text": "plus?: { active: boolean; until: string | null }"
+        }
+      ]
+    },
+    {
+      "path": "mobile/lib/watchlist.ts",
+      "evidence": [
+        {
+          "line": 7,
+          "text": "let state: WatchState = initialWatch(null)"
+        },
+        {
+          "line": 12,
+          "text": "state = next"
+        }
+      ]
+    },
+    {
+      "path": "mobile/lib/watchlistState.ts",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "// Pure watchlist state: which films are saved for the signed-in member, and which are mid-request."
+        },
+        {
+          "line": 7,
+          "text": "pending: ReadonlySet<number>"
+        },
+        {
+          "line": 11,
+          "text": "return { owner, ids: new Set(), pending: new Set() }"
+        },
+        {
+          "line": 15,
+          "text": "export function startToggle(state: WatchState, id: number): { next: WatchState; saving: boolean } | null {"
+        },
+        {
+          "line": 21,
+          "text": "return { next: { ...state, ids, pending: new Set(state.pending).add(id) }, saving }"
+        },
+        {
+          "line": 25,
+          "text": "export function settleToggle(state: WatchState, owner: string | null, id: number, saving: boolean, ok: boolean): WatchState {"
+        },
+        {
+          "line": 27,
+          "text": "const pending = new Set(state.pending)"
+        },
+        {
+          "line": 38,
+          "text": "export function replaceIds(state: WatchState, owner: string | null, ids: number[]): WatchState {"
         }
       ]
     },

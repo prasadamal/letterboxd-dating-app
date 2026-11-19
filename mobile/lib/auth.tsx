@@ -3,6 +3,7 @@ import { ApiError, apiFetch } from './api'
 import { clearRegisteredPushToken, getRegisteredPushToken, registerDevicePushToken } from './push'
 import { clearTokens, getAccessToken, getRefreshToken, saveTokens } from './session'
 import type { PlatformStatus, User } from './types'
+import { setWatchOwner } from './watchlist'
 
 type AuthContextValue = {
   user: User | null
@@ -53,6 +54,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     restore()
   }, [restore])
+
+  // The watchlist belongs to whoever is signed in; switching accounts starts from an empty list.
+  useEffect(() => {
+    setWatchOwner(user?.id ?? null)
+  }, [user?.id])
 
   const value = useMemo<AuthContextValue>(
     () => ({

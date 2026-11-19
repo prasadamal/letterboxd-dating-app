@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { apiFetch } from '../lib/api'
+import { isSaved, refreshWatchlist } from '../lib/watchlist'
 import { colors, radii, type } from '../lib/theme'
 import type { Collection, FilmItem, Reaction } from '../lib/types'
 import { FilmRow } from './FilmRow'
@@ -49,6 +50,8 @@ export function FilmExplorer() {
     setFilms((list) => list.map((f) => (f.id === film.id ? { ...f, myRating: reaction } : f)))
     try {
       await apiFetch(`/movies/${film.id}/rate`, { method: 'POST', body: JSON.stringify({ reaction }) })
+      // Seen it now: the server took it off the watchlist, so the bookmark follows.
+      if (reaction !== 'skip' && isSaved(film.id)) refreshWatchlist().catch(() => null)
     } catch (err) {
       setFilms((list) => list.map((f) => (f.id === film.id ? { ...f, myRating: previous } : f)))
       setError(err instanceof Error ? err.message : 'Could not save rating')
@@ -95,7 +98,7 @@ export function FilmExplorer() {
       {!loading && searching && !films.length ? <Text style={type.small}>Nothing found for “{query.trim()}”. Tell us in Settings → Send feedback.</Text> : null}
       <View style={{ gap: 10 }}>
         {films.map((film) => (
-          <FilmRow key={film.id} film={film} onRate={rate} />
+          <FilmRow key={film.id} film={film} onRate={rate} showSave />
         ))}
       </View>
     </View>

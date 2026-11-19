@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons'
+import { WatchlistButton } from './WatchlistButton'
 import { useEffect, useState } from 'react'
 import { Share, StyleSheet, Text, View } from 'react-native'
 import { haptic } from '../lib/haptics'
@@ -50,7 +51,8 @@ export function DailyResultsCard({ results }: { results: DailyResults }) {
           const vote = film.myRating ? VOTE[film.myRating] : null
           const pct = film.likedPercent
           return (
-            <View key={film.id} style={styles.row} accessible accessibilityLabel={`${film.title}. ${vote?.label ?? 'Not rated'}. ${pct ?? 0}% liked it.`}>
+            <View key={film.id} style={styles.row}>
+              <View style={styles.rowInfo} accessible accessibilityLabel={`${film.title}. ${vote?.label ?? 'Not rated'}. ${pct ?? 0}% liked it.`}>
               <Poster film={film} width={30} height={40} variant="thumb" />
               <View style={{ flex: 1, gap: 4 }}>
                 <Text style={styles.title} numberOfLines={1}>
@@ -64,6 +66,8 @@ export function DailyResultsCard({ results }: { results: DailyResults }) {
               <View style={[styles.vote, { backgroundColor: vote ? vote.color : colors.cardHigh }]}>
                 {vote && <Ionicons name={vote.icon} size={13} color="#fff" />}
               </View>
+              </View>
+              {film.myRating === 'skip' && <WatchlistButton filmId={film.id} title={film.title} size={30} />}
             </View>
           )
         })}
@@ -104,6 +108,7 @@ const styles = StyleSheet.create({
   agreeValue: { fontFamily: fonts.display, fontSize: 40, color: colors.lime, letterSpacing: -1.5 },
   list: { gap: 10 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  rowInfo: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 12 },
   title: { fontFamily: fonts.semi, color: colors.text, fontSize: 14 },
   barTrack: { height: 4, borderRadius: 2, backgroundColor: 'rgba(255,255,255,0.08)', overflow: 'hidden' },
   barFill: { height: 4, borderRadius: 2, backgroundColor: colors.lime },
