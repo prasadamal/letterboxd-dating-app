@@ -117,7 +117,7 @@ router.post(
       throw new AppError('Invalid email or password', 401, 'INVALID_CREDENTIALS')
     }
     if (user.is_active === false) {
-      throw new AppError('This account has been suspended. Contact support@reelmates.app.', 403, 'ACCOUNT_SUSPENDED')
+      throw new AppError('This account has been suspended. Contact amalprasadappu@gmail.com.', 403, 'ACCOUNT_SUSPENDED')
     }
 
     await updateUserProfile(user.id, { last_active_at: new Date().toISOString() })
