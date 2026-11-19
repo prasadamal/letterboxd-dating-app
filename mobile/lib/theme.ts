@@ -13,7 +13,7 @@ export const colors = {
   text: '#F7F7FA',
   soft: '#D9D9E3',
   muted: '#9C9CAD',
-  faint: '#6B6B7D',
+  faint: '#8585A0', // 4.6:1 or better on every surface (WCAG AA for small text)
 
   lime: '#D4FF3F', // primary actions; always with dark text (onLime)
   onLime: '#0A0A0D',
