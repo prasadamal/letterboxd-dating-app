@@ -6,6 +6,7 @@ import { getCollections, getTopFilms, searchFilms } from '../services/filmServic
 import { COLLECTIONS } from '../data/curatedFilmsMeta.js'
 import { recordDailyActivity } from '../services/growthService.js'
 import { dailyNumber, getDailyMoviesWithCommunity, getDailyResults } from '../services/dailyService.js'
+import { addToWatchlist, listWatchlist, parseMovieId, removeFromWatchlist } from '../services/watchlistService.js'
 
 const router = express.Router()
 
@@ -58,6 +59,25 @@ router.get(
   })
 )
 
+// Films you want to watch later, newest first.
+router.get(
+  '/watchlist',
+  authMiddleware,
+  asyncHandler(async (req, res) => res.json({ films: await listWatchlist(req.user.id) }))
+)
+
+router.put(
+  '/:id/watchlist',
+  authMiddleware,
+  asyncHandler(async (req, res) => res.json(await addToWatchlist(req.user.id, parseMovieId(req.params.id))))
+)
+
+router.delete(
+  '/:id/watchlist',
+  authMiddleware,
+  asyncHandler(async (req, res) => res.json(await removeFromWatchlist(req.user.id, parseMovieId(req.params.id))))
+)
+
 router.post('/:id/rate', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params
@@ -73,6 +93,8 @@ router.post('/:id/rate', authMiddleware, async (req, res) => {
     }
 
     const user = await rateMovie(req.user.id, movie.id, reaction)
+    // Loved or hated means you have seen it: it leaves your watchlist. Best effort, never fails the rating.
+    if (reaction !== 'skip') await removeFromWatchlist(req.user.id, movie.id).catch(() => null)
     // A failed streak update must never lose the rating.
     const streak = await recordDailyActivity(req.user.id).catch(() => null)
     return res.json({ ok: true, user: ensureUserProfile(streak ? { ...user, streak } : user), streak })
