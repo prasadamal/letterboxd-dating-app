@@ -131,7 +131,7 @@ export default function DiaryLogScreen() {
       </View>
 
       <Text style={styles.label}>Your rating</Text>
-      <View style={styles.stars} accessibilityLabel={starsSpoken(stars)}>
+      <View style={styles.stars}>
         {[1, 2, 3, 4, 5].map((n) => {
           const icon = stars != null && stars >= n * 2 ? 'star' : stars === n * 2 - 1 ? 'star-half' : 'star-outline'
           return (
@@ -147,7 +147,7 @@ export default function DiaryLogScreen() {
           )
         })}
       </View>
-      <Text style={type.small}>{stars ? starsSpoken(stars) : 'Optional. Tap a star twice for a half.'}</Text>
+      <Text style={type.small} accessibilityLiveRegion="polite">{stars ? starsSpoken(stars) : 'Optional. Tap a star twice for a half.'}</Text>
 
       <Text style={styles.label}>Note</Text>
       <TextInput
