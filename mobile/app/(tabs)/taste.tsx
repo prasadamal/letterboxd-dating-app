@@ -12,9 +12,12 @@ export default function ExploreScreen() {
       <ScreenHeader
         title="Explore"
         subtitle="Rate anything you've seen. Every rating sharpens your matches."
-        right={<Button title="Watchlist" size="sm" variant="secondary" icon="bookmark-outline" onPress={() => router.push('/watchlist')} />}
       />
       <View style={styles.body}>
+        <View style={styles.shortcuts}>
+          <Button title="Film diary" size="sm" variant="secondary" icon="book-outline" onPress={() => router.push('/diary')} style={{ flex: 1 }} />
+          <Button title="Watchlist" size="sm" variant="secondary" icon="bookmark-outline" onPress={() => router.push('/watchlist')} style={{ flex: 1 }} />
+        </View>
         <FilmExplorer />
       </View>
     </ScrollView>
@@ -23,5 +26,6 @@ export default function ExploreScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  body: { paddingHorizontal: 20 }
+  body: { paddingHorizontal: 20 },
+  shortcuts: { flexDirection: 'row', gap: 10, marginBottom: 14 }
 })

@@ -7,6 +7,7 @@ import { COLLECTIONS } from '../data/curatedFilmsMeta.js'
 import { recordDailyActivity } from '../services/growthService.js'
 import { dailyNumber, getDailyMoviesWithCommunity, getDailyResults } from '../services/dailyService.js'
 import { addToWatchlist, listWatchlist, parseMovieId, removeFromWatchlist } from '../services/watchlistService.js'
+import { addDiaryEntry, deleteDiaryEntry, listDiary, updateDiaryEntry } from '../services/diaryService.js'
 
 const router = express.Router()
 
@@ -76,6 +77,31 @@ router.delete(
   '/:id/watchlist',
   authMiddleware,
   asyncHandler(async (req, res) => res.json(await removeFromWatchlist(req.user.id, parseMovieId(req.params.id))))
+)
+
+// Film diary: every viewing with its date, an optional half-star rating, a note and a rewatch flag.
+router.get(
+  '/diary',
+  authMiddleware,
+  asyncHandler(async (req, res) => res.json({ entries: await listDiary(req.user.id) }))
+)
+
+router.post(
+  '/:id/diary',
+  authMiddleware,
+  asyncHandler(async (req, res) => res.status(201).json({ entry: await addDiaryEntry(req.user.id, req.params.id, req.body) }))
+)
+
+router.patch(
+  '/diary/:entryId',
+  authMiddleware,
+  asyncHandler(async (req, res) => res.json({ entry: await updateDiaryEntry(req.user.id, req.params.entryId, req.body) }))
+)
+
+router.delete(
+  '/diary/:entryId',
+  authMiddleware,
+  asyncHandler(async (req, res) => res.json(await deleteDiaryEntry(req.user.id, req.params.entryId)))
 )
 
 router.post('/:id/rate', authMiddleware, async (req, res) => {

@@ -1,4 +1,4 @@
-import { useFocusEffect } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import { useCallback, useState } from 'react'
 import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { FilmRow } from '../components/FilmRow'
@@ -62,9 +62,16 @@ export default function WatchlistScreen() {
         />
       ) : (
         <View style={{ gap: 10 }}>
-          <Text style={styles.count}>{visible.length === 1 ? '1 film to watch' : `${visible.length} films to watch`}</Text>
+          <Text style={styles.count}>
+            {visible.length === 1 ? '1 film to watch' : `${visible.length} films to watch`}. Watched one? Tap ✓ to log it in your diary.
+          </Text>
           {visible.map((film) => (
-            <FilmRow key={film.id} film={{ ...film, tags: [], myRating: null }} showSave />
+            <FilmRow
+              key={film.id}
+              film={{ ...film, tags: [], myRating: null }}
+              showSave
+              onLog={(f) => router.push({ pathname: '/diary-log', params: { filmId: String(f.id), title: f.title, year: f.year ? String(f.year) : '' } })}
+            />
           ))}
         </View>
       )}
