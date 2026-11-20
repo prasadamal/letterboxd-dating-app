@@ -138,6 +138,15 @@ export default function YouScreen() {
       <SectionTitle title="Your taste in numbers" />
       <TasteStatsCard stats={stats} />
 
+      <Card onPress={() => router.push('/diary')} style={styles.row}>
+        <Ionicons name="book" size={22} color={colors.lime} />
+        <View style={{ flex: 1 }}>
+          <Text style={type.h3}>Film diary</Text>
+          <Text style={type.small}>Every film you watch, with the date, stars and a note</Text>
+        </View>
+        <Ionicons name="chevron-forward" size={20} color={colors.muted} />
+      </Card>
+
       <Card onPress={() => router.push('/friends')} style={styles.row}>
         <Ionicons name="people" size={22} color={colors.lime} />
         <View style={{ flex: 1 }}>

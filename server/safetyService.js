@@ -89,7 +89,7 @@ export async function deleteUserAccount(userId) {
   await deleteWhere('messages', 'sender_id', [userId])
   await deleteWhere('user_swipes', 'swiper_id', [userId])
   await deleteWhere('user_swipes', 'target_id', [userId])
-  for (const table of ['user_ratings', 'watchlist', 'daily_batches', 'user_deck_stats', 'profile_photos', 'push_tokens', 'auth_tokens', 'refresh_tokens']) {
+  for (const table of ['user_ratings', 'watchlist', 'diary_entries', 'daily_batches', 'user_deck_stats', 'profile_photos', 'push_tokens', 'auth_tokens', 'refresh_tokens']) {
     await deleteWhere(table, 'user_id', [userId])
   }
   await deleteWhere('blocks', 'blocker_id', [userId])

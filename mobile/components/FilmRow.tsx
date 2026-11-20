@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { haptic } from '../lib/haptics'
 import { colors, fonts, radii } from '../lib/theme'
 import type { FilmItem, Reaction } from '../lib/types'
-import { Button, Poster, type IconName } from './ui'
+import { Button, IconButton, Poster, type IconName } from './ui'
 import { WatchlistButton } from './WatchlistButton'
 
 type Props = {
@@ -14,6 +14,8 @@ type Props = {
   pickLabel?: string
   // Shows a bookmark to save the film for later.
   showSave?: boolean
+  // Shows a "watched it" button that logs the film in your diary.
+  onLog?: (film: FilmItem) => void
 }
 
 const CHOICES: { reaction: Reaction; icon: IconName; label: string; color: string }[] = [
@@ -22,7 +24,7 @@ const CHOICES: { reaction: Reaction; icon: IconName; label: string; color: strin
   { reaction: 'skip', icon: 'eye-off', label: "Haven't seen it", color: colors.cyan }
 ]
 
-export function FilmRow({ film, onRate, onPick, pickLabel = 'Pick', showSave = false }: Props) {
+export function FilmRow({ film, onRate, onPick, pickLabel = 'Pick', showSave = false, onLog }: Props) {
   const meta = [film.genres?.[0], film.origin_language].filter(Boolean).join(' · ')
   return (
     <View style={styles.row}>
@@ -68,6 +70,9 @@ export function FilmRow({ film, onRate, onPick, pickLabel = 'Pick', showSave = f
         )}
       </View>
       {onPick && <Button title={pickLabel} size="sm" onPress={() => onPick(film)} />}
+      {onLog && !onPick && (
+        <IconButton icon="checkmark-done" size={34} color={colors.lime} background={colors.card} border={colors.border} accessibilityLabel={`Watched ${film.title}: log it in your diary`} onPress={() => onLog(film)} />
+      )}
       {showSave && !onPick && <WatchlistButton filmId={film.id} title={film.title} />}
     </View>
   )

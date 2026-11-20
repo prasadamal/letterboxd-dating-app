@@ -224,6 +224,14 @@
       "transitions": "configured/unconfigured; live/ready/degraded; export → signed build → staging → release",
       "decision": "Preserve release gates. Passing unit tests is not a production-readiness state.",
       "inventory": "README.md"
+    },
+    {
+      "id": "R29",
+      "flow": "Film diary",
+      "sources": "`server/services/diaryService.js`, `server/routes/movies.js`, `mobile/lib/diary.ts`, `mobile/lib/diaryFormat.ts`, `mobile/app/diary.tsx`, `mobile/app/diary-log.tsx`, `supabase/migrations/20261120120000_film_diary.sql`",
+      "transitions": "picking film → drafting → saving → logged (film leaves watchlist) / error with draft kept; entry → editing → saved / deleted; list loading → ready / empty / error",
+      "decision": "Private per member, service-role only, capped at 5000 entries. A ref blocks double submits; list results and the edit cache are scoped to the signed-in account and the newest request. Deleting the account deletes the diary.",
+      "inventory": "README.md"
     }
   ]
 }

@@ -12,7 +12,12 @@ export default function ExploreScreen() {
       <ScreenHeader
         title="Explore"
         subtitle="Rate anything you've seen. Every rating sharpens your matches."
-        right={<Button title="Watchlist" size="sm" variant="secondary" icon="bookmark-outline" onPress={() => router.push('/watchlist')} />}
+        right={
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            <Button title="Diary" size="sm" variant="secondary" icon="book-outline" onPress={() => router.push('/diary')} />
+            <Button title="Watchlist" size="sm" variant="secondary" icon="bookmark-outline" onPress={() => router.push('/watchlist')} />
+          </View>
+        }
       />
       <View style={styles.body}>
         <FilmExplorer />

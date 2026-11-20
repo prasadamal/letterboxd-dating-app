@@ -204,6 +204,92 @@
       ]
     },
     {
+      "path": "mobile/app/diary-log.tsx",
+      "evidence": [
+        {
+          "line": 3,
+          "text": "import { useEffect, useRef, useState } from 'react'"
+        },
+        {
+          "line": 25,
+          "text": "const [film, setFilm] = useState<DiaryFilm | null>("
+        },
+        {
+          "line": 28,
+          "text": "const [watchedOn, setWatchedOn] = useState(existing?.watchedOn ?? localDay(today))"
+        },
+        {
+          "line": 29,
+          "text": "const [stars, setStars] = useState<number | null>(existing?.stars ?? null)"
+        },
+        {
+          "line": 30,
+          "text": "const [note, setNote] = useState(existing?.note ?? '')"
+        },
+        {
+          "line": 31,
+          "text": "const [rewatch, setRewatch] = useState(existing?.rewatch ?? false)"
+        },
+        {
+          "line": 32,
+          "text": "const [busy, setBusy] = useState(false)"
+        },
+        {
+          "line": 33,
+          "text": "const [error, setError] = useState('')"
+        },
+        {
+          "line": 174,
+          "text": "const [query, setQuery] = useState('')"
+        },
+        {
+          "line": 175,
+          "text": "const [films, setFilms] = useState<FilmItem[]>([])"
+        },
+        {
+          "line": 176,
+          "text": "const [loading, setLoading] = useState(false)"
+        },
+        {
+          "line": 177,
+          "text": "const [error, setError] = useState('')"
+        },
+        {
+          "line": 183,
+          "text": "const timer = setTimeout(async () => {"
+        }
+      ]
+    },
+    {
+      "path": "mobile/app/diary.tsx",
+      "evidence": [
+        {
+          "line": 2,
+          "text": "import { useCallback, useMemo, useRef, useState } from 'react'"
+        },
+        {
+          "line": 14,
+          "text": "const [entries, setEntries] = useState<DiaryEntry[]>([])"
+        },
+        {
+          "line": 15,
+          "text": "const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')"
+        },
+        {
+          "line": 16,
+          "text": "const [refreshing, setRefreshing] = useState(false)"
+        },
+        {
+          "line": 60,
+          "text": "{status === 'loading' ? ("
+        },
+        {
+          "line": 62,
+          "text": ") : status === 'error' ? ("
+        }
+      ]
+    },
+    {
       "path": "mobile/app/edit-profile.tsx",
       "evidence": [
         {
@@ -537,7 +623,7 @@
       "path": "mobile/components/FilmRow.tsx",
       "evidence": [
         {
-          "line": 49,
+          "line": 51,
           "text": "const active = film.myRating === reaction"
         }
       ]
@@ -1565,6 +1651,19 @@
         {
           "line": 22,
           "text": "UPDATE public.refresh_tokens t SET revoked_at = now()"
+        }
+      ]
+    },
+    {
+      "path": "supabase/migrations/20261120120000_film_diary.sql",
+      "evidence": [
+        {
+          "line": 9,
+          "text": "stars smallint CHECK (stars BETWEEN 1 AND 10),"
+        },
+        {
+          "line": 10,
+          "text": "note text CHECK (char_length(note) <= 1000),"
         }
       ]
     }
