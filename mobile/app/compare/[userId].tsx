@@ -54,7 +54,7 @@ export default function CompareScreen() {
             <Text style={styles.score}>{data.score}%</Text>
             <Text style={type.h3}>{verdict(data.score)}</Text>
             <Text style={type.small}>
-              {data.sharedCount} films in common{data.conflicts ? ` · ${data.conflicts} you disagree on` : ''}
+              {data.sharedCount} {data.sharedCount === 1 ? 'film' : 'films'} in common{data.conflicts ? ` · ${data.conflicts} you disagree on` : ''}
             </Text>
           </View>
 

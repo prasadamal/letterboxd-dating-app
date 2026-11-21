@@ -63,7 +63,7 @@ function TasteDetails({ profile, compact, actions }: Props) {
   const max = compact ? 2 : 6
   return (
     <View style={[styles.details, compact && styles.detailsCompact, Boolean(actions) && { paddingTop: 52 }]}>
-      <Text style={type.label}>{common ? `${common} films in common` : 'No films in common yet'}</Text>
+      <Text style={type.label}>{common ? `${common} ${common === 1 ? 'film' : 'films'} in common` : 'No films in common yet'}</Text>
       {loved.length > 0 && <FilmTags titles={loved} tone="pink" max={max} />}
       {hated.length > 0 && <FilmTags titles={hated} tone="red" max={compact ? 1 : 4} />}
       {profile.favorite && (
