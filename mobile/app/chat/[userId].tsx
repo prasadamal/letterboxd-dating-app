@@ -219,7 +219,7 @@ function ChatConversation({ userId, name }: { userId: string; name?: string }) {
               <Avatar uri={peer.person.photo_url} name={peerName} size={88} ring />
               <Text style={type.h2}>You matched with {peerName}</Text>
               <Text style={[type.small, { textAlign: 'center' }]}>
-                {peer.score}% taste match · {peer.sharedCount} films in common
+                {peer.score}% taste match · {peer.sharedCount} {peer.sharedCount === 1 ? 'film' : 'films'} in common
               </Text>
             </View>
           ) : null

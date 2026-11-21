@@ -3,7 +3,7 @@ import { ApiError, apiFetch } from './api'
 import { clearRegisteredPushToken, getRegisteredPushToken, registerDevicePushToken } from './push'
 import { clearTokens, getAccessToken, getRefreshToken, saveTokens } from './session'
 import type { PlatformStatus, User } from './types'
-import { setWatchOwner } from './watchlist'
+import { refreshWatchlist, setWatchOwner } from './watchlist'
 
 type AuthContextValue = {
   user: User | null
@@ -56,8 +56,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [restore])
 
   // The watchlist belongs to whoever is signed in; switching accounts starts from an empty list.
+  // Load it straight away so bookmarks on Today and Explore show saved films from the first screen.
   useEffect(() => {
     setWatchOwner(user?.id ?? null)
+    if (user?.id) refreshWatchlist().catch(() => null)
   }, [user?.id])
 
   const value = useMemo<AuthContextValue>(

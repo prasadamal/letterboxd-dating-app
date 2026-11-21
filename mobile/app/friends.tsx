@@ -115,7 +115,7 @@ export default function FriendsScreen() {
             <Text style={styles.name}>{friend.name}</Text>
             <PersonalityBadge personality={friend.personality} size="sm" />
             <Text style={type.small}>
-              {friend.sharedCount ? `${friend.sharedCount} films in common` : 'No films in common yet'}
+              {friend.sharedCount ? `${friend.sharedCount} ${friend.sharedCount === 1 ? 'film' : 'films'} in common` : 'No films in common yet'}
               {friend.favorite ? ` · ❤ ${friend.favorite.title}` : ''}
             </Text>
           </View>
