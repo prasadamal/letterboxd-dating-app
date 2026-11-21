@@ -2,7 +2,8 @@ import { supabase } from './supabaseClient.js'
 import { notifyUser } from './services/notificationService.js'
 import { broadcastChatEvent, chatChannelName } from './services/realtimeService.js'
 import { movieCatalog } from './movieCatalog.js'
-import { pendingDailyMovies, sharedDailySet, utcDayNumber } from './lib/dailyMovies.js'
+import { pendingDailyMovies } from './lib/dailyMovies.js'
+import { getDailySet, slotInfo } from './services/dailySetService.js'
 import { mapLimit, selectAll, selectAllIn } from './lib/paging.js'
 import { compareTaste } from './lib/tasteMatch.js'
 import { normalizeInterestedIn } from './lib/datingEligibility.js'
@@ -242,32 +243,26 @@ export async function getDailyMovies(userId) {
 
   if (batchError) throw batchError
 
-  if (batch?.movie_ids?.length) {
-    const { data: movies, error } = await supabase.from('movies').select('*').in('id', batch.movie_ids)
-    if (error) throw error
-    const order = new Map(batch.movie_ids.map((id, index) => [id, index]))
-    const sorted = (movies || []).sort((a, b) => order.get(a.id) - order.get(b.id))
-    const ratedToday = await ratedMovieIdsSince(userId, `${day}T00:00:00.000Z`)
-    return pendingDailyMovies(sorted, ratedToday)
-  }
+  // Everyone gets the same ten today, one from each slot (see lib/films/dailyPicker.js).
+  const set = await getDailySet(day)
+  const slots = slotInfo(set)
+  const withSlot = (movie) => (slots.has(movie.id) ? { ...movie, slot: slots.get(movie.id) } : movie)
 
-  // Everyone gets the same films today (see sharedDailySet), so taste overlap grows for all players.
-  const pool = await selectAll(() => supabase.from('movies').select('*').eq('in_deck', true).order('id'))
-  const picks = sharedDailySet(pool, utcDayNumber(), DAILY_MOVIE_COUNT)
-
-  if (picks.length) {
-    const { error: insertError } = await supabase.from('daily_batches').insert({
-      user_id: userId,
-      day,
-      seq: 0,
-      movie_ids: picks.map((movie) => movie.id)
-    })
+  const ids = batch?.movie_ids?.length ? batch.movie_ids : set.movie_ids || []
+  if (!batch?.movie_ids?.length && ids.length) {
+    const { error: insertError } = await supabase.from('daily_batches').insert({ user_id: userId, day, seq: 0, movie_ids: ids })
     // Two screens opening at once both try to create today's batch; the second one reads the first's.
     if (insertError?.code === '23505') return getDailyMovies(userId)
     if (insertError) throw insertError
   }
+  if (!ids.length) return []
 
-  return picks
+  const { data: movies, error } = await supabase.from('movies').select('*').in('id', ids)
+  if (error) throw error
+  const order = new Map(ids.map((id, index) => [id, index]))
+  const sorted = (movies || []).sort((a, b) => order.get(a.id) - order.get(b.id)).map(withSlot)
+  const ratedToday = await ratedMovieIdsSince(userId, `${day}T00:00:00.000Z`)
+  return pendingDailyMovies(sorted, ratedToday)
 }
 
 export async function rateMovie(userId, movieId, reaction) {
