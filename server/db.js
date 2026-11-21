@@ -22,30 +22,38 @@ export async function getRatingsForUsers(userIds) {
   if (!userIds.length) return new Map()
 
   // Paged and chunked: a few hundred active users already exceed the 1000-row response cap.
+  // "Haven't seen" answers and the film's details feed matching too (lib/tasteMatch.js).
   const data = await selectAllIn(userIds, (ids) =>
     supabase
       .from('user_ratings')
-      .select('user_id, rating, movie_id, movies(title, year, popularity)')
+      .select('user_id, rating, movie_id, movies(id, title, year, popularity, genres, origin_language, tags)')
       .in('user_id', ids)
-      .in('rating', ['love', 'hate'])
+      .in('rating', ['love', 'hate', 'skip'])
       .order('user_id')
       .order('movie_id')
   )
 
   const byUser = new Map()
-  for (const row of data || []) {
-    if (!byUser.has(row.user_id)) {
-      byUser.set(row.user_id, {
+  const bucketFor = (userId) => {
+    if (!byUser.has(userId)) {
+      byUser.set(userId, {
         love: new Set(),
         hate: new Set(),
+        skip: new Set(),
+        stars: new Map(),
+        films: new Map(),
         labels: { love: [], hate: [] },
         titles: new Map(),
         popularity: new Map()
       })
     }
-    const bucket = byUser.get(row.user_id)
+    return byUser.get(userId)
+  }
+  for (const row of data || []) {
+    const bucket = bucketFor(row.user_id)
     const label = row.movies ? formatMovieLabel(row.movies) : String(row.movie_id)
     bucket.titles.set(row.movie_id, label)
+    if (row.movies) bucket.films.set(row.movie_id, { ...row.movies, id: row.movie_id })
     if (row.movies?.popularity != null) bucket.popularity.set(row.movie_id, row.movies.popularity)
     if (row.rating === 'love') {
       bucket.love.add(row.movie_id)
@@ -55,7 +63,20 @@ export async function getRatingsForUsers(userIds) {
       bucket.hate.add(row.movie_id)
       bucket.labels.hate.push(label)
     }
+    if (row.rating === 'skip') bucket.skip.add(row.movie_id)
   }
+
+  // Diary stars (1–10) shade agreement; the latest entry for a film wins.
+  const diary = await selectAllIn(userIds, (ids) =>
+    supabase
+      .from('diary_entries')
+      .select('user_id, movie_id, stars, watched_on')
+      .in('user_id', ids)
+      .not('stars', 'is', null)
+      .order('user_id')
+      .order('watched_on')
+  )
+  for (const row of diary) bucketFor(row.user_id).stars.set(row.movie_id, row.stars)
 
   // Each person's single all-time favourite also feeds the match (see lib/tasteMatch.js).
   const favorites = await selectAllIn(userIds, (ids) =>
@@ -67,10 +88,7 @@ export async function getRatingsForUsers(userIds) {
       .order('id')
   )
   for (const row of favorites) {
-    if (!byUser.has(row.id)) {
-      byUser.set(row.id, { love: new Set(), hate: new Set(), labels: { love: [], hate: [] }, titles: new Map(), popularity: new Map() })
-    }
-    const bucket = byUser.get(row.id)
+    const bucket = bucketFor(row.id)
     bucket.favorite = row.favorite_movie_id
     if (row.favorite) {
       bucket.titles.set(row.favorite_movie_id, formatMovieLabel(row.favorite))
@@ -296,8 +314,8 @@ export async function rateMovie(userId, movieId, reaction) {
 }
 
 // Scoring lives in lib/tasteMatch.js (shared likes + shared dislikes on films both people rated).
-export function computeCompatibilityFromMaps(userMap, candidateMap) {
-  const result = compareTaste(userMap, candidateMap)
+export function computeCompatibilityFromMaps(userMap, candidateMap, odds) {
+  const result = compareTaste(userMap, candidateMap, { odds })
   return { ...result, summary: tasteSummaryFrom(result) }
 }
 

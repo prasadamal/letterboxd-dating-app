@@ -15,6 +15,8 @@ import { passesDiscoveryFilters } from './services/discoveryPrefs.js'
 import { notifyUser } from './services/notificationService.js'
 import { logger } from './lib/logger.js'
 import { rankByTaste } from './lib/tasteMatch.js'
+import { rankDeck } from './lib/deckRanking.js'
+import { getCommunityOdds } from './services/filmOddsService.js'
 import { selectAll, selectAllIn } from './lib/paging.js'
 import { genderQueryValues, isMutualInterest } from './lib/datingEligibility.js'
 import { sameCountry } from './lib/regionLaunch.js'
@@ -47,8 +49,8 @@ async function createMutualMatch(userId, peerId) {
   const existing = await getMutualMatchRow(userId, peerId)
   if (existing) return existing
 
-  const ratings = await getRatingsForUsers([userId, peerId])
-  const stats = computeCompatibilityFromMaps(ratings.get(userId), ratings.get(peerId))
+  const [ratings, odds] = await Promise.all([getRatingsForUsers([userId, peerId]), getCommunityOdds()])
+  const stats = computeCompatibilityFromMaps(ratings.get(userId), ratings.get(peerId), odds)
 
   const [userA, userB] = await orderedMatchUsers(userId, peerId)
   const { data, error } = await supabase
@@ -171,7 +173,10 @@ function tasteCardFields(candidate, stats) {
     prompts: publicPrompts(candidate.prompts),
     tasteSummary: stats.summary,
     likedLine: lines.likedLine,
-    dislikedLine: lines.dislikedLine
+    dislikedLine: lines.dislikedLine,
+    // Why you match (from both taste profiles) and how sure the score is: 'low' | 'medium' | 'high'.
+    reasons: stats.reasons || [],
+    confidence: stats.confidence || 'low'
   }
 }
 
@@ -195,7 +200,7 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
   const candidates = await selectAll(() => {
     let query = supabase
       .from('users')
-      .select('id, age, country, gender, interested_in, last_active_at')
+      .select('id, age, country, gender, interested_in, last_active_at, created_at')
       .neq('id', userId)
       .is('deleted_at', null)
       // Only complete, active profiles (photo, bio, country) that the inactivity job has not paused.
@@ -216,29 +221,61 @@ export async function getDatingDeckWithMeta(userId, limit = 1) {
       passesDiscoveryFilters(candidate, prefs)
   )
 
-  const activeAt = new Map(eligible.map((candidate) => [candidate.id, String(candidate.last_active_at || '')]))
+  const byId = new Map(eligible.map((candidate) => [candidate.id, candidate]))
   const shortlistIds = [...eligible]
     .sort((a, b) => String(b.last_active_at || '').localeCompare(String(a.last_active_at || '')))
     .slice(0, DECK_SCORING_POOL)
     .map((candidate) => candidate.id)
 
-  const profiles = await selectAllIn(shortlistIds, (ids) =>
-    supabase.from('users').select(CARD_COLUMNS).in('id', ids).order('id')
-  )
-
-  const ratings = await getRatingsForUsers([userId, ...shortlistIds])
+  const since = new Date(Date.now() - 14 * 86_400_000).toISOString()
+  const [profiles, ratings, odds, likedMe, incoming, deckStats] = await Promise.all([
+    selectAllIn(shortlistIds, (ids) => supabase.from('users').select(CARD_COLUMNS).in('id', ids).order('id')),
+    getRatingsForUsers([userId, ...shortlistIds]),
+    getCommunityOdds(),
+    // Who already liked you: they are certain to like you back.
+    selectAllIn(shortlistIds, (ids) =>
+      supabase.from('user_swipes').select('swiper_id').eq('target_id', userId).eq('action', 'like').in('swiper_id', ids).order('swiper_id')
+    ),
+    // Likes each candidate received lately: flooded profiles are shown a little less.
+    selectAllIn(shortlistIds, (ids) =>
+      supabase.from('user_swipes').select('target_id').eq('action', 'like').gte('created_at', since).in('target_id', ids).order('target_id')
+    ),
+    selectAllIn(shortlistIds, (ids) =>
+      supabase.from('user_deck_stats').select('user_id, swipes_total, likes_total').in('user_id', ids).order('user_id')
+    )
+  ])
   const selfMap = ratings.get(userId)
+  const likedYou = new Set(likedMe.map((r) => r.swiper_id))
+  const pending = new Map()
+  for (const r of incoming) pending.set(r.target_id, (pending.get(r.target_id) || 0) + 1)
+  const stats = new Map(deckStats.map((r) => [r.user_id, r]))
+  const daysSince = (iso) => (iso ? Math.max(0, (Date.now() - new Date(iso).getTime()) / 86_400_000) : undefined)
 
-  const ranked = profiles
+  const scored = profiles
     .map((candidate) => {
-      const stats = computeCompatibilityFromMaps(selfMap, ratings.get(candidate.id))
-      return { ...tasteCardFields(candidate, stats), _lastActive: activeAt.get(candidate.id) || '' }
+      const match = computeCompatibilityFromMaps(selfMap, ratings.get(candidate.id), odds)
+      const light = byId.get(candidate.id) || {}
+      return {
+        card: tasteCardFields(candidate, match),
+        id: candidate.id,
+        score: match.score,
+        alpha: match.alpha,
+        beta: match.beta,
+        likedYou: likedYou.has(candidate.id),
+        likes: stats.get(candidate.id)?.likes_total || 0,
+        swipes: stats.get(candidate.id)?.swipes_total || 0,
+        pendingLikes: pending.get(candidate.id) || 0,
+        daysSinceActive: daysSince(light.last_active_at),
+        daysSinceJoined: daysSince(light.created_at)
+      }
     })
-    .filter((card) => card.score >= minScore)
-    // Taste first (match %, then films in common); recent activity only breaks exact ties.
-    .sort((a, b) => rankByTaste(a, b) || b._lastActive.localeCompare(a._lastActive))
+    .filter((entry) => entry.score >= minScore)
+
+  // Two-sided ranking: taste (sampled, so promising-but-unproven people get seen), likely to like you
+  // back, active lately, not already flooded with likes (lib/deckRanking.js). Same order all day.
+  const ranked = rankDeck(scored, `${userId}:${new Date().toISOString().slice(0, 10)}`)
     .slice(0, limit)
-    .map(({ _lastActive, ...card }) => card)
+    .map((entry) => entry.card)
   const deck = await withPersonalities(ranked)
 
   const { data: statsRow } = await supabase
@@ -290,7 +327,7 @@ export async function getMutualMatches(userId) {
       .order('id')
   )
 
-  const ratings = await getRatingsForUsers([userId, ...peerIds])
+  const [ratings, odds] = await Promise.all([getRatingsForUsers([userId, ...peerIds]), getCommunityOdds()])
   const selfMap = ratings.get(userId)
   const byId = new Map((users || []).map((row) => [row.id, row]))
 
@@ -300,7 +337,7 @@ export async function getMutualMatches(userId) {
       const candidate = byId.get(peerId)
       if (!candidate) return null
 
-      const stats = computeCompatibilityFromMaps(selfMap, ratings.get(peerId))
+      const stats = computeCompatibilityFromMaps(selfMap, ratings.get(peerId), odds)
       return {
         ...tasteCardFields(candidate, stats),
         matchId: row.id,
@@ -340,10 +377,10 @@ export async function getLikesYou(userId) {
   const plus = isPlusActive(self)
   if (!plus) return { count: visible.length, plus, profiles: [] }
 
-  const ratings = await getRatingsForUsers([userId, ...visible.map((p) => p.id)])
+  const [ratings, odds] = await Promise.all([getRatingsForUsers([userId, ...visible.map((p) => p.id)]), getCommunityOdds()])
   const selfMap = ratings.get(userId)
   const profiles = await withPersonalities(
-    visible.map((p) => tasteCardFields(p, computeCompatibilityFromMaps(selfMap, ratings.get(p.id)))).sort(rankByTaste)
+    visible.map((p) => tasteCardFields(p, computeCompatibilityFromMaps(selfMap, ratings.get(p.id), odds))).sort(rankByTaste)
   )
   return { count: profiles.length, plus, profiles }
 }
