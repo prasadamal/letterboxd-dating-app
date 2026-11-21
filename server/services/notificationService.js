@@ -15,6 +15,10 @@ const EVENT_COPY = {
   daily_game: {
     title: 'Daily taste game',
     body: 'Rate today’s films to keep your match score sharp.'
+  },
+  challenge_answered: {
+    title: 'Someone took your film challenge',
+    body: 'See how connected your taste is.'
   }
 }
 
