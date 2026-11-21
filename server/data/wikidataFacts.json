@@ -1,0 +1,7357 @@
+{
+ "source": "Wikidata (CC0)",
+ "imported": "2026-11-21",
+ "films": {
+  "The Shawshank Redemption|1994": {
+   "qid": "Q172241",
+   "directors": [
+    "Frank Darabont"
+   ],
+   "cast": [
+    "Morgan Freeman",
+    "Tim Robbins",
+    "Clancy Brown",
+    "James Whitmore",
+    "William Sadler"
+   ],
+   "imdb": "tt0111161",
+   "runtime": 142,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Godfather|1972": {
+   "qid": "Q47703",
+   "directors": [
+    "Francis Ford Coppola"
+   ],
+   "cast": [
+    "Marlon Brando",
+    "Al Pacino",
+    "Diane Keaton",
+    "Robert Duvall",
+    "James Caan"
+   ],
+   "imdb": "tt0068646",
+   "runtime": 175,
+   "countries": [
+    "Italy",
+    "United States"
+   ]
+  },
+  "Parasite|2019": {
+   "qid": "Q61448040",
+   "directors": [
+    "Bong Joon-ho"
+   ],
+   "cast": [
+    "Park Seo-joon",
+    "Yong-Gyu Park",
+    "Song Kang-ho",
+    "Lee Sun-kyun",
+    "Park So-dam"
+   ],
+   "imdb": "tt6751668",
+   "runtime": 132,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "Spirited Away|2001": {
+   "qid": "Q155653",
+   "directors": [
+    "Hayao Miyazaki"
+   ],
+   "cast": [],
+   "imdb": "tt0245429",
+   "runtime": 125,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Cinema Paradiso|1988": {
+   "qid": "Q464032",
+   "directors": [
+    "Giuseppe Tornatore"
+   ],
+   "cast": [
+    "Philippe Noiret",
+    "Jacques Perrin",
+    "Brigitte Fossey",
+    "Leopoldo Trieste",
+    "Enzo Cannavale"
+   ],
+   "imdb": "tt0095765",
+   "runtime": 155,
+   "countries": [
+    "France",
+    "Italy"
+   ]
+  },
+  "Pan's Labyrinth|2006": {
+   "qid": "Q216006",
+   "directors": [
+    "Guillermo del Toro"
+   ],
+   "cast": [
+    "Ivana Baquero",
+    "Doug Jones",
+    "Maribel Verdú",
+    "Sergi López",
+    "Ariadna Gil"
+   ],
+   "imdb": "tt0457430",
+   "runtime": 119,
+   "countries": [
+    "Spain"
+   ]
+  },
+  "Amélie|2001": {
+   "qid": "Q484048",
+   "directors": [
+    "Jean-Pierre Jeunet"
+   ],
+   "cast": [
+    "Audrey Tautou",
+    "Mathieu Kassovitz",
+    "Michel Serrault",
+    "Jamel Debbouze",
+    "Yolande Moreau"
+   ],
+   "imdb": "tt0211915",
+   "runtime": 122,
+   "countries": [
+    "France"
+   ]
+  },
+  "City of God|2002": {
+   "qid": "Q220741",
+   "directors": [
+    "Fernando Meirelles",
+    "Kátia Lund"
+   ],
+   "cast": [
+    "Alice Braga",
+    "Seu Jorge",
+    "Micael Borges",
+    "Paulo Lins",
+    "Matheus Nachtergaele"
+   ],
+   "imdb": "tt0317248",
+   "runtime": 128,
+   "countries": [
+    "Brazil",
+    "France"
+   ]
+  },
+  "Oldboy|2003": {
+   "qid": "Q475693",
+   "directors": [
+    "Park Chan-wook"
+   ],
+   "cast": [
+    "Choi Min-sik",
+    "Kang Hye-jung",
+    "Yoo Ji-tae",
+    "Yoon Jin-seo",
+    "Oh Dal-su"
+   ],
+   "imdb": "tt0364569",
+   "runtime": 116,
+   "countries": [
+    "Japan",
+    "South Korea"
+   ]
+  },
+  "In the Mood for Love|2000": {
+   "qid": "Q1056853",
+   "directors": [
+    "Wong Kar-wai"
+   ],
+   "cast": [
+    "Maggie Cheung",
+    "Tony Leung",
+    "Rebecca Pan",
+    "Joe Cheung Tung-joe",
+    "Roy Cheung"
+   ],
+   "imdb": "tt0118694",
+   "runtime": 98,
+   "countries": [
+    "France",
+    "Hong Kong",
+    "Thailand"
+   ]
+  },
+  "Crouching Tiger, Hidden Dragon|2000": {
+   "qid": "Q273978",
+   "directors": [
+    "Ang Lee"
+   ],
+   "cast": [
+    "Michelle Yeoh",
+    "Zhang Ziyi",
+    "Chow Yun-fat",
+    "Cheng Pei-pei",
+    "Chang Chen"
+   ],
+   "imdb": "tt0190332",
+   "runtime": 115,
+   "countries": [
+    "Hong Kong",
+    "People's Republic of China",
+    "Taiwan",
+    "United States"
+   ]
+  },
+  "Lagaan|2001": {
+   "qid": "Q843949",
+   "directors": [
+    "Ashutosh Gowariker"
+   ],
+   "cast": [
+    "Aamir Khan",
+    "Gracy Singh",
+    "Paul Blackthorne",
+    "A. K. Hangal",
+    "Rachel Shelley"
+   ],
+   "imdb": "tt0169102",
+   "runtime": 224,
+   "countries": [
+    "India"
+   ]
+  },
+  "3 Idiots|2009": {
+   "qid": "Q229633",
+   "directors": [
+    "Rajkumar Hirani"
+   ],
+   "cast": [
+    "Aamir Khan",
+    "Kareena Kapoor",
+    "R. Madhavan",
+    "Boman Irani",
+    "Sharman Joshi"
+   ],
+   "imdb": "tt1187043",
+   "runtime": 164,
+   "countries": [
+    "India"
+   ]
+  },
+  "Dangal|2016": {
+   "qid": "Q20762668",
+   "directors": [
+    "Nitesh Tiwari"
+   ],
+   "cast": [
+    "Aamir Khan",
+    "Fatima Sana Shaikh",
+    "Zaira Wasim",
+    "Sanya Malhotra",
+    "Sakshi Tanwar"
+   ],
+   "imdb": "tt5074352",
+   "runtime": 161,
+   "countries": [
+    "India"
+   ]
+  },
+  "RRR|2022": {
+   "qid": "Q60424165",
+   "directors": [
+    "S. S. Rajamouli"
+   ],
+   "cast": [
+    "Alia Bhatt",
+    "Ajay Devgn",
+    "Ram Charan",
+    "Shriya Saran",
+    "Ray Stevenson"
+   ],
+   "imdb": "tt8178634",
+   "runtime": 187,
+   "countries": [
+    "India"
+   ]
+  },
+  "Baahubali: The Beginning|2015": {
+   "qid": "Q13897247",
+   "directors": [
+    "S. S. Rajamouli"
+   ],
+   "cast": [
+    "Anushka Shetty",
+    "Tamannaah Bhatia",
+    "Prabhas",
+    "Rana Daggubati",
+    "Sathyaraj"
+   ],
+   "imdb": "tt2631186",
+   "runtime": 159,
+   "countries": [
+    "India"
+   ]
+  },
+  "Drishyam|2013": {
+   "qid": "Q15401703",
+   "directors": [
+    "Jeethu Joseph"
+   ],
+   "cast": [
+    "Mohanlal",
+    "Meena",
+    "Esther Anil",
+    "Asha Sarath",
+    "Sidhique"
+   ],
+   "imdb": "tt3417422",
+   "runtime": 160,
+   "countries": [
+    "India"
+   ]
+  },
+  "Vikram Vedha|2017": {
+   "qid": "Q27963176",
+   "directors": [
+    "Gayatri",
+    "Pushkar",
+    "Gowtham Selvaraj"
+   ],
+   "cast": [
+    "R. Madhavan",
+    "Vijay Sethupathi",
+    "Shraddha Srinath",
+    "Varalaxmi Sarathkumar",
+    "Kathir"
+   ],
+   "imdb": "tt6148156",
+   "runtime": 147,
+   "countries": [
+    "India"
+   ]
+  },
+  "Pather Panchali|1955": {
+   "qid": "Q622380",
+   "directors": [
+    "Satyajit Ray"
+   ],
+   "cast": [
+    "Karuna Banerjee",
+    "Chunibala Devi",
+    "Kanu Banerjee",
+    "Uma Dasgupta",
+    "Tulsi Chakraborty"
+   ],
+   "imdb": "tt0048473",
+   "runtime": 120,
+   "countries": [
+    "India"
+   ]
+  },
+  "The Lunchbox|2013": {
+   "qid": "Q13423399",
+   "directors": [
+    "Ritesh Batra"
+   ],
+   "cast": [
+    "Irrfan Khan",
+    "Nawazuddin Siddiqui",
+    "Nimrat Kaur",
+    "Lillete Dubey",
+    "Bharati Achrekar"
+   ],
+   "imdb": "tt2350496",
+   "runtime": 105,
+   "countries": [
+    "France",
+    "Germany",
+    "India",
+    "United States"
+   ]
+  },
+  "Timbuktu|2014": {
+   "qid": "Q16653473",
+   "directors": [
+    "Abderrahmane Sissako"
+   ],
+   "cast": [
+    "Fatoumata Diawara",
+    "Toulou Kiki",
+    "Hichem Yacoubi",
+    "Abel Jafri",
+    "Ibrahim Ahmed dit Pino"
+   ],
+   "imdb": "tt3409392",
+   "runtime": 97,
+   "countries": [
+    "France",
+    "Mauritania"
+   ]
+  },
+  "A Separation|2011": {
+   "qid": "Q640561",
+   "directors": [
+    "Asghar Farhadi"
+   ],
+   "cast": [
+    "Leila Hatami",
+    "Shahab Hosseini",
+    "Payman Maadi",
+    "Sareh Bayat",
+    "Sarina Farhadi"
+   ],
+   "imdb": "tt1832382",
+   "runtime": 123,
+   "countries": [
+    "Iran"
+   ]
+  },
+  "The Salesman|2016": {
+   "qid": "Q22344480",
+   "directors": [
+    "Asghar Farhadi"
+   ],
+   "cast": [
+    "Taraneh Alidoosti",
+    "Shahab Hosseini"
+   ],
+   "imdb": "tt5186714",
+   "runtime": 123,
+   "countries": [
+    "France",
+    "Iran"
+   ]
+  },
+  "Tsotsi|2005": {
+   "qid": "Q626215",
+   "directors": [
+    "Gavin Hood"
+   ],
+   "cast": [
+    "Terry Pheto",
+    "Presley Chweneyagae",
+    "Zola",
+    "Ian Roberts",
+    "Mothusi Magano"
+   ],
+   "imdb": "tt0468565",
+   "runtime": 94,
+   "countries": [
+    "South Africa",
+    "United Kingdom"
+   ]
+  },
+  "Black Panther|2018": {
+   "qid": "Q23780734",
+   "directors": [
+    "Ryan Coogler"
+   ],
+   "cast": [
+    "Stan Lee",
+    "Andy Serkis",
+    "Forest Whitaker",
+    "Lupita Nyong'o",
+    "Chadwick Boseman"
+   ],
+   "imdb": "tt1825683",
+   "runtime": 134,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Moonlight|2016": {
+   "qid": "Q21527875",
+   "directors": [
+    "Barry Jenkins"
+   ],
+   "cast": [
+    "Mahershala Ali",
+    "Naomie Harris",
+    "Janelle Monáe",
+    "André Holland",
+    "Trevante Rhodes"
+   ],
+   "imdb": "tt4975722",
+   "runtime": 111,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Get Out|2017": {
+   "qid": "Q25136235",
+   "directors": [
+    "Jordan Peele"
+   ],
+   "cast": [
+    "Daniel Kaluuya",
+    "Catherine Keener",
+    "LaKeith Stanfield",
+    "Bradley Whitford",
+    "Stephen Root"
+   ],
+   "imdb": "tt5052448",
+   "runtime": 104,
+   "countries": [
+    "Japan",
+    "United States"
+   ]
+  },
+  "Everything Everywhere All at Once|2022": {
+   "qid": "Q83808444",
+   "directors": [
+    "Dan Kwan",
+    "Daniel Scheinert"
+   ],
+   "cast": [
+    "Michelle Yeoh",
+    "Jamie Lee Curtis",
+    "Jenny Slate",
+    "Ke Huy Quan",
+    "James Hong"
+   ],
+   "imdb": "tt6710474",
+   "runtime": 139,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Matrix|1999": {
+   "qid": "Q83495",
+   "directors": [
+    "Lilly Wachowski",
+    "Lana Wachowski"
+   ],
+   "cast": [
+    "Keanu Reeves",
+    "Laurence Fishburne",
+    "Hugo Weaving",
+    "Carrie-Anne Moss",
+    "Joe Pantoliano"
+   ],
+   "imdb": "tt0133093",
+   "runtime": 136,
+   "countries": [
+    "Australia",
+    "United States"
+   ]
+  },
+  "Blade Runner 2049|2017": {
+   "qid": "Q21500755",
+   "directors": [
+    "Denis Villeneuve"
+   ],
+   "cast": [
+    "Harrison Ford",
+    "Ryan Gosling",
+    "Jared Leto",
+    "Robin Wright",
+    "Dave Bautista"
+   ],
+   "imdb": "tt1856101",
+   "runtime": 164,
+   "countries": [
+    "Canada",
+    "Hungary",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Arrival|2016": {
+   "qid": "Q20382729",
+   "directors": [
+    "Denis Villeneuve"
+   ],
+   "cast": [
+    "Jeremy Renner",
+    "Amy Adams",
+    "Forest Whitaker",
+    "Michael Stuhlbarg",
+    "Tzi Ma"
+   ],
+   "imdb": "tt2543164",
+   "runtime": 116,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Interstellar|2014": {
+   "qid": "Q13417189",
+   "directors": [
+    "Christopher Nolan"
+   ],
+   "cast": [
+    "Matt Damon",
+    "Anne Hathaway",
+    "Michael Caine",
+    "Matthew McConaughey",
+    "Timothée Chalamet"
+   ],
+   "imdb": "tt0816692",
+   "runtime": 169,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Mad Max: Fury Road|2015": {
+   "qid": "Q1757288",
+   "directors": [
+    "George Miller"
+   ],
+   "cast": [
+    "Charlize Theron",
+    "Tom Hardy",
+    "Nicholas Hoult",
+    "Zoë Kravitz",
+    "Rosie Huntington-Whiteley"
+   ],
+   "imdb": "tt1392190",
+   "runtime": 120,
+   "countries": [
+    "Australia",
+    "United States"
+   ]
+  },
+  "The Dark Knight|2008": {
+   "qid": "Q163872",
+   "directors": [
+    "Christopher Nolan"
+   ],
+   "cast": [
+    "Morgan Freeman",
+    "Heath Ledger",
+    "Michael Caine",
+    "Gary Oldman",
+    "Christian Bale"
+   ],
+   "imdb": "tt0468569",
+   "runtime": 155,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Whiplash|2014": {
+   "qid": "Q15648198",
+   "directors": [
+    "Damien Chazelle"
+   ],
+   "cast": [
+    "J. K. Simmons",
+    "J.K. Simmons",
+    "Miles Teller",
+    "Melissa Benoist",
+    "Paul Reiser"
+   ],
+   "imdb": "tt2582802",
+   "runtime": 106,
+   "countries": [
+    "United States"
+   ]
+  },
+  "La La Land|2016": {
+   "qid": "Q20856802",
+   "directors": [
+    "Damien Chazelle"
+   ],
+   "cast": [
+    "Emma Stone",
+    "Ryan Gosling",
+    "J. K. Simmons",
+    "J.K. Simmons",
+    "John Legend"
+   ],
+   "imdb": "tt3783958",
+   "runtime": 128,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Grand Budapest Hotel|2014": {
+   "qid": "Q3521099",
+   "directors": [
+    "Wes Anderson"
+   ],
+   "cast": [
+    "Jude Law",
+    "Edward Norton",
+    "Bill Murray",
+    "Willem Dafoe",
+    "Ralph Fiennes"
+   ],
+   "imdb": "tt2278388",
+   "runtime": 99,
+   "countries": [
+    "Germany",
+    "United States"
+   ]
+  },
+  "Lady Bird|2017": {
+   "qid": "Q27480769",
+   "directors": [
+    "Greta Gerwig"
+   ],
+   "cast": [
+    "Timothée Chalamet",
+    "Saoirse Ronan",
+    "Laurie Metcalf",
+    "Kathryn Newton",
+    "Laura Marano"
+   ],
+   "imdb": "tt4925292",
+   "runtime": 93,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Nomadland|2020": {
+   "qid": "Q61740820",
+   "directors": [
+    "Chloé Zhao"
+   ],
+   "cast": [
+    "Frances McDormand",
+    "David Strathairn",
+    "Peter Spears"
+   ],
+   "imdb": "tt9770150",
+   "runtime": 107,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Minari|2020": {
+   "qid": "Q65679599",
+   "directors": [
+    "Lee Isaac Chung"
+   ],
+   "cast": [
+    "Steven Yeun",
+    "Will Patton",
+    "Youn Yuh-jung",
+    "Han Ye-ri",
+    "Alan S. Kim"
+   ],
+   "imdb": "tt10633456",
+   "runtime": 115,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Past Lives|2023": {
+   "qid": "Q116025865",
+   "directors": [
+    "Celine Song"
+   ],
+   "cast": [
+    "Greta Lee",
+    "John Magaro",
+    "Yoo Teo",
+    "Choi Won-young",
+    "Jonica T. Gibbs"
+   ],
+   "imdb": "tt13238346",
+   "runtime": 106,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Train to Busan|2016": {
+   "qid": "Q20948236",
+   "directors": [
+    "Yeon Sang-ho"
+   ],
+   "cast": [
+    "Gong Yoo",
+    "Ma Dong-seok",
+    "Sohee",
+    "Jung Yu-mi",
+    "Choi Woo-shik"
+   ],
+   "imdb": "tt5700672",
+   "runtime": 118,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "Your Name|2016": {
+   "qid": "Q21697406",
+   "directors": [
+    "Makoto Shinkai"
+   ],
+   "cast": [],
+   "imdb": "tt5311514",
+   "runtime": 107,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Perfect Blue|1997": {
+   "qid": "Q1205051",
+   "directors": [
+    "Satoshi Kon"
+   ],
+   "cast": [],
+   "imdb": "tt0156887",
+   "runtime": 81,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Grave of the Fireflies|1988": {
+   "qid": "Q274520",
+   "directors": [
+    "Isao Takahata"
+   ],
+   "cast": [],
+   "imdb": "tt0095327",
+   "runtime": 93,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Shoplifters|2018": {
+   "qid": "Q48765577",
+   "directors": [
+    "Hirokazu Kore-eda"
+   ],
+   "cast": [
+    "Sakura Andō",
+    "Kirin Kiki",
+    "Akira Emoto",
+    "Yuki Yamada",
+    "Mayu Matsuoka"
+   ],
+   "imdb": "tt8075192",
+   "runtime": 121,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Drive My Car|2021": {
+   "qid": "Q107107865",
+   "directors": [
+    "Ryusuke Hamaguchi"
+   ],
+   "cast": [
+    "Hidetoshi Nishijima",
+    "Masaki Okada",
+    "Reika Kirishima",
+    "Park Yu-rim",
+    "Tōko Miura"
+   ],
+   "imdb": "tt14039582",
+   "runtime": 179,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Godzilla Minus One|2023": {
+   "qid": "Q115053037",
+   "directors": [
+    "Takashi Yamazaki"
+   ],
+   "cast": [
+    "Sakura Andō",
+    "Minami Hamabe",
+    "Ryūnosuke Kamiki",
+    "Yuki Yamada",
+    "Munetaka Aoki"
+   ],
+   "imdb": "tt23289160",
+   "runtime": 125,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "The Handmaiden|2016": {
+   "qid": "Q20444585",
+   "directors": [
+    "Park Chan-wook"
+   ],
+   "cast": [
+    "Kim Min-hee",
+    "Kim Tae-ri",
+    "Moon So-ri",
+    "Kim Hae-suk",
+    "Ha Jung-woo"
+   ],
+   "imdb": "tt4016934",
+   "runtime": 168,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "Memories of Murder|2003": {
+   "qid": "Q488169",
+   "directors": [
+    "Bong Joon-ho"
+   ],
+   "cast": [
+    "Song Kang-ho",
+    "Jeon Mi-seon",
+    "Jung In-sun",
+    "Byun Hee-bong",
+    "Park Hae-il"
+   ],
+   "imdb": "tt0353969",
+   "runtime": 132,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "Burning|2018": {
+   "qid": "Q27964354",
+   "directors": [
+    "Lee Chang-dong"
+   ],
+   "cast": [
+    "Steven Yeun",
+    "Yoo Ah-in",
+    "Jeon Jong-seo"
+   ],
+   "imdb": "tt7282468",
+   "runtime": 148,
+   "countries": [
+    "Japan",
+    "South Korea"
+   ]
+  },
+  "The Wailing|2016": {
+   "qid": "Q22972803",
+   "directors": [
+    "Na Hong-jin"
+   ],
+   "cast": [
+    "Chun Woo-hee",
+    "Hwang Jung-min",
+    "Kwak Do-won",
+    "Jun Kunimura",
+    "Jang So-yeon"
+   ],
+   "imdb": "tt5215952",
+   "runtime": 156,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "Roma|2018": {
+   "qid": "Q27959455",
+   "directors": [
+    "Alfonso Cuarón"
+   ],
+   "cast": [
+    "Yalitza Aparicio",
+    "Marina de Tavira",
+    "Latin Lover",
+    "Jorge Antonio Guerrero",
+    "Jennifer Armour"
+   ],
+   "imdb": "tt6155172",
+   "runtime": 135,
+   "countries": [
+    "Mexico",
+    "United States"
+   ]
+  },
+  "The Secret in Their Eyes|2009": {
+   "qid": "Q748851",
+   "directors": [
+    "Juan J. Campanella"
+   ],
+   "cast": [
+    "Ricardo Darín",
+    "Soledad Villamil",
+    "Guillermo Francella",
+    "Carla Quevedo",
+    "Javier Godino"
+   ],
+   "imdb": "tt1305806",
+   "runtime": 129,
+   "countries": [
+    "Argentina",
+    "Spain"
+   ]
+  },
+  "A Fantastic Woman|2017": {
+   "qid": "Q28127580",
+   "directors": [
+    "Sebastián Lelio"
+   ],
+   "cast": [
+    "Daniela Vega",
+    "Antonia Zegers",
+    "Aline Küppenheim",
+    "Luis Gnecco",
+    "Amparo Noguera"
+   ],
+   "imdb": "tt5639354",
+   "runtime": 104,
+   "countries": [
+    "Chile",
+    "Germany",
+    "Spain",
+    "United States"
+   ]
+  },
+  "Portrait of a Lady on Fire|2019": {
+   "qid": "Q63246568",
+   "directors": [
+    "Céline Sciamma"
+   ],
+   "cast": [
+    "Valeria Golino",
+    "Adèle Haenel",
+    "Noémie Merlant",
+    "Luàna Bajrami",
+    "Armande Boulanger"
+   ],
+   "imdb": "tt8613070",
+   "runtime": 121,
+   "countries": [
+    "France"
+   ]
+  },
+  "The Intouchables|2011": {
+   "qid": "Q595",
+   "directors": [
+    "Olivier Nakache",
+    "Éric Toledano"
+   ],
+   "cast": [
+    "Omar Sy",
+    "François Cluzet",
+    "Audrey Fleurot",
+    "Anne Le Ny",
+    "Alba Gaïa Bellugi"
+   ],
+   "imdb": "tt1675434",
+   "runtime": 112,
+   "countries": [
+    "France"
+   ]
+  },
+  "Persepolis|2007": {
+   "qid": "Q477965",
+   "directors": [
+    "Marjane Satrapi",
+    "Vincent Paronnaud"
+   ],
+   "cast": [],
+   "imdb": "tt0808417",
+   "runtime": 95,
+   "countries": [
+    "France"
+   ]
+  },
+  "The Battle of Algiers|1966": {
+   "qid": "Q784812",
+   "directors": [
+    "Gillo Pontecorvo"
+   ],
+   "cast": [
+    "Saadi Yacef",
+    "Larbi Zekkal",
+    "Jean Martin",
+    "Brahim Hadjadj",
+    "Fusia El Kader"
+   ],
+   "imdb": "tt0058946",
+   "runtime": 117,
+   "countries": [
+    "Algeria",
+    "Italy"
+   ]
+  },
+  "Capernaum|2018": {
+   "qid": "Q51803319",
+   "directors": [
+    "Nadine Labaki"
+   ],
+   "cast": [
+    "Nadine Labaki",
+    "Zain Al Rafeea",
+    "Yordanos Shiferaw"
+   ],
+   "imdb": "tt8267604",
+   "runtime": 126,
+   "countries": [
+    "Lebanon"
+   ]
+  },
+  "Wadjda|2012": {
+   "qid": "Q5474120",
+   "directors": [
+    "Haifaa al-Mansour"
+   ],
+   "cast": [
+    "Reem Abdullah",
+    "Waad Mohammed",
+    "Mariam Alghamdi"
+   ],
+   "imdb": "tt2258858",
+   "runtime": 98,
+   "countries": [
+    "Germany",
+    "Jordan",
+    "Netherlands",
+    "Saudi Arabia",
+    "United Arab Emirates",
+    "United States"
+   ]
+  },
+  "Theeb|2014": {
+   "qid": "Q20422190",
+   "directors": [
+    "Naji Abu Nowar"
+   ],
+   "cast": [
+    "Jacir Eid Al-Hwietat",
+    "Hassan Mutlag Al-Maraiyeh",
+    "Hussein Salameh Al-Sweilhiyeen"
+   ],
+   "imdb": "tt3170902",
+   "runtime": 100,
+   "countries": [
+    "Jordan",
+    "Qatar",
+    "United Arab Emirates",
+    "United Kingdom"
+   ]
+  },
+  "District 9|2009": {
+   "qid": "Q201819",
+   "directors": [
+    "Neill Blomkamp"
+   ],
+   "cast": [
+    "Sharlto Copley",
+    "Jed Brophy",
+    "Nathalie Boltt",
+    "Jason Cope",
+    "David James"
+   ],
+   "imdb": "tt1136608",
+   "runtime": 112,
+   "countries": [
+    "New Zealand",
+    "South Africa",
+    "United States"
+   ]
+  },
+  "The Gods Must Be Crazy|1980": {
+   "qid": "Q647665",
+   "directors": [
+    "Jamie Uys"
+   ],
+   "cast": [
+    "Nǃxau",
+    "Sandra Prinsloo",
+    "Marius Weyers"
+   ],
+   "imdb": "tt0080801",
+   "runtime": 109,
+   "countries": [
+    "Botswana",
+    "South Africa"
+   ]
+  },
+  "Queen of Katwe|2016": {
+   "qid": "Q20921603",
+   "directors": [
+    "Mira Nair"
+   ],
+   "cast": [
+    "Zohran Mamdani",
+    "Lupita Nyong'o",
+    "David Oyelowo",
+    "Madina Nalwanga",
+    "Rehema Nanfuka"
+   ],
+   "imdb": "tt4341582",
+   "runtime": 124,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Slumdog Millionaire|2008": {
+   "qid": "Q125076",
+   "directors": [
+    "Danny Boyle",
+    "Loveleen Tandan"
+   ],
+   "cast": [
+    "Freida Pinto",
+    "Dev Patel",
+    "Irrfan Khan",
+    "Anil Kapoor",
+    "Rubina Ali"
+   ],
+   "imdb": "tt1010048",
+   "runtime": 120,
+   "countries": [
+    "United Kingdom"
+   ]
+  },
+  "Gangs of Wasseypur|2012": {
+   "qid": "Q2690472",
+   "directors": [
+    "Anurag Kashyap"
+   ],
+   "cast": [
+    "Nawazuddin Siddiqui",
+    "Manoj Bajpai",
+    "Huma Qureshi",
+    "Richa Chadha",
+    "Reema Sen"
+   ],
+   "imdb": "tt1954470",
+   "runtime": 160,
+   "countries": [
+    "India"
+   ]
+  },
+  "Andhadhun|2018": {
+   "qid": "Q44612834",
+   "directors": [
+    "Sriram Raghavan"
+   ],
+   "cast": [
+    "Tabu",
+    "Radhika Apte",
+    "Ayushmann Khurrana",
+    "Ashwini Kalsekar",
+    "Zakir Hussain"
+   ],
+   "imdb": "tt8108198",
+   "runtime": 139,
+   "countries": [
+    "India"
+   ]
+  },
+  "Article 15|2019": {
+   "qid": "Q62073524",
+   "directors": [
+    "Anubhav Sinha"
+   ],
+   "cast": [
+    "Ayushmann Khurrana",
+    "Isha Talwar",
+    "Sayani Gupta",
+    "Manoj Pahwa"
+   ],
+   "imdb": "tt10324144",
+   "runtime": 130,
+   "countries": [
+    "India"
+   ]
+  },
+  "Court|2014": {
+   "qid": "Q19891224",
+   "directors": [
+    "Chaitanya Tamhane"
+   ],
+   "cast": [
+    "Vira Sathidar"
+   ],
+   "imdb": "tt3717068",
+   "runtime": 116,
+   "countries": [
+    "India"
+   ]
+  },
+  "Sairat|2016": {
+   "qid": "Q23647145",
+   "directors": [
+    "Nagraj Manjule"
+   ],
+   "cast": [
+    "Jyoti Subhash",
+    "Rinku Rajguru",
+    "Nagraj Manjule",
+    "Akash Thosar",
+    "Chhaya Kadam"
+   ],
+   "imdb": "tt5312232",
+   "runtime": 174,
+   "countries": [
+    "India"
+   ]
+  },
+  "Kumbalangi Nights|2019": {
+   "qid": "Q60737728",
+   "directors": [
+    "Madhu C. Narayanan"
+   ],
+   "cast": [
+    "Fahadh Faasil",
+    "Anna Ben",
+    "Dileesh Pothan",
+    "Sheela Rajkumar",
+    "Riya Saira"
+   ],
+   "imdb": "tt8413338",
+   "countries": [
+    "India"
+   ]
+  },
+  "Premam|2015": {
+   "qid": "Q19895421",
+   "directors": [
+    "Alphonse Puthren"
+   ],
+   "cast": [
+    "Sai Pallavi",
+    "Anupama Parameswaran",
+    "Nivin Pauly",
+    "Madonna Sebastian",
+    "Soubin Shahir"
+   ],
+   "imdb": "tt4679210",
+   "runtime": 156,
+   "countries": [
+    "India"
+   ]
+  },
+  "Super Deluxe|2019": {
+   "qid": "Q27963002",
+   "directors": [
+    "Thiagarajan Kumararaja"
+   ],
+   "cast": [
+    "Vijay Sethupathi"
+   ],
+   "imdb": "tt7019942",
+   "countries": [
+    "India"
+   ]
+  },
+  "Kaithi|2019": {
+   "qid": "Q65081848",
+   "directors": [
+    "Lokesh Kanagaraj"
+   ],
+   "cast": [
+    "Karthik Siva kumar",
+    "Narain",
+    "Sai Dheena"
+   ],
+   "imdb": "tt9900782",
+   "runtime": 146,
+   "countries": [
+    "India"
+   ]
+  },
+  "Jersey|2019": {
+   "qid": "Q60738016",
+   "directors": [
+    "Gowtham Tinnanuri"
+   ],
+   "cast": [
+    "Nani",
+    "Shraddha Srinath",
+    "Sathyaraj",
+    "Rao Ramesh",
+    "Sampath Raj"
+   ],
+   "imdb": "tt8948790",
+   "countries": [
+    "India"
+   ]
+  },
+  "Coco|2017": {
+   "qid": "Q5815826",
+   "directors": [
+    "Lee Unkrich",
+    "Adrian Molina"
+   ],
+   "cast": [],
+   "imdb": "tt2380307",
+   "runtime": 109,
+   "countries": [
+    "Mexico",
+    "United States"
+   ]
+  },
+  "Inside Out|2015": {
+   "qid": "Q6144664",
+   "directors": [
+    "Pete Docter",
+    "Ronnie del Carmen"
+   ],
+   "cast": [],
+   "imdb": "tt2096673",
+   "runtime": 94,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Spider-Man: Into the Spider-Verse|2018": {
+   "qid": "Q29588607",
+   "directors": [
+    "Peter Ramsey",
+    "Rodney Rothman",
+    "Bob Persichetti"
+   ],
+   "cast": [],
+   "imdb": "tt4633694",
+   "runtime": 117,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Lion King|1994": {
+   "qid": "Q36479",
+   "directors": [
+    "Rob Minkoff",
+    "Roger Allers"
+   ],
+   "cast": [],
+   "imdb": "tt0110357",
+   "runtime": 88,
+   "countries": [
+    "United States"
+   ]
+  },
+  "WALL-E|2008": {
+   "qid": "Q104905",
+   "directors": [
+    "Andrew Stanton"
+   ],
+   "cast": [],
+   "imdb": "tt0910970",
+   "runtime": 98,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Finding Nemo|2003": {
+   "qid": "Q132863",
+   "directors": [
+    "Andrew Stanton",
+    "Lee Unkrich"
+   ],
+   "cast": [],
+   "imdb": "tt0266543",
+   "runtime": 100,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Toy Story|1995": {
+   "qid": "Q171048",
+   "directors": [
+    "John Lasseter"
+   ],
+   "cast": [],
+   "imdb": "tt0114709",
+   "runtime": 80,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Princess Bride|1987": {
+   "qid": "Q506418",
+   "directors": [
+    "Rob Reiner"
+   ],
+   "cast": [
+    "Robin Wright",
+    "Peter Falk",
+    "Billy Crystal",
+    "Mark Knopfler",
+    "Mandy Patinkin"
+   ],
+   "imdb": "tt0093779",
+   "runtime": 97,
+   "countries": [
+    "Australia",
+    "United States"
+   ]
+  },
+  "The Shining|1980": {
+   "qid": "Q186341",
+   "directors": [
+    "Stanley Kubrick"
+   ],
+   "cast": [
+    "Jack Nicholson",
+    "Shelley Duvall",
+    "Barry Nelson",
+    "Scatman Crothers",
+    "Joe Turkel"
+   ],
+   "imdb": "tt0081505",
+   "runtime": 144,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Hereditary|2018": {
+   "qid": "Q47524071",
+   "directors": [
+    "Ari Aster"
+   ],
+   "cast": [
+    "Gabriel Byrne",
+    "Toni Collette",
+    "Ann Dowd",
+    "Alex Wolff",
+    "Milly Shapiro"
+   ],
+   "imdb": "tt7784604",
+   "runtime": 127,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Witch|2015": {
+   "qid": "Q19057481",
+   "directors": [
+    "Robert Eggers"
+   ],
+   "cast": [
+    "Anya Taylor-Joy",
+    "Ralph Ineson",
+    "Kate Dickie",
+    "Julian Richings",
+    "Charlie"
+   ],
+   "imdb": "tt4263482",
+   "runtime": 93,
+   "countries": [
+    "Canada",
+    "United States"
+   ]
+  },
+  "A Quiet Place|2018": {
+   "qid": "Q39070473",
+   "directors": [
+    "John Krasinski"
+   ],
+   "cast": [
+    "Emily Blunt",
+    "John Krasinski",
+    "Noah Jupe",
+    "Leon Russom",
+    "Millicent Simmonds"
+   ],
+   "imdb": "tt6644200",
+   "runtime": 90,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Scream|1996": {
+   "qid": "Q27411",
+   "directors": [
+    "Wes Craven"
+   ],
+   "cast": [
+    "Courteney Cox",
+    "Neve Campbell",
+    "Matthew Lillard",
+    "Rose McGowan",
+    "David Arquette"
+   ],
+   "imdb": "tt0117571",
+   "runtime": 111,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Exorcist|1973": {
+   "qid": "Q274167",
+   "directors": [
+    "William Friedkin"
+   ],
+   "cast": [
+    "Max von Sydow",
+    "Ellen Burstyn",
+    "Linda Blair",
+    "Lee J. Cobb",
+    "William Peter Blatty"
+   ],
+   "imdb": "tt0070047",
+   "runtime": 122,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Halloween|1978": {
+   "qid": "Q221103",
+   "directors": [
+    "John Carpenter"
+   ],
+   "cast": [
+    "Jamie Lee Curtis",
+    "Donald Pleasence",
+    "John Carpenter",
+    "Nick Castle",
+    "Kyle Richards"
+   ],
+   "imdb": "tt0077651",
+   "runtime": 92,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Psycho|1960": {
+   "qid": "Q163038",
+   "directors": [
+    "Alfred Hitchcock"
+   ],
+   "cast": [
+    "Alfred Hitchcock",
+    "Anthony Perkins",
+    "Janet Leigh",
+    "Martin Balsam",
+    "Vera Miles"
+   ],
+   "imdb": "tt0054215",
+   "runtime": 109,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Silence of the Lambs|1991": {
+   "qid": "Q133654",
+   "directors": [
+    "Jonathan Demme"
+   ],
+   "cast": [
+    "Anthony Hopkins",
+    "Jodie Foster",
+    "George A. Romero",
+    "Roger Corman",
+    "Scott Glenn"
+   ],
+   "imdb": "tt0102926",
+   "runtime": 118,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Se7en|1995": {
+   "qid": "Q190908",
+   "directors": [
+    "David Fincher"
+   ],
+   "cast": [
+    "Brad Pitt",
+    "Gwyneth Paltrow",
+    "Morgan Freeman",
+    "Kevin Spacey",
+    "Richard Schiff"
+   ],
+   "imdb": "tt0114369",
+   "runtime": 127,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Zodiac|2007": {
+   "qid": "Q218172",
+   "directors": [
+    "David Fincher"
+   ],
+   "cast": [
+    "Robert Downey Jr.",
+    "Mark Ruffalo",
+    "Jake Gyllenhaal",
+    "Chloë Sevigny",
+    "Charles Fleischer"
+   ],
+   "imdb": "tt0443706",
+   "runtime": 157,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Prisoners|2013": {
+   "qid": "Q3404003",
+   "directors": [
+    "Denis Villeneuve"
+   ],
+   "cast": [
+    "Hugh Jackman",
+    "Jake Gyllenhaal",
+    "Viola Davis",
+    "Melissa Leo",
+    "Terrence Howard"
+   ],
+   "imdb": "tt1392214",
+   "runtime": 153,
+   "countries": [
+    "United States"
+   ]
+  },
+  "No Country for Old Men|2007": {
+   "qid": "Q183081",
+   "directors": [
+    "Joel Coen",
+    "Ethan Coen"
+   ],
+   "cast": [
+    "Javier Bardem",
+    "Tommy Lee Jones",
+    "Woody Harrelson",
+    "Josh Brolin",
+    "Kelly Macdonald"
+   ],
+   "imdb": "tt0477348",
+   "runtime": 122,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Fargo|1996": {
+   "qid": "Q222720",
+   "directors": [
+    "Joel Coen",
+    "Ethan Coen"
+   ],
+   "cast": [
+    "Frances McDormand",
+    "Steve Buscemi",
+    "William H. Macy",
+    "Bruce Campbell",
+    "José Feliciano"
+   ],
+   "imdb": "tt0116282",
+   "runtime": 98,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Pulp Fiction|1994": {
+   "qid": "Q104123",
+   "directors": [
+    "Quentin Tarantino"
+   ],
+   "cast": [
+    "Quentin Tarantino",
+    "Bruce Willis",
+    "John Travolta",
+    "Uma Thurman",
+    "Samuel L. Jackson"
+   ],
+   "imdb": "tt0110912",
+   "runtime": 154,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Goodfellas|1990": {
+   "qid": "Q42047",
+   "directors": [
+    "Martin Scorsese"
+   ],
+   "cast": [
+    "Robert De Niro",
+    "Samuel L. Jackson",
+    "Joe Pesci",
+    "Ray Liotta",
+    "Lorraine Bracco"
+   ],
+   "imdb": "tt0099685",
+   "runtime": 145,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Departed|2006": {
+   "qid": "Q172975",
+   "directors": [
+    "Martin Scorsese"
+   ],
+   "cast": [
+    "Leonardo DiCaprio",
+    "Jack Nicholson",
+    "Matt Damon",
+    "Mark Wahlberg",
+    "Alec Baldwin"
+   ],
+   "imdb": "tt0407887",
+   "runtime": 151,
+   "countries": [
+    "Hong Kong",
+    "United States"
+   ]
+  },
+  "Casino|1995": {
+   "qid": "Q220910",
+   "directors": [
+    "Martin Scorsese"
+   ],
+   "cast": [
+    "Robert De Niro",
+    "Sharon Stone",
+    "James Woods",
+    "Don Rickles",
+    "Joe Pesci"
+   ],
+   "imdb": "tt0112641",
+   "runtime": 178,
+   "countries": [
+    "France",
+    "United States"
+   ]
+  },
+  "Heat|1995": {
+   "qid": "Q42198",
+   "directors": [
+    "Michael Mann"
+   ],
+   "cast": [
+    "Robert De Niro",
+    "Natalie Portman",
+    "Al Pacino",
+    "Jon Voight",
+    "Val Kilmer"
+   ],
+   "imdb": "tt0113277",
+   "runtime": 170,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Usual Suspects|1995": {
+   "qid": "Q132351",
+   "directors": [
+    "Bryan Singer"
+   ],
+   "cast": [
+    "Kevin Spacey",
+    "Benicio del Toro",
+    "Clark Gregg",
+    "Giancarlo Esposito",
+    "Pete Postlethwaite"
+   ],
+   "imdb": "tt0114814",
+   "runtime": 106,
+   "countries": [
+    "United States"
+   ]
+  },
+  "L.A. Confidential|1997": {
+   "qid": "Q339876",
+   "directors": [
+    "Curtis Hanson"
+   ],
+   "cast": [
+    "Russell Crowe",
+    "Kim Basinger",
+    "Kevin Spacey",
+    "Danny DeVito",
+    "Guy Pearce"
+   ],
+   "imdb": "tt0119488",
+   "runtime": 132,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Chinatown|1974": {
+   "qid": "Q644987",
+   "directors": [
+    "Roman Polanski"
+   ],
+   "cast": [
+    "Jack Nicholson",
+    "Roman Polanski",
+    "Faye Dunaway",
+    "John Huston",
+    "Diane Ladd"
+   ],
+   "imdb": "tt0071315",
+   "runtime": 133,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Double Indemnity|1944": {
+   "qid": "Q478209",
+   "directors": [
+    "Billy Wilder"
+   ],
+   "cast": [
+    "Raymond Chandler",
+    "Barbara Stanwyck",
+    "Edward G. Robinson",
+    "Gig Young",
+    "Fred MacMurray"
+   ],
+   "imdb": "tt0036775",
+   "runtime": 107,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Maltese Falcon|1941": {
+   "qid": "Q221462",
+   "directors": [
+    "John Huston"
+   ],
+   "cast": [
+    "Humphrey Bogart",
+    "Mary Astor",
+    "Peter Lorre",
+    "Walter Huston",
+    "Gladys George"
+   ],
+   "imdb": "tt0033870",
+   "runtime": 101,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Before Sunrise|1995": {
+   "qid": "Q659609",
+   "directors": [
+    "Richard Linklater"
+   ],
+   "cast": [
+    "Ethan Hawke",
+    "Julie Delpy",
+    "Adam Goldberg",
+    "Erni Mangold",
+    "Hanno Pöschl"
+   ],
+   "imdb": "tt0112471",
+   "runtime": 97,
+   "countries": [
+    "Austria",
+    "Switzerland",
+    "United States"
+   ]
+  },
+  "Eternal Sunshine of the Spotless Mind|2004": {
+   "qid": "Q208269",
+   "directors": [
+    "Michel Gondry"
+   ],
+   "cast": [
+    "Kate Winslet",
+    "Jim Carrey",
+    "Kirsten Dunst",
+    "Mark Ruffalo",
+    "Elijah Wood"
+   ],
+   "imdb": "tt0338013",
+   "runtime": 104,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Call Me by Your Name|2017": {
+   "qid": "Q25136757",
+   "directors": [
+    "Luca Guadagnino"
+   ],
+   "cast": [
+    "Timothée Chalamet",
+    "Armie Hammer",
+    "Michael Stuhlbarg",
+    "Amira Casar",
+    "Esther Garrel"
+   ],
+   "imdb": "tt5726616",
+   "runtime": 132,
+   "countries": [
+    "Brazil",
+    "France",
+    "Italy",
+    "United States"
+   ]
+  },
+  "The Notebook|2004": {
+   "qid": "Q223374",
+   "directors": [
+    "Nick Cassavetes"
+   ],
+   "cast": [
+    "Rachel McAdams",
+    "Ryan Gosling",
+    "Gena Rowlands",
+    "James Garner",
+    "James Marsden"
+   ],
+   "imdb": "tt0332280",
+   "runtime": 123,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Pride & Prejudice|2005": {
+   "qid": "Q270385",
+   "directors": [
+    "Joe Wright"
+   ],
+   "cast": [
+    "Keira Knightley",
+    "Judi Dench",
+    "Donald Sutherland",
+    "Rosamund Pike",
+    "Carey Mulligan"
+   ],
+   "imdb": "tt0414387",
+   "runtime": 127,
+   "countries": [
+    "France",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Brooklyn|2015": {
+   "qid": "Q16954098",
+   "directors": [
+    "John Crowley"
+   ],
+   "cast": [
+    "Saoirse Ronan",
+    "Jim Broadbent",
+    "Julie Walters",
+    "Domhnall Gleeson",
+    "Emily Bett Rickards"
+   ],
+   "imdb": "tt2381111",
+   "runtime": 112,
+   "countries": [
+    "Canada",
+    "Ireland",
+    "United Kingdom"
+   ]
+  },
+  "Carol|2015": {
+   "qid": "Q15963780",
+   "directors": [
+    "Todd Haynes"
+   ],
+   "cast": [
+    "Dwight D. Eisenhower",
+    "Cate Blanchett",
+    "Rooney Mara",
+    "Sarah Paulson",
+    "Kyle Chandler"
+   ],
+   "imdb": "tt2402927",
+   "runtime": 118,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Phantom Thread|2017": {
+   "qid": "Q28840386",
+   "directors": [
+    "Paul Thomas Anderson"
+   ],
+   "cast": [
+    "Daniel Day-Lewis",
+    "Lesley Manville",
+    "Vicky Krieps",
+    "Gina McKee",
+    "Harriet Sansom Harris"
+   ],
+   "imdb": "tt5776858",
+   "runtime": 130,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "The Shape of Water|2017": {
+   "qid": "Q26698156",
+   "directors": [
+    "Guillermo del Toro"
+   ],
+   "cast": [
+    "Octavia Spencer",
+    "Sally Hawkins",
+    "Michael Shannon",
+    "Richard Jenkins",
+    "Michael Stuhlbarg"
+   ],
+   "imdb": "tt5580390",
+   "runtime": 123,
+   "countries": [
+    "Mexico",
+    "United States"
+   ]
+  },
+  "The Lord of the Rings: The Fellowship of the Ring|2001": {
+   "qid": "Q127367",
+   "directors": [
+    "Peter Jackson"
+   ],
+   "cast": [
+    "Cate Blanchett",
+    "Christopher Lee",
+    "Peter Jackson",
+    "Orlando Bloom",
+    "Ian McKellen"
+   ],
+   "imdb": "tt0120737",
+   "runtime": 228,
+   "countries": [
+    "New Zealand",
+    "United States"
+   ]
+  },
+  "Harry Potter and the Prisoner of Azkaban|2004": {
+   "qid": "Q102448",
+   "directors": [
+    "Alfonso Cuarón"
+   ],
+   "cast": [
+    "Emma Watson",
+    "Daniel Radcliffe",
+    "Gary Oldman",
+    "Maggie Smith",
+    "Alan Rickman"
+   ],
+   "imdb": "tt0304141",
+   "runtime": 141,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Howl's Moving Castle|2004": {
+   "qid": "Q29011",
+   "directors": [
+    "Hayao Miyazaki"
+   ],
+   "cast": [],
+   "imdb": "tt0347149",
+   "runtime": 119,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "The Wizard of Oz|1939": {
+   "qid": "Q193695",
+   "directors": [
+    "King Vidor",
+    "Victor Fleming"
+   ],
+   "cast": [
+    "Judy Garland",
+    "Billie Burke",
+    "Frank Morgan",
+    "Margaret Hamilton",
+    "Adriana Caselotti"
+   ],
+   "imdb": "tt0032138",
+   "runtime": 98,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Dune|2021": {
+   "qid": "Q60834962",
+   "directors": [
+    "Denis Villeneuve"
+   ],
+   "cast": [
+    "Charlotte Rampling",
+    "Zendaya",
+    "Timothée Chalamet",
+    "Javier Bardem",
+    "Jason Momoa"
+   ],
+   "imdb": "tt1160419",
+   "runtime": 155,
+   "countries": [
+    "Canada",
+    "Hungary",
+    "Jordan",
+    "Norway",
+    "United Arab Emirates",
+    "United States"
+   ]
+  },
+  "2001: A Space Odyssey|1968": {
+   "qid": "Q103474",
+   "directors": [
+    "Stanley Kubrick"
+   ],
+   "cast": [
+    "Arthur C. Clarke",
+    "Keir Dullea",
+    "Gary Lockwood",
+    "Douglas Rain",
+    "Ann Gillis"
+   ],
+   "imdb": "tt0062622",
+   "runtime": 143,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Alien|1979": {
+   "qid": "Q103569",
+   "directors": [
+    "Ridley Scott"
+   ],
+   "cast": [
+    "Sigourney Weaver",
+    "John Hurt",
+    "Ian Holm",
+    "Harry Dean Stanton",
+    "Yaphet Kotto"
+   ],
+   "imdb": "tt0078748",
+   "runtime": 117,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "The Thing|1982": {
+   "qid": "Q210756",
+   "directors": [
+    "John Carpenter"
+   ],
+   "cast": [
+    "Kurt Russell",
+    "Wilford Brimley",
+    "John Carpenter",
+    "Keith David",
+    "Richard Dysart"
+   ],
+   "imdb": "tt0084787",
+   "runtime": 109,
+   "countries": [
+    "Canada",
+    "United States"
+   ]
+  },
+  "Children of Men|2006": {
+   "qid": "Q221090",
+   "directors": [
+    "Alfonso Cuarón"
+   ],
+   "cast": [
+    "Michael Caine",
+    "Julianne Moore",
+    "Chiwetel Ejiofor",
+    "Clive Owen",
+    "Charlie Hunnam"
+   ],
+   "imdb": "tt0206634",
+   "runtime": 106,
+   "countries": [
+    "Japan",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Ex Machina|2014": {
+   "qid": "Q16635326",
+   "directors": [
+    "Alex Garland"
+   ],
+   "cast": [
+    "Alicia Vikander",
+    "Oscar Isaac",
+    "Domhnall Gleeson",
+    "Sonoya Mizuno",
+    "Corey Johnson"
+   ],
+   "imdb": "tt0470752",
+   "runtime": 108,
+   "countries": [
+    "United Kingdom"
+   ]
+  },
+  "Annihilation|2018": {
+   "qid": "Q25136228",
+   "directors": [
+    "Alex Garland"
+   ],
+   "cast": [
+    "Natalie Portman",
+    "Oscar Isaac",
+    "Tessa Thompson",
+    "Jennifer Jason Leigh",
+    "Benedict Wong"
+   ],
+   "imdb": "tt2798920",
+   "runtime": 115,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Snowpiercer|2013": {
+   "qid": "Q492908",
+   "directors": [
+    "Bong Joon-ho"
+   ],
+   "cast": [
+    "Chris Evans",
+    "Ed Harris",
+    "Tilda Swinton",
+    "John Hurt",
+    "Octavia Spencer"
+   ],
+   "imdb": "tt1706620",
+   "runtime": 126,
+   "countries": [
+    "Czech Republic",
+    "France",
+    "South Korea",
+    "United States"
+   ]
+  },
+  "Okja|2017": {
+   "qid": "Q23932553",
+   "directors": [
+    "Bong Joon-ho"
+   ],
+   "cast": [
+    "Jake Gyllenhaal",
+    "Lily Collins",
+    "Tilda Swinton",
+    "Giancarlo Esposito",
+    "Paul Dano"
+   ],
+   "imdb": "tt3967856",
+   "runtime": 121,
+   "countries": [
+    "South Korea",
+    "United States"
+   ]
+  },
+  "Stalker|1979": {
+   "qid": "Q200437",
+   "directors": [
+    "Andrei Tarkovsky"
+   ],
+   "cast": [
+    "Alisa Freindlich",
+    "Anatoly Solonitsyn",
+    "Alexander Kaidanovsky",
+    "Nikolai Grinko",
+    "Vladimir Zamanskiy"
+   ],
+   "imdb": "tt0079944",
+   "runtime": 163,
+   "countries": [
+    "Soviet Union"
+   ]
+  },
+  "Solaris|1972": {
+   "qid": "Q125772",
+   "directors": [
+    "Andrei Tarkovsky"
+   ],
+   "cast": [
+    "Donatas Banionis",
+    "Anatoly Solonitsyn",
+    "Yulian Semyonov",
+    "Natalya Bondarchuk",
+    "Nikolai Grinko"
+   ],
+   "imdb": "tt0069293",
+   "runtime": 160,
+   "countries": [
+    "Soviet Union"
+   ]
+  },
+  "Metropolis|1927": {
+   "qid": "Q151599",
+   "directors": [
+    "Fritz Lang"
+   ],
+   "cast": [
+    "Helene Weigel",
+    "Brigitte Helm",
+    "Heinrich George",
+    "Alfred Abel",
+    "Gustav Fröhlich"
+   ],
+   "imdb": "tt0017136",
+   "runtime": 153,
+   "countries": [
+    "Weimar Republic",
+    "Weimarer Republik"
+   ]
+  },
+  "Das Boot|1981": {
+   "qid": "Q62730",
+   "directors": [
+    "Wolfgang Petersen"
+   ],
+   "cast": [
+    "Otto Sander",
+    "Jürgen Prochnow",
+    "Herbert Grönemeyer",
+    "Uwe Ochsenknecht",
+    "Günter Lamprecht"
+   ],
+   "imdb": "tt0082096",
+   "runtime": 293,
+   "countries": [
+    "West Germany"
+   ]
+  },
+  "Downfall|2004": {
+   "qid": "Q152857",
+   "directors": [
+    "Oliver Hirschbiegel"
+   ],
+   "cast": [
+    "Bruno Ganz",
+    "Thomas Kretschmann",
+    "Alexandra Maria Lara",
+    "Corinna Harfouch",
+    "Julia Jentsch"
+   ],
+   "imdb": "tt0363163",
+   "runtime": 155,
+   "countries": [
+    "Austria",
+    "Germany",
+    "Italy"
+   ]
+  },
+  "Come and See|1985": {
+   "qid": "Q1130395",
+   "directors": [
+    "Elem Klimov"
+   ],
+   "cast": [
+    "Aleksei Kravchenko",
+    "Liubomiras Laucevičius"
+   ],
+   "imdb": "tt0091251",
+   "runtime": 146,
+   "countries": [
+    "Soviet Union"
+   ]
+  },
+  "Apocalypse Now|1979": {
+   "qid": "Q182692",
+   "directors": [
+    "Francis Ford Coppola"
+   ],
+   "cast": [
+    "Marlon Brando",
+    "Harrison Ford",
+    "Francis Ford Coppola",
+    "Robert Duvall",
+    "Charlie Sheen"
+   ],
+   "imdb": "tt0078788",
+   "runtime": 202,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Saving Private Ryan|1998": {
+   "qid": "Q165817",
+   "directors": [
+    "Steven Spielberg"
+   ],
+   "cast": [
+    "Tom Hanks",
+    "Matt Damon",
+    "Vin Diesel",
+    "John de Lancie",
+    "Bryan Cranston"
+   ],
+   "imdb": "tt0120815",
+   "runtime": 169,
+   "countries": [
+    "United States"
+   ]
+  },
+  "1917|2019": {
+   "qid": "Q62721520",
+   "directors": [
+    "Sam Mendes"
+   ],
+   "cast": [
+    "Benedict Cumberbatch",
+    "Colin Firth",
+    "Mark Strong",
+    "Richard Madden",
+    "Andrew Scott"
+   ],
+   "imdb": "tt8579674",
+   "runtime": 119,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Dunkirk|2017": {
+   "qid": "Q21935651",
+   "directors": [
+    "Christopher Nolan"
+   ],
+   "cast": [
+    "Michael Caine",
+    "Cillian Murphy",
+    "Tom Hardy",
+    "Harry Styles",
+    "Olivia Wilde"
+   ],
+   "imdb": "tt5013056",
+   "runtime": 106,
+   "countries": [
+    "France",
+    "Netherlands",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "The Hurt Locker|2008": {
+   "qid": "Q183066",
+   "directors": [
+    "Kathryn Bigelow"
+   ],
+   "cast": [
+    "Jeremy Renner",
+    "Ralph Fiennes",
+    "Evangeline Lilly",
+    "Guy Pearce",
+    "Anthony Mackie"
+   ],
+   "imdb": "tt0887912",
+   "runtime": 131,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Full Metal Jacket|1987": {
+   "qid": "Q243439",
+   "directors": [
+    "Stanley Kubrick"
+   ],
+   "cast": [
+    "Stanley Kubrick",
+    "R. Lee Ermey",
+    "Vincent D'Onofrio",
+    "Adam Baldwin",
+    "Matthew Modine"
+   ],
+   "imdb": "tt0093058",
+   "runtime": 116,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Platoon|1986": {
+   "qid": "Q190643",
+   "directors": [
+    "Oliver Stone"
+   ],
+   "cast": [
+    "Johnny Depp",
+    "Oliver Stone",
+    "Willem Dafoe",
+    "Charlie Sheen",
+    "Forest Whitaker"
+   ],
+   "imdb": "tt0091763",
+   "runtime": 118,
+   "countries": [
+    "Philippines",
+    "United States"
+   ]
+  },
+  "The Searchers|1956": {
+   "qid": "Q276769",
+   "directors": [
+    "John Ford"
+   ],
+   "cast": [
+    "John Wayne",
+    "Natalie Wood",
+    "Vera Miles",
+    "Jeffrey Hunter",
+    "Lana Wood"
+   ],
+   "imdb": "tt0049730",
+   "runtime": 119,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Unforgiven|1992": {
+   "qid": "Q104137",
+   "directors": [
+    "Clint Eastwood"
+   ],
+   "cast": [
+    "Clint Eastwood",
+    "Morgan Freeman",
+    "Gene Hackman",
+    "Richard Harris",
+    "Frances Fisher"
+   ],
+   "imdb": "tt0105695",
+   "runtime": 130,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Good, the Bad and the Ugly|1966": {
+   "qid": "Q41483",
+   "directors": [
+    "Sergio Leone"
+   ],
+   "cast": [
+    "Clint Eastwood",
+    "Eli Wallach",
+    "Lee Van Cleef",
+    "Mario Brega",
+    "Maurizio Arena"
+   ],
+   "imdb": "tt0060196",
+   "runtime": 174,
+   "countries": [
+    "Germany",
+    "Italy",
+    "Spain"
+   ]
+  },
+  "Raging Bull|1980": {
+   "qid": "Q220780",
+   "directors": [
+    "Martin Scorsese"
+   ],
+   "cast": [
+    "Robert De Niro",
+    "Martin Scorsese",
+    "Joe Pesci",
+    "John Turturro",
+    "Frank Vincent"
+   ],
+   "imdb": "tt0081398",
+   "runtime": 129,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Taxi Driver|1976": {
+   "qid": "Q47221",
+   "directors": [
+    "Martin Scorsese"
+   ],
+   "cast": [
+    "Robert De Niro",
+    "Jodie Foster",
+    "Martin Scorsese",
+    "Harvey Keitel",
+    "Cybill Shepherd"
+   ],
+   "imdb": "tt0075314",
+   "runtime": 114,
+   "countries": [
+    "United States"
+   ]
+  },
+  "There Will Be Blood|2007": {
+   "qid": "Q244315",
+   "directors": [
+    "Paul Thomas Anderson"
+   ],
+   "cast": [
+    "Daniel Day-Lewis",
+    "Jim Meskimen",
+    "Paul Dano",
+    "Ciarán Hinds",
+    "Paul F. Tompkins"
+   ],
+   "imdb": "tt0469494",
+   "runtime": 158,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Master|2012": {
+   "qid": "Q283586",
+   "directors": [
+    "Paul Thomas Anderson"
+   ],
+   "cast": [
+    "Amy Adams",
+    "Joaquin Phoenix",
+    "Philip Seymour Hoffman",
+    "Rami Malek",
+    "Laura Dern"
+   ],
+   "imdb": "tt1560747",
+   "runtime": 138,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Magnolia|1999": {
+   "qid": "Q588420",
+   "directors": [
+    "Paul Thomas Anderson"
+   ],
+   "cast": [
+    "Tom Cruise",
+    "Julianne Moore",
+    "Philip Seymour Hoffman",
+    "John C. Reilly",
+    "Felicity Huffman"
+   ],
+   "imdb": "tt0175880",
+   "runtime": 188,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Boyhood|2014": {
+   "qid": "Q4103201",
+   "directors": [
+    "Richard Linklater"
+   ],
+   "cast": [
+    "Ethan Hawke",
+    "Patricia Arquette",
+    "Ellar Coltrane",
+    "Nick Krause",
+    "Lorelei Linklater"
+   ],
+   "imdb": "tt1065073",
+   "runtime": 165,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Florida Project|2017": {
+   "qid": "Q29514872",
+   "directors": [
+    "Sean Baker"
+   ],
+   "cast": [
+    "Willem Dafoe",
+    "Caleb Landry Jones",
+    "Brooklynn Prince",
+    "Macon Blair",
+    "Bria Vinaite"
+   ],
+   "imdb": "tt5649144",
+   "runtime": 115,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Farewell|2019": {
+   "qid": "Q60611804",
+   "directors": [
+    "Lulu Wang"
+   ],
+   "cast": [
+    "Awkwafina",
+    "Tzi Ma",
+    "Zhao Shuzhen"
+   ],
+   "imdb": "tt8637428",
+   "runtime": 98,
+   "countries": [
+    "United States"
+   ]
+  },
+  "A Taxi Driver|2017": {
+   "qid": "Q28698824",
+   "directors": [
+    "Jang Hoon"
+   ],
+   "cast": [
+    "Thomas Kretschmann",
+    "Ryu Jun-yeol",
+    "Song Kang-ho",
+    "Yoo Hai-jin"
+   ],
+   "imdb": "tt6878038",
+   "runtime": 137,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "PK|2014": {
+   "qid": "Q7117022",
+   "directors": [
+    "Rajkumar Hirani"
+   ],
+   "cast": [
+    "Aamir Khan",
+    "Anushka Sharma",
+    "Ranbir Kapoor",
+    "Sushant Singh Rajput",
+    "Sanjay Dutt"
+   ],
+   "imdb": "tt2338151",
+   "runtime": 153,
+   "countries": [
+    "India"
+   ]
+  },
+  "Hera Pheri|2000": {
+   "qid": "Q5732486",
+   "directors": [
+    "Priyadarshan"
+   ],
+   "cast": [
+    "Akshay Kumar",
+    "Tabu",
+    "Sunil Shetty",
+    "Paresh Rawal"
+   ],
+   "imdb": "tt0242519",
+   "runtime": 145,
+   "countries": [
+    "India"
+   ]
+  },
+  "Andaz Apna Apna|1994": {
+   "qid": "Q283481",
+   "directors": [
+    "Rajkumar Santoshi"
+   ],
+   "cast": [
+    "Salman Khan",
+    "Aamir Khan",
+    "Karisma Kapoor",
+    "Juhi Chawla",
+    "Raveena Tandon"
+   ],
+   "imdb": "tt0109117",
+   "runtime": 150,
+   "countries": [
+    "India"
+   ]
+  },
+  "Superbad|2007": {
+   "qid": "Q679611",
+   "directors": [
+    "Greg Mottola"
+   ],
+   "cast": [
+    "Emma Stone",
+    "Seth Rogen",
+    "Jonah Hill",
+    "Dave Franco",
+    "Michael Cera"
+   ],
+   "imdb": "tt0829482",
+   "runtime": 114,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Bridesmaids|2011": {
+   "qid": "Q837264",
+   "directors": [
+    "Paul Feig"
+   ],
+   "cast": [
+    "Melissa McCarthy",
+    "Terry Crews",
+    "Kristen Wiig",
+    "Rose Byrne",
+    "Jon Hamm"
+   ],
+   "imdb": "tt1478338",
+   "runtime": 125,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Big Lebowski|1998": {
+   "qid": "Q337078",
+   "directors": [
+    "Joel Coen",
+    "Ethan Coen"
+   ],
+   "cast": [
+    "Julianne Moore",
+    "John Goodman",
+    "Philip Seymour Hoffman",
+    "Jeff Bridges",
+    "Steve Buscemi"
+   ],
+   "imdb": "tt0118715",
+   "runtime": 117,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Groundhog Day|1993": {
+   "qid": "Q488655",
+   "directors": [
+    "Harold Ramis"
+   ],
+   "cast": [
+    "Bill Murray",
+    "Andie MacDowell",
+    "Harold Ramis",
+    "Michael Shannon",
+    "Stephen Tobolowsky"
+   ],
+   "imdb": "tt0107048",
+   "runtime": 101,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Monty Python and the Holy Grail|1975": {
+   "qid": "Q25043",
+   "directors": [
+    "Terry Gilliam",
+    "Terry Jones"
+   ],
+   "cast": [
+    "Terry Gilliam",
+    "John Cleese",
+    "Michael Palin",
+    "Terry Jones",
+    "Eric Idle"
+   ],
+   "imdb": "tt0071853",
+   "runtime": 91,
+   "countries": [
+    "United Kingdom"
+   ]
+  },
+  "Borat|2006": {
+   "qid": "Q186323",
+   "directors": [
+    "Larry Charles"
+   ],
+   "cast": [
+    "Pamela Anderson",
+    "Sacha Baron Cohen",
+    "Ken Davitian",
+    "Luenell",
+    "Dan Mazer"
+   ],
+   "imdb": "tt0443453",
+   "runtime": 84,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "The Grand Seduction|2013": {
+   "qid": "Q14949752",
+   "directors": [
+    "Don McKellar"
+   ],
+   "cast": [
+    "Brendan Gleeson",
+    "Taylor Kitsch",
+    "Percy Hynes White",
+    "Gordon Pinsent",
+    "Anna Hopkins"
+   ],
+   "imdb": "tt2319580",
+   "runtime": 113,
+   "countries": [
+    "Canada",
+    "United States"
+   ]
+  },
+  "Hunt for the Wilderpeople|2016": {
+   "qid": "Q22236109",
+   "directors": [
+    "Taika Waititi"
+   ],
+   "cast": [
+    "Sam Neill",
+    "Taika Waititi",
+    "Julian Dennison",
+    "Rhys Darby",
+    "Rachel House"
+   ],
+   "imdb": "tt4698684",
+   "runtime": 101,
+   "countries": [
+    "New Zealand"
+   ]
+  },
+  "What We Do in the Shadows|2014": {
+   "qid": "Q17036671",
+   "directors": [
+    "Jemaine Clement",
+    "Taika Waititi"
+   ],
+   "cast": [
+    "Taika Waititi",
+    "Jemaine Clement",
+    "Rhys Darby",
+    "Madeleine Sami",
+    "Jackie van Beek"
+   ],
+   "imdb": "tt3416742",
+   "runtime": 86,
+   "countries": [
+    "New Zealand"
+   ]
+  },
+  "The Square|2017": {
+   "qid": "Q27237522",
+   "directors": [
+    "Ruben Östlund"
+   ],
+   "cast": [
+    "Elisabeth Moss",
+    "Dominic West",
+    "Claes Bang",
+    "Terry Notary",
+    "Peter Viitanen"
+   ],
+   "imdb": "tt4995790",
+   "runtime": 152,
+   "countries": [
+    "Denmark",
+    "France",
+    "Germany",
+    "Sweden"
+   ]
+  },
+  "Force Majeure|2014": {
+   "qid": "Q10706553",
+   "directors": [
+    "Ruben Östlund"
+   ],
+   "cast": [
+    "Brady Corbet",
+    "Kristofer Hivju",
+    "Lisa Loven Kongsli",
+    "Johannes Bah Kuhnke",
+    "Malin Dahl"
+   ],
+   "imdb": "tt2121382",
+   "runtime": 120,
+   "countries": [
+    "Denmark",
+    "France",
+    "Norway",
+    "Sweden"
+   ]
+  },
+  "The Lives of Others|2006": {
+   "qid": "Q153882",
+   "directors": [
+    "Florian Henckel von Donnersmarck"
+   ],
+   "cast": [
+    "Ulrich Mühe",
+    "Martina Gedeck",
+    "Sebastian Koch",
+    "Ulrich Tukur",
+    "Herbert Knaup"
+   ],
+   "imdb": "tt0405094",
+   "runtime": 137,
+   "countries": [
+    "Germany"
+   ]
+  },
+  "Head-On|2004": {
+   "qid": "Q325648",
+   "directors": [
+    "Fatih Akin"
+   ],
+   "cast": [
+    "Sibel Kekilli",
+    "Maceo Parker",
+    "Meltem Cumbul",
+    "Birol Ünel",
+    "Mehmet Kurtuluş"
+   ],
+   "imdb": "tt0347048",
+   "runtime": 116,
+   "countries": [
+    "Germany",
+    "Turkey"
+   ]
+  },
+  "Once Upon a Time in Anatolia|2011": {
+   "qid": "Q1707497",
+   "directors": [
+    "Nuri Bilge Ceylan"
+   ],
+   "cast": [
+    "Yılmaz Erdoğan",
+    "Mehmet Emin Toprak",
+    "Ahmet Mümtaz Taylan",
+    "Fırat Tanış",
+    "Ercan Kesal"
+   ],
+   "imdb": "tt1827487",
+   "runtime": 157,
+   "countries": [
+    "Bosnia and Herzegovina",
+    "Turkey"
+   ]
+  },
+  "Mustang|2015": {
+   "qid": "Q19824796",
+   "directors": [
+    "Deniz Gamze Ergüven"
+   ],
+   "cast": [
+    "İlayda Akdoğan",
+    "Ayberk Pekcan",
+    "Elit İşcan",
+    "Nihal Koldaş",
+    "Burak Yiğit"
+   ],
+   "imdb": "tt3966404",
+   "runtime": 97,
+   "countries": [
+    "France",
+    "Germany",
+    "Qatar",
+    "Turkey"
+   ]
+  },
+  "Incendies|2010": {
+   "qid": "Q1212650",
+   "directors": [
+    "Denis Villeneuve"
+   ],
+   "cast": [
+    "Lubna Azabal",
+    "Mélissa Désormeaux-Poulin",
+    "Jackie Sawiris",
+    "Rémy Girard",
+    "Maxim Gaudette"
+   ],
+   "imdb": "tt1255953",
+   "runtime": 133,
+   "countries": [
+    "Canada",
+    "France"
+   ]
+  },
+  "The Class|2008": {
+   "qid": "Q1139259",
+   "directors": [
+    "Laurent Cantet"
+   ],
+   "cast": [
+    "Valérie Benguigui",
+    "François Bégaudeau",
+    "Louise Grinberg",
+    "Arthur Fogel"
+   ],
+   "imdb": "tt1068646",
+   "runtime": 128,
+   "countries": [
+    "France"
+   ]
+  },
+  "Atlantics|2019": {
+   "qid": "Q63212985",
+   "directors": [
+    "Mati Diop"
+   ],
+   "cast": [
+    "Mame Bineta Sané",
+    "Amadou Mbow",
+    "Diankou Sembene",
+    "Ibrahima Traore"
+   ],
+   "imdb": "tt10199586",
+   "runtime": 106,
+   "countries": [
+    "Belgium",
+    "France",
+    "Senegal"
+   ]
+  },
+  "Rafiki|2018": {
+   "qid": "Q52272990",
+   "directors": [
+    "Wanuri Kahiu"
+   ],
+   "cast": [
+    "Nini Wacera",
+    "Patricia Kihoro",
+    "Samantha Mugatsia",
+    "Muthoni Gathecha",
+    "Nice Githinji"
+   ],
+   "imdb": "tt8286894",
+   "runtime": 82,
+   "countries": [
+    "Kenya"
+   ]
+  },
+  "Supa Modo|2018": {
+   "qid": "Q48671647",
+   "directors": [
+    "Likarion Wainaina"
+   ],
+   "cast": [],
+   "imdb": "tt7772412",
+   "countries": [
+    "Germany",
+    "Kenya"
+   ]
+  },
+  "The Band's Visit|2007": {
+   "qid": "Q1211239",
+   "directors": [
+    "Eran Kolirin"
+   ],
+   "cast": [
+    "Ronit Elkabetz",
+    "Sasson Gabai",
+    "Saleh Bakri",
+    "Uri Gavriel",
+    "Tomer Yosef"
+   ],
+   "imdb": "tt1032856",
+   "runtime": 87,
+   "countries": [
+    "France",
+    "Israel"
+   ]
+  },
+  "Caramel|2007": {
+   "qid": "Q544992",
+   "directors": [
+    "Nadine Labaki"
+   ],
+   "cast": [
+    "Nadine Labaki",
+    "Yasmine Al Massri",
+    "Adel Karam"
+   ],
+   "imdb": "tt0825236",
+   "runtime": 92,
+   "countries": [
+    "France",
+    "Lebanon"
+   ]
+  },
+  "Omar|2013": {
+   "qid": "Q13475554",
+   "directors": [
+    "Hany Abu-Assad"
+   ],
+   "cast": [
+    "Adam Bakri",
+    "Leem Lubany",
+    "Waleed Zuaiter",
+    "Yousef Sweid",
+    "Anna Maria Hawa"
+   ],
+   "imdb": "tt2852406",
+   "runtime": 96,
+   "countries": [
+    "Occupied Palestinian territory",
+    "Palestine"
+   ]
+  },
+  "Uncle Boonmee Who Can Recall His Past Lives|2010": {
+   "qid": "Q553901",
+   "directors": [
+    "Apichatpong Weerasethakul"
+   ],
+   "cast": [
+    "Jenjira Pongpas"
+   ],
+   "imdb": "tt1588895",
+   "runtime": 113,
+   "countries": [
+    "France",
+    "Thailand"
+   ]
+  },
+  "Bad Genius|2017": {
+   "qid": "Q29465710",
+   "directors": [
+    "Nattawut Poonpiriya"
+   ],
+   "cast": [
+    "Chutimon Chuengcharoensukying",
+    "Chanon Santinatornkul",
+    "Teeradon Supapunpinyo",
+    "Eisaya Hosuwan",
+    "Thaneth Warakulnukroh"
+   ],
+   "imdb": "tt6788942",
+   "runtime": 130,
+   "countries": [
+    "Thailand"
+   ]
+  },
+  "The Raid|2011": {
+   "qid": "Q1573662",
+   "directors": [
+    "Gareth Evans"
+   ],
+   "cast": [
+    "Iko Uwais",
+    "Joe Taslim",
+    "Yayan Ruhian",
+    "Donny Alamsyah"
+   ],
+   "imdb": "tt1899353",
+   "runtime": 101,
+   "countries": [
+    "Indonesia"
+   ]
+  },
+  "The Act of Killing|2012": {
+   "qid": "Q7712287",
+   "directors": [
+    "Joshua Oppenheimer",
+    "Christine Cynn"
+   ],
+   "cast": [],
+   "imdb": "tt2375605",
+   "runtime": 159,
+   "countries": [
+    "Denmark",
+    "Norway",
+    "United Kingdom"
+   ]
+  },
+  "Honeyland|2019": {
+   "qid": "Q61456310",
+   "directors": [
+    "Tamara Kotevska",
+    "Ljubomir Stefanov"
+   ],
+   "cast": [],
+   "imdb": "tt8991268",
+   "runtime": 89,
+   "countries": [
+    "North Macedonia"
+   ]
+  },
+  "Free Solo|2018": {
+   "qid": "Q58814632",
+   "directors": [
+    "Elizabeth Chai Vasarhelyi",
+    "Jimmy Chin"
+   ],
+   "cast": [],
+   "imdb": "tt7775622",
+   "runtime": 96,
+   "countries": [
+    "United States"
+   ]
+  },
+  "March of the Penguins|2005": {
+   "qid": "Q330113",
+   "directors": [
+    "Luc Jacquet"
+   ],
+   "cast": [],
+   "imdb": "tt0428803",
+   "runtime": 84,
+   "countries": [
+    "France"
+   ]
+  },
+  "13th|2016": {
+   "qid": "Q26824229",
+   "directors": [
+    "Ava DuVernay"
+   ],
+   "cast": [
+    "Barack Obama",
+    "Donald Trump",
+    "Ronald Reagan",
+    "George W. Bush",
+    "Martin Luther King Jr."
+   ],
+   "imdb": "tt5895028",
+   "runtime": 100,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Won't You Be My Neighbor?|2018": {
+   "qid": "Q52151494",
+   "directors": [
+    "Morgan Neville"
+   ],
+   "cast": [
+    "Fred Rogers",
+    "Yo-Yo Ma",
+    "David Newell",
+    "Tom Junod",
+    "Joe Negri"
+   ],
+   "imdb": "tt7681902",
+   "countries": [
+    "United States"
+   ]
+  },
+  "Searching for Sugar Man|2012": {
+   "qid": "Q287708",
+   "directors": [
+    "Malik Bendjelloul"
+   ],
+   "cast": [
+    "Sixto Rodriguez"
+   ],
+   "imdb": "tt2125608",
+   "runtime": 86,
+   "countries": [
+    "Sweden",
+    "United Kingdom"
+   ]
+  },
+  "Singin' in the Rain|1952": {
+   "qid": "Q309153",
+   "directors": [
+    "Gene Kelly",
+    "Stanley Donen"
+   ],
+   "cast": [
+    "Gene Kelly",
+    "Debbie Reynolds",
+    "Rita Moreno",
+    "Cyd Charisse",
+    "Donald O'Connor"
+   ],
+   "imdb": "tt0045152",
+   "runtime": 103,
+   "countries": [
+    "United States"
+   ]
+  },
+  "West Side Story|1961": {
+   "qid": "Q273704",
+   "directors": [
+    "Robert Wise",
+    "Jerome Robbins"
+   ],
+   "cast": [
+    "Natalie Wood",
+    "Rita Moreno",
+    "George Chakiris",
+    "Richard Beymer",
+    "Russ Tamblyn"
+   ],
+   "imdb": "tt0055614",
+   "runtime": 150,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Chicago|2002": {
+   "qid": "Q189889",
+   "directors": [
+    "Rob Marshall"
+   ],
+   "cast": [
+    "Catherine Zeta-Jones",
+    "Renée Zellweger",
+    "Richard Gere",
+    "Lucy Liu",
+    "Queen Latifah"
+   ],
+   "imdb": "tt0299658",
+   "runtime": 113,
+   "countries": [
+    "Canada",
+    "Germany",
+    "United States"
+   ]
+  },
+  "The Sound of Music|1965": {
+   "qid": "Q60072",
+   "directors": [
+    "Robert Wise"
+   ],
+   "cast": [
+    "Christopher Plummer",
+    "Julie Andrews",
+    "Eleanor Parker",
+    "Peggy Wood",
+    "Marni Nixon"
+   ],
+   "imdb": "tt0059742",
+   "runtime": 174,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Dil Se..|1998": {
+   "qid": "Q944356",
+   "directors": [
+    "Mani Ratnam"
+   ],
+   "cast": [
+    "Shah Rukh Khan",
+    "Preity Zinta",
+    "Manisha Koirala"
+   ],
+   "imdb": "tt0164538",
+   "runtime": 163,
+   "countries": [
+    "India"
+   ]
+  },
+  "Devdas|2002": {
+   "qid": "Q247854",
+   "directors": [
+    "Sanjay Leela Bhansali"
+   ],
+   "cast": [
+    "Shah Rukh Khan",
+    "Aishwarya Rai",
+    "Madhuri Dixit",
+    "Jackie Shroff",
+    "Kirron Kher"
+   ],
+   "imdb": "tt0238936",
+   "runtime": 185,
+   "countries": [
+    "India"
+   ]
+  },
+  "Barfi!|2012": {
+   "qid": "Q2558109",
+   "directors": [
+    "Anurag Basu"
+   ],
+   "cast": [
+    "Priyanka Chopra",
+    "Ranbir Kapoor",
+    "Ileana D'Cruz",
+    "Roopa Ganguly",
+    "Ashish Vidyarthi"
+   ],
+   "imdb": "tt2082197",
+   "runtime": 151,
+   "countries": [
+    "India"
+   ]
+  },
+  "Swades|2004": {
+   "qid": "Q1759650",
+   "directors": [
+    "Ashutosh Gowariker"
+   ],
+   "cast": [
+    "Shah Rukh Khan",
+    "Gayatri Joshi",
+    "Kishori Ballal"
+   ],
+   "imdb": "tt0367110",
+   "runtime": 187,
+   "countries": [
+    "India"
+   ]
+  },
+  "Queen|2013": {
+   "qid": "Q15907466",
+   "directors": [
+    "Vikas Bahl"
+   ],
+   "cast": [
+    "Kangana Ranaut",
+    "Lisa Haydon",
+    "Rajkummar Rao"
+   ],
+   "imdb": "tt3322420",
+   "runtime": 146,
+   "countries": [
+    "India"
+   ]
+  },
+  "Udaan|2010": {
+   "qid": "Q2402889",
+   "directors": [
+    "Vikramaditya Motwane"
+   ],
+   "cast": [
+    "Ronit Roy",
+    "Ram Kapoor",
+    "Manjot Singh",
+    "Rajat Barmecha"
+   ],
+   "imdb": "tt1639426",
+   "runtime": 138,
+   "countries": [
+    "India"
+   ]
+  },
+  "Ship of Theseus|2012": {
+   "qid": "Q14243960",
+   "directors": [
+    "Anand Gandhi"
+   ],
+   "cast": [
+    "Aida El-Kashef",
+    "Paromita Vohra"
+   ],
+   "imdb": "tt1773764",
+   "countries": [
+    "India"
+   ]
+  },
+  "Tumbbad|2018": {
+   "qid": "Q56279881",
+   "directors": [
+    "Anand Gandhi",
+    "Rahi Anil Barve"
+   ],
+   "cast": [
+    "Ronjini Chakraborty",
+    "Anita Date Kelkar",
+    "Sohum Shah",
+    "Rudra Soni",
+    "Harish Khanna"
+   ],
+   "imdb": "tt8239946",
+   "runtime": 104,
+   "countries": [
+    "India",
+    "Sweden"
+   ]
+  },
+  "Stree|2018": {
+   "qid": "Q56274037",
+   "directors": [
+    "Amar Kaushik"
+   ],
+   "cast": [
+    "Shraddha Kapoor",
+    "Rajkummar Rao",
+    "Pankaj Tripathi",
+    "Aparshakti Khurana"
+   ],
+   "imdb": "tt8108202",
+   "countries": [
+    "India"
+   ]
+  },
+  "Us|2019": {
+   "qid": "Q56000996",
+   "directors": [
+    "Jordan Peele"
+   ],
+   "cast": [
+    "Lupita Nyong'o",
+    "Elisabeth Moss",
+    "Nicole Richie",
+    "Yahya Abdul-Mateen II",
+    "Winston Duke"
+   ],
+   "imdb": "tt6857112",
+   "runtime": 116,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Nope|2022": {
+   "qid": "Q107176162",
+   "directors": [
+    "Jordan Peele"
+   ],
+   "cast": [
+    "Daniel Kaluuya",
+    "Keke Palmer",
+    "Steven Yeun",
+    "Keith David",
+    "Barbie Ferreira"
+   ],
+   "imdb": "tt10954984",
+   "runtime": 130,
+   "countries": [
+    "Canada",
+    "Japan",
+    "United States"
+   ]
+  },
+  "The Babadook|2014": {
+   "qid": "Q16011764",
+   "directors": [
+    "Jennifer Kent"
+   ],
+   "cast": [
+    "Essie Davis",
+    "Daniel Henshall",
+    "Hayley McElhinney",
+    "Benjamin Winspear",
+    "Ben Winspear"
+   ],
+   "imdb": "tt2321549",
+   "runtime": 94,
+   "countries": [
+    "Australia",
+    "Canada"
+   ]
+  },
+  "Let the Right One In|2008": {
+   "qid": "Q144756",
+   "directors": [
+    "Tomas Alfredson"
+   ],
+   "cast": [
+    "Lina Leandersson",
+    "Peter Carlberg",
+    "Ika Nord",
+    "Kåre Hedebrant",
+    "Per Ragnar"
+   ],
+   "imdb": "tt1139797",
+   "runtime": 110,
+   "countries": [
+    "Sweden"
+   ]
+  },
+  "Raw|2016": {
+   "qid": "Q21427355",
+   "directors": [
+    "Julia Ducournau"
+   ],
+   "cast": [
+    "Ella Rumpf",
+    "Bouli Lanners",
+    "Garance Marillier",
+    "Laurent Lucas",
+    "Marion Vernoux"
+   ],
+   "imdb": "tt4954522",
+   "runtime": 99,
+   "countries": [
+    "Belgium",
+    "France"
+   ]
+  },
+  "A Girl Walks Home Alone at Night|2014": {
+   "qid": "Q17061299",
+   "directors": [
+    "Ana Lily Amirpour"
+   ],
+   "cast": [
+    "Marshall Manesh",
+    "Mozhan Marnò",
+    "Ana Lily Amirpour",
+    "Sheila Vand",
+    "Dominic Rains"
+   ],
+   "imdb": "tt2326554",
+   "runtime": 101,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Under the Shadow|2016": {
+   "qid": "Q23925023",
+   "directors": [
+    "Babak Anvari"
+   ],
+   "cast": [
+    "Narges Rashidi",
+    "Arash Marandi",
+    "Bobby Naderi"
+   ],
+   "imdb": "tt4273292",
+   "runtime": 84,
+   "countries": [
+    "Jordan",
+    "Qatar",
+    "United Kingdom"
+   ]
+  },
+  "The Host|2006": {
+   "qid": "Q488222",
+   "directors": [
+    "Bong Joon-ho"
+   ],
+   "cast": [
+    "Bae Doona",
+    "Song Kang-ho",
+    "Scott Wilson",
+    "Ko A-sung",
+    "Byun Hee-bong"
+   ],
+   "imdb": "tt0468492",
+   "runtime": 119,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "Mother|2009": {
+   "qid": "Q483761",
+   "directors": [
+    "Bong Joon-ho"
+   ],
+   "cast": [
+    "Won Bin",
+    "Kim Hye-ja",
+    "Jin Goo",
+    "Yoon Je-moon",
+    "Lee Mi-do"
+   ],
+   "imdb": "tt1216496",
+   "runtime": 128,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "The Chaser|2008": {
+   "qid": "Q496724",
+   "directors": [
+    "Na Hong-jin"
+   ],
+   "cast": [
+    "Ha Jung-woo",
+    "Seo Young-hee",
+    "Kim Yun-seok"
+   ],
+   "imdb": "tt1190539",
+   "runtime": 123,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "I Saw the Devil|2010": {
+   "qid": "Q485725",
+   "directors": [
+    "Kim Ji-woon"
+   ],
+   "cast": [
+    "Lee Byung-hun",
+    "Choi Min-sik"
+   ],
+   "imdb": "tt1588170",
+   "runtime": 141,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "A Bittersweet Life|2005": {
+   "qid": "Q485462",
+   "directors": [
+    "Kim Ji-woon"
+   ],
+   "cast": [
+    "Lee Byung-hun",
+    "Shin Min-a",
+    "Hwang Jung-min",
+    "Oh Dal-su"
+   ],
+   "imdb": "tt0456912",
+   "runtime": 120,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "The Man from Nowhere|2010": {
+   "qid": "Q485709",
+   "directors": [
+    "Lee Jeong-beom"
+   ],
+   "cast": [
+    "Kim Sae-ron",
+    "Won Bin",
+    "Kim Sung-oh",
+    "Kim Hee-won",
+    "Thanayong Wongtrakun"
+   ],
+   "imdb": "tt1527788",
+   "runtime": 119,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "Ip Man|2008": {
+   "qid": "Q573743",
+   "directors": [
+    "Wilson Yip"
+   ],
+   "cast": [
+    "Donnie Yen",
+    "Simon Yam",
+    "Lynn Hung",
+    "Tenma Shibuya",
+    "Hiroyuki Ikeuchi"
+   ],
+   "imdb": "tt1220719",
+   "runtime": 106,
+   "countries": [
+    "Hong Kong"
+   ]
+  },
+  "Hero|2002": {
+   "qid": "Q260379",
+   "directors": [
+    "Zhang Yimou"
+   ],
+   "cast": [
+    "Jet Li",
+    "Zhang Ziyi",
+    "Donnie Yen",
+    "Maggie Cheung",
+    "Tony Leung"
+   ],
+   "imdb": "tt0299977",
+   "runtime": 99,
+   "countries": [
+    "People's Republic of China"
+   ]
+  },
+  "House of Flying Daggers|2004": {
+   "qid": "Q369388",
+   "directors": [
+    "Zhang Yimou"
+   ],
+   "cast": [
+    "Zhang Ziyi",
+    "Andy Lau",
+    "Takeshi Kaneshiro",
+    "Song Dandan"
+   ],
+   "imdb": "tt0385004",
+   "runtime": 119,
+   "countries": [
+    "Hong Kong",
+    "People's Republic of China"
+   ]
+  },
+  "Raise the Red Lantern|1991": {
+   "qid": "Q665146",
+   "directors": [
+    "Zhang Yimou"
+   ],
+   "cast": [
+    "Gong Li",
+    "He Saifei",
+    "Kong Lin",
+    "Cao Cuifen"
+   ],
+   "imdb": "tt0101640",
+   "runtime": 125,
+   "countries": [
+    "People's Republic of China"
+   ]
+  },
+  "Farewell My Concubine|1993": {
+   "qid": "Q696413",
+   "directors": [
+    "Chen Kaige"
+   ],
+   "cast": [
+    "Gong Li",
+    "Leslie Cheung",
+    "Ge You",
+    "Zhang Fengyi",
+    "Jiang Wenli"
+   ],
+   "imdb": "tt0106332",
+   "runtime": 171,
+   "countries": [
+    "People's Republic of China"
+   ]
+  },
+  "Still Life|2006": {
+   "qid": "Q1371155",
+   "directors": [
+    "Jia Zhangke"
+   ],
+   "cast": [
+    "Zhao Tao",
+    "Wang Hongwei",
+    "Han Sanming"
+   ],
+   "imdb": "tt0859765",
+   "runtime": 111,
+   "countries": [
+    "Hong Kong",
+    "People's Republic of China"
+   ]
+  },
+  "A Touch of Sin|2013": {
+   "qid": "Q13218237",
+   "directors": [
+    "Jia Zhangke"
+   ],
+   "cast": [
+    "Zhao Tao",
+    "Wang Baoqiang",
+    "Jiang Wu",
+    "Zhang Jiayi",
+    "Li Meng"
+   ],
+   "imdb": "tt2852400",
+   "runtime": 130,
+   "countries": [
+    "Hong Kong",
+    "Japan",
+    "People's Republic of China"
+   ]
+  },
+  "Nobody Knows|2004": {
+   "qid": "Q612298",
+   "directors": [
+    "Hirokazu Kore-eda"
+   ],
+   "cast": [
+    "Yūya Yagira",
+    "Ryō Kase",
+    "Susumu Terajima",
+    "Kenichi Endō",
+    "You"
+   ],
+   "imdb": "tt0408664",
+   "runtime": 141,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Like Father, Like Son|2013": {
+   "qid": "Q13218260",
+   "directors": [
+    "Hirokazu Kore-eda"
+   ],
+   "cast": [
+    "Masaharu Fukuyama",
+    "Kirin Kiki",
+    "Yōko Maki",
+    "Jun Kunimura",
+    "Machiko Ono"
+   ],
+   "imdb": "tt2331143",
+   "runtime": 120,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Our Little Sister|2015": {
+   "qid": "Q19806501",
+   "directors": [
+    "Hirokazu Kore-eda"
+   ],
+   "cast": [
+    "Masami Nagasawa",
+    "Suzu Hirose",
+    "Haruka Ayase",
+    "Kirin Kiki",
+    "Kaho"
+   ],
+   "imdb": "tt3756788",
+   "runtime": 127,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "After the Storm|2016": {
+   "qid": "Q21857474",
+   "directors": [
+    "Hirokazu Kore-eda"
+   ],
+   "cast": [
+    "Hiroshi Abe",
+    "Kirin Kiki",
+    "Yōko Maki"
+   ],
+   "imdb": "tt5294966",
+   "runtime": 117,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "The Taste of Tea|2004": {
+   "qid": "Q472012",
+   "directors": [
+    "Katsuhito Ishii"
+   ],
+   "cast": [
+    "Rinko Kikuchi",
+    "Hideaki Anno",
+    "Tadanobu Asano",
+    "Kenichi Matsuyama",
+    "Anna Tsuchiya"
+   ],
+   "imdb": "tt0413893",
+   "runtime": 124,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Perfect Days|2023": {
+   "qid": "Q117663112",
+   "directors": [
+    "Wim Wenders"
+   ],
+   "cast": [
+    "Kōji Yakusho",
+    "Tokio Emoto",
+    "Min Tanaka",
+    "Yumi Asō",
+    "Sayuri Ishikawa"
+   ],
+   "imdb": "tt27503384",
+   "runtime": 123,
+   "countries": [
+    "Germany",
+    "Japan"
+   ]
+  },
+  "The Fabelmans|2022": {
+   "qid": "Q107710009",
+   "directors": [
+    "Steven Spielberg"
+   ],
+   "cast": [
+    "David Lynch",
+    "Michelle Williams",
+    "Seth Rogen",
+    "Paul Dano",
+    "Greg Grunberg"
+   ],
+   "imdb": "tt14208870",
+   "runtime": 151,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Holdovers|2023": {
+   "qid": "Q112114745",
+   "directors": [
+    "Alexander Payne"
+   ],
+   "cast": [
+    "Paul Giamatti",
+    "Carrie Preston",
+    "Da'Vine Joy Randolph",
+    "Dominic Sessa"
+   ],
+   "imdb": "tt14849194",
+   "runtime": 133,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Anatomy of a Fall|2023": {
+   "qid": "Q117037697",
+   "directors": [
+    "Justine Triet"
+   ],
+   "cast": [
+    "Sandra Hüller",
+    "Swann Arlaud",
+    "Jehnny Beth",
+    "Antoine Reinartz",
+    "Samuel Theis"
+   ],
+   "imdb": "tt17009710",
+   "runtime": 156,
+   "countries": [
+    "France"
+   ]
+  },
+  "The Zone of Interest|2023": {
+   "qid": "Q115993222",
+   "directors": [
+    "Jonathan Glazer"
+   ],
+   "cast": [
+    "Sandra Hüller",
+    "Christian Friedel",
+    "Imogen Kogge",
+    "Ralph Herforth",
+    "Maximilian Beck"
+   ],
+   "imdb": "tt7160372",
+   "runtime": 106,
+   "countries": [
+    "Poland",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "All Quiet on the Western Front|2022": {
+   "qid": "Q108837349",
+   "directors": [
+    "Edward Berger"
+   ],
+   "cast": [
+    "Daniel Brühl",
+    "Felix Kammerer",
+    "Albrecht Schuch",
+    "Devid Striesow",
+    "Thibault de Montalembert"
+   ],
+   "imdb": "tt1016150",
+   "runtime": 147,
+   "countries": [
+    "Germany",
+    "United States"
+   ]
+  },
+  "Decision to Leave|2022": {
+   "qid": "Q100889636",
+   "directors": [
+    "Park Chan-wook"
+   ],
+   "cast": [
+    "Tang Wei",
+    "Lee Jeong-hyeon",
+    "Ko Kyung-pyo",
+    "Park Hae-il",
+    "Jeong E-suh"
+   ],
+   "imdb": "tt12477480",
+   "runtime": 138,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "Broker|2022": {
+   "qid": "Q23994919",
+   "directors": [
+    "Hirokazu Kore-eda"
+   ],
+   "cast": [
+    "IU",
+    "Bae Doona",
+    "Song Kang-ho",
+    "Gang Dong-won",
+    "Lee Joo-young"
+   ],
+   "imdb": "tt13056052",
+   "runtime": 129,
+   "countries": [
+    "South Korea"
+   ]
+  },
+  "The Worst Person in the World|2021": {
+   "qid": "Q107089587",
+   "directors": [
+    "Joachim Trier"
+   ],
+   "cast": [
+    "Renate Reinsve",
+    "Anders Danielsen Lie",
+    "Silje Storstein",
+    "Ruby Dagnall",
+    "Herbert Nordrum"
+   ],
+   "imdb": "tt10370710",
+   "runtime": 121,
+   "countries": [
+    "Denmark",
+    "France",
+    "Norway",
+    "Sweden"
+   ]
+  },
+  "Another Round|2020": {
+   "qid": "Q69303989",
+   "directors": [
+    "Thomas Vinterberg"
+   ],
+   "cast": [
+    "Mads Mikkelsen",
+    "Maria Bonnevie",
+    "Thomas Bo Larsen",
+    "Lars Ranthe",
+    "Susse Wold"
+   ],
+   "imdb": "tt10288566",
+   "runtime": 117,
+   "countries": [
+    "Denmark",
+    "Netherlands",
+    "Sweden"
+   ]
+  },
+  "The Hand of God|2021": {
+   "qid": "Q104856751",
+   "directors": [
+    "Paolo Sorrentino"
+   ],
+   "cast": [
+    "Toni Servillo",
+    "Luisa Ranieri",
+    "Lino Musella"
+   ],
+   "imdb": "tt12680684",
+   "runtime": 130,
+   "countries": [
+    "Italy"
+   ]
+  },
+  "The Great Beauty|2013": {
+   "qid": "Q6379279",
+   "directors": [
+    "Paolo Sorrentino"
+   ],
+   "cast": [
+    "Fanny Ardant",
+    "Sabrina Ferilli",
+    "Toni Servillo",
+    "Serena Grandi",
+    "Carlo Verdone"
+   ],
+   "imdb": "tt2358891",
+   "runtime": 142,
+   "countries": [
+    "France",
+    "Italy"
+   ]
+  },
+  "Il Postino|1994": {
+   "qid": "Q258647",
+   "directors": [
+    "Michael Radford"
+   ],
+   "cast": [
+    "Philippe Noiret",
+    "Massimo Troisi",
+    "Maria Grazia Cucinotta",
+    "Anna Bonaiuto",
+    "Simona Caparrini"
+   ],
+   "imdb": "tt0110877",
+   "runtime": 108,
+   "countries": [
+    "Belgium",
+    "France",
+    "Italy"
+   ]
+  },
+  "Life Is Beautiful|1997": {
+   "qid": "Q19355",
+   "directors": [
+    "Roberto Benigni"
+   ],
+   "cast": [
+    "Roberto Benigni",
+    "Marisa Paredes",
+    "Horst Buchholz",
+    "Nicoletta Braschi",
+    "Omero Antonutti"
+   ],
+   "imdb": "tt0118799",
+   "runtime": 116,
+   "countries": [
+    "Italy"
+   ]
+  },
+  "The Platform|2019": {
+   "qid": "Q67628998",
+   "directors": [
+    "Galder Gaztelu-Urrutia"
+   ],
+   "cast": [
+    "Antonia San Juan",
+    "Iván Massagué",
+    "Emilio Buale",
+    "Alexandra Masangkay",
+    "Zorion Egileor"
+   ],
+   "imdb": "tt8228288",
+   "runtime": 94,
+   "countries": [
+    "Spain"
+   ]
+  },
+  "The Orphanage|2007": {
+   "qid": "Q923911",
+   "directors": [
+    "J. A. Bayona"
+   ],
+   "cast": [
+    "Geraldine Chaplin",
+    "Belén Rueda",
+    "Óscar Casas",
+    "Mabel Rivera",
+    "Montserrat Carulla"
+   ],
+   "imdb": "tt0464141",
+   "runtime": 101,
+   "countries": [
+    "Mexico",
+    "Spain"
+   ]
+  },
+  "Talk to Her|2002": {
+   "qid": "Q478780",
+   "directors": [
+    "Pedro Almodóvar"
+   ],
+   "cast": [
+    "Geraldine Chaplin",
+    "Paz Vega",
+    "Pina Bausch",
+    "Caetano Veloso",
+    "Marisa Paredes"
+   ],
+   "imdb": "tt0287467",
+   "runtime": 112,
+   "countries": [
+    "Spain"
+   ]
+  },
+  "All About My Mother|1999": {
+   "qid": "Q329805",
+   "directors": [
+    "Pedro Almodóvar"
+   ],
+   "cast": [
+    "Penélope Cruz",
+    "Bette Davis",
+    "Pedro Almodóvar",
+    "Anne Baxter",
+    "Celeste Holm"
+   ],
+   "imdb": "tt0185125",
+   "runtime": 104,
+   "countries": [
+    "France",
+    "Spain"
+   ]
+  },
+  "Volver|2006": {
+   "qid": "Q209667",
+   "directors": [
+    "Pedro Almodóvar"
+   ],
+   "cast": [
+    "Penélope Cruz",
+    "Carmen Maura",
+    "Chus Lampreave",
+    "Carmen Machi",
+    "Lola Dueñas"
+   ],
+   "imdb": "tt0441909",
+   "runtime": 121,
+   "countries": [
+    "Spain"
+   ]
+  },
+  "The Skin I Live In|2011": {
+   "qid": "Q1130310",
+   "directors": [
+    "Pedro Almodóvar"
+   ],
+   "cast": [
+    "Antonio Banderas",
+    "Marisa Paredes",
+    "Elena Anaya",
+    "Carmen Machi",
+    "Blanca Suárez"
+   ],
+   "imdb": "tt1189073",
+   "runtime": 120,
+   "countries": [
+    "Spain"
+   ]
+  },
+  "The Motorcycle Diaries|2004": {
+   "qid": "Q309246",
+   "directors": [
+    "Walter Salles"
+   ],
+   "cast": [
+    "Gael García Bernal",
+    "Alberto Granado",
+    "Mía Maestro",
+    "Rodrigo de la Serna",
+    "Mercedes Moran"
+   ],
+   "imdb": "tt0318462",
+   "runtime": 126,
+   "countries": [
+    "Argentina",
+    "Brazil",
+    "Chile",
+    "France",
+    "Germany",
+    "Peru",
+    "Spain",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Central Station|1998": {
+   "qid": "Q1054036",
+   "directors": [
+    "Walter Salles"
+   ],
+   "cast": [
+    "Fernanda Montenegro",
+    "Marília Pêra",
+    "Matheus Nachtergaele",
+    "Othon Bastos",
+    "Vinícius de Oliveira"
+   ],
+   "imdb": "tt0140888",
+   "runtime": 113,
+   "countries": [
+    "Brazil",
+    "France"
+   ]
+  },
+  "City of Men|2007": {
+   "qid": "Q1910645",
+   "directors": [
+    "Paulo Morelli"
+   ],
+   "cast": [
+    "Jonathan Haagensen",
+    "Darlan Cunha",
+    "Douglas Silva"
+   ],
+   "imdb": "tt0870090",
+   "runtime": 110,
+   "countries": [
+    "Brazil"
+   ]
+  },
+  "Elite Squad|2007": {
+   "qid": "Q282781",
+   "directors": [
+    "José Padilha"
+   ],
+   "cast": [
+    "Wagner Moura",
+    "Fernanda Machado",
+    "Caio Junqueira",
+    "André Ramiro"
+   ],
+   "imdb": "tt0861739",
+   "runtime": 118,
+   "countries": [
+    "Brazil"
+   ]
+  },
+  "The Second Mother|2015": {
+   "qid": "Q18703886",
+   "directors": [
+    "Anna Muylaert"
+   ],
+   "cast": [
+    "Regina Casé",
+    "Camila Márdila",
+    "Lourenço Mutarelli",
+    "Luís Miranda",
+    "Michel Joelsas"
+   ],
+   "imdb": "tt3742378",
+   "runtime": 112,
+   "countries": [
+    "Brazil"
+   ]
+  },
+  "Aquarius|2016": {
+   "qid": "Q23833608",
+   "directors": [
+    "Kleber Mendonça Filho"
+   ],
+   "cast": [
+    "Sônia Braga",
+    "Maeve Jinkings",
+    "Humberto Carrão",
+    "Irandhir Santos"
+   ],
+   "imdb": "tt5221584",
+   "runtime": 145,
+   "countries": [
+    "Brazil"
+   ]
+  },
+  "Bacurau|2019": {
+   "qid": "Q63246555",
+   "directors": [
+    "Kleber Mendonça Filho"
+   ],
+   "cast": [
+    "Udo Kier",
+    "Sônia Braga",
+    "Karine Teles",
+    "Silvero Pereira",
+    "Antonio Saboia"
+   ],
+   "imdb": "tt2762506",
+   "runtime": 131,
+   "countries": [
+    "Brazil",
+    "France"
+   ]
+  },
+  "Wolfwalkers|2020": {
+   "qid": "Q68681463",
+   "directors": [
+    "Tomm Moore",
+    "Ross Stewart"
+   ],
+   "cast": [],
+   "imdb": "tt5198068",
+   "runtime": 103,
+   "countries": [
+    "France",
+    "Ireland",
+    "Luxembourg",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Song of the Sea|2014": {
+   "qid": "Q17125101",
+   "directors": [
+    "Tomm Moore"
+   ],
+   "cast": [],
+   "imdb": "tt1865505",
+   "runtime": 93,
+   "countries": [
+    "Belgium",
+    "Denmark",
+    "France",
+    "Ireland",
+    "Luxembourg"
+   ]
+  },
+  "The Breadwinner|2017": {
+   "qid": "Q19862858",
+   "directors": [
+    "Nora Twomey"
+   ],
+   "cast": [],
+   "imdb": "tt3901826",
+   "runtime": 94,
+   "countries": [
+    "Canada",
+    "Ireland",
+    "Luxembourg"
+   ]
+  },
+  "The Red Turtle|2016": {
+   "qid": "Q19840623",
+   "directors": [
+    "Michaël Dudok de Wit"
+   ],
+   "cast": [],
+   "imdb": "tt3666024",
+   "runtime": 80,
+   "countries": [
+    "Belgium",
+    "France",
+    "Japan"
+   ]
+  },
+  "Mirai|2018": {
+   "qid": "Q45865176",
+   "directors": [
+    "Mamoru Hosoda"
+   ],
+   "cast": [],
+   "imdb": "tt6900448",
+   "runtime": 100,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "The Boy and the Heron|2023": {
+   "qid": "Q47482560",
+   "directors": [
+    "Hayao Miyazaki"
+   ],
+   "cast": [],
+   "imdb": "tt6587046",
+   "runtime": 124,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Belle|2021": {
+   "qid": "Q104184744",
+   "directors": [
+    "Mamoru Hosoda"
+   ],
+   "cast": [],
+   "imdb": "tt13651628",
+   "runtime": 122,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Puss in Boots: The Last Wish|2022": {
+   "qid": "Q31271384",
+   "directors": [
+    "Joel Crawford"
+   ],
+   "cast": [],
+   "imdb": "tt3915174",
+   "runtime": 102,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Turning Red|2022": {
+   "qid": "Q104845027",
+   "directors": [
+    "Domee Shi"
+   ],
+   "cast": [],
+   "imdb": "tt8097030",
+   "runtime": 100,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Encanto|2021": {
+   "qid": "Q103372692",
+   "directors": [
+    "Byron Howard",
+    "Jared Bush",
+    "Charise Castro Smith"
+   ],
+   "cast": [],
+   "imdb": "tt2953050",
+   "runtime": 109,
+   "countries": [
+    "Colombia",
+    "United States"
+   ]
+  },
+  "Moana|2016": {
+   "qid": "Q18647981",
+   "directors": [
+    "John Musker",
+    "Ron Clements",
+    "Chris Williams",
+    "Don Hall"
+   ],
+   "cast": [],
+   "imdb": "tt3521164",
+   "runtime": 107,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Zootopia|2016": {
+   "qid": "Q15270647",
+   "directors": [
+    "Byron Howard",
+    "Rich Moore",
+    "Jared Bush"
+   ],
+   "cast": [],
+   "imdb": "tt2948356",
+   "runtime": 108,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Klaus|2019": {
+   "qid": "Q67208596",
+   "directors": [
+    "Sergio Pablos"
+   ],
+   "cast": [],
+   "imdb": "tt4729430",
+   "runtime": 96,
+   "countries": [
+    "Spain"
+   ]
+  },
+  "The Iron Giant|1999": {
+   "qid": "Q867283",
+   "directors": [
+    "Brad Bird"
+   ],
+   "cast": [],
+   "imdb": "tt0129167",
+   "runtime": 86,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Akira|1988": {
+   "qid": "Q1905968",
+   "directors": [
+    "Katsuhiro Otomo"
+   ],
+   "cast": [],
+   "imdb": "tt0094625",
+   "runtime": 124,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Ghost in the Shell|1995": {
+   "qid": "Q1066948",
+   "directors": [
+    "Mamoru Oshii"
+   ],
+   "cast": [],
+   "imdb": "tt0113568",
+   "runtime": 79,
+   "countries": [
+    "Japan",
+    "United Kingdom"
+   ]
+  },
+  "Redline|2009": {
+   "qid": "Q1207954",
+   "directors": [
+    "Takeshi Koike"
+   ],
+   "cast": [],
+   "imdb": "tt1483797",
+   "runtime": 102,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "A Silent Voice|2016": {
+   "qid": "Q23925035",
+   "directors": [
+    "Naoko Yamada"
+   ],
+   "cast": [],
+   "imdb": "tt5323662",
+   "runtime": 129,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Weathering with You|2019": {
+   "qid": "Q59692464",
+   "directors": [
+    "Makoto Shinkai"
+   ],
+   "cast": [],
+   "imdb": "tt9426210",
+   "runtime": 112,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "The Wind Rises|2013": {
+   "qid": "Q888131",
+   "directors": [
+    "Hayao Miyazaki"
+   ],
+   "cast": [],
+   "imdb": "tt2013293",
+   "runtime": 126,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Nausicaä of the Valley of the Wind|1984": {
+   "qid": "Q8885676",
+   "directors": [
+    "Hayao Miyazaki"
+   ],
+   "cast": [],
+   "imdb": "tt0087544",
+   "runtime": 117,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Castle in the Sky|1986": {
+   "qid": "Q498577",
+   "directors": [
+    "Hayao Miyazaki"
+   ],
+   "cast": [],
+   "imdb": "tt0092067",
+   "runtime": 124,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "My Neighbor Totoro|1988": {
+   "qid": "Q39571",
+   "directors": [
+    "Hayao Miyazaki"
+   ],
+   "cast": [],
+   "imdb": "tt0096283",
+   "runtime": 86,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Kiki's Delivery Service|1989": {
+   "qid": "Q196602",
+   "directors": [
+    "Hayao Miyazaki"
+   ],
+   "cast": [],
+   "imdb": "tt0097814",
+   "runtime": 103,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Princess Mononoke|1997": {
+   "qid": "Q186572",
+   "directors": [
+    "Hayao Miyazaki"
+   ],
+   "cast": [],
+   "imdb": "tt0119698",
+   "runtime": 128,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "The Cat Returns|2002": {
+   "qid": "Q51543",
+   "directors": [
+    "Hiroyuki Morita"
+   ],
+   "cast": [],
+   "imdb": "tt0347618",
+   "runtime": 75,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Ponyo|2008": {
+   "qid": "Q236728",
+   "directors": [
+    "Hayao Miyazaki"
+   ],
+   "cast": [],
+   "imdb": "tt0876563",
+   "runtime": 101,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "The Secret World of Arrietty|2010": {
+   "qid": "Q699835",
+   "directors": [
+    "Hiromasa Yonebayashi"
+   ],
+   "cast": [],
+   "imdb": "tt1568921",
+   "runtime": 94,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "When Marnie Was There|2014": {
+   "qid": "Q15303700",
+   "directors": [
+    "Hiromasa Yonebayashi"
+   ],
+   "cast": [],
+   "imdb": "tt3398268",
+   "runtime": 103,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "The Boy and the Beast|2015": {
+   "qid": "Q18684117",
+   "directors": [
+    "Mamoru Hosoda"
+   ],
+   "cast": [],
+   "imdb": "tt4272866",
+   "runtime": 119,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "The First Slam Dunk|2022": {
+   "qid": "Q112897629",
+   "directors": [
+    "Takehiko Inoue"
+   ],
+   "cast": [],
+   "imdb": "tt15242330",
+   "runtime": 124,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Suzume|2022": {
+   "qid": "Q110126272",
+   "directors": [
+    "Makoto Shinkai"
+   ],
+   "cast": [],
+   "imdb": "tt16428256",
+   "runtime": 122,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "The Rules of the Game|1939": {
+   "qid": "Q748599",
+   "directors": [
+    "Jean Renoir"
+   ],
+   "cast": [
+    "Jean Renoir",
+    "Henri Cartier-Bresson",
+    "Paulette Dubost",
+    "Marcel Dalio",
+    "Gaston Modot"
+   ],
+   "imdb": "tt0031885",
+   "runtime": 110,
+   "countries": [
+    "France"
+   ]
+  },
+  "Citizen Kane|1941": {
+   "qid": "Q24815",
+   "directors": [
+    "Orson Welles"
+   ],
+   "cast": [
+    "Orson Welles",
+    "Joseph Cotten",
+    "Alan Ladd",
+    "Agnes Moorehead",
+    "Gregg Toland"
+   ],
+   "imdb": "tt0033467",
+   "runtime": 119,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Casablanca|1942": {
+   "qid": "Q132689",
+   "directors": [
+    "Michael Curtiz"
+   ],
+   "cast": [
+    "Ingrid Bergman",
+    "Humphrey Bogart",
+    "Peter Lorre",
+    "Claude Rains",
+    "Conrad Veidt"
+   ],
+   "imdb": "tt0034583",
+   "runtime": 102,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Bicycle Thieves|1948": {
+   "qid": "Q172837",
+   "directors": [
+    "Vittorio De Sica"
+   ],
+   "cast": [
+    "Sergio Leone",
+    "Lamberto Maggiorani",
+    "Enzo Staiola",
+    "Lianella Carell",
+    "Elena Altieri"
+   ],
+   "imdb": "tt0040522",
+   "runtime": 90,
+   "countries": [
+    "Italy"
+   ]
+  },
+  "Rashomon|1950": {
+   "qid": "Q135465",
+   "directors": [
+    "Akira Kurosawa"
+   ],
+   "cast": [
+    "Toshirō Mifune",
+    "Takashi Shimura",
+    "Machiko Kyō",
+    "Minoru Chiaki",
+    "Masayuki Mori"
+   ],
+   "imdb": "tt0042876",
+   "runtime": 88,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Sunset Boulevard|1950": {
+   "qid": "Q193570",
+   "directors": [
+    "Billy Wilder"
+   ],
+   "cast": [
+    "Buster Keaton",
+    "Gloria Swanson",
+    "William Holden",
+    "Cecil B. DeMille",
+    "Erich von Stroheim"
+   ],
+   "imdb": "tt0043014",
+   "runtime": 110,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Ikiru|1952": {
+   "qid": "Q152105",
+   "directors": [
+    "Akira Kurosawa"
+   ],
+   "cast": [
+    "Takashi Shimura",
+    "Minoru Chiaki",
+    "Seiji Miyaguchi",
+    "Kamatari Fujiwara",
+    "Nobuo Nakamura"
+   ],
+   "imdb": "tt0044741",
+   "runtime": 143,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Tokyo Story|1953": {
+   "qid": "Q26060",
+   "directors": [
+    "Yasujirō Ozu"
+   ],
+   "cast": [
+    "Setsuko Hara",
+    "Kyōko Kagawa",
+    "Chishū Ryū",
+    "Sō Yamamura",
+    "Haruko Sugimura"
+   ],
+   "imdb": "tt0046438",
+   "runtime": 136,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Seven Samurai|1954": {
+   "qid": "Q189540",
+   "directors": [
+    "Akira Kurosawa"
+   ],
+   "cast": [
+    "Toshirō Mifune",
+    "Takashi Shimura",
+    "Tatsuya Nakadai",
+    "Haruo Nakajima",
+    "Isao Kimura"
+   ],
+   "imdb": "tt0047478",
+   "runtime": 207,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "12 Angry Men|1957": {
+   "qid": "Q2345",
+   "directors": [
+    "Sidney Lumet"
+   ],
+   "cast": [
+    "Henry Fonda",
+    "Martin Balsam",
+    "Ed Begley",
+    "Lee J. Cobb",
+    "Jack Klugman"
+   ],
+   "imdb": "tt0050083",
+   "runtime": 95,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Mother India|1957": {
+   "qid": "Q1411238",
+   "directors": [
+    "Mehboob Khan"
+   ],
+   "cast": [
+    "Nargis",
+    "Sunil Dutt",
+    "Raaj Kumar",
+    "Rajendra Kumar",
+    "Sajid Khan"
+   ],
+   "imdb": "tt0050188",
+   "runtime": 172,
+   "countries": [
+    "India"
+   ]
+  },
+  "The Seventh Seal|1957": {
+   "qid": "Q217189",
+   "directors": [
+    "Ingmar Bergman"
+   ],
+   "cast": [
+    "Max von Sydow",
+    "Bibi Andersson",
+    "Gunnel Lindblom",
+    "Gunnar Björnstrand",
+    "Mona Malm"
+   ],
+   "imdb": "tt0050976",
+   "runtime": 96,
+   "countries": [
+    "Sweden"
+   ]
+  },
+  "Vertigo|1958": {
+   "qid": "Q202548",
+   "directors": [
+    "Alfred Hitchcock"
+   ],
+   "cast": [
+    "Alfred Hitchcock",
+    "James Stewart",
+    "Kim Novak",
+    "Barbara Bel Geddes",
+    "Ellen Corby"
+   ],
+   "imdb": "tt0052357",
+   "runtime": 128,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The 400 Blows|1959": {
+   "qid": "Q162331",
+   "directors": [
+    "François Truffaut"
+   ],
+   "cast": [
+    "Jean-Paul Belmondo",
+    "Jean-Luc Godard",
+    "François Truffaut",
+    "Jeanne Moreau",
+    "Jacques Demy"
+   ],
+   "imdb": "tt0053198",
+   "runtime": 99,
+   "countries": [
+    "France"
+   ]
+  },
+  "La Dolce Vita|1960": {
+   "qid": "Q18407",
+   "directors": [
+    "Federico Fellini"
+   ],
+   "cast": [
+    "Marcello Mastroianni",
+    "Adriano Celentano",
+    "Anita Ekberg",
+    "Anouk Aimée",
+    "Nico"
+   ],
+   "imdb": "tt0053779",
+   "runtime": 174,
+   "countries": [
+    "France",
+    "Italy"
+   ]
+  },
+  "Mughal-e-Azam|1960": {
+   "qid": "Q1367294",
+   "directors": [
+    "K. Asif"
+   ],
+   "cast": [
+    "Dilip Kumar",
+    "Madhubala",
+    "Prithviraj Kapoor",
+    "Durga Khote",
+    "Johnny Walker"
+   ],
+   "imdb": "tt0054098",
+   "runtime": 173,
+   "countries": [
+    "India"
+   ]
+  },
+  "Harakiri|1962": {
+   "qid": "Q1584406",
+   "directors": [
+    "Masaki Kobayashi"
+   ],
+   "cast": [
+    "Tatsuya Nakadai",
+    "Rentarō Mikuni",
+    "Tetsurō Tamba",
+    "Shima Iwashita",
+    "Yoshio Inaba"
+   ],
+   "imdb": "tt0056058",
+   "runtime": 135,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "8½|1963": {
+   "qid": "Q12018",
+   "directors": [
+    "Federico Fellini"
+   ],
+   "cast": [
+    "Marcello Mastroianni",
+    "Claudia Cardinale",
+    "Anouk Aimée",
+    "Sandra Milo",
+    "Barbara Steele"
+   ],
+   "imdb": "tt0056801",
+   "runtime": 138,
+   "countries": [
+    "France",
+    "Italy"
+   ]
+  },
+  "High and Low|1963": {
+   "qid": "Q244878",
+   "directors": [
+    "Akira Kurosawa"
+   ],
+   "cast": [
+    "Toshirō Mifune",
+    "Takashi Shimura",
+    "Tatsuya Nakadai",
+    "Kyōko Kagawa",
+    "Isao Kimura"
+   ],
+   "imdb": "tt0057565",
+   "runtime": 143,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Charulata|1964": {
+   "qid": "Q639597",
+   "directors": [
+    "Satyajit Ray"
+   ],
+   "cast": [
+    "Soumitra Chatterjee",
+    "Madhabi Mukherjee",
+    "Bankim Ghosh"
+   ],
+   "imdb": "tt0057935",
+   "runtime": 117,
+   "countries": [
+    "India"
+   ]
+  },
+  "Chemmeen|1965": {
+   "qid": "Q3595616",
+   "directors": [
+    "Ramu Kariat"
+   ],
+   "cast": [
+    "Sheela",
+    "Madhu",
+    "Adoor Bhavani",
+    "Adoor Pankajam",
+    "Latha Raju"
+   ],
+   "imdb": "tt0059028",
+   "countries": [
+    "India"
+   ]
+  },
+  "Guide|1965": {
+   "qid": "Q848664",
+   "directors": [
+    "Vijay Anand"
+   ],
+   "cast": [
+    "Dev Anand",
+    "Waheeda Rehman",
+    "Leela Chitnis",
+    "Iftekhar"
+   ],
+   "imdb": "tt0059246",
+   "runtime": 183,
+   "countries": [
+    "India"
+   ]
+  },
+  "Persona|1966": {
+   "qid": "Q695255",
+   "directors": [
+    "Ingmar Bergman"
+   ],
+   "cast": [
+    "Liv Ullmann",
+    "Bibi Andersson",
+    "Gunnar Björnstrand",
+    "Margaretha Krook"
+   ],
+   "imdb": "tt0060827",
+   "runtime": 84,
+   "countries": [
+    "Sweden"
+   ]
+  },
+  "A Clockwork Orange|1971": {
+   "qid": "Q181086",
+   "directors": [
+    "Stanley Kubrick"
+   ],
+   "cast": [
+    "Malcolm McDowell",
+    "David Prowse",
+    "Steven Berkoff",
+    "Warren Clarke",
+    "Patrick Magee"
+   ],
+   "imdb": "tt0066921",
+   "runtime": 136,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Anand|1971": {
+   "qid": "Q485676",
+   "directors": [
+    "Hrishikesh Mukherjee"
+   ],
+   "cast": [
+    "Amitabh Bachchan",
+    "Rajesh Khanna",
+    "Dara Singh",
+    "Lalita Pawar",
+    "Durga Khote"
+   ],
+   "imdb": "tt0066763",
+   "runtime": 122,
+   "countries": [
+    "India"
+   ]
+  },
+  "Swayamvaram|1972": {
+   "qid": "Q7654086",
+   "directors": [
+    "Adoor Gopalakrishnan"
+   ],
+   "cast": [
+    "Madhu"
+   ],
+   "imdb": "tt0069334",
+   "runtime": 131,
+   "countries": [
+    "India"
+   ]
+  },
+  "The Conversation|1974": {
+   "qid": "Q1009788",
+   "directors": [
+    "Francis Ford Coppola"
+   ],
+   "cast": [
+    "Harrison Ford",
+    "Robert Duvall",
+    "Gene Hackman",
+    "Teri Garr",
+    "John Cazale"
+   ],
+   "imdb": "tt0071360",
+   "runtime": 109,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Godfather Part II|1974": {
+   "qid": "Q184768",
+   "directors": [
+    "Francis Ford Coppola"
+   ],
+   "cast": [
+    "Robert De Niro",
+    "Al Pacino",
+    "Diane Keaton",
+    "Robert Duvall",
+    "James Caan"
+   ],
+   "imdb": "tt0071562",
+   "runtime": 202,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Deewaar|1975": {
+   "qid": "Q787034",
+   "directors": [
+    "Yash Chopra"
+   ],
+   "cast": [
+    "Amitabh Bachchan",
+    "Shashi Kapoor",
+    "Parveen Babi",
+    "Neetu Singh",
+    "Nirupa Roy"
+   ],
+   "imdb": "tt0072860",
+   "runtime": 174,
+   "countries": [
+    "India"
+   ]
+  },
+  "Jaws|1975": {
+   "qid": "Q189505",
+   "directors": [
+    "Steven Spielberg"
+   ],
+   "cast": [
+    "Steven Spielberg",
+    "Richard Dreyfuss",
+    "Roy Scheider",
+    "Robert Shaw",
+    "Peter Benchley"
+   ],
+   "imdb": "tt0073195",
+   "runtime": 124,
+   "countries": [
+    "United States"
+   ]
+  },
+  "One Flew Over the Cuckoo's Nest|1975": {
+   "qid": "Q171669",
+   "directors": [
+    "Miloš Forman"
+   ],
+   "cast": [
+    "Jack Nicholson",
+    "Danny DeVito",
+    "Anjelica Huston",
+    "Louise Fletcher",
+    "Christopher Lloyd"
+   ],
+   "imdb": "tt0073486",
+   "runtime": 136,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Sholay|1975": {
+   "qid": "Q949228",
+   "directors": [
+    "Ramesh Sippy"
+   ],
+   "cast": [
+    "Amitabh Bachchan",
+    "Hema Malini",
+    "Dharmendra",
+    "Jaya Bachchan",
+    "Helen"
+   ],
+   "imdb": "tt0073707",
+   "runtime": 204,
+   "countries": [
+    "India"
+   ]
+  },
+  "Sorcerer|1977": {
+   "qid": "Q541707",
+   "directors": [
+    "William Friedkin"
+   ],
+   "cast": [
+    "Roy Scheider",
+    "Bruno Cremer",
+    "Francisco Rabal",
+    "Joe Spinell",
+    "Friedrich von Ledebur"
+   ],
+   "imdb": "tt0076740",
+   "runtime": 121,
+   "countries": [
+    "Mexico",
+    "United States"
+   ]
+  },
+  "The Empire Strikes Back|1980": {
+   "qid": "Q181795",
+   "directors": [
+    "Irvin Kershner"
+   ],
+   "cast": [
+    "Harrison Ford",
+    "Carrie Fisher",
+    "Alec Guinness",
+    "Mark Hamill",
+    "Frank Oz"
+   ],
+   "imdb": "tt0080684",
+   "runtime": 124,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Elippathayam|1981": {
+   "qid": "Q2614341",
+   "directors": [
+    "Adoor Gopalakrishnan"
+   ],
+   "cast": [
+    "Sharada",
+    "Karamana Janardanan Nair"
+   ],
+   "imdb": "tt0082318",
+   "runtime": 116,
+   "countries": [
+    "India"
+   ]
+  },
+  "Raiders of the Lost Ark|1981": {
+   "qid": "Q174284",
+   "directors": [
+    "Steven Spielberg"
+   ],
+   "cast": [
+    "Harrison Ford",
+    "Alfred Molina",
+    "John Rhys-Davies",
+    "Karen Allen",
+    "Denholm Elliott"
+   ],
+   "imdb": "tt0082971",
+   "runtime": 115,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Thief|1981": {
+   "qid": "Q1193098",
+   "directors": [
+    "Michael Mann"
+   ],
+   "cast": [
+    "James Caan",
+    "Willie Nelson",
+    "Jim Belushi",
+    "William Petersen",
+    "Dennis Farina"
+   ],
+   "imdb": "tt0083190",
+   "runtime": 122,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The King of Comedy|1982": {
+   "qid": "Q1122281",
+   "directors": [
+    "Martin Scorsese"
+   ],
+   "cast": [
+    "Robert De Niro",
+    "Martin Scorsese",
+    "Liza Minnelli",
+    "Jerry Lewis",
+    "Joe Strummer"
+   ],
+   "imdb": "tt0085794",
+   "runtime": 109,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Yavanika|1982": {
+   "qid": "Q8050364",
+   "directors": [
+    "K. G. George"
+   ],
+   "cast": [
+    "Mammootty",
+    "Jagathy Sreekumar",
+    "Bharath Gopi",
+    "Jalaja",
+    "Ashokan"
+   ],
+   "imdb": "tt0215376",
+   "countries": [
+    "India"
+   ]
+  },
+  "Jaane Bhi Do Yaaro|1983": {
+   "qid": "Q3071387",
+   "directors": [
+    "Kundan Shah"
+   ],
+   "cast": [
+    "Om Puri",
+    "Naseeruddin Shah",
+    "Neena Gupta",
+    "Pankaj Kapur",
+    "Satish Shah"
+   ],
+   "imdb": "tt0085743",
+   "runtime": 132,
+   "countries": [
+    "India"
+   ]
+  },
+  "The Breakfast Club|1985": {
+   "qid": "Q499152",
+   "directors": [
+    "John Hughes"
+   ],
+   "cast": [
+    "Emilio Estevez",
+    "Molly Ringwald",
+    "John Hughes",
+    "Ally Sheedy",
+    "Anthony Michael Hall"
+   ],
+   "imdb": "tt0088847",
+   "runtime": 95,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Nadodikkattu|1987": {
+   "qid": "Q6957926",
+   "directors": [
+    "Sathyan Anthikad"
+   ],
+   "cast": [
+    "Mohanlal"
+   ],
+   "imdb": "tt0282778",
+   "countries": [
+    "India"
+   ]
+  },
+  "Nayakan|1987": {
+   "qid": "Q3181879",
+   "directors": [
+    "Mani Ratnam"
+   ],
+   "cast": [
+    "Kamal Haasan",
+    "Saranya Ponvannan",
+    "Karthika",
+    "Janagaraj"
+   ],
+   "imdb": "tt0093603",
+   "runtime": 165,
+   "countries": [
+    "India"
+   ]
+  },
+  "Thoovanathumbikal|1987": {
+   "qid": "Q7796009",
+   "directors": [
+    "P. Padmarajan"
+   ],
+   "cast": [
+    "Mohanlal",
+    "Sumalata",
+    "Parvathy",
+    "Ashokan"
+   ],
+   "imdb": "tt0249188",
+   "countries": [
+    "India"
+   ]
+  },
+  "Wings of Desire|1987": {
+   "qid": "Q156911",
+   "directors": [
+    "Wim Wenders"
+   ],
+   "cast": [
+    "Peter Falk",
+    "Bruno Ganz",
+    "Nick Cave",
+    "Otto Sander",
+    "Blixa Bargeld"
+   ],
+   "imdb": "tt0093191",
+   "runtime": 128,
+   "countries": [
+    "France",
+    "Germany"
+   ]
+  },
+  "Chithram|1988": {
+   "qid": "Q5102231",
+   "directors": [
+    "Priyadarshan"
+   ],
+   "cast": [
+    "Mohanlal",
+    "Sukumari",
+    "Nedumudi Venu",
+    "Sreenivasan",
+    "Lizy"
+   ],
+   "imdb": "tt0214585",
+   "runtime": 159,
+   "countries": [
+    "India"
+   ]
+  },
+  "Kireedam|1989": {
+   "qid": "Q13111257",
+   "directors": [
+    "Sibi Malayil"
+   ],
+   "cast": [
+    "Mohanlal",
+    "Kaviyoor Ponnamma",
+    "Thilakan",
+    "Jagathy Sreekumar",
+    "Jagadish"
+   ],
+   "imdb": "tt0237376",
+   "countries": [
+    "India"
+   ]
+  },
+  "Mathilukal|1990": {
+   "qid": "Q3535751",
+   "directors": [
+    "Adoor Gopalakrishnan"
+   ],
+   "cast": [
+    "Mammootty"
+   ],
+   "imdb": "tt0097851",
+   "runtime": 120,
+   "countries": [
+    "India"
+   ]
+  },
+  "Perumthachan|1990": {
+   "qid": "Q7171082",
+   "directors": [
+    "Ajayan"
+   ],
+   "cast": [
+    "Thilakan"
+   ],
+   "imdb": "tt0100354",
+   "countries": [
+    "India"
+   ]
+  },
+  "A Brighter Summer Day|1991": {
+   "qid": "Q710745",
+   "directors": [
+    "Edward Yang"
+   ],
+   "cast": [
+    "Chang Chen",
+    "Ri Myung-hun",
+    "Elaine Jin",
+    "Tsai Chin",
+    "Lawrence Ko"
+   ],
+   "imdb": "tt0101985",
+   "runtime": 237,
+   "countries": [
+    "Taiwan"
+   ]
+  },
+  "Bharatham|1991": {
+   "qid": "Q4901186",
+   "directors": [
+    "Sibi Malayil"
+   ],
+   "cast": [
+    "Mohanlal",
+    "Yaragudipati Venkata Mahalakshmi",
+    "Urvashi",
+    "Nedumudi Venu",
+    "Murali"
+   ],
+   "imdb": "tt0237038",
+   "countries": [
+    "India"
+   ]
+  },
+  "Kilukkam|1991": {
+   "qid": "Q6408256",
+   "directors": [
+    "Priyadarshan"
+   ],
+   "cast": [
+    "Mohanlal",
+    "Revathi",
+    "Sharat Saxena",
+    "Thilakan",
+    "Jagathy Sreekumar"
+   ],
+   "imdb": "tt0255306",
+   "runtime": 155,
+   "countries": [
+    "India"
+   ]
+  },
+  "Devasuram|1993": {
+   "qid": "Q5266597",
+   "directors": [
+    "I. V. Sasi"
+   ],
+   "cast": [
+    "Mohanlal",
+    "Revathi",
+    "Nedumudi Venu",
+    "Napoleon",
+    "Innocent Vareed Thekkethala"
+   ],
+   "imdb": "tt0291855",
+   "countries": [
+    "India"
+   ]
+  },
+  "Manichitrathazhu|1993": {
+   "qid": "Q3530081",
+   "directors": [
+    "Fazil"
+   ],
+   "cast": [
+    "Shobana",
+    "Mohanlal",
+    "K.P.A.C. Lalitha",
+    "Nedumudi Venu",
+    "Thilakan"
+   ],
+   "imdb": "tt0214915",
+   "runtime": 169,
+   "countries": [
+    "India"
+   ]
+  },
+  "Schindler's List|1993": {
+   "qid": "Q483941",
+   "directors": [
+    "Steven Spielberg"
+   ],
+   "cast": [
+    "Liam Neeson",
+    "Ben Kingsley",
+    "Ralph Fiennes",
+    "Embeth Davidtz",
+    "Branko Lustig"
+   ],
+   "imdb": "tt0108052",
+   "runtime": 195,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Piano|1993": {
+   "qid": "Q117315",
+   "directors": [
+    "Jane Campion"
+   ],
+   "cast": [
+    "Holly Hunter",
+    "Sam Neill",
+    "Harvey Keitel",
+    "Anna Paquin",
+    "Cliff Curtis"
+   ],
+   "imdb": "tt0107822",
+   "runtime": 121,
+   "countries": [
+    "Australia",
+    "France",
+    "New Zealand"
+   ]
+  },
+  "Forrest Gump|1994": {
+   "qid": "Q134773",
+   "directors": [
+    "Robert Zemeckis"
+   ],
+   "cast": [
+    "John Lennon",
+    "Gerald Ford",
+    "Tom Hanks",
+    "Sally Field",
+    "Kurt Russell"
+   ],
+   "imdb": "tt0109830",
+   "runtime": 142,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Spadikam|1995": {
+   "qid": "Q7572787",
+   "directors": [
+    "Bhadran"
+   ],
+   "cast": [
+    "Mohanlal",
+    "Silk Smitha",
+    "K.P.A.C. Lalitha",
+    "Urvashi",
+    "Nedumudi Venu"
+   ],
+   "imdb": "tt0292246",
+   "countries": [
+    "India"
+   ]
+  },
+  "Guru|1997": {
+   "qid": "Q5620328",
+   "directors": [
+    "Rajiv Anchal"
+   ],
+   "cast": [
+    "Kaveri",
+    "Mohanlal",
+    "Suresh Gopi",
+    "Sithara",
+    "Murali"
+   ],
+   "imdb": "tt0133826",
+   "countries": [
+    "India"
+   ]
+  },
+  "Titanic|1997": {
+   "qid": "Q44578",
+   "directors": [
+    "James Cameron"
+   ],
+   "cast": [
+    "Leonardo DiCaprio",
+    "Kate Winslet",
+    "James Cameron",
+    "Kathy Bates",
+    "Bill Paxton"
+   ],
+   "imdb": "tt0120338",
+   "runtime": 194,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Truman Show|1998": {
+   "qid": "Q214801",
+   "directors": [
+    "Peter Weir"
+   ],
+   "cast": [
+    "Jim Carrey",
+    "Ed Harris",
+    "Philip Glass",
+    "Paul Giamatti",
+    "Laura Linney"
+   ],
+   "imdb": "tt0120382",
+   "runtime": 99,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Eyes Wide Shut|1999": {
+   "qid": "Q209481",
+   "directors": [
+    "Stanley Kubrick"
+   ],
+   "cast": [
+    "Stanley Kubrick",
+    "Nicole Kidman",
+    "Tom Cruise",
+    "Sydney Pollack",
+    "Alan Cumming"
+   ],
+   "imdb": "tt0120663",
+   "runtime": 159,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Fight Club|1999": {
+   "qid": "Q190050",
+   "directors": [
+    "David Fincher"
+   ],
+   "cast": [
+    "Brad Pitt",
+    "Edward Norton",
+    "Jared Leto",
+    "Helena Bonham Carter",
+    "Meat Loaf"
+   ],
+   "imdb": "tt0137523",
+   "runtime": 139,
+   "countries": [
+    "Germany",
+    "United States"
+   ]
+  },
+  "The Green Mile|1999": {
+   "qid": "Q208263",
+   "directors": [
+    "Frank Darabont"
+   ],
+   "cast": [
+    "Tom Hanks",
+    "Michael Clarke Duncan",
+    "Gary Sinise",
+    "Sam Rockwell",
+    "Michael Jeter"
+   ],
+   "imdb": "tt0120689",
+   "runtime": 189,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Straight Story|1999": {
+   "qid": "Q1139454",
+   "directors": [
+    "David Lynch"
+   ],
+   "cast": [
+    "Sissy Spacek",
+    "Harry Dean Stanton",
+    "Richard Farnsworth",
+    "Everett McGill",
+    "Kevin Farley"
+   ],
+   "imdb": "tt0166896",
+   "runtime": 108,
+   "countries": [
+    "France",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Vanaprastham|1999": {
+   "qid": "Q7913965",
+   "directors": [
+    "Shaji N. Karun"
+   ],
+   "cast": [
+    "Mohanlal",
+    "Suhasini Maniratnam",
+    "Mattannoor Sankarankutty",
+    "Kalamandalam Gopi",
+    "Kalamandalam Haridas"
+   ],
+   "imdb": "tt0202055",
+   "runtime": 119,
+   "countries": [
+    "Germany",
+    "India"
+   ]
+  },
+  "Gladiator|2000": {
+   "qid": "Q128518",
+   "directors": [
+    "Ridley Scott"
+   ],
+   "cast": [
+    "Russell Crowe",
+    "Joaquin Phoenix",
+    "Richard Harris",
+    "Djimon Hounsou",
+    "Derek Jacobi"
+   ],
+   "imdb": "tt0172495",
+   "runtime": 155,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Yi Yi|2000": {
+   "qid": "Q704513",
+   "directors": [
+    "Edward Yang"
+   ],
+   "cast": [
+    "Edward Yang",
+    "Issey Ogata",
+    "Leon Dai",
+    "Cheryl Yang",
+    "Elaine Jin"
+   ],
+   "imdb": "tt0244316",
+   "runtime": 173,
+   "countries": [
+    "Japan",
+    "Taiwan"
+   ]
+  },
+  "Dil Chahta Hai|2001": {
+   "qid": "Q370313",
+   "directors": [
+    "Farhan Akhtar"
+   ],
+   "cast": [
+    "Aamir Khan",
+    "Preity Zinta",
+    "Saif Ali Khan",
+    "Dimple Kapadia",
+    "Akshaye Khanna"
+   ],
+   "imdb": "tt0292490",
+   "runtime": 185,
+   "countries": [
+    "India"
+   ]
+  },
+  "Donnie Darko|2001": {
+   "qid": "Q426828",
+   "directors": [
+    "Richard Kelly"
+   ],
+   "cast": [
+    "Drew Barrymore",
+    "Jake Gyllenhaal",
+    "Patrick Swayze",
+    "Ashley Tisdale",
+    "Maggie Gyllenhaal"
+   ],
+   "imdb": "tt0246578",
+   "runtime": 134,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Lord of the Rings: The Two Towers|2002": {
+   "qid": "Q164963",
+   "directors": [
+    "Peter Jackson"
+   ],
+   "cast": [
+    "Cate Blanchett",
+    "Christopher Lee",
+    "Peter Jackson",
+    "Orlando Bloom",
+    "Ian McKellen"
+   ],
+   "imdb": "tt0167261",
+   "runtime": 235,
+   "countries": [
+    "New Zealand",
+    "United States"
+   ]
+  },
+  "Love Actually|2003": {
+   "qid": "Q190588",
+   "directors": [
+    "Richard Curtis"
+   ],
+   "cast": [
+    "Rowan Atkinson",
+    "Elisha Cuthbert",
+    "Keira Knightley",
+    "Liam Neeson",
+    "Alan Rickman"
+   ],
+   "imdb": "tt0314331",
+   "runtime": 135,
+   "countries": [
+    "France",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "The Lord of the Rings: The Return of the King|2003": {
+   "qid": "Q131074",
+   "directors": [
+    "Peter Jackson"
+   ],
+   "cast": [
+    "Cate Blanchett",
+    "Christopher Lee",
+    "Peter Jackson",
+    "Orlando Bloom",
+    "Ian McKellen"
+   ],
+   "imdb": "tt0167260",
+   "runtime": 263,
+   "countries": [
+    "New Zealand",
+    "United States"
+   ]
+  },
+  "Crash|2004": {
+   "qid": "Q188000",
+   "directors": [
+    "Paul Haggis"
+   ],
+   "cast": [
+    "Sandra Bullock",
+    "Brendan Fraser",
+    "Don Cheadle",
+    "Matt Dillon",
+    "Ryan Phillippe"
+   ],
+   "imdb": "tt0375679",
+   "runtime": 115,
+   "countries": [
+    "Germany",
+    "United States"
+   ]
+  },
+  "Kiss Kiss Bang Bang|2005": {
+   "qid": "Q1423695",
+   "directors": [
+    "Shane Black"
+   ],
+   "cast": [
+    "Robert Downey Jr.",
+    "Val Kilmer",
+    "Laurence Fishburne",
+    "Michelle Monaghan",
+    "Ariel Winter"
+   ],
+   "imdb": "tt0373469",
+   "runtime": 102,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Southland Tales|2006": {
+   "qid": "Q1476272",
+   "directors": [
+    "Richard Kelly"
+   ],
+   "cast": [
+    "Dwayne Johnson",
+    "Justin Timberlake",
+    "Sarah Michelle Gellar",
+    "Amy Poehler",
+    "Mandy Moore"
+   ],
+   "imdb": "tt0405336",
+   "runtime": 145,
+   "countries": [
+    "France",
+    "Germany",
+    "United States"
+   ]
+  },
+  "The Fall|2006": {
+   "qid": "Q547120",
+   "directors": [
+    "Tarsem Singh"
+   ],
+   "cast": [
+    "Lee Pace",
+    "Justine Waddell",
+    "Leo Bill",
+    "Sean Gilder",
+    "Daniel Caltagirone"
+   ],
+   "imdb": "tt0460791",
+   "runtime": 117,
+   "countries": [
+    "India",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "The Fountain|2006": {
+   "qid": "Q842770",
+   "directors": [
+    "Darren Aronofsky"
+   ],
+   "cast": [
+    "Hugh Jackman",
+    "Rachel Weisz",
+    "Ellen Burstyn",
+    "Ethan Suplee",
+    "Cliff Curtis"
+   ],
+   "imdb": "tt0414993",
+   "runtime": 96,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Prestige|2006": {
+   "qid": "Q46551",
+   "directors": [
+    "Christopher Nolan"
+   ],
+   "cast": [
+    "Scarlett Johansson",
+    "David Bowie",
+    "Michael Caine",
+    "Hugh Jackman",
+    "Christian Bale"
+   ],
+   "imdb": "tt0482571",
+   "runtime": 125,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "The Assassination of Jesse James by the Coward Robert Ford|2007": {
+   "qid": "Q388950",
+   "directors": [
+    "Andrew Dominik"
+   ],
+   "cast": [
+    "Brad Pitt",
+    "Jeremy Renner",
+    "Zooey Deschanel",
+    "Casey Affleck",
+    "Sam Rockwell"
+   ],
+   "imdb": "tt0443680",
+   "runtime": 160,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Man from Earth|2007": {
+   "qid": "Q93701",
+   "directors": [
+    "Richard Schenkman"
+   ],
+   "cast": [
+    "William Katt",
+    "Tony Todd",
+    "John Billingsley",
+    "Richard Riehle",
+    "David Lee Smith"
+   ],
+   "imdb": "tt0756683",
+   "runtime": 87,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Avatar|2009": {
+   "qid": "Q24871",
+   "directors": [
+    "James Cameron"
+   ],
+   "cast": [
+    "Sigourney Weaver",
+    "Michelle Rodriguez",
+    "Zoe Saldaña",
+    "Sam Worthington",
+    "Giovanni Ribisi"
+   ],
+   "imdb": "tt0499549",
+   "runtime": 162,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Fantastic Mr. Fox|2009": {
+   "qid": "Q465275",
+   "directors": [
+    "Wes Anderson"
+   ],
+   "cast": [],
+   "imdb": "tt0432283",
+   "runtime": 87,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Blind Side|2009": {
+   "qid": "Q206497",
+   "directors": [
+    "John Lee Hancock"
+   ],
+   "cast": [
+    "Sandra Bullock",
+    "Kathy Bates",
+    "Lily Collins",
+    "Tim McGraw",
+    "Kim Dickens"
+   ],
+   "imdb": "tt0878804",
+   "runtime": 128,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Secret of Kells|2009": {
+   "qid": "Q908816",
+   "directors": [
+    "Tomm Moore",
+    "Nora Twomey"
+   ],
+   "cast": [],
+   "imdb": "tt0485601",
+   "runtime": 75,
+   "countries": [
+    "Belgium",
+    "France",
+    "Ireland"
+   ]
+  },
+  "Inception|2010": {
+   "qid": "Q25188",
+   "directors": [
+    "Christopher Nolan"
+   ],
+   "cast": [
+    "Leonardo DiCaprio",
+    "Michael Caine",
+    "Marion Cotillard",
+    "Cillian Murphy",
+    "Tom Hardy"
+   ],
+   "imdb": "tt1375666",
+   "runtime": 148,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "The Social Network|2010": {
+   "qid": "Q185888",
+   "directors": [
+    "David Fincher"
+   ],
+   "cast": [
+    "Andrew Garfield",
+    "Justin Timberlake",
+    "Dakota Johnson",
+    "Jesse Eisenberg",
+    "Rooney Mara"
+   ],
+   "imdb": "tt1285016",
+   "runtime": 121,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Tree of Life|2011": {
+   "qid": "Q244257",
+   "directors": [
+    "Terrence Malick"
+   ],
+   "cast": [
+    "Brad Pitt",
+    "Sean Penn",
+    "Jessica Chastain",
+    "Tye Sheridan",
+    "Fiona Shaw"
+   ],
+   "imdb": "tt0478304",
+   "runtime": 138,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Cloud Atlas|2012": {
+   "qid": "Q28936",
+   "directors": [
+    "Tom Tykwer",
+    "Lilly Wachowski",
+    "Lana Wachowski"
+   ],
+   "cast": [
+    "Tom Hanks",
+    "Halle Berry",
+    "Susan Sarandon",
+    "Hugh Grant",
+    "Hugo Weaving"
+   ],
+   "imdb": "tt1371111",
+   "runtime": 172,
+   "countries": [
+    "Germany",
+    "Hong Kong",
+    "People's Republic of China",
+    "Singapore",
+    "Spain",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Django Unchained|2012": {
+   "qid": "Q571032",
+   "directors": [
+    "Quentin Tarantino"
+   ],
+   "cast": [
+    "Leonardo DiCaprio",
+    "Quentin Tarantino",
+    "Samuel L. Jackson",
+    "Jamie Foxx",
+    "Christoph Waltz"
+   ],
+   "imdb": "tt1853728",
+   "runtime": 165,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Spring Breakers|2012": {
+   "qid": "Q1781285",
+   "directors": [
+    "Harmony Korine"
+   ],
+   "cast": [
+    "Selena Gomez",
+    "Vanessa Hudgens",
+    "Vanessa Hudgens Tucker",
+    "James Franco",
+    "Ashley Benson"
+   ],
+   "imdb": "tt2101441",
+   "runtime": 94,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Avengers|2012": {
+   "qid": "Q182218",
+   "directors": [
+    "Joss Whedon"
+   ],
+   "cast": [
+    "Scarlett Johansson",
+    "Gwyneth Paltrow",
+    "Jeremy Renner",
+    "Robert Downey Jr.",
+    "Samuel L. Jackson"
+   ],
+   "imdb": "tt0848228",
+   "runtime": 142,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Hunt|2012": {
+   "qid": "Q32303",
+   "directors": [
+    "Thomas Vinterberg"
+   ],
+   "cast": [
+    "Mads Mikkelsen",
+    "Thomas Vinterberg",
+    "Alexandra Rapaport",
+    "Thomas Bo Larsen",
+    "Bjarne Henriksen"
+   ],
+   "imdb": "tt2106476",
+   "runtime": 111,
+   "countries": [
+    "Denmark",
+    "Sweden"
+   ]
+  },
+  "Ustad Hotel|2012": {
+   "qid": "Q7902166",
+   "directors": [
+    "Anwar Rasheed"
+   ],
+   "cast": [
+    "Jishnu Raghavan",
+    "Nithya Menen",
+    "Dulquer Salmaan",
+    "Lena",
+    "Thilakan"
+   ],
+   "imdb": "tt2218988",
+   "runtime": 150,
+   "countries": [
+    "India"
+   ]
+  },
+  "Coherence|2013": {
+   "qid": "Q17150929",
+   "directors": [
+    "James Ward Byrkit"
+   ],
+   "cast": [
+    "Nicholas Brendon",
+    "Elizabeth Gracen",
+    "Maury Sterling",
+    "Lorene Scafaria",
+    "Emily Baldoni"
+   ],
+   "imdb": "tt2866360",
+   "runtime": 87,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Fandry|2013": {
+   "qid": "Q15716241",
+   "directors": [
+    "Nagraj Manjule"
+   ],
+   "cast": [
+    "Kishor Kadam"
+   ],
+   "imdb": "tt2827320",
+   "runtime": 101,
+   "countries": [
+    "India"
+   ]
+  },
+  "Only God Forgives|2013": {
+   "qid": "Q2679094",
+   "directors": [
+    "Nicolas Winding Refn"
+   ],
+   "cast": [
+    "Ryan Gosling",
+    "Kristin Scott Thomas",
+    "Tom Burke",
+    "Rhatha Phongam",
+    "Vithaya Pansringarm"
+   ],
+   "imdb": "tt1602613",
+   "runtime": 90,
+   "countries": [
+    "Denmark",
+    "France",
+    "Sweden",
+    "Thailand",
+    "United States"
+   ]
+  },
+  "The Wolf of Wall Street|2013": {
+   "qid": "Q1392744",
+   "directors": [
+    "Martin Scorsese"
+   ],
+   "cast": [
+    "Leonardo DiCaprio",
+    "Matthew McConaughey",
+    "Margot Robbie",
+    "Rob Reiner",
+    "Jean Dujardin"
+   ],
+   "imdb": "tt0993846",
+   "runtime": 180,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Lobster|2015": {
+   "qid": "Q16996794",
+   "directors": [
+    "Yorgos Lanthimos"
+   ],
+   "cast": [
+    "Rachel Weisz",
+    "Colin Farrell",
+    "Olivia Colman",
+    "Léa Seydoux",
+    "John C. Reilly"
+   ],
+   "imdb": "tt3464902",
+   "runtime": 118,
+   "countries": [
+    "France",
+    "Greece",
+    "Netherlands",
+    "United Kingdom"
+   ]
+  },
+  "The Revenant|2015": {
+   "qid": "Q18002795",
+   "directors": [
+    "Alejandro González Iñárritu"
+   ],
+   "cast": [
+    "Leonardo DiCaprio",
+    "Tom Hardy",
+    "Will Poulter",
+    "Domhnall Gleeson",
+    "Lukas Haas"
+   ],
+   "imdb": "tt1663202",
+   "runtime": 157,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Aruvi|2016": {
+   "qid": "Q27957901",
+   "directors": [
+    "Arun Prabu Purushothaman"
+   ],
+   "cast": [
+    "Aditi Balan"
+   ],
+   "imdb": "tt5867800",
+   "runtime": 130,
+   "countries": [
+    "India"
+   ]
+  },
+  "Maheshinte Prathikaaram|2016": {
+   "qid": "Q23681158",
+   "directors": [
+    "Dileesh Pothan"
+   ],
+   "cast": [
+    "Fahadh Faasil",
+    "Aparna Balamurali",
+    "Anusree",
+    "Lijomol Jose",
+    "Dileesh Pothan"
+   ],
+   "imdb": "tt4851630",
+   "countries": [
+    "India"
+   ]
+  },
+  "Paterson|2016": {
+   "qid": "Q23817035",
+   "directors": [
+    "Jim Jarmusch"
+   ],
+   "cast": [
+    "Adam Driver",
+    "Golshifteh Farahani",
+    "Method Man",
+    "Barry Shabaka Henley",
+    "William Jackson Harper"
+   ],
+   "imdb": "tt5247022",
+   "runtime": 113,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Neon Demon|2016": {
+   "qid": "Q19750881",
+   "directors": [
+    "Nicolas Winding Refn"
+   ],
+   "cast": [
+    "Keanu Reeves",
+    "Elle Fanning",
+    "Christina Hendricks",
+    "Jena",
+    "Jena Malone"
+   ],
+   "imdb": "tt1974419",
+   "runtime": 118,
+   "countries": [
+    "Denmark",
+    "France",
+    "United States"
+   ]
+  },
+  "The Nice Guys|2016": {
+   "qid": "Q18415459",
+   "directors": [
+    "Shane Black"
+   ],
+   "cast": [
+    "Russell Crowe",
+    "Kim Basinger",
+    "Ryan Gosling",
+    "Margaret Qualley",
+    "Matt Bomer"
+   ],
+   "imdb": "tt3799694",
+   "runtime": 116,
+   "countries": [
+    "United States"
+   ]
+  },
+  "A Ghost Story|2017": {
+   "qid": "Q27964497",
+   "directors": [
+    "David Lowery"
+   ],
+   "cast": [
+    "Kesha",
+    "Casey Affleck",
+    "Rooney Mara",
+    "Brea Grant",
+    "David Lowery"
+   ],
+   "imdb": "tt6265828",
+   "runtime": 92,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Angamaly Diaries|2017": {
+   "qid": "Q28952116",
+   "directors": [
+    "Lijo Jose Pellissery"
+   ],
+   "cast": [
+    "Anna Rajan",
+    "Lijo Jose Pellissery",
+    "Chemban Vinod Jose",
+    "Jolly Chirayath",
+    "Antony Varghese."
+   ],
+   "imdb": "tt6167894",
+   "runtime": 132,
+   "countries": [
+    "India"
+   ]
+  },
+  "Baahubali 2: The Conclusion|2017": {
+   "qid": "Q21001674",
+   "directors": [
+    "S. S. Rajamouli"
+   ],
+   "cast": [
+    "Anushka Shetty",
+    "Tamannaah Bhatia",
+    "Prabhas",
+    "Rana Daggubati",
+    "Ramya Krishnan"
+   ],
+   "imdb": "tt4849438",
+   "runtime": 167,
+   "countries": [
+    "India"
+   ]
+  },
+  "The Greatest Showman|2017": {
+   "qid": "Q27942936",
+   "directors": [
+    "Michael Gracey"
+   ],
+   "cast": [
+    "Hugh Jackman",
+    "Zendaya",
+    "Zac Efron",
+    "Michelle Williams",
+    "Rebecca Ferguson"
+   ],
+   "imdb": "tt1485796",
+   "runtime": 105,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Rider|2017": {
+   "qid": "Q29877021",
+   "directors": [
+    "Chloé Zhao"
+   ],
+   "cast": [],
+   "imdb": "tt6217608",
+   "runtime": 103,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Thondimuthalum Driksakshiyum|2017": {
+   "qid": "Q28127585",
+   "directors": [
+    "Dileesh Pothan"
+   ],
+   "cast": [
+    "Fahadh Faasil",
+    "Suraj Venjaramoodu",
+    "Alencier Ley Lopez"
+   ],
+   "imdb": "tt5906392",
+   "countries": [
+    "India"
+   ]
+  },
+  "Bohemian Rhapsody|2018": {
+   "qid": "Q27894574",
+   "directors": [
+    "Bryan Singer"
+   ],
+   "cast": [
+    "Freddie Mercury",
+    "Mike Myers",
+    "Rami Malek",
+    "Adam Lambert",
+    "Aidan Gillen"
+   ],
+   "imdb": "tt1727824",
+   "runtime": 134,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Green Book|2018": {
+   "qid": "Q48673898",
+   "directors": [
+    "Peter Farrelly"
+   ],
+   "cast": [
+    "Viggo Mortensen",
+    "Mahershala Ali",
+    "Linda Cardellini",
+    "Brian Stepanek",
+    "P.J. Byrne"
+   ],
+   "imdb": "tt6966692",
+   "runtime": 130,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Sudani from Nigeria|2018": {
+   "qid": "Q43639467",
+   "directors": [
+    "Zakariya Mohammed"
+   ],
+   "cast": [
+    "Samuel Abiola Robinson",
+    "Savithri Sreedharan",
+    "Soubin Shahir",
+    "Sarasa Balussery",
+    "Aneesh G. Menon"
+   ],
+   "imdb": "tt7581572",
+   "countries": [
+    "India"
+   ]
+  },
+  "Jallikattu|2019": {
+   "qid": "Q67202673",
+   "directors": [
+    "Lijo Jose Pellissery"
+   ],
+   "cast": [
+    "Antony Varghese.",
+    "Chemban Vinod Jose",
+    "Sabumon Abdusamad",
+    "Jaffar Idukki"
+   ],
+   "imdb": "tt8721556",
+   "runtime": 91,
+   "countries": [
+    "India"
+   ]
+  },
+  "Joker|2019": {
+   "qid": "Q42759035",
+   "directors": [
+    "Todd Phillips"
+   ],
+   "cast": [
+    "Robert De Niro",
+    "Joaquin Phoenix",
+    "Justin Theroux",
+    "Frances Conroy",
+    "Shea Whigham"
+   ],
+   "imdb": "tt7286456",
+   "runtime": 122,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Midsommar|2019": {
+   "qid": "Q55907451",
+   "directors": [
+    "Ari Aster"
+   ],
+   "cast": [
+    "Florence Pugh",
+    "Will Poulter",
+    "Björn Andrésen",
+    "Jack Reynor",
+    "William Jackson Harper"
+   ],
+   "imdb": "tt8772262",
+   "runtime": 147,
+   "countries": [
+    "Sweden",
+    "United States"
+   ]
+  },
+  "The Irishman|2019": {
+   "qid": "Q29057443",
+   "directors": [
+    "Martin Scorsese"
+   ],
+   "cast": [
+    "Robert De Niro",
+    "Al Pacino",
+    "Joe Pesci",
+    "Harvey Keitel",
+    "Anna Paquin"
+   ],
+   "imdb": "tt1302006",
+   "runtime": 209,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Vast of Night|2019": {
+   "qid": "Q68220947",
+   "directors": [
+    "Andrew Patterson"
+   ],
+   "cast": [
+    "Sierra McCormick"
+   ],
+   "imdb": "tt6803046",
+   "runtime": 91,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Tenet|2020": {
+   "qid": "Q63985561",
+   "directors": [
+    "Christopher Nolan"
+   ],
+   "cast": [
+    "Michael Caine",
+    "Robert Pattinson",
+    "Kenneth Branagh",
+    "Aaron Taylor-Johnson",
+    "Elizabeth Debicki"
+   ],
+   "imdb": "tt6723592",
+   "runtime": 150,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Jai Bhim|2021": {
+   "qid": "Q108376991",
+   "directors": [
+    "T. J. Gnanavel"
+   ],
+   "cast": [
+    "Suriya",
+    "Prakash Raj",
+    "Rao Ramesh",
+    "Rajisha Vijayan",
+    "Lijomol Jose"
+   ],
+   "imdb": "tt15097216",
+   "runtime": 164,
+   "countries": [
+    "India"
+   ]
+  },
+  "Joji|2021": {
+   "qid": "Q106363196",
+   "directors": [
+    "Dileesh Pothan"
+   ],
+   "cast": [
+    "Fahadh Faasil",
+    "Baburaj",
+    "Shammi Thilakan",
+    "Unnimaya Prasad"
+   ],
+   "imdb": "tt13206926",
+   "runtime": 123,
+   "countries": [
+    "India"
+   ]
+  },
+  "Minnal Murali|2021": {
+   "qid": "Q95432716",
+   "directors": [
+    "Basil Joseph"
+   ],
+   "cast": [
+    "Tovino Thomas",
+    "Basil Joseph",
+    "Mamukkoya",
+    "P. Balachandran",
+    "Guru Somasundaram"
+   ],
+   "imdb": "tt7268738",
+   "runtime": 159,
+   "countries": [
+    "India"
+   ]
+  },
+  "The Great Indian Kitchen|2021": {
+   "qid": "Q104884250",
+   "directors": [
+    "Jeo Baby"
+   ],
+   "cast": [
+    "Suraj Venjaramoodu",
+    "Nimisha Sajayan",
+    "Sidhartha Siva"
+   ],
+   "imdb": "tt13299890",
+   "countries": [
+    "India"
+   ]
+  },
+  "Babylon|2022": {
+   "qid": "Q107119206",
+   "directors": [
+    "Damien Chazelle"
+   ],
+   "cast": [
+    "Brad Pitt",
+    "Margot Robbie",
+    "Tobey Maguire",
+    "Olivia Wilde",
+    "Flea"
+   ],
+   "imdb": "tt10640346",
+   "runtime": 189,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Banshees of Inisherin|2022": {
+   "qid": "Q108314506",
+   "directors": [
+    "Martin McDonagh"
+   ],
+   "cast": [
+    "Colin Farrell",
+    "Brendan Gleeson",
+    "Barry Keoghan",
+    "Kerry Condon",
+    "Jon Kenny"
+   ],
+   "imdb": "tt11813216",
+   "runtime": 114,
+   "countries": [
+    "Ireland",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "The Batman|2022": {
+   "qid": "Q61117344",
+   "directors": [
+    "Matt Reeves"
+   ],
+   "cast": [
+    "Robert Pattinson",
+    "Andy Serkis",
+    "Colin Farrell",
+    "John Turturro",
+    "Zoë Kravitz"
+   ],
+   "imdb": "tt1877830",
+   "runtime": 176,
+   "countries": [
+    "United States"
+   ]
+  },
+  "2018|2023": {
+   "qid": "Q115878911",
+   "directors": [
+    "Jude Anthany Joseph"
+   ],
+   "cast": [
+    "Anamika",
+    "Aparna Balamurali",
+    "Tovino Thomas",
+    "Asif Ali",
+    "Vineeth Sreenivasan"
+   ],
+   "imdb": "tt9006564",
+   "countries": [
+    "India"
+   ]
+  },
+  "Beau Is Afraid|2023": {
+   "qid": "Q106817801",
+   "directors": [
+    "Ari Aster"
+   ],
+   "cast": [
+    "Joaquin Phoenix",
+    "Richard Kind",
+    "Parker Posey",
+    "Nathan Lane",
+    "Bill Hader"
+   ],
+   "imdb": "tt13521006",
+   "runtime": 179,
+   "countries": [
+    "Canada",
+    "Finland",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Bramayugam|2024": {
+   "qid": "Q121842080",
+   "directors": [
+    "Rahul Sadasivan"
+   ],
+   "cast": [
+    "Mammootty",
+    "Sidharth Bharathan",
+    "Arjun Ashokan",
+    "Manikandan R Achari",
+    "Amalda Liz"
+   ],
+   "imdb": "tt27431598",
+   "countries": [
+    "India"
+   ]
+  },
+  "Manjummel Boys|2024": {
+   "qid": "Q124636001",
+   "directors": [
+    "Chidambaram"
+   ],
+   "cast": [
+    "Sreenath Bhasi",
+    "Deepak Parambol",
+    "Soubin Shahir",
+    "Ganapathi S Poduval",
+    "Shebin Benson"
+   ],
+   "imdb": "tt26458038",
+   "runtime": 135,
+   "countries": [
+    "India"
+   ]
+  },
+  "Premalu|2024": {
+   "qid": "Q124467044",
+   "directors": [
+    "Girish A.D"
+   ],
+   "cast": [
+    "Mamitha Baiju",
+    "Naslen K. Gafoor",
+    "Akhila Bhargavan",
+    "Shyam Mohan",
+    "Sangeeth Prathap"
+   ],
+   "imdb": "tt28288786",
+   "runtime": 156,
+   "countries": [
+    "India"
+   ]
+  }
+ }
+}

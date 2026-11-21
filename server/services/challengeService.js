@@ -9,6 +9,7 @@ import { scoreChallenge, validateAnswers } from '../lib/challenge.js'
 import { utcDay } from '../lib/streaks.js'
 import { containsBlockedContent } from '../lib/contentFilter.js'
 import { getDailySet, slotInfo } from './dailySetService.js'
+import { filmDetails } from '../lib/films/filmFeatures.js'
 import { getCommunityOdds } from './filmOddsService.js'
 import { notifyUser } from './notificationService.js'
 import { dailyNumber } from './dailyService.js'
@@ -117,7 +118,7 @@ export async function getPublicChallenge(rawCode) {
     day: challenge.day,
     number: dayNumberLabel(challenge.day),
     responses: countResult.count || 0,
-    films: list.map((f) => ({ ...f, slot: slots.get(f.id) || null }))
+    films: list.map((f) => ({ ...f, details: filmDetails(f), slot: slots.get(f.id) || null }))
   }
 }
 

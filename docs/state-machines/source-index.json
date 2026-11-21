@@ -930,15 +930,15 @@
       "path": "server/db.js",
       "evidence": [
         {
-          "line": 115,
+          "line": 116,
           "text": "verification_status: row.verification_status === 'verified' ? 'verified' : 'unverified',"
         },
         {
-          "line": 148,
+          "line": 149,
           "text": "verification_status: row.verification_status || 'unverified',"
         },
         {
-          "line": 385,
+          "line": 386,
           "text": "if (!peer || peer.deleted_at || peer.is_active === false) return true"
         }
       ]
@@ -1125,6 +1125,19 @@
       ]
     },
     {
+      "path": "server/scripts/importWikidata.js",
+      "evidence": [
+        {
+          "line": 16,
+          "text": "const sleep = (ms) => new Promise((r) => setTimeout(r, ms))"
+        },
+        {
+          "line": 19,
+          "text": "if (res.status === 429 || res.status >= 500) {"
+        }
+      ]
+    },
+    {
       "path": "server/services/auditService.js",
       "evidence": [
         {
@@ -1187,7 +1200,7 @@
       "path": "server/services/challengeService.js",
       "evidence": [
         {
-          "line": 57,
+          "line": 58,
           "text": "if (!data || data.owner?.deleted_at || data.owner?.is_active === false) throw new AppError('Challenge not found', 404, 'NOT_FOUND')"
         }
       ]

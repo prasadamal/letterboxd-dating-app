@@ -119,3 +119,15 @@ test('community answers move a film between "known" and "hidden"', () => {
   assert.ok(informativeness({ pSeen: 0.9, pLove: 0.5 }).opinion > informativeness({ pSeen: 0.9, pLove: 0.95 }).opinion)
   assert.ok(seenPrior(36, 'Malayalam') > seenPrior(36, 'English'))
 })
+
+test('Wikidata facts: details for cards, and directors that agree with the hand-written list', async () => {
+  const { filmDetails } = await import('../lib/films/filmFeatures.js')
+  const godfather = filmDetails({ title: 'The Godfather', year: 1972 })
+  assert.equal(godfather.director, 'Francis Ford Coppola')
+  assert.ok(godfather.cast.includes('Al Pacino'))
+  assert.ok(godfather.runtime > 150 && godfather.runtime < 200)
+  assert.deepEqual(filmDetails({ title: 'Not a film', year: 1900 }), { director: null, cast: [], runtime: null })
+  const fs = await import('node:fs')
+  const w = JSON.parse(fs.readFileSync(new URL('../data/wikidataFacts.json', import.meta.url), 'utf8')).films
+  assert.ok(Object.keys(w).length >= 400, 'most catalog films have Wikidata facts')
+})
