@@ -8,6 +8,7 @@ import { publicPrompts } from '../lib/profilePrompts.js'
 import { getTasteStats } from './filmService.js'
 import { logger } from '../lib/logger.js'
 import { getPersonalities } from './personalityService.js'
+import { getCommunityOdds } from './filmOddsService.js'
 import { canonicalGenres } from '../lib/genres.js'
 
 // Called after every rating; writes only on the first rating of a UTC day.
@@ -91,14 +92,15 @@ export async function getIcebreakers(userId, peerId) {
   const meta = await getChatMeta(userId, peerId)
   if (!meta) throw new AppError('No conversation', 404, 'NOT_FOUND')
 
-  const [peer, ratings, personalities] = await Promise.all([
+  const [peer, ratings, personalities, odds] = await Promise.all([
     findUserById(peerId),
     getRatingsForUsers([userId, peerId]),
-    getPersonalities([userId, peerId])
+    getPersonalities([userId, peerId]),
+    getCommunityOdds()
   ])
   const mine = ratings.get(userId)
   const theirs = ratings.get(peerId)
-  const stats = compareTaste(mine, theirs)
+  const stats = compareTaste(mine, theirs, { odds })
   const myType = personalities.get(userId)
   const theirType = personalities.get(peerId)
 

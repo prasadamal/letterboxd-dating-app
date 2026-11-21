@@ -76,6 +76,8 @@ export type Movie = {
   popularity?: number
   // Daily films only: how everyone has rated it so far (revealed after you swipe).
   community?: { likedPercent: number | null; votes: number }
+  // Daily films only: which of the day's ten slots this film fills ("Hidden gem", "Director's pick: …").
+  slot?: { slot: string; label: string; note?: string; faceOff?: string }
 }
 
 export type DatingProfile = User & {

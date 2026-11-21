@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { WatchlistButton } from './WatchlistButton'
+import { ChallengeFriend } from './ChallengeFriend'
 import { useEffect, useState } from 'react'
 import { Share, StyleSheet, Text, View } from 'react-native'
 import { haptic } from '../lib/haptics'
@@ -88,6 +89,8 @@ export function DailyResultsCard({ results }: { results: DailyResults }) {
           )}
         </View>
       )}
+
+      {results.complete && <ChallengeFriend />}
 
       <Button
         title="Share my results"

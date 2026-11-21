@@ -118,6 +118,22 @@ export function FilmSwipeDeck({ movies, total, onRate }: Props) {
         ))}
       </View>
 
+      {/* The film's slot in today's ten; always takes one line so the card doesn't jump. */}
+      <View style={styles.slotRow} accessible accessibilityLabel={visible[0]?.slot ? `${visible[0].slot.label}. ${visible[0].slot.note || ''}` : undefined}>
+        {visible[0]?.slot ? (
+          <>
+            <Text style={styles.slotLabel} numberOfLines={1}>
+              {visible[0].slot.label}
+            </Text>
+            {visible[0].slot.note ? (
+              <Text style={styles.slotNote} numberOfLines={1}>
+                {visible[0].slot.note}
+              </Text>
+            ) : null}
+          </>
+        ) : null}
+      </View>
+
       <View style={{ width: cardWidth, height: cardHeight + 16 }}>
         {visible
           .map((movie, i) => {
@@ -174,6 +190,9 @@ export function FilmSwipeDeck({ movies, total, onRate }: Props) {
 }
 
 const styles = StyleSheet.create({
+  slotRow: { height: 22, flexDirection: 'row', alignItems: 'center', gap: 8, alignSelf: 'stretch', justifyContent: 'center', paddingHorizontal: 8 },
+  slotLabel: { fontFamily: fonts.bold, fontSize: 12, letterSpacing: 1, textTransform: 'uppercase', color: colors.lime, flexShrink: 0, maxWidth: '60%' },
+  slotNote: { color: colors.muted, fontSize: 12, flexShrink: 1 },
   wrap: { alignItems: 'center', gap: 16 },
   progressRow: { flexDirection: 'row', gap: 5, alignSelf: 'stretch', paddingHorizontal: 20 },
   progressDot: { flex: 1, height: 4, borderRadius: 2, backgroundColor: 'rgba(255,255,255,0.12)' },
