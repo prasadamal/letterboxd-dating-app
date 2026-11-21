@@ -1,0 +1,56 @@
+name: ReelMates APK (GitHub build, no EAS)
+
+# An alternative to EAS builds. It only builds an APK you can download; it changes nothing else.
+# Runs on a push to the branch claude/reelmates-apk-build, or by hand from the Actions tab.
+on:
+  push:
+    branches: [claude/reelmates-apk-build]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: mobile
+    env:
+      # Public values, the same as the preview profile in mobile/eas.json.
+      EXPO_PUBLIC_SUPABASE_URL: https://kounpkxjjkuoabbofgay.supabase.co
+      EXPO_PUBLIC_SUPABASE_ANON_KEY: sb_publishable_mGGVjbDjEE9KET5IjaiUmw_nuk-I_gv
+      EXPO_PUBLIC_API_URL: https://reelmates-api-kshi.onrender.com/api/v1
+      EXPO_PUBLIC_WEB_URL: https://reelmates-api-kshi.onrender.com
+      EXPO_PUBLIC_EAS_PROJECT_ID: a3bbbbc6-34c1-4388-b870-ef4c49eaad72
+      # Stops the build if any of the values above is missing or not a public https address.
+      REELMATES_RELEASE_CHECK: '1'
+      CI: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      # The runner already includes the Android SDK, so no extra setup step is needed.
+      - run: npm ci
+      - name: Check the code first
+        run: npm run typecheck && npm test
+      - name: Generate the Android project
+        run: npx expo prebuild --platform android --no-install
+      - name: Build the APK
+        working-directory: mobile/android
+        run: ./gradlew assembleRelease --no-daemon -Dorg.gradle.jvmargs="-Xmx4g"
+      - name: Name the file
+        run: cp android/app/build/outputs/apk/release/app-release.apk reelmates-${GITHUB_SHA::7}.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reelmates-apk
+          path: mobile/reelmates-*.apk
+          retention-days: 14
