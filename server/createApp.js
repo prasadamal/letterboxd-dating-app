@@ -26,6 +26,9 @@ import internalRoutes from './routes/internal.js'
 import friendsRoutes from './routes/friends.js'
 import feedbackRoutes from './routes/feedback.js'
 import publicRoutes from './routes/public.js'
+import challengesRoutes from './routes/challenges.js'
+import { getPublicChallenge } from './services/challengeService.js'
+import { challengePreviewHtml } from './lib/linkPreview.js'
 import billingRoutes from './routes/billing.js'
 import { openApiDocument } from './openapi/spec.js'
 import swaggerUi from 'swagger-ui-express'
@@ -100,6 +103,7 @@ export function createApp() {
     app.use(`${prefix}/friends`, friendsRoutes)
     app.use(`${prefix}/feedback`, feedbackRoutes)
     app.use(`${prefix}/public`, publicRoutes)
+    app.use(`${prefix}/challenges`, challengesRoutes)
     app.use(`${prefix}/billing`, billingRoutes)
   }
 
@@ -107,6 +111,17 @@ export function createApp() {
   mount('/api')
 
   if (isProduction && fs.existsSync(distPath)) {
+    // Challenge links get their own preview title and description in WhatsApp, Telegram, Instagram…
+    const shell = fs.readFileSync(path.join(distPath, 'index.html'), 'utf8')
+    app.get('/c/:code', async (req, res) => {
+      res.set('Content-Type', 'text/html; charset=utf-8')
+      try {
+        const challenge = await getPublicChallenge(req.params.code)
+        return res.send(challengePreviewHtml(shell, challenge, `${req.protocol}://${req.get('host')}${req.originalUrl}`))
+      } catch {
+        return res.send(shell)
+      }
+    })
     app.use(express.static(distPath))
     app.get('*', (req, res, next) => {
       if (req.path.startsWith('/api')) return next()

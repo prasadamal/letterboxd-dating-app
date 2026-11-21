@@ -6,6 +6,7 @@ import { selectAll, selectAllIn } from '../lib/paging.js'
 import { compareTaste, rarityWeight, rankByTaste } from '../lib/tasteMatch.js'
 import { personalityBadge } from '../lib/filmPersonality.js'
 import { getPersonalities, withPersonalities } from './personalityService.js'
+import { getCommunityOdds } from './filmOddsService.js'
 
 // Film friends: compare taste with anyone, not just dating matches. Works before dating opens.
 // Your friend code is your referral code; adding someone by code makes you friends both ways.
@@ -59,12 +60,12 @@ export async function listFriends(userId) {
   if (!ids.length) return []
 
   const people = await selectAllIn(ids, (part) => supabase.from('users').select(PERSON_COLUMNS).in('id', part).order('id'))
-  const ratings = await getRatingsForUsers([userId, ...ids])
+  const [ratings, odds] = await Promise.all([getRatingsForUsers([userId, ...ids]), getCommunityOdds()])
   const mine = ratings.get(userId)
   const friends = people
     .filter((p) => !p.deleted_at && p.is_active !== false)
     .map((p) => {
-      const stats = compareTaste(mine, ratings.get(p.id))
+      const stats = compareTaste(mine, ratings.get(p.id), { odds })
       return {
         ...mapPublicUser(p),
         score: stats.score,
@@ -109,10 +110,14 @@ export async function compareWith(userId, otherId) {
   const other = await canCompare(userId, otherId)
   if (!other) throw new AppError('You can compare taste with your film friends and matches', 404, 'NOT_FOUND')
 
-  const [ratings, personalities] = await Promise.all([getRatingsForUsers([userId, otherId]), getPersonalities([userId, otherId])])
+  const [ratings, personalities, odds] = await Promise.all([
+    getRatingsForUsers([userId, otherId]),
+    getPersonalities([userId, otherId]),
+    getCommunityOdds()
+  ])
   const mine = ratings.get(userId)
   const theirs = ratings.get(otherId)
-  const stats = compareTaste(mine, theirs)
+  const stats = compareTaste(mine, theirs, { odds })
   const myFavorite = mine?.favorite != null ? mine.titles?.get(mine.favorite) || null : null
 
   return {

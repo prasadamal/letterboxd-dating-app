@@ -504,18 +504,39 @@
       ]
     },
     {
+      "path": "mobile/components/ChallengeFriend.tsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { useCallback, useEffect, useState } from 'react'"
+        },
+        {
+          "line": 12,
+          "text": "const [challenge, setChallenge] = useState<MyChallenge | null>(null)"
+        },
+        {
+          "line": 13,
+          "text": "const [busy, setBusy] = useState(false)"
+        },
+        {
+          "line": 14,
+          "text": "const [error, setError] = useState('')"
+        }
+      ]
+    },
+    {
       "path": "mobile/components/DailyResultsCard.tsx",
       "evidence": [
         {
-          "line": 3,
+          "line": 4,
           "text": "import { useEffect, useState } from 'react'"
         },
         {
-          "line": 27,
+          "line": 28,
           "text": "const [countdown, setCountdown] = useState(untilNextDrop())"
         },
         {
-          "line": 29,
+          "line": 30,
           "text": "const timer = setInterval(() => setCountdown(untilNextDrop()), 30000)"
         }
       ]
@@ -884,19 +905,23 @@
       "path": "server/datingService.js",
       "evidence": [
         {
-          "line": 83,
+          "line": 85,
           "text": "if (!self || !target || target.deleted_at || target.is_active === false) throw new Error('User not found')"
         },
         {
-          "line": 86,
+          "line": 88,
           "text": "const status = await assertDatingLaunched(self)"
         },
         {
-          "line": 185,
+          "line": 190,
           "text": "const status = await assertDatingLaunched(self)"
         },
         {
-          "line": 319,
+          "line": 249,
+          "text": "const pending = new Map()"
+        },
+        {
+          "line": 356,
           "text": "const status = await assertDatingLaunched(self)"
         }
       ]
@@ -905,15 +930,15 @@
       "path": "server/db.js",
       "evidence": [
         {
-          "line": 96,
+          "line": 115,
           "text": "verification_status: row.verification_status === 'verified' ? 'verified' : 'unverified',"
         },
         {
-          "line": 129,
+          "line": 148,
           "text": "verification_status: row.verification_status || 'unverified',"
         },
         {
-          "line": 372,
+          "line": 385,
           "text": "if (!peer || peer.deleted_at || peer.is_active === false) return true"
         }
       ]
@@ -1159,14 +1184,44 @@
       ]
     },
     {
+      "path": "server/services/challengeService.js",
+      "evidence": [
+        {
+          "line": 57,
+          "text": "if (!data || data.owner?.deleted_at || data.owner?.is_active === false) throw new AppError('Challenge not found', 404, 'NOT_FOUND')"
+        }
+      ]
+    },
+    {
+      "path": "server/services/filmOddsService.js",
+      "evidence": [
+        {
+          "line": 9,
+          "text": "let cached = null"
+        },
+        {
+          "line": 10,
+          "text": "let cachedAt = 0"
+        },
+        {
+          "line": 11,
+          "text": "let pending = null"
+        },
+        {
+          "line": 33,
+          "text": "pending = null"
+        }
+      ]
+    },
+    {
       "path": "server/services/friendsService.js",
       "evidence": [
         {
-          "line": 23,
+          "line": 24,
           "text": "if (!friend || friend.deleted_at || friend.is_active === false) throw new AppError('No one has that code', 404, 'NOT_FOUND')"
         },
         {
-          "line": 82,
+          "line": 83,
           "text": "if (!other || other.deleted_at || other.is_active === false) return false"
         }
       ]
@@ -1175,7 +1230,7 @@
       "path": "server/services/growthService.js",
       "evidence": [
         {
-          "line": 61,
+          "line": 62,
           "text": "if (!user || !user.taste_card_public || user.deleted_at || user.is_active === false) {"
         }
       ]
@@ -1205,7 +1260,7 @@
       "path": "server/services/notificationService.js",
       "evidence": [
         {
-          "line": 50,
+          "line": 54,
           "text": "logger.warn('Expo push failed', { status: response.status, text })"
         }
       ]
@@ -1257,11 +1312,11 @@
           "text": "import { useEffect, useState } from 'react'"
         },
         {
-          "line": 12,
+          "line": 13,
           "text": "const [user, setUser] = useState(null)"
         },
         {
-          "line": 13,
+          "line": 14,
           "text": "const [ready, setReady] = useState(false)"
         }
       ]
@@ -1407,6 +1462,43 @@
         {
           "line": 64,
           "text": "const [busy, setBusy] = useState(false)"
+        }
+      ]
+    },
+    {
+      "path": "src/pages/ChallengePage.jsx",
+      "evidence": [
+        {
+          "line": 1,
+          "text": "import { useEffect, useMemo, useState } from 'react'"
+        },
+        {
+          "line": 27,
+          "text": "const [challenge, setChallenge] = useState(null)"
+        },
+        {
+          "line": 28,
+          "text": "const [error, setError] = useState('')"
+        },
+        {
+          "line": 29,
+          "text": "const [name, setName] = useState('')"
+        },
+        {
+          "line": 30,
+          "text": "const [answers, setAnswers] = useState({})"
+        },
+        {
+          "line": 31,
+          "text": "const [sending, setSending] = useState(false)"
+        },
+        {
+          "line": 32,
+          "text": "const [result, setResult] = useState(() => remembered(code))"
+        },
+        {
+          "line": 33,
+          "text": "const [shared, setShared] = useState('')"
         }
       ]
     },
@@ -1664,6 +1756,19 @@
         {
           "line": 10,
           "text": "note text CHECK (char_length(note) <= 1000),"
+        }
+      ]
+    },
+    {
+      "path": "supabase/migrations/20261121120000_daily_sets_and_challenges.sql",
+      "evidence": [
+        {
+          "line": 34,
+          "text": "responder_name text NOT NULL CHECK (char_length(responder_name) BETWEEN 1 AND 40),"
+        },
+        {
+          "line": 37,
+          "text": "score integer NOT NULL CHECK (score BETWEEN 0 AND 100),"
         }
       ]
     }
