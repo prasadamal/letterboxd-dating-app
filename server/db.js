@@ -4,7 +4,7 @@ import { broadcastChatEvent, chatChannelName } from './services/realtimeService.
 import { movieCatalog } from './movieCatalog.js'
 import { pendingDailyMovies } from './lib/dailyMovies.js'
 import { getDailySet, slotInfo } from './services/dailySetService.js'
-import { filmDetails } from './lib/films/filmFeatures.js'
+import { filmDetails, posterUrl } from './lib/films/filmFeatures.js'
 import { mapLimit, selectAll, selectAllIn } from './lib/paging.js'
 import { compareTaste } from './lib/tasteMatch.js'
 import { normalizeInterestedIn } from './lib/datingEligibility.js'
@@ -265,7 +265,7 @@ export async function getDailyMovies(userId) {
   // Everyone gets the same ten today, one from each slot (see lib/films/dailyPicker.js).
   const set = await getDailySet(day)
   const slots = slotInfo(set)
-  const withSlot = (movie) => ({ ...movie, details: filmDetails(movie), ...(slots.has(movie.id) ? { slot: slots.get(movie.id) } : {}) })
+  const withSlot = (movie) => ({ ...movie, poster_url: posterUrl(movie), details: filmDetails(movie), ...(slots.has(movie.id) ? { slot: slots.get(movie.id) } : {}) })
 
   const ids = batch?.movie_ids?.length ? batch.movie_ids : set.movie_ids || []
   if (!batch?.movie_ids?.length && ids.length) {

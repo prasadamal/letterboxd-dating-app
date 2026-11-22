@@ -3,6 +3,7 @@ import { selectAll, selectAllIn } from '../lib/paging.js'
 import { COLLECTIONS } from '../data/curatedFilmsMeta.js'
 import { canonicalGenres } from '../lib/genres.js'
 import { filmPersonality } from '../lib/filmPersonality.js'
+import { posterUrl } from '../lib/films/filmFeatures.js'
 
 const FILM_COLUMNS = 'id, title, year, genres, origin_language, tags, popularity'
 const CHART_TTL_MS = 5 * 60_000
@@ -15,7 +16,8 @@ function publicFilm(movie) {
     year: movie.year,
     genres: canonicalGenres(movie.genres),
     origin_language: movie.origin_language,
-    tags: movie.tags || []
+    tags: movie.tags || [],
+    poster_url: posterUrl(movie)
   }
 }
 

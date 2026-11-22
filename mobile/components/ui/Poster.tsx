@@ -1,9 +1,10 @@
 import { LinearGradient } from 'expo-linear-gradient'
-import { StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native'
+import { useState } from 'react'
+import { Image, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native'
 import { posterArt, posterTitleSize } from '../../lib/posterArt'
 import { fonts } from '../../lib/theme'
 
-type Film = { id: number; title: string; year?: number | null; genres?: string[]; origin_language?: string }
+type Film = { id: number; title: string; year?: number | null; genres?: string[]; origin_language?: string; poster_url?: string | null }
 
 // Typographic poster: a genre gradient, the year up top and the title set big, like a minimalist one-sheet.
 export function Poster({
@@ -21,12 +22,26 @@ export function Poster({
 }) {
   const art = posterArt(film)
   const h = height ?? Math.round(width * 1.45)
+  const [failed, setFailed] = useState(false)
+  // A real poster when the film has a free one (public domain, from Wikimedia Commons); the typographic
+  // poster stays underneath while it loads and if it fails.
+  const photo =
+    film.poster_url && !failed ? (
+      <Image
+        source={{ uri: film.poster_url }}
+        style={StyleSheet.absoluteFill}
+        resizeMode="cover"
+        onError={() => setFailed(true)}
+        accessibilityIgnoresInvertColors
+      />
+    ) : null
   if (variant === 'thumb') {
     return (
       <LinearGradient colors={art.colors} start={art.start} end={art.end} style={[styles.thumb, { width, height: h, borderRadius: Math.round(width * 0.2) }, style]}>
         <Text selectable={false} style={[styles.thumbLetter, { fontSize: Math.round(width * 0.42) }]} numberOfLines={1}>
           {film.title.replace(/^(The|A|An) /i, '').charAt(0).toUpperCase()}
         </Text>
+        {photo}
       </LinearGradient>
     )
   }
@@ -51,6 +66,7 @@ export function Poster({
         </Text>
         {!!meta && <Text selectable={false} style={[styles.meta, small && styles.metaSmall]} numberOfLines={1}>{meta.toUpperCase()}</Text>}
       </View>
+      {photo}
     </LinearGradient>
   )
 }

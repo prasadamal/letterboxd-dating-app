@@ -1,6 +1,6 @@
 {
  "source": "Wikidata (CC0)",
- "imported": "2026-11-21",
+ "imported": "2026-11-22",
  "films": {
   "The Shawshank Redemption|1994": {
    "qid": "Q172241",
@@ -8,11 +8,11 @@
     "Frank Darabont"
    ],
    "cast": [
-    "Morgan Freeman",
     "Tim Robbins",
-    "Clancy Brown",
-    "James Whitmore",
-    "William Sadler"
+    "Morgan Freeman",
+    "Bob Gunton",
+    "William Sadler",
+    "James Whitmore"
    ],
    "imdb": "tt0111161",
    "runtime": 142,
@@ -28,9 +28,9 @@
    "cast": [
     "Marlon Brando",
     "Al Pacino",
-    "Diane Keaton",
+    "James Caan",
     "Robert Duvall",
-    "James Caan"
+    "Diane Keaton"
    ],
    "imdb": "tt0068646",
    "runtime": 175,
@@ -45,10 +45,10 @@
     "Bong Joon-ho"
    ],
    "cast": [
-    "Park Seo-joon",
-    "Yong-Gyu Park",
     "Song Kang-ho",
     "Lee Sun-kyun",
+    "Park Seo-joon",
+    "Cho Yeo-jeong",
     "Park So-dam"
    ],
    "imdb": "tt6751668",
@@ -75,11 +75,11 @@
     "Giuseppe Tornatore"
    ],
    "cast": [
-    "Philippe Noiret",
     "Jacques Perrin",
+    "Philippe Noiret",
+    "Marco Leonardi",
     "Brigitte Fossey",
-    "Leopoldo Trieste",
-    "Enzo Cannavale"
+    "Salvatore Cascio"
    ],
    "imdb": "tt0095765",
    "runtime": 155,
@@ -95,10 +95,10 @@
    ],
    "cast": [
     "Ivana Baquero",
+    "Ariadna Gil",
     "Doug Jones",
     "Maribel Verdú",
-    "Sergi López",
-    "Ariadna Gil"
+    "Sergi López"
    ],
    "imdb": "tt0457430",
    "runtime": 119,
@@ -114,9 +114,9 @@
    "cast": [
     "Audrey Tautou",
     "Mathieu Kassovitz",
-    "Michel Serrault",
     "Jamel Debbouze",
-    "Yolande Moreau"
+    "Yolande Moreau",
+    "Dominique Pinon"
    ],
    "imdb": "tt0211915",
    "runtime": 122,
@@ -127,15 +127,15 @@
   "City of God|2002": {
    "qid": "Q220741",
    "directors": [
-    "Fernando Meirelles",
-    "Kátia Lund"
+    "Kátia Lund",
+    "Fernando Meirelles"
    ],
    "cast": [
     "Alice Braga",
+    "Alexandre Rodrigues",
     "Seu Jorge",
-    "Micael Borges",
-    "Paulo Lins",
-    "Matheus Nachtergaele"
+    "Leandro Firmino",
+    "Jonathan Haagensen"
    ],
    "imdb": "tt0317248",
    "runtime": 128,
@@ -151,8 +151,8 @@
    ],
    "cast": [
     "Choi Min-sik",
-    "Kang Hye-jung",
     "Yoo Ji-tae",
+    "Kang Hye-jung",
     "Yoon Jin-seo",
     "Oh Dal-su"
    ],
@@ -171,8 +171,8 @@
    "cast": [
     "Maggie Cheung",
     "Tony Leung",
-    "Rebecca Pan",
     "Joe Cheung Tung-joe",
+    "Rebecca Pan",
     "Roy Cheung"
    ],
    "imdb": "tt0118694",
@@ -189,9 +189,9 @@
     "Ang Lee"
    ],
    "cast": [
+    "Chow Yun-fat",
     "Michelle Yeoh",
     "Zhang Ziyi",
-    "Chow Yun-fat",
     "Cheng Pei-pei",
     "Chang Chen"
    ],
@@ -212,9 +212,9 @@
    "cast": [
     "Aamir Khan",
     "Gracy Singh",
+    "Rachel Shelley",
     "Paul Blackthorne",
-    "A. K. Hangal",
-    "Rachel Shelley"
+    "Kulbhushan Kharbanda"
    ],
    "imdb": "tt0169102",
    "runtime": 224,
@@ -231,8 +231,8 @@
     "Aamir Khan",
     "Kareena Kapoor",
     "R. Madhavan",
-    "Boman Irani",
-    "Sharman Joshi"
+    "Sharman Joshi",
+    "Boman Irani"
    ],
    "imdb": "tt1187043",
    "runtime": 164,
@@ -247,10 +247,10 @@
    ],
    "cast": [
     "Aamir Khan",
+    "Sakshi Tanwar",
     "Fatima Sana Shaikh",
-    "Zaira Wasim",
     "Sanya Malhotra",
-    "Sakshi Tanwar"
+    "Zaira Wasim"
    ],
    "imdb": "tt5074352",
    "runtime": 161,
@@ -264,14 +264,14 @@
     "S. S. Rajamouli"
    ],
    "cast": [
+    "N. T. Rama Rao Jr.",
     "Alia Bhatt",
-    "Ajay Devgn",
     "Ram Charan",
-    "Shriya Saran",
-    "Ray Stevenson"
+    "Ajay Devgn",
+    "Shriya Saran"
    ],
    "imdb": "tt8178634",
-   "runtime": 187,
+   "runtime": 181,
    "countries": [
     "India"
    ]
@@ -282,14 +282,14 @@
     "S. S. Rajamouli"
    ],
    "cast": [
-    "Anushka Shetty",
-    "Tamannaah Bhatia",
     "Prabhas",
+    "Tamannaah Bhatia",
+    "Anushka Shetty",
     "Rana Daggubati",
     "Sathyaraj"
    ],
    "imdb": "tt2631186",
-   "runtime": 159,
+   "runtime": 129,
    "countries": [
     "India"
    ]
@@ -304,7 +304,7 @@
     "Meena",
     "Esther Anil",
     "Asha Sarath",
-    "Sidhique"
+    "Ansiba Hassan"
    ],
    "imdb": "tt3417422",
    "runtime": 160,
@@ -322,8 +322,8 @@
    "cast": [
     "R. Madhavan",
     "Vijay Sethupathi",
-    "Shraddha Srinath",
     "Varalaxmi Sarathkumar",
+    "Shraddha Srinath",
     "Kathir"
    ],
    "imdb": "tt6148156",
@@ -338,9 +338,9 @@
     "Satyajit Ray"
    ],
    "cast": [
+    "Kanu Banerjee",
     "Karuna Banerjee",
     "Chunibala Devi",
-    "Kanu Banerjee",
     "Uma Dasgupta",
     "Tulsi Chakraborty"
    ],
@@ -357,8 +357,8 @@
    ],
    "cast": [
     "Irrfan Khan",
-    "Nawazuddin Siddiqui",
     "Nimrat Kaur",
+    "Nawazuddin Siddiqui",
     "Lillete Dubey",
     "Bharati Achrekar"
    ],
@@ -378,9 +378,9 @@
    ],
    "cast": [
     "Fatoumata Diawara",
-    "Toulou Kiki",
-    "Hichem Yacoubi",
     "Abel Jafri",
+    "Hichem Yacoubi",
+    "Toulou Kiki",
     "Ibrahim Ahmed dit Pino"
    ],
    "imdb": "tt3409392",
@@ -397,9 +397,9 @@
    ],
    "cast": [
     "Leila Hatami",
+    "Sareh Bayat",
     "Shahab Hosseini",
     "Payman Maadi",
-    "Sareh Bayat",
     "Sarina Farhadi"
    ],
    "imdb": "tt1832382",
@@ -414,8 +414,8 @@
     "Asghar Farhadi"
    ],
    "cast": [
-    "Taraneh Alidoosti",
-    "Shahab Hosseini"
+    "Shahab Hosseini",
+    "Taraneh Alidoosti"
    ],
    "imdb": "tt5186714",
    "runtime": 123,
@@ -430,8 +430,8 @@
     "Gavin Hood"
    ],
    "cast": [
-    "Terry Pheto",
     "Presley Chweneyagae",
+    "Terry Pheto",
     "Zola",
     "Ian Roberts",
     "Mothusi Magano"
@@ -449,11 +449,11 @@
     "Ryan Coogler"
    ],
    "cast": [
-    "Stan Lee",
-    "Andy Serkis",
-    "Forest Whitaker",
+    "Chadwick Boseman",
     "Lupita Nyong'o",
-    "Chadwick Boseman"
+    "Michael B. Jordan",
+    "Andy Serkis",
+    "Forest Whitaker"
    ],
    "imdb": "tt1825683",
    "runtime": 134,
@@ -467,11 +467,11 @@
     "Barry Jenkins"
    ],
    "cast": [
-    "Mahershala Ali",
     "Naomie Harris",
+    "Mahershala Ali",
     "Janelle Monáe",
-    "André Holland",
-    "Trevante Rhodes"
+    "Trevante Rhodes",
+    "André Holland"
    ],
    "imdb": "tt4975722",
    "runtime": 111,
@@ -487,7 +487,7 @@
    "cast": [
     "Daniel Kaluuya",
     "Catherine Keener",
-    "LaKeith Stanfield",
+    "Allison Williams",
     "Bradley Whitford",
     "Stephen Root"
    ],
@@ -525,9 +525,9 @@
    ],
    "cast": [
     "Keanu Reeves",
+    "Carrie-Anne Moss",
     "Laurence Fishburne",
     "Hugo Weaving",
-    "Carrie-Anne Moss",
     "Joe Pantoliano"
    ],
    "imdb": "tt0133093",
@@ -543,10 +543,10 @@
     "Denis Villeneuve"
    ],
    "cast": [
-    "Harrison Ford",
     "Ryan Gosling",
-    "Jared Leto",
+    "Harrison Ford",
     "Robin Wright",
+    "Jared Leto",
     "Dave Bautista"
    ],
    "imdb": "tt1856101",
@@ -564,8 +564,8 @@
     "Denis Villeneuve"
    ],
    "cast": [
-    "Jeremy Renner",
     "Amy Adams",
+    "Jeremy Renner",
     "Forest Whitaker",
     "Michael Stuhlbarg",
     "Tzi Ma"
@@ -582,11 +582,11 @@
     "Christopher Nolan"
    ],
    "cast": [
-    "Matt Damon",
+    "Matthew McConaughey",
     "Anne Hathaway",
     "Michael Caine",
-    "Matthew McConaughey",
-    "Timothée Chalamet"
+    "Matt Damon",
+    "Jessica Chastain"
    ],
    "imdb": "tt0816692",
    "runtime": 169,
@@ -601,8 +601,8 @@
     "George Miller"
    ],
    "cast": [
-    "Charlize Theron",
     "Tom Hardy",
+    "Charlize Theron",
     "Nicholas Hoult",
     "Zoë Kravitz",
     "Rosie Huntington-Whiteley"
@@ -620,11 +620,11 @@
     "Christopher Nolan"
    ],
    "cast": [
-    "Morgan Freeman",
-    "Heath Ledger",
+    "Christian Bale",
     "Michael Caine",
-    "Gary Oldman",
-    "Christian Bale"
+    "Heath Ledger",
+    "Morgan Freeman",
+    "Gary Oldman"
    ],
    "imdb": "tt0468569",
    "runtime": 155,
@@ -640,9 +640,9 @@
    ],
    "cast": [
     "J. K. Simmons",
-    "J.K. Simmons",
-    "Miles Teller",
+    "Austin Stowell",
     "Melissa Benoist",
+    "Miles Teller",
     "Paul Reiser"
    ],
    "imdb": "tt2582802",
@@ -658,10 +658,10 @@
    ],
    "cast": [
     "Emma Stone",
-    "Ryan Gosling",
     "J. K. Simmons",
-    "J.K. Simmons",
-    "John Legend"
+    "Ryan Gosling",
+    "John Legend",
+    "Finn Wittrock"
    ],
    "imdb": "tt3783958",
    "runtime": 128,
@@ -675,11 +675,11 @@
     "Wes Anderson"
    ],
    "cast": [
-    "Jude Law",
+    "Ralph Fiennes",
     "Edward Norton",
-    "Bill Murray",
-    "Willem Dafoe",
-    "Ralph Fiennes"
+    "Jude Law",
+    "Saoirse Ronan",
+    "Willem Dafoe"
    ],
    "imdb": "tt2278388",
    "runtime": 99,
@@ -694,11 +694,11 @@
     "Greta Gerwig"
    ],
    "cast": [
-    "Timothée Chalamet",
     "Saoirse Ronan",
+    "Timothée Chalamet",
     "Laurie Metcalf",
     "Kathryn Newton",
-    "Laura Marano"
+    "Odeya Rush"
    ],
    "imdb": "tt4925292",
    "runtime": 93,
@@ -729,8 +729,8 @@
    ],
    "cast": [
     "Steven Yeun",
-    "Will Patton",
     "Youn Yuh-jung",
+    "Will Patton",
     "Han Ye-ri",
     "Alan S. Kim"
    ],
@@ -766,9 +766,9 @@
    "cast": [
     "Gong Yoo",
     "Ma Dong-seok",
-    "Sohee",
     "Jung Yu-mi",
-    "Choi Woo-shik"
+    "Kim Su-an",
+    "Sohee"
    ],
    "imdb": "tt5700672",
    "runtime": 118,
@@ -783,7 +783,7 @@
    ],
    "cast": [],
    "imdb": "tt5311514",
-   "runtime": 107,
+   "runtime": 106,
    "countries": [
     "Japan"
    ]
@@ -818,11 +818,11 @@
     "Hirokazu Kore-eda"
    ],
    "cast": [
+    "Lily Franky",
     "Sakura Andō",
+    "Mayu Matsuoka",
     "Kirin Kiki",
-    "Akira Emoto",
-    "Yuki Yamada",
-    "Mayu Matsuoka"
+    "Akira Emoto"
    ],
    "imdb": "tt8075192",
    "runtime": 121,
@@ -839,8 +839,8 @@
     "Hidetoshi Nishijima",
     "Masaki Okada",
     "Reika Kirishima",
-    "Park Yu-rim",
-    "Tōko Miura"
+    "Tōko Miura",
+    "Park Yu-rim"
    ],
    "imdb": "tt14039582",
    "runtime": 179,
@@ -854,14 +854,14 @@
     "Takashi Yamazaki"
    ],
    "cast": [
-    "Sakura Andō",
-    "Minami Hamabe",
     "Ryūnosuke Kamiki",
+    "Minami Hamabe",
+    "Sakura Andō",
     "Yuki Yamada",
     "Munetaka Aoki"
    ],
    "imdb": "tt23289160",
-   "runtime": 125,
+   "runtime": 124,
    "countries": [
     "Japan"
    ]
@@ -874,12 +874,12 @@
    "cast": [
     "Kim Min-hee",
     "Kim Tae-ri",
+    "Ha Jung-woo",
     "Moon So-ri",
-    "Kim Hae-suk",
-    "Ha Jung-woo"
+    "Cho Jin-woong"
    ],
    "imdb": "tt4016934",
-   "runtime": 168,
+   "runtime": 145,
    "countries": [
     "South Korea"
    ]
@@ -891,10 +891,10 @@
    ],
    "cast": [
     "Song Kang-ho",
+    "Kim Sang-kyung",
     "Jeon Mi-seon",
-    "Jung In-sun",
-    "Byun Hee-bong",
-    "Park Hae-il"
+    "Park Hae-il",
+    "Jung In-sun"
    ],
    "imdb": "tt0353969",
    "runtime": 132,
@@ -908,8 +908,8 @@
     "Lee Chang-dong"
    ],
    "cast": [
-    "Steven Yeun",
     "Yoo Ah-in",
+    "Steven Yeun",
     "Jeon Jong-seo"
    ],
    "imdb": "tt7282468",
@@ -925,9 +925,9 @@
     "Na Hong-jin"
    ],
    "cast": [
-    "Chun Woo-hee",
-    "Hwang Jung-min",
     "Kwak Do-won",
+    "Hwang Jung-min",
+    "Chun Woo-hee",
     "Jun Kunimura",
     "Jang So-yeon"
    ],
@@ -945,8 +945,8 @@
    "cast": [
     "Yalitza Aparicio",
     "Marina de Tavira",
-    "Latin Lover",
     "Jorge Antonio Guerrero",
+    "Latin Lover",
     "Jennifer Armour"
    ],
    "imdb": "tt6155172",
@@ -965,8 +965,8 @@
     "Ricardo Darín",
     "Soledad Villamil",
     "Guillermo Francella",
-    "Carla Quevedo",
-    "Javier Godino"
+    "Javier Godino",
+    "Carla Quevedo"
    ],
    "imdb": "tt1305806",
    "runtime": 129,
@@ -983,8 +983,8 @@
    "cast": [
     "Daniela Vega",
     "Antonia Zegers",
+    "Alejandro Goic",
     "Aline Küppenheim",
-    "Luis Gnecco",
     "Amparo Noguera"
    ],
    "imdb": "tt5639354",
@@ -1002,8 +1002,8 @@
     "Céline Sciamma"
    ],
    "cast": [
-    "Valeria Golino",
     "Adèle Haenel",
+    "Valeria Golino",
     "Noémie Merlant",
     "Luàna Bajrami",
     "Armande Boulanger"
@@ -1021,11 +1021,11 @@
     "Éric Toledano"
    ],
    "cast": [
-    "Omar Sy",
     "François Cluzet",
+    "Omar Sy",
     "Audrey Fleurot",
-    "Anne Le Ny",
-    "Alba Gaïa Bellugi"
+    "Alba Gaïa Bellugi",
+    "Anne Le Ny"
    ],
    "imdb": "tt1675434",
    "runtime": 112,
@@ -1052,9 +1052,9 @@
     "Gillo Pontecorvo"
    ],
    "cast": [
+    "Jean Martin",
     "Saadi Yacef",
     "Larbi Zekkal",
-    "Jean Martin",
     "Brahim Hadjadj",
     "Fusia El Kader"
    ],
@@ -1071,7 +1071,6 @@
     "Nadine Labaki"
    ],
    "cast": [
-    "Nadine Labaki",
     "Zain Al Rafeea",
     "Yordanos Shiferaw"
    ],
@@ -1128,10 +1127,10 @@
    ],
    "cast": [
     "Sharlto Copley",
+    "David James",
     "Jed Brophy",
     "Nathalie Boltt",
-    "Jason Cope",
-    "David James"
+    "Sylvaine Strike"
    ],
    "imdb": "tt1136608",
    "runtime": 112,
@@ -1164,11 +1163,11 @@
     "Mira Nair"
    ],
    "cast": [
-    "Zohran Mamdani",
     "Lupita Nyong'o",
     "David Oyelowo",
     "Madina Nalwanga",
-    "Rehema Nanfuka"
+    "Ntare Mwine",
+    "Esteri Tebandeke"
    ],
    "imdb": "tt4341582",
    "runtime": 124,
@@ -1183,11 +1182,11 @@
     "Loveleen Tandan"
    ],
    "cast": [
-    "Freida Pinto",
     "Dev Patel",
+    "Freida Pinto",
     "Irrfan Khan",
     "Anil Kapoor",
-    "Rubina Ali"
+    "Madhur Mittal"
    ],
    "imdb": "tt1010048",
    "runtime": 120,
@@ -1201,11 +1200,11 @@
     "Anurag Kashyap"
    ],
    "cast": [
-    "Nawazuddin Siddiqui",
+    "Jaideep Ahlawat",
     "Manoj Bajpai",
+    "Nawazuddin Siddiqui",
     "Huma Qureshi",
-    "Richa Chadha",
-    "Reema Sen"
+    "Richa Chadha"
    ],
    "imdb": "tt1954470",
    "runtime": 160,
@@ -1220,10 +1219,10 @@
    ],
    "cast": [
     "Tabu",
-    "Radhika Apte",
     "Ayushmann Khurrana",
+    "Radhika Apte",
     "Ashwini Kalsekar",
-    "Zakir Hussain"
+    "Anil Dhawan"
    ],
    "imdb": "tt8108198",
    "runtime": 139,
@@ -1268,11 +1267,11 @@
     "Nagraj Manjule"
    ],
    "cast": [
-    "Jyoti Subhash",
     "Rinku Rajguru",
-    "Nagraj Manjule",
+    "Jyoti Subhash",
     "Akash Thosar",
-    "Chhaya Kadam"
+    "Chhaya Kadam",
+    "Tanaji Galgunde"
    ],
    "imdb": "tt5312232",
    "runtime": 174,
@@ -1287,10 +1286,10 @@
    ],
    "cast": [
     "Fahadh Faasil",
+    "Shane Nigam",
+    "Sreenath Bhasi",
     "Anna Ben",
-    "Dileesh Pothan",
-    "Sheela Rajkumar",
-    "Riya Saira"
+    "Soubin Shahir"
    ],
    "imdb": "tt8413338",
    "countries": [
@@ -1303,11 +1302,11 @@
     "Alphonse Puthren"
    ],
    "cast": [
+    "Nivin Pauly",
     "Sai Pallavi",
     "Anupama Parameswaran",
-    "Nivin Pauly",
-    "Madonna Sebastian",
-    "Soubin Shahir"
+    "Soubin Shahir",
+    "Madonna Sebastian"
    ],
    "imdb": "tt4679210",
    "runtime": 156,
@@ -1353,8 +1352,8 @@
     "Nani",
     "Shraddha Srinath",
     "Sathyaraj",
-    "Rao Ramesh",
-    "Sampath Raj"
+    "Harish Kalyan",
+    "Rao Ramesh"
    ],
    "imdb": "tt8948790",
    "countries": [
@@ -1397,7 +1396,7 @@
    ],
    "cast": [],
    "imdb": "tt4633694",
-   "runtime": 117,
+   "runtime": 116,
    "countries": [
     "United States"
    ]
@@ -1405,8 +1404,8 @@
   "The Lion King|1994": {
    "qid": "Q36479",
    "directors": [
-    "Rob Minkoff",
-    "Roger Allers"
+    "Roger Allers",
+    "Rob Minkoff"
    ],
    "cast": [],
    "imdb": "tt0110357",
@@ -1458,14 +1457,14 @@
     "Rob Reiner"
    ],
    "cast": [
+    "Cary Elwes",
     "Robin Wright",
+    "Mandy Patinkin",
     "Peter Falk",
-    "Billy Crystal",
-    "Mark Knopfler",
-    "Mandy Patinkin"
+    "Billy Crystal"
    ],
    "imdb": "tt0093779",
-   "runtime": 97,
+   "runtime": 94,
    "countries": [
     "Australia",
     "United States"
@@ -1479,12 +1478,12 @@
    "cast": [
     "Jack Nicholson",
     "Shelley Duvall",
-    "Barry Nelson",
+    "Danny Lloyd",
     "Scatman Crothers",
-    "Joe Turkel"
+    "Barry Nelson"
    ],
    "imdb": "tt0081505",
-   "runtime": 144,
+   "runtime": 119,
    "countries": [
     "United Kingdom",
     "United States"
@@ -1496,8 +1495,8 @@
     "Ari Aster"
    ],
    "cast": [
-    "Gabriel Byrne",
     "Toni Collette",
+    "Gabriel Byrne",
     "Ann Dowd",
     "Alex Wolff",
     "Milly Shapiro"
@@ -1514,8 +1513,8 @@
     "Robert Eggers"
    ],
    "cast": [
-    "Anya Taylor-Joy",
     "Ralph Ineson",
+    "Anya Taylor-Joy",
     "Kate Dickie",
     "Julian Richings",
     "Charlie"
@@ -1534,10 +1533,9 @@
    ],
    "cast": [
     "Emily Blunt",
-    "John Krasinski",
+    "Millicent Simmonds",
     "Noah Jupe",
-    "Leon Russom",
-    "Millicent Simmonds"
+    "Leon Russom"
    ],
    "imdb": "tt6644200",
    "runtime": 90,
@@ -1551,11 +1549,11 @@
     "Wes Craven"
    ],
    "cast": [
-    "Courteney Cox",
     "Neve Campbell",
-    "Matthew Lillard",
-    "Rose McGowan",
-    "David Arquette"
+    "Drew Barrymore",
+    "Courteney Cox",
+    "Skeet Ulrich",
+    "Rose McGowan"
    ],
    "imdb": "tt0117571",
    "runtime": 111,
@@ -1569,10 +1567,10 @@
     "William Friedkin"
    ],
    "cast": [
-    "Max von Sydow",
     "Ellen Burstyn",
-    "Linda Blair",
+    "Max von Sydow",
     "Lee J. Cobb",
+    "Linda Blair",
     "William Peter Blatty"
    ],
    "imdb": "tt0070047",
@@ -1587,11 +1585,11 @@
     "John Carpenter"
    ],
    "cast": [
-    "Jamie Lee Curtis",
     "Donald Pleasence",
-    "John Carpenter",
+    "Jamie Lee Curtis",
+    "P. J. Soles",
     "Nick Castle",
-    "Kyle Richards"
+    "Charles Cyphers"
    ],
    "imdb": "tt0077651",
    "runtime": 92,
@@ -1605,11 +1603,11 @@
     "Alfred Hitchcock"
    ],
    "cast": [
-    "Alfred Hitchcock",
-    "Anthony Perkins",
-    "Janet Leigh",
+    "John Gavin",
     "Martin Balsam",
-    "Vera Miles"
+    "Anthony Perkins",
+    "John McIntire",
+    "Pat Hitchcock"
    ],
    "imdb": "tt0054215",
    "runtime": 109,
@@ -1623,11 +1621,11 @@
     "Jonathan Demme"
    ],
    "cast": [
-    "Anthony Hopkins",
     "Jodie Foster",
-    "George A. Romero",
-    "Roger Corman",
-    "Scott Glenn"
+    "Scott Glenn",
+    "Ted Levine",
+    "Charles Napier",
+    "Chris Isaak"
    ],
    "imdb": "tt0102926",
    "runtime": 118,
@@ -1642,10 +1640,10 @@
    ],
    "cast": [
     "Brad Pitt",
-    "Gwyneth Paltrow",
     "Morgan Freeman",
+    "Gwyneth Paltrow",
     "Kevin Spacey",
-    "Richard Schiff"
+    "R. Lee Ermey"
    ],
    "imdb": "tt0114369",
    "runtime": 127,
@@ -1659,11 +1657,11 @@
     "David Fincher"
    ],
    "cast": [
+    "Jake Gyllenhaal",
     "Robert Downey Jr.",
     "Mark Ruffalo",
-    "Jake Gyllenhaal",
     "Chloë Sevigny",
-    "Charles Fleischer"
+    "Brian Cox"
    ],
    "imdb": "tt0443706",
    "runtime": 157,
@@ -1681,7 +1679,7 @@
     "Jake Gyllenhaal",
     "Viola Davis",
     "Melissa Leo",
-    "Terrence Howard"
+    "Paul Dano"
    ],
    "imdb": "tt1392214",
    "runtime": 153,
@@ -1696,8 +1694,8 @@
     "Ethan Coen"
    ],
    "cast": [
-    "Javier Bardem",
     "Tommy Lee Jones",
+    "Javier Bardem",
     "Woody Harrelson",
     "Josh Brolin",
     "Kelly Macdonald"
@@ -1716,9 +1714,9 @@
    ],
    "cast": [
     "Frances McDormand",
-    "Steve Buscemi",
     "William H. Macy",
-    "Bruce Campbell",
+    "Steve Buscemi",
+    "Peter Stormare",
     "José Feliciano"
    ],
    "imdb": "tt0116282",
@@ -1734,11 +1732,11 @@
     "Quentin Tarantino"
    ],
    "cast": [
-    "Quentin Tarantino",
     "Bruce Willis",
     "John Travolta",
     "Uma Thurman",
-    "Samuel L. Jackson"
+    "Samuel L. Jackson",
+    "Rosanna Arquette"
    ],
    "imdb": "tt0110912",
    "runtime": 154,
@@ -1752,9 +1750,9 @@
     "Martin Scorsese"
    ],
    "cast": [
+    "Joe Pesci",
     "Robert De Niro",
     "Samuel L. Jackson",
-    "Joe Pesci",
     "Ray Liotta",
     "Lorraine Bracco"
    ],
@@ -1771,8 +1769,8 @@
    ],
    "cast": [
     "Leonardo DiCaprio",
-    "Jack Nicholson",
     "Matt Damon",
+    "Jack Nicholson",
     "Mark Wahlberg",
     "Alec Baldwin"
    ],
@@ -1789,11 +1787,11 @@
     "Martin Scorsese"
    ],
    "cast": [
-    "Robert De Niro",
     "Sharon Stone",
+    "Robert De Niro",
+    "Joe Pesci",
     "James Woods",
-    "Don Rickles",
-    "Joe Pesci"
+    "Don Rickles"
    ],
    "imdb": "tt0112641",
    "runtime": 178,
@@ -1809,10 +1807,10 @@
    ],
    "cast": [
     "Robert De Niro",
-    "Natalie Portman",
     "Al Pacino",
     "Jon Voight",
-    "Val Kilmer"
+    "Val Kilmer",
+    "Ashley Judd"
    ],
    "imdb": "tt0113277",
    "runtime": 170,
@@ -1826,11 +1824,11 @@
     "Bryan Singer"
    ],
    "cast": [
-    "Kevin Spacey",
+    "Stephen Baldwin",
     "Benicio del Toro",
-    "Clark Gregg",
-    "Giancarlo Esposito",
-    "Pete Postlethwaite"
+    "Kevin Spacey",
+    "Gabriel Byrne",
+    "Chazz Palminteri"
    ],
    "imdb": "tt0114814",
    "runtime": 106,
@@ -1844,9 +1842,9 @@
     "Curtis Hanson"
    ],
    "cast": [
+    "Kevin Spacey",
     "Russell Crowe",
     "Kim Basinger",
-    "Kevin Spacey",
     "Danny DeVito",
     "Guy Pearce"
    ],
@@ -1863,13 +1861,13 @@
    ],
    "cast": [
     "Jack Nicholson",
-    "Roman Polanski",
-    "Faye Dunaway",
     "John Huston",
-    "Diane Ladd"
+    "Faye Dunaway",
+    "Diane Ladd",
+    "John Hillerman"
    ],
    "imdb": "tt0071315",
-   "runtime": 133,
+   "runtime": 131,
    "countries": [
     "United States"
    ]
@@ -1880,11 +1878,11 @@
     "Billy Wilder"
    ],
    "cast": [
-    "Raymond Chandler",
+    "Fred MacMurray",
     "Barbara Stanwyck",
+    "Raymond Chandler",
     "Edward G. Robinson",
-    "Gig Young",
-    "Fred MacMurray"
+    "Gig Young"
    ],
    "imdb": "tt0036775",
    "runtime": 107,
@@ -1901,8 +1899,8 @@
     "Humphrey Bogart",
     "Mary Astor",
     "Peter Lorre",
-    "Walter Huston",
-    "Gladys George"
+    "Gladys George",
+    "Walter Huston"
    ],
    "imdb": "tt0033870",
    "runtime": 101,
@@ -1919,8 +1917,8 @@
     "Ethan Hawke",
     "Julie Delpy",
     "Adam Goldberg",
-    "Erni Mangold",
-    "Hanno Pöschl"
+    "Hanno Pöschl",
+    "Erni Mangold"
    ],
    "imdb": "tt0112471",
    "runtime": 97,
@@ -1936,8 +1934,8 @@
     "Michel Gondry"
    ],
    "cast": [
-    "Kate Winslet",
     "Jim Carrey",
+    "Kate Winslet",
     "Kirsten Dunst",
     "Mark Ruffalo",
     "Elijah Wood"
@@ -1975,8 +1973,8 @@
     "Nick Cassavetes"
    ],
    "cast": [
-    "Rachel McAdams",
     "Ryan Gosling",
+    "Rachel McAdams",
     "Gena Rowlands",
     "James Garner",
     "James Marsden"
@@ -1994,10 +1992,10 @@
    ],
    "cast": [
     "Keira Knightley",
-    "Judi Dench",
     "Donald Sutherland",
-    "Rosamund Pike",
-    "Carey Mulligan"
+    "Judi Dench",
+    "Matthew Macfadyen",
+    "Rosamund Pike"
    ],
    "imdb": "tt0414387",
    "runtime": 127,
@@ -2015,9 +2013,9 @@
    "cast": [
     "Saoirse Ronan",
     "Jim Broadbent",
-    "Julie Walters",
     "Domhnall Gleeson",
-    "Emily Bett Rickards"
+    "Julie Walters",
+    "Emory Cohen"
    ],
    "imdb": "tt2381111",
    "runtime": 112,
@@ -2033,11 +2031,11 @@
     "Todd Haynes"
    ],
    "cast": [
-    "Dwight D. Eisenhower",
     "Cate Blanchett",
+    "Dwight D. Eisenhower",
     "Rooney Mara",
-    "Sarah Paulson",
-    "Kyle Chandler"
+    "Kyle Chandler",
+    "Sarah Paulson"
    ],
    "imdb": "tt2402927",
    "runtime": 118,
@@ -2056,7 +2054,7 @@
     "Lesley Manville",
     "Vicky Krieps",
     "Gina McKee",
-    "Harriet Sansom Harris"
+    "Richard Graham"
    ],
    "imdb": "tt5776858",
    "runtime": 130,
@@ -2071,11 +2069,11 @@
     "Guillermo del Toro"
    ],
    "cast": [
-    "Octavia Spencer",
     "Sally Hawkins",
+    "Octavia Spencer",
     "Michael Shannon",
     "Richard Jenkins",
-    "Michael Stuhlbarg"
+    "Doug Jones"
    ],
    "imdb": "tt5580390",
    "runtime": 123,
@@ -2090,14 +2088,14 @@
     "Peter Jackson"
    ],
    "cast": [
+    "Elijah Wood",
+    "Ian McKellen",
     "Cate Blanchett",
-    "Christopher Lee",
-    "Peter Jackson",
-    "Orlando Bloom",
-    "Ian McKellen"
+    "Liv Tyler",
+    "Christopher Lee"
    ],
    "imdb": "tt0120737",
-   "runtime": 228,
+   "runtime": 178,
    "countries": [
     "New Zealand",
     "United States"
@@ -2109,11 +2107,11 @@
     "Alfonso Cuarón"
    ],
    "cast": [
-    "Emma Watson",
     "Daniel Radcliffe",
+    "Emma Watson",
+    "Rupert Grint",
     "Gary Oldman",
-    "Maggie Smith",
-    "Alan Rickman"
+    "Maggie Smith"
    ],
    "imdb": "tt0304141",
    "runtime": 141,
@@ -2142,10 +2140,10 @@
    ],
    "cast": [
     "Judy Garland",
-    "Billie Burke",
     "Frank Morgan",
-    "Margaret Hamilton",
-    "Adriana Caselotti"
+    "Ray Bolger",
+    "Jack Haley",
+    "Billie Burke"
    ],
    "imdb": "tt0032138",
    "runtime": 98,
@@ -2159,11 +2157,11 @@
     "Denis Villeneuve"
    ],
    "cast": [
-    "Charlotte Rampling",
-    "Zendaya",
     "Timothée Chalamet",
-    "Javier Bardem",
-    "Jason Momoa"
+    "Charlotte Rampling",
+    "Rebecca Ferguson",
+    "Zendaya",
+    "Josh Brolin"
    ],
    "imdb": "tt1160419",
    "runtime": 155,
@@ -2182,11 +2180,11 @@
     "Stanley Kubrick"
    ],
    "cast": [
-    "Arthur C. Clarke",
     "Keir Dullea",
     "Gary Lockwood",
+    "William Sylvester",
     "Douglas Rain",
-    "Ann Gillis"
+    "Margaret Tyzack"
    ],
    "imdb": "tt0062622",
    "runtime": 143,
@@ -2201,11 +2199,11 @@
     "Ridley Scott"
    ],
    "cast": [
+    "Yaphet Kotto",
     "Sigourney Weaver",
+    "Veronica Cartwright",
     "John Hurt",
-    "Ian Holm",
-    "Harry Dean Stanton",
-    "Yaphet Kotto"
+    "Tom Skerritt"
    ],
    "imdb": "tt0078748",
    "runtime": 117,
@@ -2222,9 +2220,9 @@
    "cast": [
     "Kurt Russell",
     "Wilford Brimley",
-    "John Carpenter",
     "Keith David",
-    "Richard Dysart"
+    "Donald Moffat",
+    "Charles Hallahan"
    ],
    "imdb": "tt0084787",
    "runtime": 109,
@@ -2239,10 +2237,10 @@
     "Alfonso Cuarón"
    ],
    "cast": [
-    "Michael Caine",
-    "Julianne Moore",
-    "Chiwetel Ejiofor",
     "Clive Owen",
+    "Julianne Moore",
+    "Michael Caine",
+    "Chiwetel Ejiofor",
     "Charlie Hunnam"
    ],
    "imdb": "tt0206634",
@@ -2262,8 +2260,8 @@
     "Alicia Vikander",
     "Oscar Isaac",
     "Domhnall Gleeson",
-    "Sonoya Mizuno",
-    "Corey Johnson"
+    "Corey Johnson",
+    "Sonoya Mizuno"
    ],
    "imdb": "tt0470752",
    "runtime": 108,
@@ -2278,10 +2276,10 @@
    ],
    "cast": [
     "Natalie Portman",
+    "Jennifer Jason Leigh",
     "Oscar Isaac",
     "Tessa Thompson",
-    "Jennifer Jason Leigh",
-    "Benedict Wong"
+    "Gina Rodriguez"
    ],
    "imdb": "tt2798920",
    "runtime": 115,
@@ -2299,8 +2297,8 @@
     "Chris Evans",
     "Ed Harris",
     "Tilda Swinton",
-    "John Hurt",
-    "Octavia Spencer"
+    "Song Kang-ho",
+    "John Hurt"
    ],
    "imdb": "tt1706620",
    "runtime": 126,
@@ -2318,9 +2316,9 @@
    ],
    "cast": [
     "Jake Gyllenhaal",
-    "Lily Collins",
+    "Ahn Seo-hyun",
     "Tilda Swinton",
-    "Giancarlo Esposito",
+    "Lily Collins",
     "Paul Dano"
    ],
    "imdb": "tt3967856",
@@ -2336,8 +2334,8 @@
     "Andrei Tarkovsky"
    ],
    "cast": [
-    "Alisa Freindlich",
     "Anatoly Solonitsyn",
+    "Alisa Freindlich",
     "Alexander Kaidanovsky",
     "Nikolai Grinko",
     "Vladimir Zamanskiy"
@@ -2356,9 +2354,9 @@
    "cast": [
     "Donatas Banionis",
     "Anatoly Solonitsyn",
-    "Yulian Semyonov",
     "Natalya Bondarchuk",
-    "Nikolai Grinko"
+    "Yulian Semyonov",
+    "Jüri Järvet"
    ],
    "imdb": "tt0069293",
    "runtime": 160,
@@ -2372,11 +2370,11 @@
     "Fritz Lang"
    ],
    "cast": [
-    "Helene Weigel",
-    "Brigitte Helm",
-    "Heinrich George",
     "Alfred Abel",
-    "Gustav Fröhlich"
+    "Brigitte Helm",
+    "Rudolf Klein-Rogge",
+    "Gustav Fröhlich",
+    "Heinrich George"
    ],
    "imdb": "tt0017136",
    "runtime": 153,
@@ -2391,14 +2389,14 @@
     "Wolfgang Petersen"
    ],
    "cast": [
-    "Otto Sander",
     "Jürgen Prochnow",
+    "Otto Sander",
     "Herbert Grönemeyer",
-    "Uwe Ochsenknecht",
-    "Günter Lamprecht"
+    "Klaus Wennemann",
+    "Uwe Ochsenknecht"
    ],
    "imdb": "tt0082096",
-   "runtime": 293,
+   "runtime": 149,
    "countries": [
     "West Germany"
    ]
@@ -2410,10 +2408,10 @@
    ],
    "cast": [
     "Bruno Ganz",
-    "Thomas Kretschmann",
     "Alexandra Maria Lara",
+    "Thomas Kretschmann",
     "Corinna Harfouch",
-    "Julia Jentsch"
+    "Juliane Köhler"
    ],
    "imdb": "tt0363163",
    "runtime": 155,
@@ -2445,13 +2443,13 @@
    ],
    "cast": [
     "Marlon Brando",
-    "Harrison Ford",
-    "Francis Ford Coppola",
     "Robert Duvall",
-    "Charlie Sheen"
+    "Dennis Hopper",
+    "Laurence Fishburne",
+    "Frederic Forrest"
    ],
    "imdb": "tt0078788",
-   "runtime": 202,
+   "runtime": 147,
    "countries": [
     "United States"
    ]
@@ -2465,8 +2463,8 @@
     "Tom Hanks",
     "Matt Damon",
     "Vin Diesel",
-    "John de Lancie",
-    "Bryan Cranston"
+    "Giovanni Ribisi",
+    "Edward Burns"
    ],
    "imdb": "tt0120815",
    "runtime": 169,
@@ -2480,11 +2478,11 @@
     "Sam Mendes"
    ],
    "cast": [
+    "George MacKay",
     "Benedict Cumberbatch",
     "Colin Firth",
     "Mark Strong",
-    "Richard Madden",
-    "Andrew Scott"
+    "Dean-Charles Chapman"
    ],
    "imdb": "tt8579674",
    "runtime": 119,
@@ -2499,11 +2497,11 @@
     "Christopher Nolan"
    ],
    "cast": [
-    "Michael Caine",
+    "Kenneth Branagh",
+    "Olivia Wilde",
     "Cillian Murphy",
     "Tom Hardy",
-    "Harry Styles",
-    "Olivia Wilde"
+    "Armie Hammer"
    ],
    "imdb": "tt5013056",
    "runtime": 106,
@@ -2521,10 +2519,10 @@
    ],
    "cast": [
     "Jeremy Renner",
-    "Ralph Fiennes",
+    "Anthony Mackie",
     "Evangeline Lilly",
-    "Guy Pearce",
-    "Anthony Mackie"
+    "Ralph Fiennes",
+    "Guy Pearce"
    ],
    "imdb": "tt0887912",
    "runtime": 131,
@@ -2538,11 +2536,11 @@
     "Stanley Kubrick"
    ],
    "cast": [
-    "Stanley Kubrick",
+    "Adam Baldwin",
     "R. Lee Ermey",
     "Vincent D'Onofrio",
-    "Adam Baldwin",
-    "Matthew Modine"
+    "Matthew Modine",
+    "Arliss Howard"
    ],
    "imdb": "tt0093058",
    "runtime": 116,
@@ -2557,14 +2555,14 @@
     "Oliver Stone"
    ],
    "cast": [
+    "Tom Berenger",
     "Johnny Depp",
-    "Oliver Stone",
     "Willem Dafoe",
     "Charlie Sheen",
     "Forest Whitaker"
    ],
    "imdb": "tt0091763",
-   "runtime": 118,
+   "runtime": 115,
    "countries": [
     "Philippines",
     "United States"
@@ -2577,10 +2575,10 @@
    ],
    "cast": [
     "John Wayne",
+    "Jeffrey Hunter",
     "Natalie Wood",
     "Vera Miles",
-    "Jeffrey Hunter",
-    "Lana Wood"
+    "Ward Bond"
    ],
    "imdb": "tt0049730",
    "runtime": 119,
@@ -2594,11 +2592,11 @@
     "Clint Eastwood"
    ],
    "cast": [
-    "Clint Eastwood",
-    "Morgan Freeman",
     "Gene Hackman",
+    "Morgan Freeman",
     "Richard Harris",
-    "Frances Fisher"
+    "Frances Fisher",
+    "Saul Rubinek"
    ],
    "imdb": "tt0105695",
    "runtime": 130,
@@ -2613,10 +2611,10 @@
    ],
    "cast": [
     "Clint Eastwood",
-    "Eli Wallach",
     "Lee Van Cleef",
+    "Eli Wallach",
     "Mario Brega",
-    "Maurizio Arena"
+    "Aldo Giuffrè"
    ],
    "imdb": "tt0060196",
    "runtime": 174,
@@ -2632,10 +2630,10 @@
     "Martin Scorsese"
    ],
    "cast": [
-    "Robert De Niro",
-    "Martin Scorsese",
     "Joe Pesci",
+    "Robert De Niro",
     "John Turturro",
+    "Cathy Moriarty",
     "Frank Vincent"
    ],
    "imdb": "tt0081398",
@@ -2652,9 +2650,9 @@
    "cast": [
     "Robert De Niro",
     "Jodie Foster",
-    "Martin Scorsese",
     "Harvey Keitel",
-    "Cybill Shepherd"
+    "Cybill Shepherd",
+    "Peter Boyle"
    ],
    "imdb": "tt0075314",
    "runtime": 114,
@@ -2669,10 +2667,10 @@
    ],
    "cast": [
     "Daniel Day-Lewis",
-    "Jim Meskimen",
     "Paul Dano",
+    "Jim Meskimen",
     "Ciarán Hinds",
-    "Paul F. Tompkins"
+    "Kevin J. O'Connor"
    ],
    "imdb": "tt0469494",
    "runtime": 158,
@@ -2686,9 +2684,9 @@
     "Paul Thomas Anderson"
    ],
    "cast": [
-    "Amy Adams",
     "Joaquin Phoenix",
     "Philip Seymour Hoffman",
+    "Amy Adams",
     "Rami Malek",
     "Laura Dern"
    ],
@@ -2706,9 +2704,9 @@
    "cast": [
     "Tom Cruise",
     "Julianne Moore",
-    "Philip Seymour Hoffman",
     "John C. Reilly",
-    "Felicity Huffman"
+    "Philip Seymour Hoffman",
+    "William H. Macy"
    ],
    "imdb": "tt0175880",
    "runtime": 188,
@@ -2742,8 +2740,8 @@
    "cast": [
     "Willem Dafoe",
     "Caleb Landry Jones",
-    "Brooklynn Prince",
     "Macon Blair",
+    "Brooklynn Prince",
     "Bria Vinaite"
    ],
    "imdb": "tt5649144",
@@ -2774,9 +2772,9 @@
     "Jang Hoon"
    ],
    "cast": [
+    "Song Kang-ho",
     "Thomas Kretschmann",
     "Ryu Jun-yeol",
-    "Song Kang-ho",
     "Yoo Hai-jin"
    ],
    "imdb": "tt6878038",
@@ -2793,9 +2791,9 @@
    "cast": [
     "Aamir Khan",
     "Anushka Sharma",
-    "Ranbir Kapoor",
     "Sushant Singh Rajput",
-    "Sanjay Dutt"
+    "Sanjay Dutt",
+    "Ranbir Kapoor"
    ],
    "imdb": "tt2338151",
    "runtime": 153,
@@ -2811,8 +2809,8 @@
    "cast": [
     "Akshay Kumar",
     "Tabu",
-    "Sunil Shetty",
-    "Paresh Rawal"
+    "Paresh Rawal",
+    "Sunil Shetty"
    ],
    "imdb": "tt0242519",
    "runtime": 145,
@@ -2826,11 +2824,11 @@
     "Rajkumar Santoshi"
    ],
    "cast": [
-    "Salman Khan",
     "Aamir Khan",
+    "Salman Khan",
     "Karisma Kapoor",
-    "Juhi Chawla",
-    "Raveena Tandon"
+    "Raveena Tandon",
+    "Paresh Rawal"
    ],
    "imdb": "tt0109117",
    "runtime": 150,
@@ -2844,11 +2842,11 @@
     "Greg Mottola"
    ],
    "cast": [
-    "Emma Stone",
-    "Seth Rogen",
     "Jonah Hill",
-    "Dave Franco",
-    "Michael Cera"
+    "Emma Stone",
+    "Michael Cera",
+    "Seth Rogen",
+    "Bill Hader"
    ],
    "imdb": "tt0829482",
    "runtime": 114,
@@ -2862,11 +2860,11 @@
     "Paul Feig"
    ],
    "cast": [
-    "Melissa McCarthy",
-    "Terry Crews",
     "Kristen Wiig",
+    "Melissa McCarthy",
     "Rose Byrne",
-    "Jon Hamm"
+    "Maya Rudolph",
+    "Terry Crews"
    ],
    "imdb": "tt1478338",
    "runtime": 125,
@@ -2882,10 +2880,10 @@
    ],
    "cast": [
     "Julianne Moore",
+    "Steve Buscemi",
     "John Goodman",
-    "Philip Seymour Hoffman",
     "Jeff Bridges",
-    "Steve Buscemi"
+    "Philip Seymour Hoffman"
    ],
    "imdb": "tt0118715",
    "runtime": 117,
@@ -2900,9 +2898,9 @@
     "Harold Ramis"
    ],
    "cast": [
-    "Bill Murray",
     "Andie MacDowell",
-    "Harold Ramis",
+    "Bill Murray",
+    "Chris Elliott",
     "Michael Shannon",
     "Stephen Tobolowsky"
    ],
@@ -2919,11 +2917,11 @@
     "Terry Jones"
    ],
    "cast": [
-    "Terry Gilliam",
+    "Graham Chapman",
     "John Cleese",
+    "Eric Idle",
     "Michael Palin",
-    "Terry Jones",
-    "Eric Idle"
+    "Carol Cleveland"
    ],
    "imdb": "tt0071853",
    "runtime": 91,
@@ -2937,8 +2935,8 @@
     "Larry Charles"
    ],
    "cast": [
-    "Pamela Anderson",
     "Sacha Baron Cohen",
+    "Pamela Anderson",
     "Ken Davitian",
     "Luenell",
     "Dan Mazer"
@@ -2956,11 +2954,11 @@
     "Don McKellar"
    ],
    "cast": [
-    "Brendan Gleeson",
     "Taylor Kitsch",
+    "Brendan Gleeson",
     "Percy Hynes White",
     "Gordon Pinsent",
-    "Anna Hopkins"
+    "Liane Balaban"
    ],
    "imdb": "tt2319580",
    "runtime": 113,
@@ -2976,10 +2974,10 @@
    ],
    "cast": [
     "Sam Neill",
-    "Taika Waititi",
     "Julian Dennison",
+    "Rachel House",
     "Rhys Darby",
-    "Rachel House"
+    "Rima Te Wiata"
    ],
    "imdb": "tt4698684",
    "runtime": 101,
@@ -2994,11 +2992,11 @@
     "Taika Waititi"
    ],
    "cast": [
-    "Taika Waititi",
-    "Jemaine Clement",
     "Rhys Darby",
-    "Madeleine Sami",
-    "Jackie van Beek"
+    "Mario Gaoa",
+    "Jonny Brugh",
+    "Ian Harcourt",
+    "Jason Hoyte"
    ],
    "imdb": "tt3416742",
    "runtime": 86,
@@ -3013,10 +3011,10 @@
    ],
    "cast": [
     "Elisabeth Moss",
-    "Dominic West",
     "Claes Bang",
+    "Dominic West",
     "Terry Notary",
-    "Peter Viitanen"
+    "Sofie Hamilton"
    ],
    "imdb": "tt4995790",
    "runtime": 152,
@@ -3033,11 +3031,11 @@
     "Ruben Östlund"
    ],
    "cast": [
+    "Johannes Bah Kuhnke",
     "Brady Corbet",
     "Kristofer Hivju",
     "Lisa Loven Kongsli",
-    "Johannes Bah Kuhnke",
-    "Malin Dahl"
+    "Vincent Wettergren"
    ],
    "imdb": "tt2121382",
    "runtime": 120,
@@ -3055,8 +3053,8 @@
    ],
    "cast": [
     "Ulrich Mühe",
-    "Martina Gedeck",
     "Sebastian Koch",
+    "Martina Gedeck",
     "Ulrich Tukur",
     "Herbert Knaup"
    ],
@@ -3073,9 +3071,9 @@
    ],
    "cast": [
     "Sibel Kekilli",
-    "Maceo Parker",
-    "Meltem Cumbul",
     "Birol Ünel",
+    "Meltem Cumbul",
+    "Güven Kıraç",
     "Mehmet Kurtuluş"
    ],
    "imdb": "tt0347048",
@@ -3092,9 +3090,9 @@
    ],
    "cast": [
     "Yılmaz Erdoğan",
-    "Mehmet Emin Toprak",
     "Ahmet Mümtaz Taylan",
-    "Fırat Tanış",
+    "Taner Birsel",
+    "Mehmet Emin Toprak",
     "Ercan Kesal"
    ],
    "imdb": "tt1827487",
@@ -3110,9 +3108,9 @@
     "Deniz Gamze Ergüven"
    ],
    "cast": [
+    "Elit İşcan",
     "İlayda Akdoğan",
     "Ayberk Pekcan",
-    "Elit İşcan",
     "Nihal Koldaş",
     "Burak Yiğit"
    ],
@@ -3132,10 +3130,10 @@
    ],
    "cast": [
     "Lubna Azabal",
+    "Maxim Gaudette",
     "Mélissa Désormeaux-Poulin",
-    "Jackie Sawiris",
     "Rémy Girard",
-    "Maxim Gaudette"
+    "Jackie Sawiris"
    ],
    "imdb": "tt1255953",
    "runtime": 133,
@@ -3150,8 +3148,8 @@
     "Laurent Cantet"
    ],
    "cast": [
-    "Valérie Benguigui",
     "François Bégaudeau",
+    "Valérie Benguigui",
     "Louise Grinberg",
     "Arthur Fogel"
    ],
@@ -3169,8 +3167,8 @@
    "cast": [
     "Mame Bineta Sané",
     "Amadou Mbow",
-    "Diankou Sembene",
-    "Ibrahima Traore"
+    "Ibrahima Traore",
+    "Diankou Sembene"
    ],
    "imdb": "tt10199586",
    "runtime": 106,
@@ -3186,11 +3184,11 @@
     "Wanuri Kahiu"
    ],
    "cast": [
+    "Samantha Mugatsia",
+    "Sheila Munyiva",
     "Nini Wacera",
     "Patricia Kihoro",
-    "Samantha Mugatsia",
-    "Muthoni Gathecha",
-    "Nice Githinji"
+    "Muthoni Gathecha"
    ],
    "imdb": "tt8286894",
    "runtime": 82,
@@ -3217,8 +3215,8 @@
    ],
    "cast": [
     "Ronit Elkabetz",
-    "Sasson Gabai",
     "Saleh Bakri",
+    "Sasson Gabai",
     "Uri Gavriel",
     "Tomer Yosef"
    ],
@@ -3235,7 +3233,6 @@
     "Nadine Labaki"
    ],
    "cast": [
-    "Nadine Labaki",
     "Yasmine Al Massri",
     "Adel Karam"
    ],
@@ -3253,8 +3250,8 @@
    ],
    "cast": [
     "Adam Bakri",
-    "Leem Lubany",
     "Waleed Zuaiter",
+    "Leem Lubany",
     "Yousef Sweid",
     "Anna Maria Hawa"
    ],
@@ -3287,9 +3284,9 @@
    ],
    "cast": [
     "Chutimon Chuengcharoensukying",
-    "Chanon Santinatornkul",
-    "Teeradon Supapunpinyo",
     "Eisaya Hosuwan",
+    "Teeradon Supapunpinyo",
+    "Chanon Santinatornkul",
     "Thaneth Warakulnukroh"
    ],
    "imdb": "tt6788942",
@@ -3374,11 +3371,11 @@
     "Ava DuVernay"
    ],
    "cast": [
-    "Barack Obama",
-    "Donald Trump",
-    "Ronald Reagan",
     "George W. Bush",
-    "Martin Luther King Jr."
+    "Angela Davis",
+    "Barack Obama",
+    "Ronald Reagan",
+    "George H. W. Bush"
    ],
    "imdb": "tt5895028",
    "runtime": 100,
@@ -3394,9 +3391,9 @@
    "cast": [
     "Fred Rogers",
     "Yo-Yo Ma",
+    "Joe Negri",
     "David Newell",
-    "Tom Junod",
-    "Joe Negri"
+    "Tom Junod"
    ],
    "imdb": "tt7681902",
    "countries": [
@@ -3421,15 +3418,15 @@
   "Singin' in the Rain|1952": {
    "qid": "Q309153",
    "directors": [
-    "Gene Kelly",
-    "Stanley Donen"
+    "Stanley Donen",
+    "Gene Kelly"
    ],
    "cast": [
-    "Gene Kelly",
+    "Donald O'Connor",
     "Debbie Reynolds",
     "Rita Moreno",
     "Cyd Charisse",
-    "Donald O'Connor"
+    "Jean Hagen"
    ],
    "imdb": "tt0045152",
    "runtime": 103,
@@ -3446,8 +3443,8 @@
    "cast": [
     "Natalie Wood",
     "Rita Moreno",
-    "George Chakiris",
     "Richard Beymer",
+    "George Chakiris",
     "Russ Tamblyn"
    ],
    "imdb": "tt0055614",
@@ -3462,8 +3459,8 @@
     "Rob Marshall"
    ],
    "cast": [
-    "Catherine Zeta-Jones",
     "Renée Zellweger",
+    "Catherine Zeta-Jones",
     "Richard Gere",
     "Lucy Liu",
     "Queen Latifah"
@@ -3482,11 +3479,11 @@
     "Robert Wise"
    ],
    "cast": [
-    "Christopher Plummer",
     "Julie Andrews",
+    "Christopher Plummer",
     "Eleanor Parker",
     "Peggy Wood",
-    "Marni Nixon"
+    "Nicholas Hammond"
    ],
    "imdb": "tt0059742",
    "runtime": 174,
@@ -3534,10 +3531,10 @@
     "Anurag Basu"
    ],
    "cast": [
-    "Priyanka Chopra",
     "Ranbir Kapoor",
+    "Priyanka Chopra",
     "Ileana D'Cruz",
-    "Roopa Ganguly",
+    "Akash Khurana",
     "Ashish Vidyarthi"
    ],
    "imdb": "tt2082197",
@@ -3585,9 +3582,9 @@
    ],
    "cast": [
     "Ronit Roy",
+    "Rajat Barmecha",
     "Ram Kapoor",
-    "Manjot Singh",
-    "Rajat Barmecha"
+    "Manjot Singh"
    ],
    "imdb": "tt1639426",
    "runtime": 138,
@@ -3612,15 +3609,15 @@
   "Tumbbad|2018": {
    "qid": "Q56279881",
    "directors": [
-    "Anand Gandhi",
-    "Rahi Anil Barve"
+    "Rahi Anil Barve",
+    "Anand Gandhi"
    ],
    "cast": [
-    "Ronjini Chakraborty",
-    "Anita Date Kelkar",
     "Sohum Shah",
+    "Anita Date Kelkar",
+    "Ronjini Chakraborty",
     "Rudra Soni",
-    "Harish Khanna"
+    "Mohammad Samad"
    ],
    "imdb": "tt8239946",
    "runtime": 104,
@@ -3653,12 +3650,12 @@
    "cast": [
     "Lupita Nyong'o",
     "Elisabeth Moss",
-    "Nicole Richie",
+    "Winston Duke",
     "Yahya Abdul-Mateen II",
-    "Winston Duke"
+    "Anna Diop"
    ],
    "imdb": "tt6857112",
-   "runtime": 116,
+   "runtime": 112,
    "countries": [
     "United States"
    ]
@@ -3693,7 +3690,7 @@
     "Daniel Henshall",
     "Hayley McElhinney",
     "Benjamin Winspear",
-    "Ben Winspear"
+    "Terence Crawford"
    ],
    "imdb": "tt2321549",
    "runtime": 94,
@@ -3709,10 +3706,10 @@
    ],
    "cast": [
     "Lina Leandersson",
-    "Peter Carlberg",
-    "Ika Nord",
     "Kåre Hedebrant",
-    "Per Ragnar"
+    "Per Ragnar",
+    "Peter Carlberg",
+    "Ika Nord"
    ],
    "imdb": "tt1139797",
    "runtime": 110,
@@ -3726,10 +3723,10 @@
     "Julia Ducournau"
    ],
    "cast": [
-    "Ella Rumpf",
-    "Bouli Lanners",
     "Garance Marillier",
     "Laurent Lucas",
+    "Ella Rumpf",
+    "Bouli Lanners",
     "Marion Vernoux"
    ],
    "imdb": "tt4954522",
@@ -3745,11 +3742,11 @@
     "Ana Lily Amirpour"
    ],
    "cast": [
+    "Sheila Vand",
     "Marshall Manesh",
     "Mozhan Marnò",
-    "Ana Lily Amirpour",
-    "Sheila Vand",
-    "Dominic Rains"
+    "Dominic Rains",
+    "Pej Vahdat"
    ],
    "imdb": "tt2326554",
    "runtime": 101,
@@ -3781,11 +3778,11 @@
     "Bong Joon-ho"
    ],
    "cast": [
-    "Bae Doona",
     "Song Kang-ho",
+    "Bae Doona",
     "Scott Wilson",
-    "Ko A-sung",
-    "Byun Hee-bong"
+    "Byun Hee-bong",
+    "Ko A-sung"
    ],
    "imdb": "tt0468492",
    "runtime": 119,
@@ -3799,8 +3796,8 @@
     "Bong Joon-ho"
    ],
    "cast": [
-    "Won Bin",
     "Kim Hye-ja",
+    "Won Bin",
     "Jin Goo",
     "Yoon Je-moon",
     "Lee Mi-do"
@@ -3817,9 +3814,9 @@
     "Na Hong-jin"
    ],
    "cast": [
+    "Kim Yun-seok",
     "Ha Jung-woo",
-    "Seo Young-hee",
-    "Kim Yun-seok"
+    "Seo Young-hee"
    ],
    "imdb": "tt1190539",
    "runtime": 123,
@@ -3865,8 +3862,8 @@
     "Lee Jeong-beom"
    ],
    "cast": [
-    "Kim Sae-ron",
     "Won Bin",
+    "Kim Sae-ron",
     "Kim Sung-oh",
     "Kim Hee-won",
     "Thanayong Wongtrakun"
@@ -3886,8 +3883,8 @@
     "Donnie Yen",
     "Simon Yam",
     "Lynn Hung",
-    "Tenma Shibuya",
-    "Hiroyuki Ikeuchi"
+    "Gordon Lam",
+    "Louis Fan"
    ],
    "imdb": "tt1220719",
    "runtime": 106,
@@ -3902,10 +3899,10 @@
    ],
    "cast": [
     "Jet Li",
-    "Zhang Ziyi",
-    "Donnie Yen",
+    "Tony Leung",
     "Maggie Cheung",
-    "Tony Leung"
+    "Zhang Ziyi",
+    "Donnie Yen"
    ],
    "imdb": "tt0299977",
    "runtime": 99,
@@ -3919,8 +3916,8 @@
     "Zhang Yimou"
    ],
    "cast": [
-    "Zhang Ziyi",
     "Andy Lau",
+    "Zhang Ziyi",
     "Takeshi Kaneshiro",
     "Song Dandan"
    ],
@@ -3939,8 +3936,8 @@
    "cast": [
     "Gong Li",
     "He Saifei",
-    "Kong Lin",
-    "Cao Cuifen"
+    "Cao Cuifen",
+    "Kong Lin"
    ],
    "imdb": "tt0101640",
    "runtime": 125,
@@ -3954,10 +3951,10 @@
     "Chen Kaige"
    ],
    "cast": [
-    "Gong Li",
     "Leslie Cheung",
-    "Ge You",
+    "Gong Li",
     "Zhang Fengyi",
+    "Ge You",
     "Jiang Wenli"
    ],
    "imdb": "tt0106332",
@@ -3973,8 +3970,8 @@
    ],
    "cast": [
     "Zhao Tao",
-    "Wang Hongwei",
-    "Han Sanming"
+    "Han Sanming",
+    "Wang Hongwei"
    ],
    "imdb": "tt0859765",
    "runtime": 111,
@@ -3990,8 +3987,8 @@
    ],
    "cast": [
     "Zhao Tao",
-    "Wang Baoqiang",
     "Jiang Wu",
+    "Wang Baoqiang",
     "Zhang Jiayi",
     "Li Meng"
    ],
@@ -4010,10 +4007,10 @@
    ],
    "cast": [
     "Yūya Yagira",
-    "Ryō Kase",
     "Susumu Terajima",
-    "Kenichi Endō",
-    "You"
+    "Ryō Kase",
+    "You",
+    "Kenichi Endō"
    ],
    "imdb": "tt0408664",
    "runtime": 141,
@@ -4028,10 +4025,10 @@
    ],
    "cast": [
     "Masaharu Fukuyama",
+    "Machiko Ono",
     "Kirin Kiki",
     "Yōko Maki",
-    "Jun Kunimura",
-    "Machiko Ono"
+    "Jun Kunimura"
    ],
    "imdb": "tt2331143",
    "runtime": 120,
@@ -4045,11 +4042,11 @@
     "Hirokazu Kore-eda"
    ],
    "cast": [
+    "Haruka Ayase",
     "Masami Nagasawa",
     "Suzu Hirose",
-    "Haruka Ayase",
-    "Kirin Kiki",
-    "Kaho"
+    "Kaho",
+    "Kirin Kiki"
    ],
    "imdb": "tt3756788",
    "runtime": 127,
@@ -4079,11 +4076,11 @@
     "Katsuhito Ishii"
    ],
    "cast": [
+    "Tadanobu Asano",
     "Rinko Kikuchi",
     "Hideaki Anno",
-    "Tadanobu Asano",
-    "Kenichi Matsuyama",
-    "Anna Tsuchiya"
+    "Anna Tsuchiya",
+    "Tomokazu Miura"
    ],
    "imdb": "tt0413893",
    "runtime": 124,
@@ -4099,9 +4096,9 @@
    "cast": [
     "Kōji Yakusho",
     "Tokio Emoto",
-    "Min Tanaka",
     "Yumi Asō",
-    "Sayuri Ishikawa"
+    "Sayuri Ishikawa",
+    "Min Tanaka"
    ],
    "imdb": "tt27503384",
    "runtime": 123,
@@ -4116,11 +4113,11 @@
     "Steven Spielberg"
    ],
    "cast": [
-    "David Lynch",
     "Michelle Williams",
     "Seth Rogen",
     "Paul Dano",
-    "Greg Grunberg"
+    "Julia Butters",
+    "Judd Hirsch"
    ],
    "imdb": "tt14208870",
    "runtime": 151,
@@ -4135,8 +4132,8 @@
    ],
    "cast": [
     "Paul Giamatti",
-    "Carrie Preston",
     "Da'Vine Joy Randolph",
+    "Carrie Preston",
     "Dominic Sessa"
    ],
    "imdb": "tt14849194",
@@ -4153,12 +4150,12 @@
    "cast": [
     "Sandra Hüller",
     "Swann Arlaud",
-    "Jehnny Beth",
     "Antoine Reinartz",
-    "Samuel Theis"
+    "Jehnny Beth",
+    "Milo Machado-Graner"
    ],
    "imdb": "tt17009710",
-   "runtime": 156,
+   "runtime": 150,
    "countries": [
     "France"
    ]
@@ -4171,12 +4168,12 @@
    "cast": [
     "Sandra Hüller",
     "Christian Friedel",
-    "Imogen Kogge",
     "Ralph Herforth",
-    "Maximilian Beck"
+    "Imogen Kogge",
+    "Daniel Holzberg"
    ],
    "imdb": "tt7160372",
-   "runtime": 106,
+   "runtime": 105,
    "countries": [
     "Poland",
     "United Kingdom",
@@ -4209,9 +4206,9 @@
    ],
    "cast": [
     "Tang Wei",
+    "Park Hae-il",
     "Lee Jeong-hyeon",
     "Ko Kyung-pyo",
-    "Park Hae-il",
     "Jeong E-suh"
    ],
    "imdb": "tt12477480",
@@ -4226,9 +4223,9 @@
     "Hirokazu Kore-eda"
    ],
    "cast": [
+    "Song Kang-ho",
     "IU",
     "Bae Doona",
-    "Song Kang-ho",
     "Gang Dong-won",
     "Lee Joo-young"
    ],
@@ -4247,8 +4244,8 @@
     "Renate Reinsve",
     "Anders Danielsen Lie",
     "Silje Storstein",
-    "Ruby Dagnall",
-    "Herbert Nordrum"
+    "Herbert Nordrum",
+    "Ruby Dagnall"
    ],
    "imdb": "tt10370710",
    "runtime": 121,
@@ -4266,10 +4263,10 @@
    ],
    "cast": [
     "Mads Mikkelsen",
-    "Maria Bonnevie",
     "Thomas Bo Larsen",
+    "Maria Bonnevie",
     "Lars Ranthe",
-    "Susse Wold"
+    "Magnus Millang"
    ],
    "imdb": "tt10288566",
    "runtime": 117,
@@ -4301,11 +4298,11 @@
     "Paolo Sorrentino"
    ],
    "cast": [
-    "Fanny Ardant",
-    "Sabrina Ferilli",
     "Toni Servillo",
+    "Sabrina Ferilli",
+    "Carlo Verdone",
     "Serena Grandi",
-    "Carlo Verdone"
+    "Carlo Buccirosso"
    ],
    "imdb": "tt2358891",
    "runtime": 142,
@@ -4324,7 +4321,7 @@
     "Massimo Troisi",
     "Maria Grazia Cucinotta",
     "Anna Bonaiuto",
-    "Simona Caparrini"
+    "Renato Scarpa"
    ],
    "imdb": "tt0110877",
    "runtime": 108,
@@ -4340,11 +4337,11 @@
     "Roberto Benigni"
    ],
    "cast": [
-    "Roberto Benigni",
+    "Nicoletta Braschi",
     "Marisa Paredes",
     "Horst Buchholz",
-    "Nicoletta Braschi",
-    "Omero Antonutti"
+    "Giorgio Cantarini",
+    "Giustino Durano"
    ],
    "imdb": "tt0118799",
    "runtime": 116,
@@ -4358,11 +4355,11 @@
     "Galder Gaztelu-Urrutia"
    ],
    "cast": [
+    "Emilio Buale",
     "Antonia San Juan",
     "Iván Massagué",
-    "Emilio Buale",
-    "Alexandra Masangkay",
-    "Zorion Egileor"
+    "Zorion Egileor",
+    "Alexandra Masangkay"
    ],
    "imdb": "tt8228288",
    "runtime": 94,
@@ -4376,11 +4373,11 @@
     "J. A. Bayona"
    ],
    "cast": [
-    "Geraldine Chaplin",
     "Belén Rueda",
+    "Geraldine Chaplin",
     "Óscar Casas",
     "Mabel Rivera",
-    "Montserrat Carulla"
+    "Fernando Cayo"
    ],
    "imdb": "tt0464141",
    "runtime": 101,
@@ -4395,11 +4392,11 @@
     "Pedro Almodóvar"
    ],
    "cast": [
+    "Javier Cámara",
     "Geraldine Chaplin",
     "Paz Vega",
-    "Pina Bausch",
-    "Caetano Veloso",
-    "Marisa Paredes"
+    "Leonor Watling",
+    "Darío Grandinetti"
    ],
    "imdb": "tt0287467",
    "runtime": 112,
@@ -4414,13 +4411,13 @@
    ],
    "cast": [
     "Penélope Cruz",
-    "Bette Davis",
-    "Pedro Almodóvar",
-    "Anne Baxter",
-    "Celeste Holm"
+    "Cecilia Roth",
+    "Marisa Paredes",
+    "Candela Peña",
+    "Fernando Fernán Gómez"
    ],
    "imdb": "tt0185125",
-   "runtime": 104,
+   "runtime": 101,
    "countries": [
     "France",
     "Spain"
@@ -4434,9 +4431,9 @@
    "cast": [
     "Penélope Cruz",
     "Carmen Maura",
+    "Lola Dueñas",
     "Chus Lampreave",
-    "Carmen Machi",
-    "Lola Dueñas"
+    "Blanca Portillo"
    ],
    "imdb": "tt0441909",
    "runtime": 121,
@@ -4451,10 +4448,10 @@
    ],
    "cast": [
     "Antonio Banderas",
-    "Marisa Paredes",
     "Elena Anaya",
-    "Carmen Machi",
-    "Blanca Suárez"
+    "Marisa Paredes",
+    "Blanca Suárez",
+    "Concha Buika"
    ],
    "imdb": "tt1189073",
    "runtime": 120,
@@ -4469,13 +4466,13 @@
    ],
    "cast": [
     "Gael García Bernal",
-    "Alberto Granado",
-    "Mía Maestro",
     "Rodrigo de la Serna",
+    "Mía Maestro",
+    "Alberto Granado",
     "Mercedes Moran"
    ],
    "imdb": "tt0318462",
-   "runtime": 126,
+   "runtime": 120,
    "countries": [
     "Argentina",
     "Brazil",
@@ -4495,13 +4492,13 @@
    ],
    "cast": [
     "Fernanda Montenegro",
+    "Vinícius de Oliveira",
     "Marília Pêra",
     "Matheus Nachtergaele",
-    "Othon Bastos",
-    "Vinícius de Oliveira"
+    "Othon Bastos"
    ],
    "imdb": "tt0140888",
-   "runtime": 113,
+   "runtime": 105,
    "countries": [
     "Brazil",
     "France"
@@ -4513,9 +4510,9 @@
     "Paulo Morelli"
    ],
    "cast": [
+    "Douglas Silva",
     "Jonathan Haagensen",
-    "Darlan Cunha",
-    "Douglas Silva"
+    "Darlan Cunha"
    ],
    "imdb": "tt0870090",
    "runtime": 110,
@@ -4531,8 +4528,8 @@
    "cast": [
     "Wagner Moura",
     "Fernanda Machado",
-    "Caio Junqueira",
-    "André Ramiro"
+    "André Ramiro",
+    "Caio Junqueira"
    ],
    "imdb": "tt0861739",
    "runtime": 118,
@@ -4548,9 +4545,9 @@
    "cast": [
     "Regina Casé",
     "Camila Márdila",
+    "Michel Joelsas",
     "Lourenço Mutarelli",
-    "Luís Miranda",
-    "Michel Joelsas"
+    "Luís Miranda"
    ],
    "imdb": "tt3742378",
    "runtime": 112,
@@ -4565,9 +4562,9 @@
    ],
    "cast": [
     "Sônia Braga",
-    "Maeve Jinkings",
     "Humberto Carrão",
-    "Irandhir Santos"
+    "Irandhir Santos",
+    "Maeve Jinkings"
    ],
    "imdb": "tt5221584",
    "runtime": 145,
@@ -4584,8 +4581,8 @@
     "Udo Kier",
     "Sônia Braga",
     "Karine Teles",
-    "Silvero Pereira",
-    "Antonio Saboia"
+    "Bárbara Colen",
+    "Silvero Pereira"
    ],
    "imdb": "tt2762506",
    "runtime": 131,
@@ -4698,7 +4695,7 @@
    ],
    "cast": [],
    "imdb": "tt3915174",
-   "runtime": 102,
+   "runtime": 100,
    "countries": [
     "United States"
    ]
@@ -4764,7 +4761,12 @@
    "directors": [
     "Sergio Pablos"
    ],
-   "cast": [],
+   "cast": [
+    "Jason Schwartzman",
+    "J. K. Simmons",
+    "Joan Cusack",
+    "Rashida Jones"
+   ],
    "imdb": "tt4729430",
    "runtime": 96,
    "countries": [
@@ -4995,7 +4997,7 @@
    ],
    "cast": [],
    "imdb": "tt16428256",
-   "runtime": 122,
+   "runtime": 121,
    "countries": [
     "Japan"
    ]
@@ -5006,7 +5008,7 @@
     "Jean Renoir"
    ],
    "cast": [
-    "Jean Renoir",
+    "Nora Gregor",
     "Henri Cartier-Bresson",
     "Paulette Dubost",
     "Marcel Dalio",
@@ -5024,11 +5026,11 @@
     "Orson Welles"
    ],
    "cast": [
-    "Orson Welles",
     "Joseph Cotten",
-    "Alan Ladd",
     "Agnes Moorehead",
-    "Gregg Toland"
+    "Ruth Warrick",
+    "Everett Sloane",
+    "William Alland"
    ],
    "imdb": "tt0033467",
    "runtime": 119,
@@ -5042,11 +5044,11 @@
     "Michael Curtiz"
    ],
    "cast": [
-    "Ingrid Bergman",
     "Humphrey Bogart",
-    "Peter Lorre",
+    "Ingrid Bergman",
     "Claude Rains",
-    "Conrad Veidt"
+    "Peter Lorre",
+    "Paul Henreid"
    ],
    "imdb": "tt0034583",
    "runtime": 102,
@@ -5060,8 +5062,8 @@
     "Vittorio De Sica"
    ],
    "cast": [
-    "Sergio Leone",
     "Lamberto Maggiorani",
+    "Sergio Leone",
     "Enzo Staiola",
     "Lianella Carell",
     "Elena Altieri"
@@ -5079,10 +5081,10 @@
    ],
    "cast": [
     "Toshirō Mifune",
-    "Takashi Shimura",
     "Machiko Kyō",
-    "Minoru Chiaki",
-    "Masayuki Mori"
+    "Takashi Shimura",
+    "Masayuki Mori",
+    "Minoru Chiaki"
    ],
    "imdb": "tt0042876",
    "runtime": 88,
@@ -5096,11 +5098,11 @@
     "Billy Wilder"
    ],
    "cast": [
-    "Buster Keaton",
-    "Gloria Swanson",
     "William Holden",
-    "Cecil B. DeMille",
-    "Erich von Stroheim"
+    "Gloria Swanson",
+    "Buster Keaton",
+    "Erich von Stroheim",
+    "Nancy Olson"
    ],
    "imdb": "tt0043014",
    "runtime": 110,
@@ -5116,9 +5118,9 @@
    "cast": [
     "Takashi Shimura",
     "Minoru Chiaki",
-    "Seiji Miyaguchi",
+    "Bokuzen Hidari",
     "Kamatari Fujiwara",
-    "Nobuo Nakamura"
+    "Nobuo Kaneko"
    ],
    "imdb": "tt0044741",
    "runtime": 143,
@@ -5133,9 +5135,9 @@
    ],
    "cast": [
     "Setsuko Hara",
-    "Kyōko Kagawa",
     "Chishū Ryū",
-    "Sō Yamamura",
+    "Kyōko Kagawa",
+    "Chieko Higashiyama",
     "Haruko Sugimura"
    ],
    "imdb": "tt0046438",
@@ -5152,8 +5154,8 @@
    "cast": [
     "Toshirō Mifune",
     "Takashi Shimura",
-    "Tatsuya Nakadai",
-    "Haruo Nakajima",
+    "Seiji Miyaguchi",
+    "Minoru Chiaki",
     "Isao Kimura"
    ],
    "imdb": "tt0047478",
@@ -5168,10 +5170,10 @@
     "Sidney Lumet"
    ],
    "cast": [
-    "Henry Fonda",
     "Martin Balsam",
-    "Ed Begley",
+    "Henry Fonda",
     "Lee J. Cobb",
+    "John Fiedler",
     "Jack Klugman"
    ],
    "imdb": "tt0050083",
@@ -5188,9 +5190,9 @@
    "cast": [
     "Nargis",
     "Sunil Dutt",
-    "Raaj Kumar",
     "Rajendra Kumar",
-    "Sajid Khan"
+    "Raaj Kumar",
+    "Kumkum"
    ],
    "imdb": "tt0050188",
    "runtime": 172,
@@ -5206,9 +5208,9 @@
    "cast": [
     "Max von Sydow",
     "Bibi Andersson",
-    "Gunnel Lindblom",
     "Gunnar Björnstrand",
-    "Mona Malm"
+    "Bengt Ekerot",
+    "Gunnel Lindblom"
    ],
    "imdb": "tt0050976",
    "runtime": 96,
@@ -5222,11 +5224,11 @@
     "Alfred Hitchcock"
    ],
    "cast": [
-    "Alfred Hitchcock",
     "James Stewart",
     "Kim Novak",
     "Barbara Bel Geddes",
-    "Ellen Corby"
+    "Ellen Corby",
+    "Tom Helmore"
    ],
    "imdb": "tt0052357",
    "runtime": 128,
@@ -5240,11 +5242,11 @@
     "François Truffaut"
    ],
    "cast": [
-    "Jean-Paul Belmondo",
-    "Jean-Luc Godard",
-    "François Truffaut",
+    "Jean-Pierre Léaud",
     "Jeanne Moreau",
-    "Jacques Demy"
+    "Claire Maurier",
+    "Jacques Demy",
+    "Jean-Claude Brialy"
    ],
    "imdb": "tt0053198",
    "runtime": 99,
@@ -5259,10 +5261,10 @@
    ],
    "cast": [
     "Marcello Mastroianni",
-    "Adriano Celentano",
     "Anita Ekberg",
     "Anouk Aimée",
-    "Nico"
+    "Yvonne Furneaux",
+    "Magali Noël"
    ],
    "imdb": "tt0053779",
    "runtime": 174,
@@ -5277,11 +5279,11 @@
     "K. Asif"
    ],
    "cast": [
+    "Prithviraj Kapoor",
     "Dilip Kumar",
     "Madhubala",
-    "Prithviraj Kapoor",
     "Durga Khote",
-    "Johnny Walker"
+    "Nigar Sultana"
    ],
    "imdb": "tt0054098",
    "runtime": 173,
@@ -5297,9 +5299,9 @@
    "cast": [
     "Tatsuya Nakadai",
     "Rentarō Mikuni",
+    "Kei Satō",
     "Tetsurō Tamba",
-    "Shima Iwashita",
-    "Yoshio Inaba"
+    "Shima Iwashita"
    ],
    "imdb": "tt0056058",
    "runtime": 135,
@@ -5333,10 +5335,10 @@
    ],
    "cast": [
     "Toshirō Mifune",
-    "Takashi Shimura",
     "Tatsuya Nakadai",
-    "Kyōko Kagawa",
-    "Isao Kimura"
+    "Takashi Shimura",
+    "Isao Kimura",
+    "Kyōko Kagawa"
    ],
    "imdb": "tt0057565",
    "runtime": 143,
@@ -5369,8 +5371,8 @@
     "Sheela",
     "Madhu",
     "Adoor Bhavani",
-    "Adoor Pankajam",
-    "Latha Raju"
+    "Sathyan",
+    "Adoor Pankajam"
    ],
    "imdb": "tt0059028",
    "countries": [
@@ -5400,8 +5402,8 @@
     "Ingmar Bergman"
    ],
    "cast": [
-    "Liv Ullmann",
     "Bibi Andersson",
+    "Liv Ullmann",
     "Gunnar Björnstrand",
     "Margaretha Krook"
    ],
@@ -5417,11 +5419,11 @@
     "Stanley Kubrick"
    ],
    "cast": [
+    "Patrick Magee",
     "Malcolm McDowell",
-    "David Prowse",
-    "Steven Berkoff",
-    "Warren Clarke",
-    "Patrick Magee"
+    "Adrienne Corri",
+    "Miriam Karlin",
+    "Warren Clarke"
    ],
    "imdb": "tt0066921",
    "runtime": 136,
@@ -5438,8 +5440,8 @@
    "cast": [
     "Amitabh Bachchan",
     "Rajesh Khanna",
-    "Dara Singh",
     "Lalita Pawar",
+    "Dara Singh",
     "Durga Khote"
    ],
    "imdb": "tt0066763",
@@ -5469,10 +5471,10 @@
    ],
    "cast": [
     "Harrison Ford",
-    "Robert Duvall",
     "Gene Hackman",
-    "Teri Garr",
-    "John Cazale"
+    "Robert Duvall",
+    "John Cazale",
+    "Teri Garr"
    ],
    "imdb": "tt0071360",
    "runtime": 109,
@@ -5486,14 +5488,14 @@
     "Francis Ford Coppola"
    ],
    "cast": [
-    "Robert De Niro",
     "Al Pacino",
-    "Diane Keaton",
+    "Robert De Niro",
     "Robert Duvall",
-    "James Caan"
+    "Diane Keaton",
+    "Talia Shire"
    ],
    "imdb": "tt0071562",
-   "runtime": 202,
+   "runtime": 165,
    "countries": [
     "United States"
    ]
@@ -5522,10 +5524,10 @@
     "Steven Spielberg"
    ],
    "cast": [
-    "Steven Spielberg",
-    "Richard Dreyfuss",
     "Roy Scheider",
+    "Richard Dreyfuss",
     "Robert Shaw",
+    "Lorraine Gary",
     "Peter Benchley"
    ],
    "imdb": "tt0073195",
@@ -5541,13 +5543,13 @@
    ],
    "cast": [
     "Jack Nicholson",
-    "Danny DeVito",
-    "Anjelica Huston",
     "Louise Fletcher",
+    "Danny DeVito",
+    "Brad Dourif",
     "Christopher Lloyd"
    ],
    "imdb": "tt0073486",
-   "runtime": 136,
+   "runtime": 133,
    "countries": [
     "United States"
    ]
@@ -5558,11 +5560,11 @@
     "Ramesh Sippy"
    ],
    "cast": [
+    "Dharmendra",
     "Amitabh Bachchan",
     "Hema Malini",
-    "Dharmendra",
     "Jaya Bachchan",
-    "Helen"
+    "Sanjeev Kumar"
    ],
    "imdb": "tt0073707",
    "runtime": 204,
@@ -5579,8 +5581,8 @@
     "Roy Scheider",
     "Bruno Cremer",
     "Francisco Rabal",
-    "Joe Spinell",
-    "Friedrich von Ledebur"
+    "Amidou",
+    "Joe Spinell"
    ],
    "imdb": "tt0076740",
    "runtime": 121,
@@ -5597,12 +5599,12 @@
    "cast": [
     "Harrison Ford",
     "Carrie Fisher",
-    "Alec Guinness",
     "Mark Hamill",
-    "Frank Oz"
+    "Alec Guinness",
+    "David Prowse"
    ],
    "imdb": "tt0080684",
-   "runtime": 124,
+   "runtime": 122,
    "countries": [
     "United States"
    ]
@@ -5629,9 +5631,9 @@
    ],
    "cast": [
     "Harrison Ford",
-    "Alfred Molina",
     "John Rhys-Davies",
     "Karen Allen",
+    "Alfred Molina",
     "Denholm Elliott"
    ],
    "imdb": "tt0082971",
@@ -5649,7 +5651,7 @@
     "James Caan",
     "Willie Nelson",
     "Jim Belushi",
-    "William Petersen",
+    "Tuesday Weld",
     "Dennis Farina"
    ],
    "imdb": "tt0083190",
@@ -5665,10 +5667,10 @@
    ],
    "cast": [
     "Robert De Niro",
-    "Martin Scorsese",
-    "Liza Minnelli",
     "Jerry Lewis",
-    "Joe Strummer"
+    "Liza Minnelli",
+    "Sandra Bernhard",
+    "Tony Randall"
    ],
    "imdb": "tt0085794",
    "runtime": 109,
@@ -5683,8 +5685,8 @@
    ],
    "cast": [
     "Mammootty",
-    "Jagathy Sreekumar",
     "Bharath Gopi",
+    "Jagathy Sreekumar",
     "Jalaja",
     "Ashokan"
    ],
@@ -5699,11 +5701,11 @@
     "Kundan Shah"
    ],
    "cast": [
-    "Om Puri",
     "Naseeruddin Shah",
-    "Neena Gupta",
+    "Om Puri",
     "Pankaj Kapur",
-    "Satish Shah"
+    "Satish Shah",
+    "Ravi Baswani"
    ],
    "imdb": "tt0085743",
    "runtime": 132,
@@ -5719,12 +5721,12 @@
    "cast": [
     "Emilio Estevez",
     "Molly Ringwald",
-    "John Hughes",
     "Ally Sheedy",
-    "Anthony Michael Hall"
+    "Anthony Michael Hall",
+    "Judd Nelson"
    ],
    "imdb": "tt0088847",
-   "runtime": 95,
+   "runtime": 93,
    "countries": [
     "United States"
    ]
@@ -5781,11 +5783,11 @@
     "Wim Wenders"
    ],
    "cast": [
-    "Peter Falk",
     "Bruno Ganz",
-    "Nick Cave",
+    "Peter Falk",
     "Otto Sander",
-    "Blixa Bargeld"
+    "Nick Cave",
+    "Solveig Dommartin"
    ],
    "imdb": "tt0093191",
    "runtime": 128,
@@ -5801,10 +5803,10 @@
    ],
    "cast": [
     "Mohanlal",
-    "Sukumari",
     "Nedumudi Venu",
-    "Sreenivasan",
-    "Lizy"
+    "Sukumari",
+    "Ranjini",
+    "Sreenivasan"
    ],
    "imdb": "tt0214585",
    "runtime": 159,
@@ -5819,10 +5821,10 @@
    ],
    "cast": [
     "Mohanlal",
-    "Kaviyoor Ponnamma",
     "Thilakan",
-    "Jagathy Sreekumar",
-    "Jagadish"
+    "Kaviyoor Ponnamma",
+    "Murali",
+    "Jagathy Sreekumar"
    ],
    "imdb": "tt0237376",
    "countries": [
@@ -5863,9 +5865,9 @@
    ],
    "cast": [
     "Chang Chen",
-    "Ri Myung-hun",
     "Elaine Jin",
-    "Tsai Chin",
+    "Chen Yi Wen",
+    "Chang Kuo-chu",
     "Lawrence Ko"
    ],
    "imdb": "tt0101985",
@@ -5899,9 +5901,9 @@
    "cast": [
     "Mohanlal",
     "Revathi",
+    "Jagathy Sreekumar",
     "Sharat Saxena",
-    "Thilakan",
-    "Jagathy Sreekumar"
+    "Thilakan"
    ],
    "imdb": "tt0255306",
    "runtime": 155,
@@ -5932,11 +5934,11 @@
     "Fazil"
    ],
    "cast": [
-    "Shobana",
     "Mohanlal",
-    "K.P.A.C. Lalitha",
+    "Shobana",
     "Nedumudi Venu",
-    "Thilakan"
+    "Suresh Gopi",
+    "K.P.A.C. Lalitha"
    ],
    "imdb": "tt0214915",
    "runtime": 169,
@@ -5950,11 +5952,11 @@
     "Steven Spielberg"
    ],
    "cast": [
+    "Ralph Fiennes",
     "Liam Neeson",
     "Ben Kingsley",
-    "Ralph Fiennes",
     "Embeth Davidtz",
-    "Branko Lustig"
+    "Caroline Goodall"
    ],
    "imdb": "tt0108052",
    "runtime": 195,
@@ -5968,14 +5970,14 @@
     "Jane Campion"
    ],
    "cast": [
-    "Holly Hunter",
-    "Sam Neill",
     "Harvey Keitel",
     "Anna Paquin",
+    "Sam Neill",
+    "Holly Hunter",
     "Cliff Curtis"
    ],
    "imdb": "tt0107822",
-   "runtime": 121,
+   "runtime": 120,
    "countries": [
     "Australia",
     "France",
@@ -5988,10 +5990,10 @@
     "Robert Zemeckis"
    ],
    "cast": [
-    "John Lennon",
-    "Gerald Ford",
     "Tom Hanks",
+    "Gary Sinise",
     "Sally Field",
+    "Robin Wright",
     "Kurt Russell"
    ],
    "imdb": "tt0109830",
@@ -6008,7 +6010,7 @@
    "cast": [
     "Mohanlal",
     "Silk Smitha",
-    "K.P.A.C. Lalitha",
+    "Thilakan",
     "Urvashi",
     "Nedumudi Venu"
    ],
@@ -6023,8 +6025,8 @@
     "Rajiv Anchal"
    ],
    "cast": [
-    "Kaveri",
     "Mohanlal",
+    "Kaveri",
     "Suresh Gopi",
     "Sithara",
     "Murali"
@@ -6042,8 +6044,8 @@
    "cast": [
     "Leonardo DiCaprio",
     "Kate Winslet",
-    "James Cameron",
     "Kathy Bates",
+    "Billy Zane",
     "Bill Paxton"
    ],
    "imdb": "tt0120338",
@@ -6060,9 +6062,9 @@
    "cast": [
     "Jim Carrey",
     "Ed Harris",
-    "Philip Glass",
+    "Laura Linney",
     "Paul Giamatti",
-    "Laura Linney"
+    "Natascha McElhone"
    ],
    "imdb": "tt0120382",
    "runtime": 99,
@@ -6076,10 +6078,10 @@
     "Stanley Kubrick"
    ],
    "cast": [
-    "Stanley Kubrick",
-    "Nicole Kidman",
     "Tom Cruise",
+    "Nicole Kidman",
     "Sydney Pollack",
+    "Todd Field",
     "Alan Cumming"
    ],
    "imdb": "tt0120663",
@@ -6095,10 +6097,10 @@
     "David Fincher"
    ],
    "cast": [
-    "Brad Pitt",
     "Edward Norton",
-    "Jared Leto",
+    "Brad Pitt",
     "Helena Bonham Carter",
+    "Jared Leto",
     "Meat Loaf"
    ],
    "imdb": "tt0137523",
@@ -6116,9 +6118,9 @@
    "cast": [
     "Tom Hanks",
     "Michael Clarke Duncan",
-    "Gary Sinise",
-    "Sam Rockwell",
-    "Michael Jeter"
+    "David Morse",
+    "Bonnie Hunt",
+    "Sam Rockwell"
    ],
    "imdb": "tt0120689",
    "runtime": 189,
@@ -6132,9 +6134,9 @@
     "David Lynch"
    ],
    "cast": [
+    "Richard Farnsworth",
     "Sissy Spacek",
     "Harry Dean Stanton",
-    "Richard Farnsworth",
     "Everett McGill",
     "Kevin Farley"
    ],
@@ -6155,8 +6157,8 @@
     "Mohanlal",
     "Suhasini Maniratnam",
     "Mattannoor Sankarankutty",
-    "Kalamandalam Gopi",
-    "Kalamandalam Haridas"
+    "Kalamandalam Haridas",
+    "Kalamandalam Gopi"
    ],
    "imdb": "tt0202055",
    "runtime": 119,
@@ -6174,8 +6176,8 @@
     "Russell Crowe",
     "Joaquin Phoenix",
     "Richard Harris",
-    "Djimon Hounsou",
-    "Derek Jacobi"
+    "Connie Nielsen",
+    "Djimon Hounsou"
    ],
    "imdb": "tt0172495",
    "runtime": 155,
@@ -6190,11 +6192,11 @@
     "Edward Yang"
    ],
    "cast": [
-    "Edward Yang",
+    "Wu Nien-jen",
+    "Elaine Jin",
     "Issey Ogata",
     "Leon Dai",
-    "Cheryl Yang",
-    "Elaine Jin"
+    "Lawrence Ko"
    ],
    "imdb": "tt0244316",
    "runtime": 173,
@@ -6210,10 +6212,10 @@
    ],
    "cast": [
     "Aamir Khan",
-    "Preity Zinta",
     "Saif Ali Khan",
-    "Dimple Kapadia",
-    "Akshaye Khanna"
+    "Preity Zinta",
+    "Akshaye Khanna",
+    "Dimple Kapadia"
    ],
    "imdb": "tt0292490",
    "runtime": 185,
@@ -6227,14 +6229,14 @@
     "Richard Kelly"
    ],
    "cast": [
-    "Drew Barrymore",
-    "Jake Gyllenhaal",
     "Patrick Swayze",
-    "Ashley Tisdale",
+    "Jake Gyllenhaal",
+    "Drew Barrymore",
+    "Mary McDonnell",
     "Maggie Gyllenhaal"
    ],
    "imdb": "tt0246578",
-   "runtime": 134,
+   "runtime": 113,
    "countries": [
     "United States"
    ]
@@ -6245,14 +6247,14 @@
     "Peter Jackson"
    ],
    "cast": [
+    "Ian McKellen",
     "Cate Blanchett",
+    "Viggo Mortensen",
     "Christopher Lee",
-    "Peter Jackson",
-    "Orlando Bloom",
-    "Ian McKellen"
+    "Sean Astin"
    ],
    "imdb": "tt0167261",
-   "runtime": 235,
+   "runtime": 179,
    "countries": [
     "New Zealand",
     "United States"
@@ -6264,11 +6266,11 @@
     "Richard Curtis"
    ],
    "cast": [
-    "Rowan Atkinson",
-    "Elisha Cuthbert",
-    "Keira Knightley",
+    "Hugh Grant",
     "Liam Neeson",
-    "Alan Rickman"
+    "Rowan Atkinson",
+    "Colin Firth",
+    "Keira Knightley"
    ],
    "imdb": "tt0314331",
    "runtime": 135,
@@ -6284,14 +6286,14 @@
     "Peter Jackson"
    ],
    "cast": [
+    "Elijah Wood",
+    "Ian McKellen",
     "Cate Blanchett",
     "Christopher Lee",
-    "Peter Jackson",
-    "Orlando Bloom",
-    "Ian McKellen"
+    "Andy Serkis"
    ],
    "imdb": "tt0167260",
-   "runtime": 263,
+   "runtime": 201,
    "countries": [
     "New Zealand",
     "United States"
@@ -6304,13 +6306,13 @@
    ],
    "cast": [
     "Sandra Bullock",
+    "Ryan Phillippe",
     "Brendan Fraser",
     "Don Cheadle",
-    "Matt Dillon",
-    "Ryan Phillippe"
+    "Matt Dillon"
    ],
    "imdb": "tt0375679",
-   "runtime": 115,
+   "runtime": 112,
    "countries": [
     "Germany",
     "United States"
@@ -6324,8 +6326,8 @@
    "cast": [
     "Robert Downey Jr.",
     "Val Kilmer",
-    "Laurence Fishburne",
     "Michelle Monaghan",
+    "Corbin Bernsen",
     "Ariel Winter"
    ],
    "imdb": "tt0373469",
@@ -6342,8 +6344,8 @@
    "cast": [
     "Dwayne Johnson",
     "Justin Timberlake",
+    "Seann William Scott",
     "Sarah Michelle Gellar",
-    "Amy Poehler",
     "Mandy Moore"
    ],
    "imdb": "tt0405336",
@@ -6363,8 +6365,8 @@
     "Lee Pace",
     "Justine Waddell",
     "Leo Bill",
-    "Sean Gilder",
-    "Daniel Caltagirone"
+    "Daniel Caltagirone",
+    "Catinca Untaru"
    ],
    "imdb": "tt0460791",
    "runtime": 117,
@@ -6383,8 +6385,8 @@
     "Hugh Jackman",
     "Rachel Weisz",
     "Ellen Burstyn",
-    "Ethan Suplee",
-    "Cliff Curtis"
+    "Cliff Curtis",
+    "Mark Margolis"
    ],
    "imdb": "tt0414993",
    "runtime": 96,
@@ -6398,11 +6400,11 @@
     "Christopher Nolan"
    ],
    "cast": [
+    "Christian Bale",
     "Scarlett Johansson",
-    "David Bowie",
-    "Michael Caine",
     "Hugh Jackman",
-    "Christian Bale"
+    "Michael Caine",
+    "David Bowie"
    ],
    "imdb": "tt0482571",
    "runtime": 125,
@@ -6419,9 +6421,9 @@
    "cast": [
     "Brad Pitt",
     "Jeremy Renner",
-    "Zooey Deschanel",
     "Casey Affleck",
-    "Sam Rockwell"
+    "Sam Rockwell",
+    "Zooey Deschanel"
    ],
    "imdb": "tt0443680",
    "runtime": 160,
@@ -6435,9 +6437,9 @@
     "Richard Schenkman"
    ],
    "cast": [
-    "William Katt",
-    "Tony Todd",
     "John Billingsley",
+    "Tony Todd",
+    "William Katt",
     "Richard Riehle",
     "David Lee Smith"
    ],
@@ -6453,11 +6455,11 @@
     "James Cameron"
    ],
    "cast": [
-    "Sigourney Weaver",
-    "Michelle Rodriguez",
-    "Zoe Saldaña",
     "Sam Worthington",
-    "Giovanni Ribisi"
+    "Zoe Saldaña",
+    "Michelle Rodriguez",
+    "Giovanni Ribisi",
+    "Stephen Lang"
    ],
    "imdb": "tt0499549",
    "runtime": 162,
@@ -6485,9 +6487,9 @@
    "cast": [
     "Sandra Bullock",
     "Kathy Bates",
-    "Lily Collins",
     "Tim McGraw",
-    "Kim Dickens"
+    "Lily Collins",
+    "Quinton Aaron"
    ],
    "imdb": "tt0878804",
    "runtime": 128,
@@ -6517,10 +6519,10 @@
    ],
    "cast": [
     "Leonardo DiCaprio",
-    "Michael Caine",
     "Marion Cotillard",
-    "Cillian Murphy",
-    "Tom Hardy"
+    "Ken Watanabe",
+    "Michael Caine",
+    "Joseph Gordon-Levitt"
    ],
    "imdb": "tt1375666",
    "runtime": 148,
@@ -6535,11 +6537,11 @@
     "David Fincher"
    ],
    "cast": [
+    "Jesse Eisenberg",
     "Andrew Garfield",
     "Justin Timberlake",
     "Dakota Johnson",
-    "Jesse Eisenberg",
-    "Rooney Mara"
+    "Brenda Song"
    ],
    "imdb": "tt1285016",
    "runtime": 121,
@@ -6553,8 +6555,8 @@
     "Terrence Malick"
    ],
    "cast": [
-    "Brad Pitt",
     "Sean Penn",
+    "Brad Pitt",
     "Jessica Chastain",
     "Tye Sheridan",
     "Fiona Shaw"
@@ -6575,9 +6577,9 @@
    "cast": [
     "Tom Hanks",
     "Halle Berry",
-    "Susan Sarandon",
     "Hugh Grant",
-    "Hugo Weaving"
+    "Susan Sarandon",
+    "Jim Broadbent"
    ],
    "imdb": "tt1371111",
    "runtime": 172,
@@ -6597,11 +6599,11 @@
     "Quentin Tarantino"
    ],
    "cast": [
-    "Leonardo DiCaprio",
-    "Quentin Tarantino",
-    "Samuel L. Jackson",
     "Jamie Foxx",
-    "Christoph Waltz"
+    "Leonardo DiCaprio",
+    "Christoph Waltz",
+    "Samuel L. Jackson",
+    "Kerry Washington"
    ],
    "imdb": "tt1853728",
    "runtime": 165,
@@ -6616,10 +6618,10 @@
    ],
    "cast": [
     "Selena Gomez",
-    "Vanessa Hudgens",
-    "Vanessa Hudgens Tucker",
     "James Franco",
-    "Ashley Benson"
+    "Vanessa Hudgens",
+    "Ashley Benson",
+    "Gucci Mane"
    ],
    "imdb": "tt2101441",
    "runtime": 94,
@@ -6633,11 +6635,11 @@
     "Joss Whedon"
    ],
    "cast": [
-    "Scarlett Johansson",
-    "Gwyneth Paltrow",
-    "Jeremy Renner",
     "Robert Downey Jr.",
-    "Samuel L. Jackson"
+    "Scarlett Johansson",
+    "Chris Evans",
+    "Jeremy Renner",
+    "Gwyneth Paltrow"
    ],
    "imdb": "tt0848228",
    "runtime": 142,
@@ -6652,10 +6654,10 @@
    ],
    "cast": [
     "Mads Mikkelsen",
-    "Thomas Vinterberg",
-    "Alexandra Rapaport",
     "Thomas Bo Larsen",
-    "Bjarne Henriksen"
+    "Alexandra Rapaport",
+    "Susse Wold",
+    "Lars Ranthe"
    ],
    "imdb": "tt2106476",
    "runtime": 111,
@@ -6670,11 +6672,11 @@
     "Anwar Rasheed"
    ],
    "cast": [
-    "Jishnu Raghavan",
-    "Nithya Menen",
     "Dulquer Salmaan",
-    "Lena",
-    "Thilakan"
+    "Nithya Menen",
+    "Jishnu Raghavan",
+    "Thilakan",
+    "Sidhique"
    ],
    "imdb": "tt2218988",
    "runtime": 150,
@@ -6689,10 +6691,10 @@
    ],
    "cast": [
     "Nicholas Brendon",
+    "Emily Baldoni",
     "Elizabeth Gracen",
     "Maury Sterling",
-    "Lorene Scafaria",
-    "Emily Baldoni"
+    "Lorene Scafaria"
    ],
    "imdb": "tt2866360",
    "runtime": 87,
@@ -6743,10 +6745,10 @@
    ],
    "cast": [
     "Leonardo DiCaprio",
-    "Matthew McConaughey",
     "Margot Robbie",
-    "Rob Reiner",
-    "Jean Dujardin"
+    "Jonah Hill",
+    "Matthew McConaughey",
+    "Rob Reiner"
    ],
    "imdb": "tt0993846",
    "runtime": 180,
@@ -6760,11 +6762,11 @@
     "Yorgos Lanthimos"
    ],
    "cast": [
-    "Rachel Weisz",
     "Colin Farrell",
-    "Olivia Colman",
+    "Rachel Weisz",
     "Léa Seydoux",
-    "John C. Reilly"
+    "Olivia Colman",
+    "Ben Whishaw"
    ],
    "imdb": "tt3464902",
    "runtime": 118,
@@ -6785,7 +6787,7 @@
     "Tom Hardy",
     "Will Poulter",
     "Domhnall Gleeson",
-    "Lukas Haas"
+    "Paul Anderson"
    ],
    "imdb": "tt1663202",
    "runtime": 157,
@@ -6817,7 +6819,7 @@
     "Aparna Balamurali",
     "Anusree",
     "Lijomol Jose",
-    "Dileesh Pothan"
+    "Soubin Shahir"
    ],
    "imdb": "tt4851630",
    "countries": [
@@ -6834,7 +6836,7 @@
     "Golshifteh Farahani",
     "Method Man",
     "Barry Shabaka Henley",
-    "William Jackson Harper"
+    "Kara Hayward"
    ],
    "imdb": "tt5247022",
    "runtime": 113,
@@ -6848,11 +6850,11 @@
     "Nicolas Winding Refn"
    ],
    "cast": [
-    "Keanu Reeves",
     "Elle Fanning",
+    "Keanu Reeves",
+    "Jena Malone",
     "Christina Hendricks",
-    "Jena",
-    "Jena Malone"
+    "Bella Heathcote"
    ],
    "imdb": "tt1974419",
    "runtime": 118,
@@ -6868,11 +6870,11 @@
     "Shane Black"
    ],
    "cast": [
+    "Ryan Gosling",
     "Russell Crowe",
     "Kim Basinger",
-    "Ryan Gosling",
-    "Margaret Qualley",
-    "Matt Bomer"
+    "Matt Bomer",
+    "Margaret Qualley"
    ],
    "imdb": "tt3799694",
    "runtime": 116,
@@ -6886,11 +6888,11 @@
     "David Lowery"
    ],
    "cast": [
-    "Kesha",
-    "Casey Affleck",
     "Rooney Mara",
-    "Brea Grant",
-    "David Lowery"
+    "Casey Affleck",
+    "Kesha",
+    "Will Oldham",
+    "Brea Grant"
    ],
    "imdb": "tt6265828",
    "runtime": 92,
@@ -6904,11 +6906,11 @@
     "Lijo Jose Pellissery"
    ],
    "cast": [
+    "Antony Varghese.",
     "Anna Rajan",
-    "Lijo Jose Pellissery",
-    "Chemban Vinod Jose",
+    "Tito Wilson",
     "Jolly Chirayath",
-    "Antony Varghese."
+    "Chemban Vinod Jose"
    ],
    "imdb": "tt6167894",
    "runtime": 132,
@@ -6922,9 +6924,9 @@
     "S. S. Rajamouli"
    ],
    "cast": [
+    "Prabhas",
     "Anushka Shetty",
     "Tamannaah Bhatia",
-    "Prabhas",
     "Rana Daggubati",
     "Ramya Krishnan"
    ],
@@ -6940,9 +6942,9 @@
     "Michael Gracey"
    ],
    "cast": [
+    "Zac Efron",
     "Hugh Jackman",
     "Zendaya",
-    "Zac Efron",
     "Michelle Williams",
     "Rebecca Ferguson"
    ],
@@ -6985,11 +6987,11 @@
     "Bryan Singer"
    ],
    "cast": [
-    "Freddie Mercury",
-    "Mike Myers",
     "Rami Malek",
-    "Adam Lambert",
-    "Aidan Gillen"
+    "Mike Myers",
+    "Lucy Boynton",
+    "Aidan Gillen",
+    "Joseph Mazzello"
    ],
    "imdb": "tt1727824",
    "runtime": 134,
@@ -7008,7 +7010,7 @@
     "Mahershala Ali",
     "Linda Cardellini",
     "Brian Stepanek",
-    "P.J. Byrne"
+    "Iqbal Theba"
    ],
    "imdb": "tt6966692",
    "runtime": 130,
@@ -7022,9 +7024,9 @@
     "Zakariya Mohammed"
    ],
    "cast": [
+    "Soubin Shahir",
     "Samuel Abiola Robinson",
     "Savithri Sreedharan",
-    "Soubin Shahir",
     "Sarasa Balussery",
     "Aneesh G. Menon"
    ],
@@ -7039,8 +7041,8 @@
     "Lijo Jose Pellissery"
    ],
    "cast": [
-    "Antony Varghese.",
     "Chemban Vinod Jose",
+    "Antony Varghese.",
     "Sabumon Abdusamad",
     "Jaffar Idukki"
    ],
@@ -7056,11 +7058,11 @@
     "Todd Phillips"
    ],
    "cast": [
-    "Robert De Niro",
     "Joaquin Phoenix",
-    "Justin Theroux",
+    "Robert De Niro",
+    "Zazie Beetz",
     "Frances Conroy",
-    "Shea Whigham"
+    "Marc Maron"
    ],
    "imdb": "tt7286456",
    "runtime": 122,
@@ -7075,10 +7077,10 @@
    ],
    "cast": [
     "Florence Pugh",
-    "Will Poulter",
-    "Björn Andrésen",
     "Jack Reynor",
-    "William Jackson Harper"
+    "Will Poulter",
+    "William Jackson Harper",
+    "Archie Madekwe"
    ],
    "imdb": "tt8772262",
    "runtime": 147,
@@ -7095,9 +7097,9 @@
    "cast": [
     "Robert De Niro",
     "Al Pacino",
-    "Joe Pesci",
     "Harvey Keitel",
-    "Anna Paquin"
+    "Joe Pesci",
+    "Bobby Cannavale"
    ],
    "imdb": "tt1302006",
    "runtime": 209,
@@ -7125,11 +7127,11 @@
     "Christopher Nolan"
    ],
    "cast": [
-    "Michael Caine",
     "Robert Pattinson",
-    "Kenneth Branagh",
-    "Aaron Taylor-Johnson",
-    "Elizabeth Debicki"
+    "John David Washington",
+    "Michael Caine",
+    "Elizabeth Debicki",
+    "Kenneth Branagh"
    ],
    "imdb": "tt6723592",
    "runtime": 150,
@@ -7146,9 +7148,9 @@
    "cast": [
     "Suriya",
     "Prakash Raj",
-    "Rao Ramesh",
+    "Lijomol Jose",
     "Rajisha Vijayan",
-    "Lijomol Jose"
+    "Rao Ramesh"
    ],
    "imdb": "tt15097216",
    "runtime": 164,
@@ -7180,10 +7182,10 @@
    ],
    "cast": [
     "Tovino Thomas",
-    "Basil Joseph",
-    "Mamukkoya",
     "P. Balachandran",
-    "Guru Somasundaram"
+    "Guru Somasundaram",
+    "Mamukkoya",
+    "Aju Varghese"
    ],
    "imdb": "tt7268738",
    "runtime": 159,
@@ -7214,9 +7216,9 @@
    "cast": [
     "Brad Pitt",
     "Margot Robbie",
-    "Tobey Maguire",
-    "Olivia Wilde",
-    "Flea"
+    "Flea",
+    "Li Jun Li",
+    "Katherine Waterston"
    ],
    "imdb": "tt10640346",
    "runtime": 189,
@@ -7232,9 +7234,9 @@
    "cast": [
     "Colin Farrell",
     "Brendan Gleeson",
-    "Barry Keoghan",
     "Kerry Condon",
-    "Jon Kenny"
+    "Barry Keoghan",
+    "Pat Shortt"
    ],
    "imdb": "tt11813216",
    "runtime": 114,
@@ -7252,9 +7254,9 @@
    "cast": [
     "Robert Pattinson",
     "Andy Serkis",
+    "Zoë Kravitz",
     "Colin Farrell",
-    "John Turturro",
-    "Zoë Kravitz"
+    "Jeffrey Wright"
    ],
    "imdb": "tt1877830",
    "runtime": 176,
@@ -7268,9 +7270,9 @@
     "Jude Anthany Joseph"
    ],
    "cast": [
-    "Anamika",
-    "Aparna Balamurali",
+    "Kunchacko Boban",
     "Tovino Thomas",
+    "Aparna Balamurali",
     "Asif Ali",
     "Vineeth Sreenivasan"
    ],
@@ -7286,10 +7288,10 @@
    ],
    "cast": [
     "Joaquin Phoenix",
-    "Richard Kind",
-    "Parker Posey",
+    "Patti LuPone",
+    "Amy Ryan",
     "Nathan Lane",
-    "Bill Hader"
+    "Parker Posey"
    ],
    "imdb": "tt13521006",
    "runtime": 179,
@@ -7307,8 +7309,8 @@
    ],
    "cast": [
     "Mammootty",
-    "Sidharth Bharathan",
     "Arjun Ashokan",
+    "Sidharth Bharathan",
     "Manikandan R Achari",
     "Amalda Liz"
    ],
@@ -7323,11 +7325,11 @@
     "Chidambaram"
    ],
    "cast": [
+    "Soubin Shahir",
     "Sreenath Bhasi",
     "Deepak Parambol",
-    "Soubin Shahir",
     "Ganapathi S Poduval",
-    "Shebin Benson"
+    "Balu Varghese"
    ],
    "imdb": "tt26458038",
    "runtime": 135,
@@ -7341,16 +7343,1887 @@
     "Girish A.D"
    ],
    "cast": [
-    "Mamitha Baiju",
     "Naslen K. Gafoor",
+    "Mamitha Baiju",
+    "Sangeeth Prathap",
     "Akhila Bhargavan",
-    "Shyam Mohan",
-    "Sangeeth Prathap"
+    "Shyam Mohan"
    ],
    "imdb": "tt28288786",
    "runtime": 156,
    "countries": [
     "India"
+   ]
+  },
+  "Reservoir Dogs|1992": {
+   "qid": "Q72962",
+   "directors": [
+    "Quentin Tarantino"
+   ],
+   "cast": [
+    "Harvey Keitel",
+    "Tim Roth",
+    "Steve Buscemi",
+    "Michael Madsen",
+    "Chris Penn"
+   ],
+   "imdb": "tt0105236",
+   "runtime": 99,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Jackie Brown|1997": {
+   "qid": "Q431252",
+   "directors": [
+    "Quentin Tarantino"
+   ],
+   "cast": [
+    "Pam Grier",
+    "Samuel L. Jackson",
+    "Robert De Niro",
+    "Michael Keaton",
+    "Bridget Fonda"
+   ],
+   "imdb": "tt0119396",
+   "runtime": 154,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Kill Bill: Volume 1|2003": {
+   "qid": "Q165325",
+   "directors": [
+    "Quentin Tarantino"
+   ],
+   "cast": [
+    "Uma Thurman",
+    "Lucy Liu",
+    "Daryl Hannah",
+    "David Carradine",
+    "Michael Madsen"
+   ],
+   "imdb": "tt0266697",
+   "runtime": 110,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Inglourious Basterds|2009": {
+   "qid": "Q153723",
+   "directors": [
+    "Quentin Tarantino"
+   ],
+   "cast": [
+    "Brad Pitt",
+    "Christoph Waltz",
+    "Diane Kruger",
+    "Michael Fassbender",
+    "Eli Roth"
+   ],
+   "imdb": "tt0361748",
+   "runtime": 153,
+   "countries": [
+    "Germany",
+    "United States"
+   ]
+  },
+  "The Hateful Eight|2015": {
+   "qid": "Q18225084",
+   "directors": [
+    "Quentin Tarantino"
+   ],
+   "cast": [
+    "Samuel L. Jackson",
+    "Kurt Russell",
+    "Jennifer Jason Leigh",
+    "Tim Roth",
+    "Channing Tatum"
+   ],
+   "imdb": "tt3460252",
+   "runtime": 167,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Once Upon a Time in Hollywood|2019": {
+   "qid": "Q47300912",
+   "directors": [
+    "Quentin Tarantino"
+   ],
+   "cast": [
+    "Leonardo DiCaprio",
+    "Brad Pitt",
+    "Margot Robbie",
+    "Al Pacino",
+    "Kurt Russell"
+   ],
+   "imdb": "tt7131622",
+   "runtime": 161,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Memento|2000": {
+   "qid": "Q190525",
+   "directors": [
+    "Christopher Nolan"
+   ],
+   "cast": [
+    "Carrie-Anne Moss",
+    "Guy Pearce",
+    "Joe Pantoliano",
+    "Jorja Fox",
+    "Mark Boone Junior"
+   ],
+   "imdb": "tt0209144",
+   "runtime": 113,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Batman Begins|2005": {
+   "qid": "Q166262",
+   "directors": [
+    "Christopher Nolan"
+   ],
+   "cast": [
+    "Christian Bale",
+    "Michael Caine",
+    "Morgan Freeman",
+    "Liam Neeson",
+    "Gary Oldman"
+   ],
+   "imdb": "tt0372784",
+   "runtime": 140,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "The Dark Knight Rises|2012": {
+   "qid": "Q189330",
+   "directors": [
+    "Christopher Nolan"
+   ],
+   "cast": [
+    "Christian Bale",
+    "Michael Caine",
+    "Gary Oldman",
+    "Anne Hathaway",
+    "Morgan Freeman"
+   ],
+   "imdb": "tt1345836",
+   "runtime": 164,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Oppenheimer|2023": {
+   "qid": "Q108839994",
+   "directors": [
+    "Christopher Nolan"
+   ],
+   "cast": [
+    "Cillian Murphy",
+    "Robert Downey Jr.",
+    "Matt Damon",
+    "Emily Blunt",
+    "Rami Malek"
+   ],
+   "imdb": "tt15398776",
+   "runtime": 180,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Shutter Island|2010": {
+   "qid": "Q210364",
+   "directors": [
+    "Martin Scorsese"
+   ],
+   "cast": [
+    "Leonardo DiCaprio",
+    "Mark Ruffalo",
+    "Ben Kingsley",
+    "Michelle Williams",
+    "Max von Sydow"
+   ],
+   "imdb": "tt1130884",
+   "runtime": 138,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Killers of the Flower Moon|2023": {
+   "qid": "Q66316924",
+   "directors": [
+    "Martin Scorsese"
+   ],
+   "cast": [
+    "Leonardo DiCaprio",
+    "Robert De Niro",
+    "Brendan Fraser",
+    "Jesse Plemons",
+    "Lily Gladstone"
+   ],
+   "imdb": "tt5537002",
+   "runtime": 206,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Iron Man|2008": {
+   "qid": "Q192724",
+   "directors": [
+    "Jon Favreau"
+   ],
+   "cast": [
+    "Robert Downey Jr.",
+    "Gwyneth Paltrow",
+    "Jeff Bridges",
+    "Terrence Howard",
+    "Paul Bettany"
+   ],
+   "imdb": "tt0371746",
+   "runtime": 126,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Guardians of the Galaxy|2014": {
+   "qid": "Q5887360",
+   "directors": [
+    "James Gunn"
+   ],
+   "cast": [
+    "Chris Pratt",
+    "Zoe Saldaña",
+    "Dave Bautista",
+    "Glenn Close",
+    "Karen Gillan"
+   ],
+   "imdb": "tt2015381",
+   "runtime": 121,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Captain America: The Winter Soldier|2014": {
+   "qid": "Q1765358",
+   "directors": [
+    "Anthony Russo",
+    "Joe Russo"
+   ],
+   "cast": [
+    "Chris Evans",
+    "Scarlett Johansson",
+    "Samuel L. Jackson",
+    "Robert Redford",
+    "Cobie Smulders"
+   ],
+   "imdb": "tt1843866",
+   "runtime": 136,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Avengers: Infinity War|2018": {
+   "qid": "Q23780914",
+   "directors": [
+    "Anthony Russo",
+    "Joe Russo"
+   ],
+   "cast": [
+    "Robert Downey Jr.",
+    "Scarlett Johansson",
+    "Chris Hemsworth",
+    "Mark Ruffalo",
+    "Tom Holland"
+   ],
+   "imdb": "tt4154756",
+   "runtime": 149,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Avengers: Endgame|2019": {
+   "qid": "Q23781155",
+   "directors": [
+    "Anthony Russo",
+    "Joe Russo"
+   ],
+   "cast": [
+    "Robert Downey Jr.",
+    "Scarlett Johansson",
+    "Chris Evans",
+    "Jeremy Renner",
+    "Mark Ruffalo"
+   ],
+   "imdb": "tt4154796",
+   "runtime": 181,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Spider-Man: No Way Home|2021": {
+   "qid": "Q68934496",
+   "directors": [
+    "Jon Watts"
+   ],
+   "cast": [
+    "Tom Holland",
+    "Zendaya",
+    "Benedict Cumberbatch",
+    "Marisa Tomei",
+    "Jamie Foxx"
+   ],
+   "imdb": "tt10872600",
+   "runtime": 148,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Logan|2017": {
+   "qid": "Q24053263",
+   "directors": [
+    "James Mangold"
+   ],
+   "cast": [
+    "Hugh Jackman",
+    "Patrick Stewart",
+    "Dafne Keen",
+    "Boyd Holbrook",
+    "Richard E. Grant"
+   ],
+   "imdb": "tt3315342",
+   "runtime": 137,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Batman|1989": {
+   "qid": "Q116852",
+   "directors": [
+    "Tim Burton"
+   ],
+   "cast": [
+    "Jack Palance",
+    "Jack Nicholson",
+    "Michael Gough",
+    "Kim Basinger",
+    "Michael Keaton"
+   ],
+   "imdb": "tt0096895",
+   "runtime": 126,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Wonder Woman|2017": {
+   "qid": "Q20502242",
+   "directors": [
+    "Patty Jenkins"
+   ],
+   "cast": [
+    "Gal Gadot",
+    "Chris Pine",
+    "Robin Wright",
+    "Connie Nielsen",
+    "David Thewlis"
+   ],
+   "imdb": "tt0451279",
+   "runtime": 141,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Man of Steel|2013": {
+   "qid": "Q622769",
+   "directors": [
+    "Zack Snyder"
+   ],
+   "cast": [
+    "Diane Lane",
+    "Russell Crowe",
+    "Amy Adams",
+    "Kevin Costner",
+    "Henry Cavill"
+   ],
+   "imdb": "tt0770828",
+   "runtime": 143,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "The Suicide Squad|2021": {
+   "qid": "Q57317060",
+   "directors": [
+    "James Gunn"
+   ],
+   "cast": [
+    "Idris Elba",
+    "Margot Robbie",
+    "John Cena",
+    "Jai Courtney",
+    "Michael Rooker"
+   ],
+   "imdb": "tt6334354",
+   "runtime": 132,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Gone Girl|2014": {
+   "qid": "Q14920425",
+   "directors": [
+    "David Fincher"
+   ],
+   "cast": [
+    "Ben Affleck",
+    "Rosamund Pike",
+    "Neil Patrick Harris",
+    "Tyler Perry",
+    "Emily Ratajkowski"
+   ],
+   "imdb": "tt2267998",
+   "runtime": 149,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Sicario|2015": {
+   "qid": "Q17337292",
+   "directors": [
+    "Denis Villeneuve"
+   ],
+   "cast": [
+    "Emily Blunt",
+    "Benicio del Toro",
+    "Josh Brolin",
+    "Jon Bernthal",
+    "Daniel Kaluuya"
+   ],
+   "imdb": "tt3397884",
+   "runtime": 121,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Dune: Part Two|2024": {
+   "qid": "Q109228991",
+   "directors": [
+    "Denis Villeneuve"
+   ],
+   "cast": [
+    "Timothée Chalamet",
+    "Zendaya",
+    "Javier Bardem",
+    "Rebecca Ferguson",
+    "Christopher Walken"
+   ],
+   "imdb": "tt15239678",
+   "runtime": 165,
+   "countries": [
+    "Canada",
+    "Hungary",
+    "Italy",
+    "Jordan",
+    "New Zealand",
+    "The Gambia",
+    "United Arab Emirates",
+    "United States"
+   ]
+  },
+  "Dr. Strangelove|1964": {
+   "qid": "Q105702",
+   "directors": [
+    "Stanley Kubrick"
+   ],
+   "cast": [
+    "Peter Sellers",
+    "George C. Scott",
+    "James Earl Jones",
+    "Sterling Hayden",
+    "Keenan Wynn"
+   ],
+   "imdb": "tt0057012",
+   "runtime": 93,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Barry Lyndon|1975": {
+   "qid": "Q471716",
+   "directors": [
+    "Stanley Kubrick"
+   ],
+   "cast": [
+    "Hardy Krüger",
+    "Ryan O'Neal",
+    "Marisa Berenson",
+    "Steven Berkoff",
+    "Patrick Magee"
+   ],
+   "imdb": "tt0072684",
+   "runtime": 181,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "E.T. the Extra-Terrestrial|1982": {
+   "qid": "Q11621",
+   "directors": [
+    "Steven Spielberg"
+   ],
+   "cast": [
+    "Dee Wallace",
+    "Drew Barrymore",
+    "Peter Coyote",
+    "Henry Thomas",
+    "Erika Eleniak"
+   ],
+   "imdb": "tt0083866",
+   "runtime": 115,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Jurassic Park|1993": {
+   "qid": "Q167726",
+   "directors": [
+    "Steven Spielberg"
+   ],
+   "cast": [
+    "Richard Attenborough",
+    "Samuel L. Jackson",
+    "Jeff Goldblum",
+    "Sam Neill",
+    "Laura Dern"
+   ],
+   "imdb": "tt0107290",
+   "runtime": 126,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Catch Me If You Can|2002": {
+   "qid": "Q208108",
+   "directors": [
+    "Steven Spielberg"
+   ],
+   "cast": [
+    "Leonardo DiCaprio",
+    "Tom Hanks",
+    "Christopher Walken",
+    "Amy Adams",
+    "Martin Sheen"
+   ],
+   "imdb": "tt0264464",
+   "runtime": 140,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Royal Tenenbaums|2001": {
+   "qid": "Q935105",
+   "directors": [
+    "Wes Anderson"
+   ],
+   "cast": [
+    "Gene Hackman",
+    "Gwyneth Paltrow",
+    "Anjelica Huston",
+    "Ben Stiller",
+    "Bill Murray"
+   ],
+   "imdb": "tt0265666",
+   "runtime": 108,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Moonrise Kingdom|2012": {
+   "qid": "Q217112",
+   "directors": [
+    "Wes Anderson"
+   ],
+   "cast": [
+    "Bruce Willis",
+    "Jared Gilman",
+    "Edward Norton",
+    "Bill Murray",
+    "Frances McDormand"
+   ],
+   "imdb": "tt1748122",
+   "runtime": 95,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Boogie Nights|1997": {
+   "qid": "Q291170",
+   "directors": [
+    "Paul Thomas Anderson"
+   ],
+   "cast": [
+    "Mark Wahlberg",
+    "Julianne Moore",
+    "Burt Reynolds",
+    "Philip Seymour Hoffman",
+    "John C. Reilly"
+   ],
+   "imdb": "tt0118749",
+   "runtime": 155,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Rear Window|1954": {
+   "qid": "Q34414",
+   "directors": [
+    "Alfred Hitchcock"
+   ],
+   "cast": [
+    "James Stewart",
+    "Grace Kelly",
+    "Thelma Ritter",
+    "Raymond Burr",
+    "Wendell Corey"
+   ],
+   "imdb": "tt0047396",
+   "runtime": 112,
+   "countries": [
+    "United States"
+   ]
+  },
+  "North by Northwest|1959": {
+   "qid": "Q223139",
+   "directors": [
+    "Alfred Hitchcock"
+   ],
+   "cast": [
+    "Eva Marie Saint",
+    "James Mason",
+    "Martin Landau",
+    "Jessie Royce Landis",
+    "Leo G. Carroll"
+   ],
+   "imdb": "tt0053125",
+   "runtime": 136,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Barbie|2023": {
+   "qid": "Q55436290",
+   "directors": [
+    "Greta Gerwig"
+   ],
+   "cast": [
+    "Ryan Gosling",
+    "America Ferrera",
+    "Will Ferrell",
+    "Simu Liu",
+    "Kate McKinnon"
+   ],
+   "imdb": "tt1517268",
+   "runtime": 114,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Poor Things|2023": {
+   "qid": "Q108760382",
+   "directors": [
+    "Yorgos Lanthimos"
+   ],
+   "cast": [
+    "Emma Stone",
+    "Willem Dafoe",
+    "Mark Ruffalo",
+    "Margaret Qualley",
+    "Hanna Schygulla"
+   ],
+   "imdb": "tt14230458",
+   "runtime": 141,
+   "countries": [
+    "Ireland",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Anora|2024": {
+   "qid": "Q123185887",
+   "directors": [
+    "Sean Baker"
+   ],
+   "cast": [
+    "Mikey Madison",
+    "Yura Borisov",
+    "Paul Weissman",
+    "Ella Rubin",
+    "Mark Eydelshteyn"
+   ],
+   "imdb": "tt28607951",
+   "runtime": 139,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Conclave|2024": {
+   "qid": "Q116701124",
+   "directors": [
+    "Edward Berger"
+   ],
+   "cast": [
+    "Ralph Fiennes",
+    "John Lithgow",
+    "Stanley Tucci",
+    "Isabella Rossellini",
+    "Sergio Castellitto"
+   ],
+   "imdb": "tt20215234",
+   "runtime": 121,
+   "countries": [
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "The Substance|2024": {
+   "qid": "Q113380226",
+   "directors": [
+    "Coralie Fargeat"
+   ],
+   "cast": [
+    "Demi Moore",
+    "Margaret Qualley",
+    "Dennis Quaid",
+    "Hugo Diego Garcia",
+    "Joseph Balderrama"
+   ],
+   "imdb": "tt17526714",
+   "runtime": 141,
+   "countries": [
+    "France",
+    "United Kingdom",
+    "United States"
+   ]
+  },
+  "Challengers|2024": {
+   "qid": "Q111458251",
+   "directors": [
+    "Luca Guadagnino"
+   ],
+   "cast": [
+    "Zendaya",
+    "Mike Faist",
+    "Josh O'Connor",
+    "Nada Despotovich",
+    "Hailey Gates"
+   ],
+   "imdb": "tt16426418",
+   "runtime": 131,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Top Gun: Maverick|2022": {
+   "qid": "Q31202708",
+   "directors": [
+    "Joseph Kosinski"
+   ],
+   "cast": [
+    "Tom Cruise",
+    "Val Kilmer",
+    "Jennifer Connelly",
+    "Ed Harris",
+    "Miles Teller"
+   ],
+   "imdb": "tt1745960",
+   "runtime": 130,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Spider-Man: Across the Spider-Verse|2023": {
+   "qid": "Q76448600",
+   "directors": [
+    "Joaquim Dos Santos",
+    "Justin K. Thompson",
+    "Kemp Powers"
+   ],
+   "cast": [],
+   "imdb": "tt9362722",
+   "runtime": 140,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Inside Out 2|2024": {
+   "qid": "Q113877606",
+   "directors": [
+    "Kelsey Mann"
+   ],
+   "cast": [],
+   "imdb": "tt22022452",
+   "runtime": 96,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Furiosa: A Mad Max Saga|2024": {
+   "qid": "Q100361125",
+   "directors": [
+    "George Miller"
+   ],
+   "cast": [
+    "Anya Taylor-Joy",
+    "Chris Hemsworth",
+    "Tom Burke",
+    "Elsa Pataky",
+    "Nathan Jones"
+   ],
+   "imdb": "tt12037194",
+   "runtime": 148,
+   "countries": [
+    "Australia",
+    "United States"
+   ]
+  },
+  "Rosemary's Baby|1968": {
+   "qid": "Q607179",
+   "directors": [
+    "Roman Polanski"
+   ],
+   "cast": [
+    "Mia Farrow",
+    "John Cassavetes",
+    "Tony Curtis",
+    "Ruth Gordon",
+    "Ralph Bellamy"
+   ],
+   "imdb": "tt0063522",
+   "runtime": 137,
+   "countries": [
+    "United States"
+   ]
+  },
+  "It Follows|2014": {
+   "qid": "Q16547881",
+   "directors": [
+    "David Robert Mitchell"
+   ],
+   "cast": [
+    "Keir Gilchrist",
+    "Maika Monroe",
+    "Jake Weary",
+    "Daniel Zovatto",
+    "Olivia Luccardi"
+   ],
+   "imdb": "tt3235888",
+   "runtime": 100,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Conjuring|2013": {
+   "qid": "Q5540479",
+   "directors": [
+    "James Wan"
+   ],
+   "cast": [
+    "Vera Farmiga",
+    "Patrick Wilson",
+    "Joey King",
+    "Mackenzie Foy",
+    "Ron Livingston"
+   ],
+   "imdb": "tt1457767",
+   "runtime": 112,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Talk to Me|2022": {
+   "qid": "Q116193178",
+   "directors": [
+    "Danny Philippou",
+    "Michael Philippou"
+   ],
+   "cast": [
+    "Miranda Otto",
+    "Sophie Wilde",
+    "Otis Dhanji",
+    "Zoe Terakes",
+    "Joe Bird"
+   ],
+   "imdb": "tt10638522",
+   "runtime": 94,
+   "countries": [
+    "Australia"
+   ]
+  },
+  "A Nightmare on Elm Street|1984": {
+   "qid": "Q329434",
+   "directors": [
+    "Wes Craven"
+   ],
+   "cast": [
+    "Johnny Depp",
+    "Heather Langenkamp",
+    "Amanda Wyss",
+    "Charles Fleischer",
+    "John Saxon"
+   ],
+   "imdb": "tt0087800",
+   "runtime": 91,
+   "countries": [
+    "United States"
+   ]
+  },
+  "The Sixth Sense|1999": {
+   "qid": "Q183063",
+   "directors": [
+    "M. Night Shyamalan"
+   ],
+   "cast": [
+    "Bruce Willis",
+    "Haley Joel Osment",
+    "Toni Collette",
+    "Olivia Williams",
+    "Mischa Barton"
+   ],
+   "imdb": "tt0167404",
+   "runtime": 107,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Back to the Future|1985": {
+   "qid": "Q91540",
+   "directors": [
+    "Robert Zemeckis"
+   ],
+   "cast": [
+    "Christopher Lloyd",
+    "Michael J. Fox",
+    "Lea Thompson",
+    "Crispin Glover",
+    "Thomas F. Wilson"
+   ],
+   "imdb": "tt0088763",
+   "runtime": 115,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Die Hard|1988": {
+   "qid": "Q105598",
+   "directors": [
+    "John McTiernan"
+   ],
+   "cast": [
+    "Bruce Willis",
+    "Alexander Godunov",
+    "Bonnie Bedelia",
+    "Reginald VelJohnson",
+    "William Atherton"
+   ],
+   "imdb": "tt0095016",
+   "runtime": 131,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Terminator 2: Judgment Day|1991": {
+   "qid": "Q170564",
+   "directors": [
+    "James Cameron"
+   ],
+   "cast": [
+    "Arnold Schwarzenegger",
+    "Edward Furlong",
+    "Linda Hamilton",
+    "Robert Patrick",
+    "Michael Biehn"
+   ],
+   "imdb": "tt0103064",
+   "runtime": 137,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Home Alone|1990": {
+   "qid": "Q105031",
+   "directors": [
+    "Chris Columbus"
+   ],
+   "cast": [
+    "Macaulay Culkin",
+    "Joe Pesci",
+    "Catherine O'Hara",
+    "Daniel Stern",
+    "John Candy"
+   ],
+   "imdb": "tt0099785",
+   "runtime": 103,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Ratatouille|2007": {
+   "qid": "Q170035",
+   "directors": [
+    "Brad Bird",
+    "Jan Pinkava"
+   ],
+   "cast": [],
+   "imdb": "tt0382932",
+   "runtime": 110,
+   "countries": [
+    "France",
+    "Japan",
+    "United States"
+   ]
+  },
+  "Up|2009": {
+   "qid": "Q174811",
+   "directors": [
+    "Pete Docter",
+    "Bob Peterson"
+   ],
+   "cast": [],
+   "imdb": "tt1049413",
+   "runtime": 96,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Shrek|2001": {
+   "qid": "Q483815",
+   "directors": [
+    "Andrew Adamson",
+    "Vicky Jenson"
+   ],
+   "cast": [],
+   "imdb": "tt0126029",
+   "runtime": 90,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Frozen|2013": {
+   "qid": "Q246283",
+   "directors": [
+    "Chris Buck",
+    "Jennifer Lee"
+   ],
+   "cast": [],
+   "imdb": "tt2294629",
+   "runtime": 101,
+   "countries": [
+    "United States"
+   ]
+  },
+  "Dilwale Dulhania Le Jayenge|1995": {
+   "qid": "Q849343",
+   "directors": [
+    "Aditya Chopra"
+   ],
+   "cast": [
+    "Shah Rukh Khan",
+    "Kajol",
+    "Amrish Puri",
+    "Farida Jalal",
+    "Anupam Kher"
+   ],
+   "imdb": "tt0112870",
+   "runtime": 245,
+   "countries": [
+    "India"
+   ]
+  },
+  "Rang De Basanti|2006": {
+   "qid": "Q924135",
+   "directors": [
+    "Rakeysh Omprakash Mehra"
+   ],
+   "cast": [
+    "Aamir Khan",
+    "Siddharth",
+    "Sharman Joshi",
+    "Waheeda Rehman",
+    "Soha Ali Khan"
+   ],
+   "imdb": "tt0405508",
+   "runtime": 157,
+   "countries": [
+    "India"
+   ]
+  },
+  "Taare Zameen Par|2007": {
+   "qid": "Q1043614",
+   "directors": [
+    "Aamir Khan",
+    "Amole Gupte",
+    "Ram Madhvani"
+   ],
+   "cast": [
+    "Darsheel Safary",
+    "Abhishek Bachchan",
+    "Tisca Chopra",
+    "Vipin Sharma",
+    "Tanay Chheda"
+   ],
+   "imdb": "tt0986264",
+   "runtime": 165,
+   "countries": [
+    "India"
+   ]
+  },
+  "Zindagi Na Milegi Dobara|2011": {
+   "qid": "Q3067642",
+   "directors": [
+    "Zoya Akhtar"
+   ],
+   "cast": [
+    "Hrithik Roshan",
+    "Katrina Kaif",
+    "Farhan Akhtar",
+    "Kalki Koechlin",
+    "Naseeruddin Shah"
+   ],
+   "imdb": "tt1562872",
+   "runtime": 154,
+   "countries": [
+    "India"
+   ]
+  },
+  "Kahaani|2012": {
+   "qid": "Q219396",
+   "directors": [
+    "Sujoy Ghosh"
+   ],
+   "cast": [
+    "Vidya Balan",
+    "Nawazuddin Siddiqui",
+    "Indraneil Sengupta",
+    "Parambrata Chatterjee",
+    "Darshan Jariwala"
+   ],
+   "imdb": "tt1821480",
+   "runtime": 122,
+   "countries": [
+    "India"
+   ]
+  },
+  "Haider|2014": {
+   "qid": "Q15726236",
+   "directors": [
+    "Vishal Bhardwaj"
+   ],
+   "cast": [
+    "Shahid Kapoor",
+    "Shraddha Kapoor",
+    "Tabu",
+    "Irrfan Khan",
+    "Kay Kay Menon"
+   ],
+   "imdb": "tt3390572",
+   "runtime": 160,
+   "countries": [
+    "India"
+   ]
+  },
+  "Gully Boy|2019": {
+   "qid": "Q48671143",
+   "directors": [
+    "Zoya Akhtar"
+   ],
+   "cast": [
+    "Ranveer Singh",
+    "Alia Bhatt",
+    "Kalki Koechlin",
+    "Siddhant Chaturvedi",
+    "Amruta Subhash"
+   ],
+   "imdb": "tt2395469",
+   "countries": [
+    "India"
+   ]
+  },
+  "12th Fail|2023": {
+   "qid": "Q122921105",
+   "directors": [
+    "Vidhu Vinod Chopra"
+   ],
+   "cast": [
+    "Vikrant Massey",
+    "Sarita Joshi",
+    "Priyanshu Chatterjee",
+    "Medha Shankr",
+    "Pallak Lalwani"
+   ],
+   "imdb": "tt23849204",
+   "runtime": 146,
+   "countries": [
+    "India"
+   ]
+  },
+  "Laapataa Ladies|2023": {
+   "qid": "Q124714626",
+   "directors": [
+    "Kiran Rao"
+   ],
+   "cast": [
+    "Ravi Kishan",
+    "Sparsh Shrivastav",
+    "Pratibha Ranta",
+    "Nitanshi Goel",
+    "Chhaya Kadam"
+   ],
+   "imdb": "tt21626284",
+   "runtime": 124,
+   "countries": [
+    "India"
+   ]
+  },
+  "Jawan|2023": {
+   "qid": "Q113493289",
+   "directors": [
+    "Atlee"
+   ],
+   "cast": [
+    "Shah Rukh Khan",
+    "Nayanthara",
+    "Vijay Sethupathi",
+    "Sanya Malhotra",
+    "Priyamani"
+   ],
+   "imdb": "tt15354916",
+   "runtime": 167,
+   "countries": [
+    "India"
+   ]
+  },
+  "Charlie|2015": {
+   "qid": "Q21034397",
+   "directors": [
+    "Martin Prakkat"
+   ],
+   "cast": [
+    "Dulquer Salmaan",
+    "Parvathy Thiruvothu",
+    "Kalpana",
+    "K.P.A.C. Lalitha",
+    "Nedumudi Venu"
+   ],
+   "imdb": "tt5082014",
+   "countries": [
+    "India"
+   ]
+  },
+  "Lucifer|2019": {
+   "qid": "Q55621418",
+   "directors": [
+    "Prithviraj Sukumaran"
+   ],
+   "cast": [
+    "Mohanlal",
+    "Vivek Oberoi",
+    "Manju Warrier",
+    "Nyla Usha",
+    "Indrajith Sukumaran"
+   ],
+   "imdb": "tt6067752",
+   "countries": [
+    "India"
+   ]
+  },
+  "Thallumaala|2022": {
+   "qid": "Q109300018",
+   "directors": [
+    "Khalidh Rahman"
+   ],
+   "cast": [
+    "Tovino Thomas",
+    "Kalyani Priyadarshan",
+    "Shine Tom Chacko",
+    "Chemban Vinod Jose",
+    "Binu Pappu"
+   ],
+   "imdb": "tt11075264",
+   "countries": [
+    "India"
+   ]
+  },
+  "Romancham|2023": {
+   "qid": "Q116973714",
+   "directors": [
+    "Jithu Madhavan"
+   ],
+   "cast": [
+    "Arjun Ashokan",
+    "Soubin Shahir",
+    "Chemban Vinod Jose",
+    "Sajin Gopu",
+    "Assim Jamal"
+   ],
+   "imdb": "tt20249418",
+   "runtime": 129,
+   "countries": [
+    "India"
+   ]
+  },
+  "Aavesham|2024": {
+   "qid": "Q125372922",
+   "directors": [
+    "Jithu Madhavan"
+   ],
+   "cast": [
+    "Fahadh Faasil",
+    "Mansoor Ali Khan",
+    "Sajin Gopu",
+    "Mithun Jai Sankar"
+   ],
+   "imdb": "tt26660021",
+   "countries": [
+    "India"
+   ]
+  },
+  "Kannur Squad|2023": {
+   "qid": "Q122308612",
+   "directors": [
+    "Roby Varghese Raj"
+   ],
+   "cast": [
+    "Mammootty",
+    "Vijayaraghavan",
+    "Kishore Kumar",
+    "Rony David",
+    "Sunny Wayne"
+   ],
+   "imdb": "tt25274786",
+   "runtime": 161,
+   "countries": [
+    "India"
+   ]
+  },
+  "Thanmathra|2005": {
+   "qid": "Q7710602",
+   "directors": [
+    "Blessy"
+   ],
+   "cast": [
+    "Mohanlal",
+    "Meera Vasudevan",
+    "Nedumudi Venu",
+    "Prathap K. Pothan",
+    "Jagathy Sreekumar"
+   ],
+   "imdb": "tt0483180",
+   "countries": [
+    "India"
+   ]
+  },
+  "Bheeshma Parvam|2022": {
+   "qid": "Q105833849",
+   "directors": [
+    "Amal Neerad"
+   ],
+   "cast": [
+    "Mammootty",
+    "K.P.A.C. Lalitha",
+    "Soubin Shahir",
+    "Nedumudi Venu",
+    "Lena"
+   ],
+   "imdb": "tt14002046",
+   "countries": [
+    "India"
+   ]
+  },
+  "Nna Thaan Case Kodu|2022": {
+   "qid": "Q113158890",
+   "directors": [
+    "Ratheesh Balakrishnan"
+   ],
+   "cast": [
+    "Kunchacko Boban",
+    "Gayathrie",
+    "Basil Joseph",
+    "Rajesh Madhavan",
+    "Unnimaya Prasad"
+   ],
+   "imdb": "tt14188930",
+   "countries": [
+    "India"
+   ]
+  },
+  "Roja|1992": {
+   "qid": "Q2739153",
+   "directors": [
+    "Mani Ratnam"
+   ],
+   "cast": [
+    "Arvind Swamy",
+    "Madhoo",
+    "Pankaj Kapur",
+    "Janagaraj"
+   ],
+   "imdb": "tt0105271",
+   "runtime": 137,
+   "countries": [
+    "India"
+   ]
+  },
+  "Bombay|1995": {
+   "qid": "Q891821",
+   "directors": [
+    "Mani Ratnam"
+   ],
+   "cast": [
+    "Manisha Koirala",
+    "Prakash Raj",
+    "Arvind Swamy",
+    "Kitty"
+   ],
+   "imdb": "tt0112553",
+   "runtime": 141,
+   "countries": [
+    "India"
+   ]
+  },
+  "Anbe Sivam|2003": {
+   "qid": "Q3418126",
+   "directors": [
+    "Sundar C"
+   ],
+   "cast": [
+    "Kamal Haasan",
+    "R. Madhavan",
+    "Kiran Rathod",
+    "Santhana Bharathi"
+   ],
+   "imdb": "tt0367495",
+   "countries": [
+    "India"
+   ]
+  },
+  "96|2018": {
+   "qid": "Q30597974",
+   "directors": [
+    "C. Prem Kumar"
+   ],
+   "cast": [
+    "Vijay Sethupathi",
+    "Trisha Krishnan"
+   ],
+   "imdb": "tt7019842",
+   "countries": [
+    "India"
+   ]
+  },
+  "Asuran|2019": {
+   "qid": "Q60738331",
+   "directors": [
+    "Vetrimaaran"
+   ],
+   "cast": [],
+   "imdb": "tt9477520",
+   "countries": [
+    "India"
+   ]
+  },
+  "Vikram|2022": {
+   "qid": "Q102147287",
+   "directors": [
+    "Lokesh Kanagaraj"
+   ],
+   "cast": [
+    "Kamal Haasan",
+    "Vijay Sethupathi",
+    "Fahadh Faasil",
+    "Narain",
+    "Kalidas Jayaram"
+   ],
+   "imdb": "tt9179430",
+   "runtime": 173,
+   "countries": [
+    "India"
+   ]
+  },
+  "Jailer|2023": {
+   "qid": "Q113625011",
+   "directors": [
+    "Nelson Dilipkumar"
+   ],
+   "cast": [
+    "Rajinikanth",
+    "Jackie Shroff",
+    "Tamannaah Bhatia",
+    "Ramya Krishnan",
+    "Shiva Rajkumar"
+   ],
+   "imdb": "tt11663228",
+   "runtime": 164,
+   "countries": [
+    "India"
+   ]
+  },
+  "Eega|2012": {
+   "qid": "Q3234794",
+   "directors": [
+    "S. S. Rajamouli"
+   ],
+   "cast": [
+    "Sudeepa",
+    "Samantha Ruth Prabhu",
+    "Nani"
+   ],
+   "imdb": "tt2258337",
+   "runtime": 134,
+   "countries": [
+    "India"
+   ]
+  },
+  "Arjun Reddy|2017": {
+   "qid": "Q28419404",
+   "directors": [
+    "Sandeep Vanga"
+   ],
+   "cast": [
+    "Vijay Deverakonda",
+    "Shalini Pandey",
+    "Priyadarshi Pulikonda"
+   ],
+   "imdb": "tt7294534",
+   "runtime": 182,
+   "countries": [
+    "India"
+   ]
+  },
+  "Pushpa: The Rise|2021": {
+   "qid": "Q86751411",
+   "directors": [
+    "Sukumar"
+   ],
+   "cast": [
+    "Allu Arjun",
+    "Rashmika Mandanna",
+    "Fahadh Faasil",
+    "Indukuri Sunil Varma",
+    "Dhananjay"
+   ],
+   "imdb": "tt9389998",
+   "countries": [
+    "India"
+   ]
+  },
+  "K.G.F: Chapter 1|2018": {
+   "qid": "Q21646605",
+   "directors": [
+    "Prashanth Neel"
+   ],
+   "cast": [
+    "Yash",
+    "Srinidhi Shetty",
+    "Malavika Avinash",
+    "Achyuth Kumar",
+    "Vasishta N. Simha"
+   ],
+   "imdb": "tt7838252",
+   "runtime": 156,
+   "countries": [
+    "India"
+   ]
+  },
+  "Breathless|1960": {
+   "qid": "Q86427",
+   "directors": [
+    "Jean-Luc Godard"
+   ],
+   "cast": [
+    "Jean-Paul Belmondo",
+    "Jean Seberg",
+    "Jean-Pierre Melville",
+    "Daniel Boulanger",
+    "André S. Labarthe"
+   ],
+   "imdb": "tt0053472",
+   "runtime": 87,
+   "countries": [
+    "France"
+   ]
+  },
+  "Cléo from 5 to 7|1962": {
+   "qid": "Q1199628",
+   "directors": [
+    "Agnès Varda"
+   ],
+   "cast": [
+    "Michel Legrand",
+    "Corinne Marchand",
+    "Jean-Claude Brialy",
+    "Dominique Davray",
+    "Yves Robert"
+   ],
+   "imdb": "tt0055852",
+   "runtime": 90,
+   "countries": [
+    "France",
+    "Italy"
+   ]
+  },
+  "La Haine|1995": {
+   "qid": "Q466101",
+   "directors": [
+    "Mathieu Kassovitz"
+   ],
+   "cast": [
+    "Vincent Cassel",
+    "Saïd Taghmaoui",
+    "Vincent Lindon",
+    "Benoît Magimel",
+    "Karin Viard"
+   ],
+   "imdb": "tt0113247",
+   "runtime": 96,
+   "countries": [
+    "France"
+   ]
+  },
+  "Delicatessen|1991": {
+   "qid": "Q827105",
+   "directors": [
+    "Jean-Pierre Jeunet",
+    "Marc Caro"
+   ],
+   "cast": [
+    "Dominique Pinon",
+    "Karin Viard",
+    "Jean-Claude Dreyfus",
+    "Marie-Laure Dougnac",
+    "Rufus"
+   ],
+   "imdb": "tt0101700",
+   "runtime": 95,
+   "countries": [
+    "France"
+   ]
+  },
+  "A Prophet|2009": {
+   "qid": "Q1061541",
+   "directors": [
+    "Jacques Audiard"
+   ],
+   "cast": [
+    "Tahar Rahim",
+    "Niels Arestrup",
+    "Reda Kateb",
+    "Leïla Bekhti",
+    "Adel Bencherif"
+   ],
+   "imdb": "tt1235166",
+   "runtime": 150,
+   "countries": [
+    "France",
+    "Italy"
+   ]
+  },
+  "Titane|2021": {
+   "qid": "Q105393862",
+   "directors": [
+    "Julia Ducournau"
+   ],
+   "cast": [
+    "Vincent Lindon",
+    "Agathe Rousselle",
+    "Garance Marillier",
+    "Myriem Akheddiou",
+    "Nathalie Boyer"
+   ],
+   "imdb": "tt10944760",
+   "runtime": 108,
+   "countries": [
+    "Belgium",
+    "France"
+   ]
+  },
+  "Amour|2012": {
+   "qid": "Q637820",
+   "directors": [
+    "Michael Haneke"
+   ],
+   "cast": [
+    "Jean-Louis Trintignant",
+    "Isabelle Huppert",
+    "Emmanuelle Riva",
+    "Alexandre Tharaud",
+    "Rita Blanco"
+   ],
+   "imdb": "tt1602620",
+   "runtime": 127,
+   "countries": [
+    "Austria",
+    "France",
+    "Germany"
+   ]
+  },
+  "Run Lola Run|1998": {
+   "qid": "Q468697",
+   "directors": [
+    "Tom Tykwer"
+   ],
+   "cast": [
+    "Franka Potente",
+    "Moritz Bleibtreu",
+    "Suzanne von Borsody",
+    "Heino Ferch",
+    "Monica Bleibtreu"
+   ],
+   "imdb": "tt0130827",
+   "runtime": 81,
+   "countries": [
+    "Germany"
+   ]
+  },
+  "Chungking Express|1994": {
+   "qid": "Q766263",
+   "directors": [
+    "Wong Kar-wai"
+   ],
+   "cast": [
+    "Brigitte Lin",
+    "Tony Leung",
+    "Faye Wong",
+    "Takeshi Kaneshiro"
+   ],
+   "imdb": "tt0109424",
+   "runtime": 101,
+   "countries": [
+    "Hong Kong"
+   ]
+  },
+  "Infernal Affairs|2002": {
+   "qid": "Q714057",
+   "directors": [
+    "Alan Mak",
+    "Zhaohui Mai",
+    "Andrew Lau"
+   ],
+   "cast": [
+    "Andy Lau",
+    "Tony Leung",
+    "Eric Tsang",
+    "Edison Chen",
+    "Anthony Wong"
+   ],
+   "imdb": "tt0338564",
+   "runtime": 97,
+   "countries": [
+    "Hong Kong"
+   ]
+  },
+  "Shaolin Soccer|2001": {
+   "qid": "Q536299",
+   "directors": [
+    "Stephen Chow"
+   ],
+   "cast": [
+    "Zhao Wei",
+    "Danny Chan",
+    "Ng Man-tat",
+    "Cecilia Cheung",
+    "Gillian Chung"
+   ],
+   "imdb": "tt0286112",
+   "runtime": 112,
+   "countries": [
+    "Hong Kong"
+   ]
+  },
+  "Battle Royale|2000": {
+   "qid": "Q864592",
+   "directors": [
+    "Kinji Fukasaku"
+   ],
+   "cast": [
+    "Tatsuya Fujiwara",
+    "Takeshi Kitano",
+    "Aki Maeda",
+    "Chiaki Kuriyama",
+    "Kō Shibasaki"
+   ],
+   "imdb": "tt0266308",
+   "runtime": 113,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Tampopo|1985": {
+   "qid": "Q2142996",
+   "directors": [
+    "Jūzō Itami"
+   ],
+   "cast": [
+    "Ken Watanabe",
+    "Kōji Yakusho",
+    "Tsutomu Yamazaki",
+    "Mariko Okada",
+    "Nobuko Miyamoto"
+   ],
+   "imdb": "tt0092048",
+   "runtime": 114,
+   "countries": [
+    "Japan"
+   ]
+  },
+  "Spring, Summer, Fall, Winter... and Spring|2003": {
+   "qid": "Q494871",
+   "directors": [
+    "Kim Ki-duk"
+   ],
+   "cast": [
+    "Oh Yeong-su",
+    "Park Ji-a",
+    "Kim Yeong-min",
+    "Kim Jong-ho",
+    "Ha Yeo-jin"
+   ],
+   "imdb": "tt0374546",
+   "runtime": 103,
+   "countries": [
+    "Germany",
+    "South Korea"
+   ]
+  },
+  "Wild Tales|2014": {
+   "qid": "Q16672466",
+   "directors": [
+    "Damián Szifron"
+   ],
+   "cast": [
+    "Darío Grandinetti",
+    "Ricardo Darín",
+    "Leonardo Sbaraglia",
+    "María Marull",
+    "Mónica Villa"
+   ],
+   "imdb": "tt3011894",
+   "runtime": 122,
+   "countries": [
+    "Argentina",
+    "Spain"
    ]
   }
  }

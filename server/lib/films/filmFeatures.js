@@ -12,6 +12,20 @@ const wikidata = (() => {
   }
 })()
 
+// Free-to-use posters from Wikimedia Commons (public domain only so far); see scripts/importPosters.js.
+const posters = (() => {
+  try {
+    return JSON.parse(fs.readFileSync(new URL('../../data/posters.json', import.meta.url), 'utf8')).films || {}
+  } catch {
+    return {}
+  }
+})()
+
+/** A real poster image for this film, or null (the apps then draw the typographic poster). */
+export function posterUrl(film) {
+  return posters[`${film?.title}|${film?.year}`]?.image || null
+}
+
 /** Public details for a film card: director(s), up to three cast members, runtime in minutes. */
 export function filmDetails(film) {
   const w = wikidata[`${film.title}|${film.year}`]

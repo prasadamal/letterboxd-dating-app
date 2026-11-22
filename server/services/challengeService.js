@@ -9,7 +9,7 @@ import { scoreChallenge, validateAnswers } from '../lib/challenge.js'
 import { utcDay } from '../lib/streaks.js'
 import { containsBlockedContent } from '../lib/contentFilter.js'
 import { getDailySet, slotInfo } from './dailySetService.js'
-import { filmDetails } from '../lib/films/filmFeatures.js'
+import { filmDetails, posterUrl } from '../lib/films/filmFeatures.js'
 import { getCommunityOdds } from './filmOddsService.js'
 import { notifyUser } from './notificationService.js'
 import { dailyNumber } from './dailyService.js'
@@ -44,7 +44,7 @@ export function shareText(name, number, url) {
 async function films(ids) {
   const { data, error } = await supabase.from('movies').select('id, title, year, genres, origin_language').in('id', ids)
   if (error) throw error
-  const byId = new Map((data || []).map((f) => [f.id, { ...f, genres: canonicalGenres(f.genres) }]))
+  const byId = new Map((data || []).map((f) => [f.id, { ...f, genres: canonicalGenres(f.genres), poster_url: posterUrl(f) }]))
   return ids.map((id) => byId.get(id)).filter(Boolean)
 }
 

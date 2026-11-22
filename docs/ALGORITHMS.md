@@ -9,6 +9,10 @@ Each catalog film has a genre, language, year, popularity estimate and a few tag
 - the franchise or studio "family": Marvel, DC, Studio Ghibli, Pixar, A24 and so on
 - whether the film is art-house
 
+Director, top cast, runtime, countries and IMDb id come from **Wikidata** (free to copy, no credit needed) via a one-time import, `node server/scripts/importWikidata.js`, saved in `server/data/wikidataFacts.json`. 525 of 543 films match, and every hand-written director agrees with it.
+
+**Posters.** `node server/scripts/importPosters.js` keeps only posters on Wikimedia Commons that are free to reuse, with their licence and author: 22 public-domain classics so far, such as Casablanca, Psycho, Vertigo, Seven Samurai and Jaws. Modern posters belong to the studios and aren't free, so every other film keeps the app's typographic poster. Real posters for modern films would need a licensed source, such as TMDB with commercial approval. The IMDb ids are already stored for that.
+
 From these, every film gets a primary genre, language group, decade, and blockbuster and art-house flags (`server/lib/films/filmFeatures.js`).
 
 **Seen and liked odds.** For every film the app estimates two things (`server/lib/films/filmStats.js`):

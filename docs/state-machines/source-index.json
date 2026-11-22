@@ -743,6 +743,19 @@
       ]
     },
     {
+      "path": "mobile/components/ui/Poster.tsx",
+      "evidence": [
+        {
+          "line": 2,
+          "text": "import { useState } from 'react'"
+        },
+        {
+          "line": 25,
+          "text": "const [failed, setFailed] = useState(false)"
+        }
+      ]
+    },
+    {
       "path": "mobile/lib/api.ts",
       "evidence": [
         {
@@ -1125,6 +1138,19 @@
       ]
     },
     {
+      "path": "server/scripts/importPosters.js",
+      "evidence": [
+        {
+          "line": 17,
+          "text": "const sleep = (ms) => new Promise((r) => setTimeout(r, ms))"
+        },
+        {
+          "line": 24,
+          "text": "const limited = res.status === 429 || res.status >= 500 || /too many requests/i.test(text.slice(0, 200))"
+        }
+      ]
+    },
+    {
       "path": "server/scripts/importWikidata.js",
       "evidence": [
         {
@@ -1243,7 +1269,7 @@
       "path": "server/services/growthService.js",
       "evidence": [
         {
-          "line": 62,
+          "line": 63,
           "text": "if (!user || !user.taste_card_public || user.deleted_at || user.is_active === false) {"
         }
       ]
