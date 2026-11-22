@@ -1,6 +1,37 @@
 // What the algorithms know about a film beyond its catalog row: primary genre, language group, decade,
 // director and family (franchise or studio), and whether it is art-house or a blockbuster.
+import fs from 'node:fs'
 import { filmFacts } from '../../data/filmFacts.js'
+
+// Director, cast, runtime, countries and IMDb id imported from Wikidata (CC0); see scripts/importWikidata.js.
+const wikidata = (() => {
+  try {
+    return JSON.parse(fs.readFileSync(new URL('../../data/wikidataFacts.json', import.meta.url), 'utf8')).films || {}
+  } catch {
+    return {}
+  }
+})()
+
+// Free-to-use posters from Wikimedia Commons (public domain only so far); see scripts/importPosters.js.
+const posters = (() => {
+  try {
+    return JSON.parse(fs.readFileSync(new URL('../../data/posters.json', import.meta.url), 'utf8')).films || {}
+  } catch {
+    return {}
+  }
+})()
+
+/** A real poster image for this film, or null (the apps then draw the typographic poster). */
+export function posterUrl(film) {
+  return posters[`${film?.title}|${film?.year}`]?.image || null
+}
+
+/** Public details for a film card: director(s), up to three cast members, runtime in minutes. */
+export function filmDetails(film) {
+  const w = wikidata[`${film.title}|${film.year}`]
+  const director = filmFacts[`${film.title}|${film.year}`]?.d || w?.directors?.join(' & ') || null
+  return { director, cast: (w?.cast || []).slice(0, 3), runtime: w?.runtime || null }
+}
 
 const INDIAN = {
   Hindi: 'Hindi',
@@ -67,7 +98,7 @@ export function enrichFilm(film) {
     decade: Math.floor((film.year || 2000) / 10) * 10,
     popularity,
     tags,
-    director: facts.d || null,
+    director: facts.d || wikidata[factsKey(film)]?.directors?.[0] || null,
     family,
     duplicateOf: facts.dup || null,
     arthouse,

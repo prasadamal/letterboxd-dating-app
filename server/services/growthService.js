@@ -10,6 +10,7 @@ import { logger } from '../lib/logger.js'
 import { getPersonalities } from './personalityService.js'
 import { getCommunityOdds } from './filmOddsService.js'
 import { canonicalGenres } from '../lib/genres.js'
+import { posterUrl } from '../lib/films/filmFeatures.js'
 
 // Called after every rating; writes only on the first rating of a UTC day.
 export async function recordDailyActivity(userId, today = utcDay()) {
@@ -44,7 +45,7 @@ async function getFilmSummaries(ids) {
   if (!ids.length) return new Map()
   const { data, error } = await supabase.from('movies').select('id, title, year, genres, origin_language').in('id', ids)
   if (error) throw error
-  return new Map((data || []).map((film) => [film.id, { ...film, genres: canonicalGenres(film.genres) }]))
+  return new Map((data || []).map((film) => [film.id, { ...film, genres: canonicalGenres(film.genres), poster_url: posterUrl(film) }]))
 }
 
 // Public, shareable taste card (/taste/<friend code>). Only what the member chose to share:

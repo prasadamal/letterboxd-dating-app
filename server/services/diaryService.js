@@ -2,6 +2,7 @@ import { supabase } from '../supabaseClient.js'
 import { AppError } from '../middleware/errors.js'
 import { canonicalGenres } from '../lib/genres.js'
 import { parseMovieId, removeFromWatchlist } from './watchlistService.js'
+import { posterUrl } from '../lib/films/filmFeatures.js'
 
 // A film a day for more than thirteen years. Keeps one member from filling the database.
 export const DIARY_LIMIT = 5000
@@ -77,7 +78,8 @@ function toEntry(row) {
       title: row.movies.title,
       year: row.movies.year,
       genres: canonicalGenres(row.movies.genres),
-      origin_language: row.movies.origin_language
+      origin_language: row.movies.origin_language,
+      poster_url: posterUrl(row.movies)
     }
   }
 }

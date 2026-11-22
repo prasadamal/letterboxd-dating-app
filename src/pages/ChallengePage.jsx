@@ -202,8 +202,13 @@ export default function ChallengePage() {
                   </span>
                   <strong className="challenge-film-title">{film.title}</strong>
                   <span className="muted-text">
-                    {[film.year, film.origin_language, film.genres?.[0]].filter(Boolean).join(' · ')}
+                    {[film.year, film.origin_language, film.genres?.[0], film.details?.runtime && `${film.details.runtime} min`].filter(Boolean).join(' · ')}
                   </span>
+                  {(film.details?.director || film.details?.cast?.length > 0) && (
+                    <span className="film-credits">
+                      {[film.details.director && `Dir. ${film.details.director}`, film.details.cast?.slice(0, 2).join(', ')].filter(Boolean).join(' · ')}
+                    </span>
+                  )}
                   <div className="answer-buttons" role="radiogroup" aria-label={`Your answer for ${film.title}`}>
                     {CHOICES.map((choice) => (
                       <button

@@ -16,6 +16,10 @@ export function Poster({ film, width = 150 }) {
         </strong>
         {film.genres?.[0] && <span className="poster-meta">{film.genres[0]}</span>}
       </div>
+      {/* A free (public-domain) poster when there is one; the typographic poster shows if it fails. */}
+      {film.poster_url && (
+        <img className="poster-photo" src={film.poster_url} alt="" loading="lazy" onError={(e) => e.currentTarget.remove()} />
+      )}
     </div>
   )
 }
