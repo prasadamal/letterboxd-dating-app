@@ -1,6 +1,7 @@
 import { supabase } from '../supabaseClient.js'
 import { AppError } from '../middleware/errors.js'
 import { canonicalGenres } from '../lib/genres.js'
+import { posterUrl } from '../lib/films/filmFeatures.js'
 
 // Generous for a real watchlist, small enough that one member cannot fill the database.
 export const WATCHLIST_LIMIT = 500
@@ -28,6 +29,7 @@ export async function listWatchlist(userId) {
       year: row.movies.year,
       genres: canonicalGenres(row.movies.genres),
       origin_language: row.movies.origin_language,
+      poster_url: posterUrl(row.movies),
       addedAt: row.created_at
     }))
 }

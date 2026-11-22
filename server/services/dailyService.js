@@ -5,6 +5,7 @@ import { selectAllIn } from '../lib/paging.js'
 import { canonicalGenres } from '../lib/genres.js'
 import { displayStreak, utcDay } from '../lib/streaks.js'
 import { utcDayNumber } from '../lib/dailyMovies.js'
+import { posterUrl } from '../lib/films/filmFeatures.js'
 
 // Daily #1 is 2026-10-01; the number goes up by one every UTC day, the same for everyone.
 const FIRST_DAILY = utcDayNumber(new Date('2026-10-01T00:00:00Z'))
@@ -134,6 +135,7 @@ export async function getDailyResults(userId, now = new Date()) {
         year: m.year,
         genres: canonicalGenres(m.genres),
         origin_language: m.origin_language,
+        poster_url: posterUrl(m),
         myRating: myRating.get(m.id) || null,
         likes: c.likes,
         dislikes: c.dislikes,
