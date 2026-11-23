@@ -14,7 +14,7 @@
       "evidence": [
         {
           "line": 2,
-          "text": "import { useCallback, useState } from 'react'"
+          "text": "import { useCallback, useRef, useState } from 'react'"
         },
         {
           "line": 24,
@@ -47,6 +47,10 @@
         {
           "line": 31,
           "text": "const [match, setMatch] = useState<DatingProfile | null>(null)"
+        },
+        {
+          "line": 65,
+          "text": "const [saving, setSaving] = useState(false)"
         }
       ]
     },
@@ -103,15 +107,19 @@
           "text": "import { useCallback, useState } from 'react'"
         },
         {
-          "line": 16,
-          "text": "const [conversations, setConversations] = useState<ConversationPreview[] | null>(null)"
-        },
-        {
           "line": 17,
-          "text": "const [likes, setLikes] = useState<LikesYou | null>(null)"
+          "text": "const [inbox, setInbox] = useState<InboxView<ConversationPreview>>({ items: null, failed: false })"
         },
         {
           "line": 18,
+          "text": "const [likes, setLikes] = useState<LikesYou | null>(null)"
+        },
+        {
+          "line": 19,
+          "text": "const [likesFailed, setLikesFailed] = useState(false)"
+        },
+        {
+          "line": 20,
           "text": "const [refreshing, setRefreshing] = useState(false)"
         }
       ]
@@ -657,15 +665,15 @@
           "text": "import { useEffect, useMemo, useRef, useState } from 'react'"
         },
         {
-          "line": 40,
+          "line": 41,
           "text": "const [queue, setQueue] = useState<Movie[]>(movies)"
         },
         {
-          "line": 41,
+          "line": 42,
           "text": "const [reveal, setReveal] = useState<string | null>(null)"
         },
         {
-          "line": 42,
+          "line": 43,
           "text": "const [error, setError] = useState('')"
         }
       ]
@@ -818,6 +826,23 @@
       ]
     },
     {
+      "path": "mobile/lib/inboxState.ts",
+      "evidence": [
+        {
+          "line": 3,
+          "text": "export type InboxView<T> = { items: T[] | null; failed: boolean }"
+        },
+        {
+          "line": 6,
+          "text": "if (result.ok) return { items: result.items, failed: false }"
+        },
+        {
+          "line": 7,
+          "text": "return { items: prev.items, failed: true }"
+        }
+      ]
+    },
+    {
       "path": "mobile/lib/platform.tsx",
       "evidence": [
         {
@@ -918,23 +943,23 @@
       "path": "server/datingService.js",
       "evidence": [
         {
-          "line": 85,
+          "line": 121,
           "text": "if (!self || !target || target.deleted_at || target.is_active === false) throw new Error('User not found')"
         },
         {
-          "line": 88,
+          "line": 124,
           "text": "const status = await assertDatingLaunched(self)"
         },
         {
-          "line": 190,
+          "line": 218,
           "text": "const status = await assertDatingLaunched(self)"
         },
         {
-          "line": 249,
+          "line": 277,
           "text": "const pending = new Map()"
         },
         {
-          "line": 356,
+          "line": 384,
           "text": "const status = await assertDatingLaunched(self)"
         }
       ]
