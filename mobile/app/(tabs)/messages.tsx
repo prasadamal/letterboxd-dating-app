@@ -5,6 +5,7 @@ import { Alert, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } 
 import { TasteProfileCard } from '../../components/TasteProfileCard'
 import { Avatar, Button, Card, EmptyState, ScreenHeader, SectionTitle, Tag } from '../../components/ui'
 import { apiFetch } from '../../lib/api'
+import { nextInbox, showEmptyInbox, type InboxView } from '../../lib/inboxState'
 import { shortTime } from '../../lib/format'
 import { haptic } from '../../lib/haptics'
 import { colors, fonts, radii, type } from '../../lib/theme'
@@ -13,17 +14,23 @@ import type { ConversationPreview, LikesYou, Match } from '../../lib/types'
 // Chats: who likes you, new matches waiting for a hello, and conversations (newest activity first).
 export default function ChatsScreen() {
   const router = useRouter()
-  const [conversations, setConversations] = useState<ConversationPreview[] | null>(null)
+  const [inbox, setInbox] = useState<InboxView<ConversationPreview>>({ items: null, failed: false })
   const [likes, setLikes] = useState<LikesYou | null>(null)
+  const [likesFailed, setLikesFailed] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
+  const conversations = inbox.items
 
+  // A failed request keeps what was already on screen and shows Retry; it never looks like "no matches".
   const load = useCallback(async () => {
     const [convos, likesYou] = await Promise.all([
-      apiFetch<{ conversations: ConversationPreview[] }>('/messages/conversations').catch(() => ({ conversations: [] as ConversationPreview[] })),
-      apiFetch<LikesYou>('/dating/likes-you').catch(() => null)
+      apiFetch<{ conversations: ConversationPreview[] }>('/messages/conversations')
+        .then((r) => ({ ok: true as const, items: r.conversations || [] }))
+        .catch(() => ({ ok: false as const })),
+      apiFetch<LikesYou>('/dating/likes-you').then((r) => ({ ok: true as const, r })).catch(() => ({ ok: false as const }))
     ])
-    setConversations(convos.conversations || [])
-    setLikes(likesYou)
+    setInbox((prev) => nextInbox(prev, convos))
+    if (likesYou.ok) setLikes(likesYou.r)
+    setLikesFailed(!likesYou.ok)
   }, [])
 
   useFocusEffect(
@@ -140,7 +147,17 @@ export default function ChatsScreen() {
           )
         })}
 
-        {conversations !== null && !conversations.length && !likes?.count && (
+        {inbox.failed && (
+          <Card style={styles.errorCard}>
+            <Text style={styles.errorTitle}>Couldn’t refresh chats</Text>
+            <Text style={styles.errorBody}>
+              {conversations?.length ? 'Showing your chats from the last time they loaded.' : 'Check your connection and try again. Your matches are safe.'}
+            </Text>
+            <Button title="Retry" icon="refresh" onPress={() => { void load() }} style={{ alignSelf: 'flex-start', marginTop: 8 }} />
+          </Card>
+        )}
+
+        {showEmptyInbox(inbox, likes?.count ?? 0, likesFailed) && (
           <EmptyState emoji="💌" title="No matches yet" body="Like people in Match. When it's mutual, they show up here and you can say hi.">
             <Button title="Go to Match" icon="heart" onPress={() => router.push('/(tabs)/dating')} style={{ alignSelf: 'stretch', marginTop: 8 }} />
           </EmptyState>
@@ -152,6 +169,9 @@ export default function ChatsScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
+  errorCard: { borderColor: 'rgba(255,138,61,0.5)', backgroundColor: 'rgba(255,138,61,0.08)' },
+  errorTitle: { fontFamily: fonts.display, color: colors.text, fontSize: 17 },
+  errorBody: { color: colors.muted, marginTop: 4, lineHeight: 20 },
   body: { paddingHorizontal: 16, gap: 12 },
   likesCard: { borderColor: 'rgba(255,79,154,0.45)', backgroundColor: 'rgba(255,79,154,0.08)' },
   likesHead: { flexDirection: 'row', alignItems: 'center', gap: 14 },

@@ -1,0 +1,125 @@
+REELMATES — PROMPT ME
+======================
+Read this first. It is the full story of ReelMates so a new developer or AI agent can continue
+without the founder having to explain anything again. Last updated: 23 November 2026.
+(This repo is PUBLIC: no passwords, keys or private emails belong in this file.)
+
+Founder: Amal Prasad (non-technical), company Ariyoo (co-founders Akshay K Vijayan, Arif K).
+Repo: github.com/prasadamal/letterboxd-dating-app (keep "Letterboxd" OUT of the store listing
+and marketing; it is only the repo name).
+
+
+1. THE IDEA
+-----------
+Bring film-loving people together, based only on movies. "Find your film people."
+- Everyone gets the same 10 films every day (the "daily ten") and rates them:
+  liked / disliked / haven't seen.
+- From ratings you get a film personality (14 archetypes), film friends, a taste-match %,
+  and later (opt-in) dating.
+- The founder's view: "the algorithm is everything" — daily picks, matching and the challenge
+  link must all be state of the art.
+- Lead with the game and friends; dating is the surprise later, kept behind a launch gate.
+
+
+2. THE END PRODUCT
+------------------
+A daily film game + film diary + taste-matching social app for India first (Malayalam, Tamil,
+Hindi, Telugu cinema are an edge) with:
+- a shareable daily result / personality card and challenge links that spread on Instagram,
+  WhatsApp and Telegram;
+- friends and taste comparison;
+- dating that opens country by country when enough men and women join;
+- later a Plus subscription (not built; no paywall until people return daily).
+
+
+3. FEATURES THAT EXIST TODAY
+----------------------------
+- Daily ten (slot-based picker, server/lib/films/dailyPicker.js, docs/ALGORITHMS.md):
+  10 slots a day — crowd favourite, new-ish, dark side, Indian cinema (rotating Malayalam,
+  Hindi, South Indian, Marathi/Bengali), director's pick (rotating Nolan, Tarantino, Scorsese,
+  Kubrick, Miyazaki, Bong, Lijo...), world cinema, feel-good, blockbuster, art house, hidden gem.
+  One face-off day a week (Marvel vs DC, Nolan vs Villeneuve, Tarantino vs Scorsese, Ghibli vs
+  Pixar, Lijo vs Dileesh...). Rules: no director/franchise twice a day, max 5 English films,
+  spread of genres/languages/eras, 40-day rest before a film returns, prefer divisive films.
+  Most films should be ones a film geek has seen (~7 of 10). Each card shows its slot label
+  ("Hidden gem: most people haven't seen this one"). Deterministic per day (daily_sets table).
+- Connection score v2 (server/lib/tasteMatch.js): agreement weighted by how surprising it is,
+  uses "haven't seen", diary stars, favourites, a taste profile (genre/language/era/director/
+  style), confidence-aware (one lucky film can't make 95%). Simulation: top-5 accuracy at
+  7 days improved 59% -> 69%.
+- Dating deck v2 (server/lib/deckRanking.js): two-sided ranking (you'd like them AND they'd
+  like you back), Thompson sampling, recency, newcomer lift. Dating gate currently 50 men +
+  50 women per country (marketing plan suggests ~500 each before promoting dating).
+- Challenge link (/c/:code): rate today's 10, share a link anywhere; the friend rates the same
+  10 in any browser with no account; identical answers = 100%; liked vs disliked is a real
+  disagreement, seen vs not seen counts half; verdicts from "Film soulmates" to
+  "Opposites attract?"; Open Graph previews; owner gets a notification.
+- Film diary (log watched films with date, half-star rating, note, rewatch), watchlist,
+  explore/search, collections, friend codes (random, rate-limited), personality card sharing,
+  report/block, account deletion, admin page.
+- Catalog: 436 films on main; PR #34 (OPEN, waiting for the founder to merge) adds 107 more
+  (543 total: Tarantino, Nolan, Scorsese, Marvel/DC, Indian, French/world, latest, horror),
+  Wikidata director/cast/runtime (server/data/wikidataFacts.json), and 22 real posters that are
+  public-domain (Wikimedia Commons, server/data/posters.json). Modern posters are studio-owned:
+  all other films use the typographic poster design. IMDb ids are stored for a future licensed
+  source (TMDB terms must be checked before commercial use).
+
+
+4. ON HOLD / NOT BUILT
+----------------------
+- Plus paywall/purchase screen (hidden until people return daily).
+- Letterboxd CSV import (on hold).
+- Licensed real posters for modern films.
+- Ideas list (21 Nov): watch parties, shared watchlist for two with "plan it", local screenings,
+  film icebreakers in chat, hot takes, this-or-that duels, film clubs by taste, daily film
+  discussion rooms, city circles, "why you match" breakdown, taste twins/opposites, mood
+  matching, trivia duels, "guess my rating", shared streaks, Top 4 films on profile,
+  "currently watching". Recommended first three: daily discussion rooms, shared watchlist +
+  "plan it", "why you match" + icebreakers.
+- Promoting dating before there are enough members.
+
+
+5. TECHNICAL MAP
+----------------
+- Server: Express + supabase-js (server/), deployed on Render free tier as reelmates-api-kshi
+  (https://reelmates-api-kshi.onrender.com; sleeps after 15 min idle, ~15-60 s wake).
+  Admin page: /admin on that host (unlock with ADMIN_API_KEY from Render's Environment tab).
+- Database: Supabase project "moviematch" (free tier; keep-alive workflow). Migrations in
+  supabase/migrations (e.g. 20261121120000_daily_sets_and_challenges — applied live).
+- Mobile app: Expo SDK 57 (mobile/), web app (src/, Vite).
+- New films in movieCatalog.js are seeded on server start (seedMoviesIfEmpty).
+- Tests: server unit tests, mobile tests; simulations in server/scripts (simulateDaily.js,
+  evaluateMatching.js); importers importWikidata.js, importPosters.js.
+- Repo rule: regenerate the state index (`node scripts/state-index.mjs`) before pushing (CI checks).
+- Builds: Expo free builds used up until 1 Dec; APKs built on GitHub Actions from branch
+  claude/reelmates-apk-build (.github/workflows/reelmates-apk-github.yml).
+
+
+6. FOUNDER ACTIONS STILL OPEN
+-----------------------------
+- Merge PR #34 (107 films, posters, Wikidata details); Render redeploys automatically.
+- Add GitHub secrets REELMATES_CRON_SECRET (copy CRON_SECRET from Render) and REELMATES_API_URL
+  so daily reminders and weekly cleanup run.
+- Email is not configured (RESEND_API_KEY, EMAIL_FROM): password reset and verification don't
+  send until a domain is bought.
+- Demo-account cleanup from the challenge test (challenge CVDG6GVB, 10 test ratings, streak)
+  needs a Supabase approval; also old test reports/feedback/scrubbed accounts.
+- Google Play account; Apple later. Render Starter ($7/mo) when the server is busy all day.
+
+
+7. MARKETING
+------------
+- Position: "Same 10 films for everyone, every day. What's your film personality?"
+  Share hook: "I matched 82% with my friend on today's drop. Beat that." Keep dating out of
+  the headline.
+- Audience: film fans 18-30, strong in Kerala and South India; college film clubs, film
+  Instagram pages, OTT discussion threads.
+- Channels: daily results card on Instagram stories/WhatsApp status (with app name and friend
+  code), small film meme/review pages (weekly "crowd verdict" graphic), college film clubs in
+  Kochi, Thiruvananthapuram, Bangalore, Chennai, Reddit (r/MalayalamMovies, r/kollywood,
+  r/bollywood) "which film split the crowd" posts, challenge links.
+- Targets (90 days): 1,500 installs, 30% keep a 3-day streak in week one, 0.3 card shares per
+  daily player, reports answered within 24 h. Watch day-7 return; if under 1 in 5, fix the game
+  before spending on acquisition.
+- Competitors (Flickship, CineConnections, FilmMatch) look small and empty: proof that the dating
+  pitch alone does not pull people in.
