@@ -11,21 +11,25 @@ type Props = {
   // The page scrolls vertically; it is locked while a horizontal drag is in progress.
   onDragChange?: (dragging: boolean) => void
   actions?: ReactNode
+  /** While a decision is saving the card can't be dragged into another one. */
+  disabled?: boolean
 }
 
 const SWIPE_THRESHOLD = 110
 
-export function SwipeDatingCard({ profile, onSwipe, onDragChange, actions }: Props) {
+export function SwipeDatingCard({ profile, onSwipe, onDragChange, actions, disabled = false }: Props) {
   const { width } = useWindowDimensions()
   const position = useRef(new Animated.ValueXY()).current
-  const latest = useRef({ onSwipe, onDragChange, width })
-  latest.current = { onSwipe, onDragChange, width }
+  const latest = useRef({ onSwipe, onDragChange, width, disabled })
+  latest.current = { onSwipe, onDragChange, width, disabled }
+  const fired = useRef(false)
 
   const responder = useMemo(
     () =>
       PanResponder.create({
         // Only horizontal drags: vertical ones scroll the profile.
-        onMoveShouldSetPanResponder: (_, g) => Math.abs(g.dx) > 10 && Math.abs(g.dx) > Math.abs(g.dy) * 1.5,
+        onMoveShouldSetPanResponder: (_, g) =>
+          !latest.current.disabled && !fired.current && Math.abs(g.dx) > 10 && Math.abs(g.dx) > Math.abs(g.dy) * 1.5,
         onPanResponderGrant: () => latest.current.onDragChange?.(true),
         onPanResponderMove: (_, g) => position.setValue({ x: g.dx, y: g.dy * 0.15 }),
         onPanResponderRelease: (_, g) => {
@@ -35,10 +39,12 @@ export function SwipeDatingCard({ profile, onSwipe, onDragChange, actions }: Pro
             Animated.spring(position, { toValue: { x: 0, y: 0 }, friction: 6, useNativeDriver: true }).start()
             return
           }
+          fired.current = true
           haptic.swipe()
           const x = (action === 'like' ? 1 : -1) * latest.current.width * 1.4
           Animated.timing(position, { toValue: { x, y: g.dy * 0.15 }, duration: 200, useNativeDriver: true }).start(() => {
             position.setValue({ x: 0, y: 0 })
+            fired.current = false
             latest.current.onSwipe(action)
           })
         },

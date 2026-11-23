@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { restoreFailed, visibleQueue } from '../lib/deckQueue'
 import { Animated, PanResponder, StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { haptic } from '../lib/haptics'
 import { colors, fonts, radii } from '../lib/theme'
@@ -43,13 +44,15 @@ export function FilmSwipeDeck({ movies, total, onRate }: Props) {
   const position = useRef(new Animated.ValueXY()).current
   const revealOpacity = useRef(new Animated.Value(0)).current
   const busy = useRef(false)
+  // Films swiped but not yet saved: kept out of the deck even if the parent list still has them.
+  const inFlight = useRef(new Set<Movie['id']>())
   const queueRef = useRef(queue)
   queueRef.current = queue
   const onRateRef = useRef(onRate)
   onRateRef.current = onRate
 
   useEffect(() => {
-    setQueue(movies)
+    setQueue(visibleQueue(movies, inFlight.current))
   }, [movies])
 
   function showReveal(text: string) {
@@ -66,6 +69,7 @@ export function FilmSwipeDeck({ movies, total, onRate }: Props) {
     const movie = queueRef.current[0]
     if (!movie || busy.current) return
     busy.current = true
+    inFlight.current.add(movie.id)
     haptic.swipe()
     const to = reaction === 'love' ? { x: width * 1.3, y: 40 } : reaction === 'hate' ? { x: -width * 1.3, y: 40 } : { x: 0, y: -height }
     Animated.timing(position, { toValue: to, duration: 230, useNativeDriver: true }).start(() => {
@@ -74,11 +78,16 @@ export function FilmSwipeDeck({ movies, total, onRate }: Props) {
       busy.current = false
       showReveal(revealText(movie, reaction))
       setError('')
-      onRateRef.current(movie, reaction).catch((err) => {
-        // Put the film back so nothing is lost.
-        setQueue((list) => [movie, ...list.filter((m) => m.id !== movie.id)])
-        setError(err instanceof Error ? err.message : 'Could not save that one. Try again.')
-      })
+      onRateRef.current(movie, reaction)
+        .then(() => {
+          inFlight.current.delete(movie.id)
+        })
+        .catch((err) => {
+          // Put the film back so nothing is lost.
+          inFlight.current.delete(movie.id)
+          setQueue((list) => restoreFailed(list, movie))
+          setError(err instanceof Error ? err.message : 'Could not save that one. Try again.')
+        })
     })
   }
 
