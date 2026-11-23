@@ -1,5 +1,5 @@
 import { useFocusEffect, useRouter } from 'expo-router'
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { ActivityIndicator, Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { MatchOverlay } from '../../components/MatchOverlay'
@@ -60,8 +60,14 @@ export default function MatchScreen() {
     }, [load])
   )
 
+  // One decision at a time: buttons and the drag gesture stay locked until the server answers.
+  const savingRef = useRef(false)
+  const [saving, setSaving] = useState(false)
+
   async function swipe(action: 'like' | 'pass') {
-    if (!profile) return
+    if (!profile || savingRef.current) return
+    savingRef.current = true
+    setSaving(true)
     const current = profile
     try {
       const result = await apiFetch<{ matched?: boolean }>('/dating/swipe', {
@@ -75,6 +81,9 @@ export default function MatchScreen() {
       await load()
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Could not save that')
+    } finally {
+      savingRef.current = false
+      setSaving(false)
     }
   }
 
@@ -199,11 +208,12 @@ export default function MatchScreen() {
                 key={profile.id}
                 profile={profile}
                 onSwipe={swipe}
+                disabled={saving}
                 onDragChange={setDragging}
                 actions={
                   <>
-                    <IconButton icon="close" size={68} color={colors.red} background={colors.card} accessibilityLabel={`Pass on ${profile.name}`} onPress={() => swipe('pass')} />
-                    <IconButton icon="heart" size={68} color="#fff" background={colors.pink} border={colors.pink} accessibilityLabel={`Like ${profile.name}`} onPress={() => swipe('like')} />
+                    <IconButton icon="close" size={68} color={colors.red} background={colors.card} accessibilityLabel={`Pass on ${profile.name}`} disabled={saving} onPress={() => swipe('pass')} />
+                    <IconButton icon="heart" size={68} color="#fff" background={colors.pink} border={colors.pink} accessibilityLabel={`Like ${profile.name}`} disabled={saving} onPress={() => swipe('like')} />
                   </>
                 }
               />

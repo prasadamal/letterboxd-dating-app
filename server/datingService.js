@@ -1,3 +1,4 @@
+import { shouldCountSwipe, shouldNotifyMatch, swipeKind } from './lib/swipeIdempotency.js'
 import { supabase } from './supabaseClient.js'
 import {
   buildTasteLines,
@@ -45,9 +46,10 @@ async function getSwipeMap(userId) {
   return new Map(rows.map((row) => [row.target_id, row.action]))
 }
 
+// Returns the match and whether this call created it (so only the creator sends notifications).
 async function createMutualMatch(userId, peerId) {
   const existing = await getMutualMatchRow(userId, peerId)
-  if (existing) return existing
+  if (existing) return { row: existing, created: false }
 
   const [ratings, odds] = await Promise.all([getRatingsForUsers([userId, peerId]), getCommunityOdds()])
   const stats = computeCompatibilityFromMaps(ratings.get(userId), ratings.get(peerId), odds)
@@ -70,9 +72,43 @@ async function createMutualMatch(userId, peerId) {
     .single()
 
   // Both people liking at the same moment race to insert the same pair; the loser reads the winner's row.
-  if (error?.code === '23505') return getMutualMatchRow(userId, peerId)
+  if (error?.code === '23505') return { row: await getMutualMatchRow(userId, peerId), created: false }
   if (error) throw error
-  return data
+  return { row: data, created: true }
+}
+
+// Writes the decision only if it changes something. Conditional writes make two identical requests
+// arriving together resolve to one write and one 'repeat'.
+async function saveSwipe(userId, targetId, action, attempt = 0) {
+  const { data: existing, error: readError } = await supabase
+    .from('user_swipes')
+    .select('action')
+    .eq('swiper_id', userId)
+    .eq('target_id', targetId)
+    .maybeSingle()
+  if (readError) throw readError
+
+  const kind = swipeKind(existing?.action, action)
+  if (kind === 'repeat') return kind
+  const now = new Date().toISOString()
+
+  const { data, error } =
+    kind === 'new'
+      ? await supabase
+          .from('user_swipes')
+          .upsert({ swiper_id: userId, target_id: targetId, action, created_at: now }, { onConflict: 'swiper_id,target_id', ignoreDuplicates: true })
+          .select('swiper_id')
+      : await supabase
+          .from('user_swipes')
+          .update({ action, created_at: now })
+          .eq('swiper_id', userId)
+          .eq('target_id', targetId)
+          .eq('action', existing.action)
+          .select('swiper_id')
+  if (error) throw error
+  if (data?.length) return kind
+  // Another request wrote first: look again once and decide from what is saved now.
+  return attempt ? 'repeat' : saveSwipe(userId, targetId, action, 1)
 }
 
 export async function recordSwipe(userId, targetId, action) {
@@ -95,19 +131,8 @@ export async function recordSwipe(userId, targetId, action) {
   if (!isMutualInterest(self, target)) throw new Error('This profile is not in your dating preferences.')
   if (!inDatingArea(status, self, target)) throw new Error('Dating is open in your country only for now.')
 
-  const { error } = await supabase.from('user_swipes').upsert(
-    {
-      swiper_id: userId,
-      target_id: targetId,
-      action,
-      created_at: new Date().toISOString()
-    },
-    { onConflict: 'swiper_id,target_id' }
-  )
-
-  if (error) throw error
-
-  await bumpSwipeStats(userId, action)
+  const kind = await saveSwipe(userId, targetId, action)
+  if (shouldCountSwipe(kind)) await bumpSwipeStats(userId, action)
 
   let matched = false
   let matchRow = null
@@ -122,12 +147,15 @@ export async function recordSwipe(userId, targetId, action) {
 
     if (reverseError) throw reverseError
     if (reverse?.action === 'like') {
-      matchRow = await createMutualMatch(userId, targetId)
+      const { row, created } = await createMutualMatch(userId, targetId)
+      matchRow = row
       matched = true
-      await Promise.all([
-        notifyUser(userId, 'new_match', { peerId: targetId }),
-        notifyUser(targetId, 'new_match', { peerId: userId })
-      ])
+      if (shouldNotifyMatch({ matched, created })) {
+        await Promise.all([
+          notifyUser(userId, 'new_match', { peerId: targetId }),
+          notifyUser(targetId, 'new_match', { peerId: userId })
+        ])
+      }
     }
   }
 
